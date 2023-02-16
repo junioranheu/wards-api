@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Wards.Domain.Entities;
 
 namespace Wards.Infrastructure.Data
 {
@@ -8,6 +9,13 @@ namespace Wards.Infrastructure.Data
         {
 
         }
+
+        // Outros;
+        public DbSet<Log> Logs { get; set; }
+
+        // Usuários;
+        public DbSet<UsuarioRole> UsuariosRoles { get; set; }
+        public DbSet<Usuario> Usuarios { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

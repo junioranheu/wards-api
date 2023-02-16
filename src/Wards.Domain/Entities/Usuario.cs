@@ -1,17 +1,24 @@
-﻿using Wards.Domain.Enums;
+﻿using System.ComponentModel.DataAnnotations;
+using Wards.Domain.Enums;
 
 namespace Wards.Domain.Entities
 {
     public sealed class Usuario
     {
+        [Key]
         public int UsuarioId { get; set; }
 
-        public string? Nome { get; set; } = string.Empty;
+        public string? NomeCompleto { get; set; } = string.Empty;
 
         public string? Email { get; set; } = string.Empty;
 
-        public UsuarioRoleEnum Role { get; set; } = UsuarioRoleEnum.Comum;
+        public string? Senha { get; set; } = string.Empty;
 
-        public StatusAtivoInativoEnum IsAtivo { get; set; } = StatusAtivoInativoEnum.Ativo;
+        public int UsuarioRoleId { get; set; }
+        public UsuarioRole? UsuarioRoles { get; set; }
+
+        public bool IsAtivo { get; set; } = true;
+
+        public DateTime Data { get; set; } = HorarioBrasilia();
     }
 }

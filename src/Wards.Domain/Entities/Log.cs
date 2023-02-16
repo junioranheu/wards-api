@@ -1,7 +1,10 @@
-﻿namespace Wards.Domain.Entities
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Wards.Domain.Entities
 {
     public sealed class Log
     {
+        [Key]
         public int LogId { get; set; }
 
         public string? TipoRequisicao { get; set; }
