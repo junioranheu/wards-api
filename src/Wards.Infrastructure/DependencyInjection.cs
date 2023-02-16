@@ -1,9 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System.Text;
+using Wards.Infrastructure.Data;
 
 namespace Wards.Infrastructure
 {
@@ -22,10 +26,36 @@ namespace Wards.Infrastructure
 
         private static void AddServices(IServiceCollection services)
         {
-           
+
         }
 
         private static void AddAuth(IServiceCollection services, WebApplicationBuilder builder)
+        {
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+                 .AddJwtBearer(x =>
+                 {
+                     x.RequireHttpsMetadata = !builder.Environment.IsDevelopment();
+                     x.SaveToken = true;
+                     x.IncludeErrorDetails = true;
+                     x.TokenValidationParameters = new TokenValidationParameters
+                     {
+                         ValidateIssuerSigningKey = true,
+                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(builder.Configuration["JwtSettings:Secret"] ?? string.Empty)),
+                         ValidateIssuer = true,
+                         ValidIssuer = builder.Configuration["JwtSettings:Issuer"],
+                         ValidateAudience = true,
+                         ValidAudience = builder.Configuration["JwtSettings:Audience"],
+                         ValidateLifetime = true,
+                         ClockSkew = TimeSpan.Zero
+                     };
+                 });
+        }
+
+        private static void AddAuthAzure(IServiceCollection services, WebApplicationBuilder builder)
         {
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                     .AddJwtBearer(o =>
@@ -41,8 +71,8 @@ namespace Wards.Infrastructure
 
         private static void AddContext(WebApplicationBuilder builder)
         {
-            string con = builder.Configuration.GetConnectionString("xxx") ?? string.Empty;
-            // builder.Services.AddDbContext<CargaVerificadaContext>(options => options.UseSqlServer(con));
+            string con = builder.Configuration.GetConnectionString("DBConnection") ?? string.Empty;
+            builder.Services.AddDbContext<WardsContext>(options => options.UseMySql(con, ServerVersion.AutoDetect(con)));
         }
 
         private static void AddSwagger(WebApplicationBuilder builder)
