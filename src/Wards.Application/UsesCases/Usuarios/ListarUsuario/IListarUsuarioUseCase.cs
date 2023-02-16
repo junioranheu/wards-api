@@ -1,4 +1,6 @@
-﻿namespace Wards.Application.UsesCases.Usuarios.ListarUsuario
+﻿using Wards.Domain.Entities;
+
+namespace Wards.Application.UsesCases.Usuarios.ListarUsuario
 {
     public interface IListarUsuarioUseCase
     {

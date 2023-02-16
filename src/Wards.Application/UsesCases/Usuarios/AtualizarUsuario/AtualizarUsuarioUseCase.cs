@@ -1,4 +1,5 @@
-﻿using Wards.Application.UsesCases.Usuarios.Shared.Models;
+﻿using Wards.Application.UsesCases.Usuarios.AtualizarUsuario.Commands;
+using Wards.Application.UsesCases.Usuarios.Shared.Models;
 
 namespace Wards.Application.UsesCases.Usuarios.AtualizarUsuario
 {

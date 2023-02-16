@@ -1,4 +1,6 @@
-﻿namespace Wards.Application.UsesCases.Usuarios.ListarUsuario.Queries
+﻿using Wards.Domain.Entities;
+
+namespace Wards.Application.UsesCases.Usuarios.ListarUsuario.Queries
 {
     public interface IListarUsuarioQuery
     {

@@ -1,4 +1,6 @@
-﻿namespace Wards.Application.UsesCases.Logs.CriarLog.Commands
+﻿using Wards.Domain.Entities;
+
+namespace Wards.Application.UsesCases.Logs.CriarLog.Commands
 {
     public sealed class CriarLogCommand : ICriarLogCommand
     {

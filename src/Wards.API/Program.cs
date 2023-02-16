@@ -1,25 +1,45 @@
+using Swashbuckle.AspNetCore.SwaggerUI;
+using Wards.API;
+using Wards.Application;
+
 var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
-
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    builder.Services.AddDependencyInjectionAPI(builder);
+    builder.Services.AddDependencyInjectionApplication();
+    builder.Services.AddDependencyInjectionInfra(builder);
+
+    builder.Services.AddControllers().AddNewtonsoftJson(options =>
+    {
+        options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+        options.SerializerSettings.Formatting = Newtonsoft.Json.Formatting.Indented;
+    });
 }
 
-app.UseHttpsRedirection();
+var app = builder.Build();
+{
+    if (app.Environment.IsDevelopment())
+    {
+        app.UseSwagger();
+        app.UseSwaggerUI(c =>
+        {
+            c.SwaggerEndpoint("/swagger/v1/swagger.json", "Wards.API");
+            c.RoutePrefix = "";
+            c.DocExpansion(DocExpansion.None);
+        });
 
-app.UseAuthorization();
+        app.UseDeveloperExceptionPage();
+    }
 
-app.MapControllers();
+    if (app.Environment.IsProduction())
+    {
+        app.UseHttpsRedirection();
+    }
 
-app.Run();
+    app.UseCors(builder.Configuration["CORSSettings:Cors"] ?? "");
+
+    app.UseAuthentication();
+    app.UseAuthorization();
+    app.MapControllers();
+
+    app.Run();
+}

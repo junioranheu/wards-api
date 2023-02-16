@@ -1,4 +1,6 @@
-﻿namespace Wards.Application.UsesCases.Usuarios.ObterUsuario
+﻿using Wards.Domain.Entities;
+
+namespace Wards.Application.UsesCases.Usuarios.ObterUsuario
 {
     public interface IObterUsuarioUseCase
     {

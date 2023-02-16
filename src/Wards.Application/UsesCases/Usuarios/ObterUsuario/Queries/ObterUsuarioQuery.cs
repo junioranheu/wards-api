@@ -1,4 +1,6 @@
-﻿namespace Wards.Application.UsesCases.Usuarios.ObterUsuario.Queries
+﻿using Wards.Domain.Entities;
+
+namespace Wards.Application.UsesCases.Usuarios.ObterUsuario.Queries
 {
     public sealed class ObterUsuarioQuery : IObterUsuarioQuery
     {

@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
 using Wards.Application.UsesCases.Usuarios.ObterUsuario.Queries;
+using Wards.Domain.Entities;
+using Wards.Domain.Enums;
 
 namespace Wards.Application.UsesCases.Usuarios.ObterUsuario
 {
@@ -28,8 +30,8 @@ namespace Wards.Application.UsesCases.Usuarios.ObterUsuario
 
                 List<int> l = new()
                 {
-                    (int)UsuarioPerfilEnum.Suporte,
-                    (int)UsuarioPerfilEnum.Publico
+                    (int)UsuarioRoleEnum.Administrador,
+                    (int)UsuarioRoleEnum.Comum
                 };
 
                 idUsuarioPerfilLista = l.ToArray();

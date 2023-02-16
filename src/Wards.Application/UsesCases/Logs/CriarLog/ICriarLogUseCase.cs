@@ -1,4 +1,6 @@
-﻿namespace Wards.Application.UsesCases.Logs.CriarLog
+﻿using Wards.Domain.Entities;
+
+namespace Wards.Application.UsesCases.Logs.CriarLog
 {
     public interface ICriarLogUseCase
     {

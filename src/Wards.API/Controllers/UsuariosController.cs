@@ -4,6 +4,7 @@ using Wards.Application.UsesCases.Usuarios.CriarUsuario;
 using Wards.Application.UsesCases.Usuarios.ListarUsuario;
 using Wards.Application.UsesCases.Usuarios.ObterUsuario;
 using Wards.Application.UsesCases.Usuarios.Shared.Models;
+using Wards.Domain.Entities;
 
 namespace Wards.API.Controllers
 {
