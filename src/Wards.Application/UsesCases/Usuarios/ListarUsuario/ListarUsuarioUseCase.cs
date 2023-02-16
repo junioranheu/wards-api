@@ -5,16 +5,16 @@ namespace Wards.Application.UsesCases.Usuarios.ListarUsuario
 {
     public sealed class ListarUsuarioUseCase : IListarUsuarioUseCase
     {
-        public readonly IListarUsuarioQuery _listarUsuarioQuery;
+        public readonly IListarUsuarioQuery _listarQuery;
 
-        public ListarUsuarioUseCase(IListarUsuarioQuery listarUsuarioQuery)
+        public ListarUsuarioUseCase(IListarUsuarioQuery listarQuery)
         {
-            _listarUsuarioQuery = listarUsuarioQuery;
+            _listarQuery = listarQuery;
         }
 
         public async Task<IEnumerable<Usuario>> ExecuteAsync()
         {
-            return await _listarUsuarioQuery.ExecuteAsync();
+            return await _listarQuery.ExecuteAsync();
         }
     }
 }

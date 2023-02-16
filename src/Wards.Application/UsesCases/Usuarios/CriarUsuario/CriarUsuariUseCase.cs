@@ -5,16 +5,16 @@ namespace Wards.Application.UsesCases.Usuarios.CriarUsuario
 {
     public sealed class CriarUsuarioUseCase : ICriarUsuarioUseCase
     {
-        public readonly ICriarUsuarioCommand _criarUsuarioCommand;
+        public readonly ICriarUsuarioCommand _criarCommand;
 
-        public CriarUsuarioUseCase(ICriarUsuarioCommand criarUsuarioCommand)
+        public CriarUsuarioUseCase(ICriarUsuarioCommand criarCommand)
         {
-            _criarUsuarioCommand = criarUsuarioCommand;
+            _criarCommand = criarCommand;
         }
 
         public async Task<int> ExecuteAsync(UsuarioDTO dto)
         {
-            return await _criarUsuarioCommand.ExecuteAsync(dto);
+            return await _criarCommand.ExecuteAsync(dto);
         }
     }
 }

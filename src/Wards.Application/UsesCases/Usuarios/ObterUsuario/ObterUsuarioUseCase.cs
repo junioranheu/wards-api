@@ -8,17 +8,17 @@ namespace Wards.Application.UsesCases.Usuarios.ObterUsuario
     public sealed class ObterUsuarioUseCase : IObterUsuarioUseCase
     {
         private readonly IMemoryCache _memoryCache;
-        public readonly IObterUsuarioQuery _obterUsuarioQuery;
+        public readonly IObterUsuarioQuery _obterQuery;
 
-        public ObterUsuarioUseCase(IMemoryCache memoryCache, IObterUsuarioQuery obterUsuarioQuery)
+        public ObterUsuarioUseCase(IMemoryCache memoryCache, IObterUsuarioQuery obterQuery)
         {
             _memoryCache = memoryCache;
-            _obterUsuarioQuery = obterUsuarioQuery;
+            _obterQuery = obterQuery;
         }
 
         public async Task<Usuario> ExecuteAsync(int id)
         {
-            return await _obterUsuarioQuery.ExecuteAsync(id);
+            return await _obterQuery.ExecuteAsync(id);
         }
 
         public async Task<int[]> GetListaIdUsuarioPerfil(string email)
