@@ -1,12 +1,13 @@
 using Swashbuckle.AspNetCore.SwaggerUI;
 using Wards.API;
 using Wards.Application;
+using Wards.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 {
     builder.Services.AddDependencyInjectionAPI(builder);
     builder.Services.AddDependencyInjectionApplication();
-    builder.Services.AddDependencyInjectionInfra(builder);
+    builder.Services.AddDependencyInjectionInfrastructure(builder);
 
     builder.Services.AddControllers().AddNewtonsoftJson(options =>
     {
