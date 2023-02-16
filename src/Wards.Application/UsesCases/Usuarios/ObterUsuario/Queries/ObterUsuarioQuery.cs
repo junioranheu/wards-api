@@ -1,4 +1,6 @@
-﻿using Wards.Domain.Entities;
+﻿using Dapper;
+using Wards.Domain.Entities;
+using Wards.Infrastructure.Factory;
 
 namespace Wards.Application.UsesCases.Usuarios.ObterUsuario.Queries
 {

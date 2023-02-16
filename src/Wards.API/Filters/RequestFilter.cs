@@ -2,12 +2,14 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System.Net;
+using Wards.Application.UsesCases.Usuarios.ObterUsuario;
+using Wards.Domain.Enums;
 
 namespace Wards.API.Filters
 {
     public class AuthAttribute : TypeFilterAttribute
     {
-        public AuthAttribute(params UsuarioPerfilEnum[] roles) : base(typeof(AuthorizeFilter))
+        public AuthAttribute(params UsuarioRoleEnum[] roles) : base(typeof(AuthorizeFilter))
         {
             Arguments = new object[] { roles };
         }
@@ -18,7 +20,7 @@ namespace Wards.API.Filters
     {
         private readonly int[] _rolesNecessarias;
 
-        public AuthorizeFilter(params UsuarioPerfilEnum[] roles)
+        public AuthorizeFilter(params UsuarioRoleEnum[] roles)
         {
             _rolesNecessarias = NormalizarRoles(roles);
         }
@@ -80,7 +82,7 @@ namespace Wards.API.Filters
             return true;
         }
 
-        private static int[] NormalizarRoles(UsuarioPerfilEnum[] roles)
+        private static int[] NormalizarRoles(UsuarioRoleEnum[] roles)
         {
             List<int> r = new();
 

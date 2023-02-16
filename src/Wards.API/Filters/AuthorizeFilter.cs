@@ -1,4 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc.Filters;
+using Newtonsoft.Json;
+using Wards.Application.UsesCases.Logs.CriarLog;
+using Wards.Application.UsesCases.Usuarios.ObterUsuario;
+using Wards.Domain.Entities;
 
 namespace Wards.API.Filters
 {
@@ -29,7 +33,7 @@ namespace Wards.API.Filters
                     Endpoint = request.Path.Value ?? string.Empty,
                     Parametros = GetParametrosRequisicao(filterContextExecuting),
                     StatusResposta = response.StatusCode > 0 ? response.StatusCode : 0,
-                    IdUsuarioPerfil = usuarioPerfilLista.FirstOrDefault()
+                    UsuarioId = usuarioPerfilLista.FirstOrDefault()
                 };
 
                 await _criarLogUseCase.ExecuteAsync(l);

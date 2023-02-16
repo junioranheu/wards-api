@@ -1,4 +1,6 @@
-﻿using Wards.Application.UsesCases.Usuarios.Shared.Models;
+﻿using Dapper;
+using Wards.Application.UsesCases.Usuarios.Shared.Models;
+using Wards.Infrastructure.Factory;
 
 namespace Wards.Application.UsesCases.Usuarios.CriarUsuario.Commands
 {
