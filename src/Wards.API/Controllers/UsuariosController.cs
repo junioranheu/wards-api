@@ -1,4 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Wards.Application.UsesCases.Usuarios.AtualizarUsuario;
+using Wards.Application.UsesCases.Usuarios.CriarUsuario;
+using Wards.Application.UsesCases.Usuarios.ListarUsuario;
+using Wards.Application.UsesCases.Usuarios.ObterUsuario;
+using Wards.Application.UsesCases.Usuarios.Shared.Models;
 
 namespace Wards.API.Controllers
 {
@@ -25,16 +30,16 @@ namespace Wards.API.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult<int>> AtualizarUsuario(UsuarioInput input)
+        public async Task<ActionResult<int>> AtualizarUsuario(UsuarioDTO dto)
         {
-            int id = await _atualizarUsuarioUseCase.ExecuteAsync(input);
+            int id = await _atualizarUsuarioUseCase.ExecuteAsync(dto);
             return Ok(id);
         }
 
         [HttpPost]
-        public async Task<ActionResult<int>> CriarUsuario(UsuarioInput input)
+        public async Task<ActionResult<int>> CriarUsuario(UsuarioDTO dto)
         {
-            int id = await _criarUsuarioUseCase.ExecuteAsync(input);
+            int id = await _criarUsuarioUseCase.ExecuteAsync(dto);
             return Ok(id);
         }
 
