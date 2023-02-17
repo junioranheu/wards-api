@@ -27,7 +27,7 @@ namespace Wards.Infrastructure
 
         private static void AddServices(IServiceCollection services, WebApplicationBuilder builder)
         {
-            services.AddScoped<IConnectionFactory>(x => ActivatorUtilities.CreateInstance<ConnectionFactory>(x, builder));
+            services.AddTransient<IConnectionFactory>(x => ActivatorUtilities.CreateInstance<ConnectionFactory>(x, builder));
         }
 
         private static void AddAuth(IServiceCollection services, WebApplicationBuilder builder)

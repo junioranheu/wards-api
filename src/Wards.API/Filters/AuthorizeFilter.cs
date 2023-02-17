@@ -33,7 +33,7 @@ namespace Wards.API.Filters
                 UsuarioId = usuarioPerfilLista.FirstOrDefault()
             };
 
-            await _criarLogUseCase.ExecuteAsync(l);
+            // await _criarLogUseCase.ExecuteAsync(l);
         }
 
         private static string GetParametrosRequisicao(ActionExecutingContext filterContextExecuting)
