@@ -1,23 +1,23 @@
 ﻿using Dapper;
+using System.Data;
 using Wards.Domain.Entities;
-using Wards.Infrastructure.Factory;
 
 namespace Wards.Application.UsesCases.Usuarios.ListarUsuario.Queries
 {
     public sealed class ListarUsuarioQuery : IListarUsuarioQuery
     {
-        private readonly IConnectionFactory _connectionFactory;
+        private readonly IDbConnection _dbConnection;
 
-        public ListarUsuarioQuery(IConnectionFactory connectionFactory)
+        public ListarUsuarioQuery(IDbConnection dbConnection)
         {
-            _connectionFactory = connectionFactory;
+            _dbConnection = dbConnection;
         }
 
         public async Task<IEnumerable<Usuario>> ExecuteAsync()
         {
             string sql = $@"SELECT * FROM Usuarios WHERE IsAtivo = 1;";
 
-            return await _connectionFactory.CreateDbConnection().QueryAsync<Usuario>(sql);
+            return await _dbConnection.QueryAsync<Usuario>(sql);
         }
     }
 }

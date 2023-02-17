@@ -6,9 +6,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using MySqlConnector;
+using System.Data;
 using System.Text;
 using Wards.Infrastructure.Data;
-using Wards.Infrastructure.Factory;
 
 namespace Wards.Infrastructure
 {
@@ -27,7 +28,7 @@ namespace Wards.Infrastructure
 
         private static void AddServices(IServiceCollection services, WebApplicationBuilder builder)
         {
-            services.AddTransient<IConnectionFactory>(x => ActivatorUtilities.CreateInstance<ConnectionFactory>(x, builder));
+
         }
 
         private static void AddAuth(IServiceCollection services, WebApplicationBuilder builder)
@@ -75,7 +76,12 @@ namespace Wards.Infrastructure
             var secretSenhaBancoDados = builder.Configuration["SecretSenhaBancoDados"]; // secrets.json;
             string con = builder.Configuration.GetConnectionString(builder.Configuration["SystemSettings:NomeConnectionString"] ?? string.Empty) ?? string.Empty;
             con = con.Replace("[SecretSenhaBancoDados]", secretSenhaBancoDados);
+
+            // Entity Framework;
             builder.Services.AddDbContext<WardsContext>(options => options.UseMySql(con, ServerVersion.AutoDetect(con)));
+
+            // Dapper;
+            builder.Services.AddTransient<IDbConnection>((sp) => new MySqlConnection(con));
         }
 
         private static void AddSwagger(WebApplicationBuilder builder)

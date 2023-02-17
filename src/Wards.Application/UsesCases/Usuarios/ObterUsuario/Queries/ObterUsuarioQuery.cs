@@ -1,23 +1,23 @@
 ﻿using Dapper;
+using System.Data;
 using Wards.Domain.Entities;
-using Wards.Infrastructure.Factory;
 
 namespace Wards.Application.UsesCases.Usuarios.ObterUsuario.Queries
 {
     public sealed class ObterUsuarioQuery : IObterUsuarioQuery
     {
-        private readonly IConnectionFactory _connectionFactory;
+        private readonly IDbConnection _dbConnection;
 
-        public ObterUsuarioQuery(IConnectionFactory connectionFactory)
+        public ObterUsuarioQuery(IDbConnection dbConnection)
         {
-            _connectionFactory = connectionFactory;
+            _dbConnection = dbConnection;
         }
 
         public async Task<Usuario> ExecuteAsync(int id)
         {
             string sql = "";
 
-            return await _connectionFactory.CreateDbConnection().QueryFirstOrDefaultAsync<Usuario>(sql, new { id });
+            return await _dbConnection.QueryFirstOrDefaultAsync<Usuario>(sql, new { id });
         }
     }
 }

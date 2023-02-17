@@ -1,23 +1,23 @@
 ﻿using Dapper;
+using System.Data;
 using Wards.Domain.Entities;
-using Wards.Infrastructure.Factory;
 
 namespace Wards.Application.UsesCases.Logs.CriarLog.Commands
 {
     public sealed class CriarLogCommand : ICriarLogCommand
     {
-        private readonly IConnectionFactory _connectionFactory;
+        private readonly IDbConnection _dbConnection;
 
-        public CriarLogCommand(IConnectionFactory connectionFactory)
+        public CriarLogCommand(IDbConnection dbConnection)
         {
-            _connectionFactory = connectionFactory;
+            _dbConnection = dbConnection;
         }
 
         public async Task<int> ExecuteAsync(Log dto)
         {
             string sql = "";
 
-            return await _connectionFactory.CreateDbConnection().ExecuteAsync(sql, dto);
+            return await _dbConnection.ExecuteAsync(sql, dto);
         }
     }
 }
