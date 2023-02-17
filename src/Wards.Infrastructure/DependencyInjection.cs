@@ -81,7 +81,7 @@ namespace Wards.Infrastructure
             builder.Services.AddDbContext<WardsContext>(options => options.UseMySql(con, ServerVersion.AutoDetect(con)));
 
             // Dapper;
-            builder.Services.AddTransient<IDbConnection>((sp) => new MySqlConnection(con));
+            builder.Services.AddScoped<IDbConnection>((sp) => new MySqlConnection(con));
         }
 
         private static void AddSwagger(WebApplicationBuilder builder)
