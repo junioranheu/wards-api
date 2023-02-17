@@ -74,7 +74,7 @@ namespace Wards.Infrastructure
         {
             var secretSenhaBancoDados = builder.Configuration["SecretSenhaBancoDados"]; // secrets.json;
             string con = builder.Configuration.GetConnectionString(builder.Configuration["SystemSettings:NomeConnectionString"] ?? string.Empty) ?? string.Empty;
-            con = con.Replace("[secretSenhaBancoDados]", secretSenhaBancoDados);
+            con = con.Replace("[SecretSenhaBancoDados]", secretSenhaBancoDados);
             builder.Services.AddDbContext<WardsContext>(options => options.UseMySql(con, ServerVersion.AutoDetect(con)));
         }
 

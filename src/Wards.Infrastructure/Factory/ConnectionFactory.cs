@@ -20,7 +20,7 @@ namespace Wards.Infrastructure.Factory
         {
             var secretSenhaBancoDados = _builder.Configuration["SecretSenhaBancoDados"]; // secrets.json;
             string con = _builder.Configuration.GetConnectionString(_builder.Configuration["SystemSettings:NomeConnectionString"] ?? string.Empty) ?? string.Empty;
-            con = con.Replace("[secretSenhaBancoDados]", secretSenhaBancoDados);
+            con = con.Replace("[SecretSenhaBancoDados]", secretSenhaBancoDados);
 
             // return new SqlConnection(_configuration.GetConnectionString(con)); // SQL Server;
             return new MySqlConnection(_configuration.GetConnectionString(con)); // MySQL;
