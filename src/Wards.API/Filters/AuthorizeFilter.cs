@@ -20,24 +20,20 @@ namespace Wards.API.Filters
             ActionExecutedContext filterContextExecuted = await next();
             HttpRequest request = filterContextExecuted.HttpContext.Request;
             HttpResponse response = filterContextExecuted.HttpContext.Response;
-            string tipoRequisicao = request.Method;
 
-            if (tipoRequisicao != "GET")
+            var obterUsuarioUseCase = filterContextExecuted.HttpContext.RequestServices.GetService<IObterUsuarioUseCase>();
+            int[] usuarioPerfilLista = await obterUsuarioUseCase.GetListaIdUsuarioPerfil(GetUsuarioEmail(filterContextExecuted));
+
+            Log l = new()
             {
-                var obterUsuarioUseCase = filterContextExecuted.HttpContext.RequestServices.GetService<IObterUsuarioUseCase>();
-                int[] usuarioPerfilLista = await obterUsuarioUseCase.GetListaIdUsuarioPerfil(GetUsuarioEmail(filterContextExecuted));
+                TipoRequisicao = request.Method ?? string.Empty,
+                Endpoint = request.Path.Value ?? string.Empty,
+                Parametros = GetParametrosRequisicao(filterContextExecuting),
+                StatusResposta = response.StatusCode > 0 ? response.StatusCode : 0,
+                UsuarioId = usuarioPerfilLista.FirstOrDefault()
+            };
 
-                Log l = new()
-                {
-                    TipoRequisicao = tipoRequisicao,
-                    Endpoint = request.Path.Value ?? string.Empty,
-                    Parametros = GetParametrosRequisicao(filterContextExecuting),
-                    StatusResposta = response.StatusCode > 0 ? response.StatusCode : 0,
-                    UsuarioId = usuarioPerfilLista.FirstOrDefault()
-                };
-
-                await _criarLogUseCase.ExecuteAsync(l);
-            }
+            await _criarLogUseCase.ExecuteAsync(l);
         }
 
         private static string GetParametrosRequisicao(ActionExecutingContext filterContextExecuting)

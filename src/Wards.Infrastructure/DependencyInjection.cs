@@ -60,8 +60,8 @@ namespace Wards.Infrastructure
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                     .AddJwtBearer(o =>
                     {
-                        o.Audience = builder.Configuration["Azure:CliendId"] ?? string.Empty;
-                        o.Authority = builder.Configuration["Azure:Authority"] ?? string.Empty;
+                        o.Audience = builder.Configuration["AzureSettings:CliendId"] ?? string.Empty;
+                        o.Authority = builder.Configuration["AzureSettings:Authority"] ?? string.Empty;
                         o.TokenValidationParameters = new TokenValidationParameters
                         {
                             ValidateIssuer = false
@@ -71,7 +71,7 @@ namespace Wards.Infrastructure
 
         private static void AddContext(WebApplicationBuilder builder)
         {
-            string con = builder.Configuration.GetConnectionString("DBConnection") ?? string.Empty;
+            string con = builder.Configuration.GetConnectionString(builder.Configuration["SystemSettings:NomeConnectionString"] ?? string.Empty) ?? string.Empty;
             builder.Services.AddDbContext<WardsContext>(options => options.UseMySql(con, ServerVersion.AutoDetect(con)));
         }
 
