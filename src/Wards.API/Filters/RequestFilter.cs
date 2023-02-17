@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.Filters;
 using Newtonsoft.Json;
 using Wards.Application.UsesCases.Logs.CriarLog;
-using Wards.Application.UsesCases.Usuarios.ObterUsuario;
+using Wards.Application.UsesCases.UsuariosRoles.ObterUsuarioRole;
 using Wards.Domain.Entities;
 
 namespace Wards.API.Filters
@@ -21,8 +21,8 @@ namespace Wards.API.Filters
             HttpRequest request = filterContextExecuted.HttpContext.Request;
             HttpResponse response = filterContextExecuted.HttpContext.Response;
 
-            var obterUsuarioUseCase = filterContextExecuted.HttpContext.RequestServices.GetService<IObterUsuarioUseCase>();
-            int[] usuarioPerfilLista = await obterUsuarioUseCase.GetListaIdUsuarioPerfil(GetUsuarioEmail(filterContextExecuted));
+            var obterUsuarioRoleUseCase = filterContextExecuted.HttpContext.RequestServices.GetService<IObterUsuarioRoleUseCase>();
+            IEnumerable<UsuarioRole> usuarioRoles = await obterUsuarioRoleUseCase.ObterCacheObterUsuarioRolesByEmail(GetUsuarioEmail(filterContextExecuted));
 
             Log l = new()
             {
@@ -30,7 +30,7 @@ namespace Wards.API.Filters
                 Endpoint = request.Path.Value ?? string.Empty,
                 Parametros = GetParametrosRequisicao(filterContextExecuting),
                 StatusResposta = response.StatusCode > 0 ? response.StatusCode : 0,
-                UsuarioId = usuarioPerfilLista.FirstOrDefault()
+                UsuarioRoleId = (usuarioRoles.FirstOrDefault()?.UsuarioRoleId > 0 ? usuarioRoles.FirstOrDefault().UsuarioRoleId : 0)
             };
 
             await _criarLogUseCase.ExecuteAsync(l);

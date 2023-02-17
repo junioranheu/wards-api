@@ -2,7 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System.Net;
-using Wards.Application.UsesCases.Usuarios.ObterUsuario;
+using Wards.Application.UsesCases.UsuariosRoles.ObterUsuarioRole;
+using Wards.Domain.Entities;
 using Wards.Domain.Enums;
 
 namespace Wards.API.Filters
@@ -29,8 +30,8 @@ namespace Wards.API.Filters
         {
             if (IsUsuarioAutenticado(context))
             {
-                int[] usuarioPerfilLista = await GetListaUsuarioPerfis(context);
-                IsUsuarioTemAcesso(context, usuarioPerfilLista, _rolesNecessarias);
+                IEnumerable<UsuarioRole> usuarioRoles = await GetUsuarioRoles(context);
+                IsUsuarioTemAcesso(context, usuarioRoles, _rolesNecessarias);
             }
         }
 
@@ -45,12 +46,12 @@ namespace Wards.API.Filters
             return true;
         }
 
-        private static async Task<int[]> GetListaUsuarioPerfis(AuthorizationFilterContext context)
+        private static async Task<IEnumerable<UsuarioRole>> GetUsuarioRoles(AuthorizationFilterContext context)
         {
-            var obterUsuarioUseCase = context.HttpContext.RequestServices.GetService<IObterUsuarioUseCase>();
-            int[] idUsuarioPerfilLista = await obterUsuarioUseCase.GetListaIdUsuarioPerfil(GetUsuarioEmail(context));
+            var obterUsuarioRoleUseCase = context.HttpContext.RequestServices.GetService<IObterUsuarioRoleUseCase>();
+            IEnumerable<UsuarioRole> usuarioRoles = await obterUsuarioRoleUseCase.ObterCacheObterUsuarioRolesByEmail(GetUsuarioEmail(context));
 
-            return idUsuarioPerfilLista;
+            return usuarioRoles;
         }
 
         private static string GetUsuarioEmail(AuthorizationFilterContext context)
@@ -64,14 +65,14 @@ namespace Wards.API.Filters
             return string.Empty;
         }
 
-        private static bool IsUsuarioTemAcesso(AuthorizationFilterContext context, int[] usuarioPerfilLista, int[] _rolesNecessarias)
+        private static bool IsUsuarioTemAcesso(AuthorizationFilterContext context, IEnumerable<UsuarioRole> usuarioRoles, int[] _rolesNecessarias)
         {
             if (_rolesNecessarias.Length == 0)
             {
                 return true;
             }
 
-            bool isUsuarioTemAcesso = usuarioPerfilLista.Any(x => _rolesNecessarias.Any(y => x == y));
+            bool isUsuarioTemAcesso = usuarioRoles.Any(x => _rolesNecessarias.Any(y => x.RoleId == y));
 
             if (!isUsuarioTemAcesso)
             {

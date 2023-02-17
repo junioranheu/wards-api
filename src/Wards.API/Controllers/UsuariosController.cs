@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Wards.API.Filters;
 using Wards.Application.UsesCases.Usuarios.AtualizarUsuario;
 using Wards.Application.UsesCases.Usuarios.CriarUsuario;
 using Wards.Application.UsesCases.Usuarios.ListarUsuario;
 using Wards.Application.UsesCases.Usuarios.ObterUsuario;
 using Wards.Application.UsesCases.Usuarios.Shared.Models;
 using Wards.Domain.Entities;
+using Wards.Domain.Enums;
 
 namespace Wards.API.Controllers
 {
@@ -45,6 +47,7 @@ namespace Wards.API.Controllers
         }
 
         [HttpGet("listar")]
+        [AuthorizeFilter(UsuarioRoleEnum.Adm)]
         public async Task<ActionResult<IEnumerable<Usuario>>> ListarUsuario()
         {
             var lista = await _listarUsuarioUseCase.ExecuteAsync();

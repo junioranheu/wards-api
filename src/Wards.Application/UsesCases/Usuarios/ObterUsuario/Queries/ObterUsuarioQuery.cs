@@ -18,6 +18,6 @@ namespace Wards.Application.UsesCases.Usuarios.ObterUsuario.Queries
             string sql = "";
 
             return await _dbConnection.QueryFirstOrDefaultAsync<Usuario>(sql, new { id });
-        }
+        }   
     }
 }

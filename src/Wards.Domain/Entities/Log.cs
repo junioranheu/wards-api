@@ -15,8 +15,8 @@ namespace Wards.Domain.Entities
 
         public int StatusResposta { get; set; }
 
-        public int UsuarioId { get; set; }
-        public Usuario? Usuarios { get; init; }
+        public int UsuarioRoleId { get; set; }
+        public UsuarioRole? UsuarioRoles { get; init; }
 
         public DateTime Data { get; set; } = DateTime.UtcNow;
     }

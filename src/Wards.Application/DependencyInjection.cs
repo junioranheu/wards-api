@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Wards.Application.UsesCases.Logs;
 using Wards.Application.UsesCases.Usuarios;
+using Wards.Application.UsesCases.UsuariosRoles;
 
 namespace Wards.Application
 {
@@ -10,6 +11,7 @@ namespace Wards.Application
         {
             services.AddLogsApplication();
             services.AddUsuariosApplication();
+            services.AddUsuariosRolesApplication();
 
             return services;
         }
