@@ -28,7 +28,7 @@ WebApplication app = builder.Build();
         app.UseSwaggerUI(c =>
         {
             c.SwaggerEndpoint("/swagger/v1/swagger.json", "Wards.API");
-            c.RoutePrefix = "";
+            // c.RoutePrefix = "";
             c.DocExpansion(DocExpansion.None);
         });
 

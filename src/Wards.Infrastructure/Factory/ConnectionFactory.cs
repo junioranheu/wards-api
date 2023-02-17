@@ -15,7 +15,8 @@ namespace Wards.Infrastructure.Factory
 
         public IDbConnection CreateDbConnection()
         {
-            return new SqlConnection(_configuration.GetConnectionString(new ConfigurationBuilder().AddJsonFile("appsettings.json").Build().GetSection("SystemSettings")["NomeConnectionString"] ?? string.Empty));
+            string con = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build().GetSection("SystemSettings")["NomeConnectionString"] ?? string.Empty;
+            return new SqlConnection(_configuration.GetConnectionString(con));
         }
     }
 }

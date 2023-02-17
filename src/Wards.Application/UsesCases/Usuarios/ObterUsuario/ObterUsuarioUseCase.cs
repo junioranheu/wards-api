@@ -30,7 +30,7 @@ namespace Wards.Application.UsesCases.Usuarios.ObterUsuario
 
                 List<int> l = new()
                 {
-                    (int)UsuarioRoleEnum.Administrador,
+                    (int)UsuarioRoleEnum.Adm,
                     (int)UsuarioRoleEnum.Comum
                 };
 

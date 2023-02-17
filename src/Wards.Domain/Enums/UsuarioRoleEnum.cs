@@ -1,8 +1,13 @@
-﻿namespace Wards.Domain.Enums
+﻿using System.ComponentModel;
+
+namespace Wards.Domain.Enums
 {
     public enum UsuarioRoleEnum
     {
-        Administrador = 1,
+        [Description("Administrador")]
+        Adm = 1,
+
+        [Description("Usuário comum")]
         Comum = 2
     }
 }

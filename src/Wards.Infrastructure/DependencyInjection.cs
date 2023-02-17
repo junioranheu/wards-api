@@ -8,6 +8,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
 using Wards.Infrastructure.Data;
+using Wards.Infrastructure.Factory;
 
 namespace Wards.Infrastructure
 {
@@ -26,7 +27,7 @@ namespace Wards.Infrastructure
 
         private static void AddServices(IServiceCollection services)
         {
-
+            services.AddScoped<IConnectionFactory, ConnectionFactory>();
         }
 
         private static void AddAuth(IServiceCollection services, WebApplicationBuilder builder)
@@ -71,7 +72,9 @@ namespace Wards.Infrastructure
 
         private static void AddContext(WebApplicationBuilder builder)
         {
+            var secretSenhaBancoDados = builder.Configuration["SecretSenhaBancoDados"]; // secrets.json;
             string con = builder.Configuration.GetConnectionString(builder.Configuration["SystemSettings:NomeConnectionString"] ?? string.Empty) ?? string.Empty;
+            con = con.Replace("[secretSenhaBancoDados]", secretSenhaBancoDados); 
             builder.Services.AddDbContext<WardsContext>(options => options.UseMySql(con, ServerVersion.AutoDetect(con)));
         }
 
