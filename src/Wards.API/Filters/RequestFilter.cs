@@ -1,97 +1,58 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Filters;
-using System.Net;
+﻿using Microsoft.AspNetCore.Mvc.Filters;
+using Newtonsoft.Json;
+using Wards.Application.UsesCases.Logs.CriarLog;
 using Wards.Application.UsesCases.Usuarios.ObterUsuario;
-using Wards.Domain.Enums;
+using Wards.Domain.Entities;
 
 namespace Wards.API.Filters
 {
-    public class AuthAttribute : TypeFilterAttribute
+    public sealed class RequestFilter : ActionFilterAttribute
     {
-        public AuthAttribute(params UsuarioRoleEnum[] roles) : base(typeof(AuthorizeFilter))
-        {
-            Arguments = new object[] { roles };
-        }
-    }
+        private readonly ICriarLogUseCase _criarLogUseCase;
 
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true, Inherited = true)]
-    public sealed class AuthorizeFilter : AuthorizeAttribute, IAsyncAuthorizationFilter
-    {
-        private readonly int[] _rolesNecessarias;
-
-        public AuthorizeFilter(params UsuarioRoleEnum[] roles)
+        public RequestFilter(ICriarLogUseCase criarLogUseCase)
         {
-            _rolesNecessarias = NormalizarRoles(roles);
+            _criarLogUseCase = criarLogUseCase;
         }
 
-        public async Task OnAuthorizationAsync(AuthorizationFilterContext context)
+        public override async Task OnActionExecutionAsync(ActionExecutingContext filterContextExecuting, ActionExecutionDelegate next)
         {
-            if (IsUsuarioAutenticado(context))
+            ActionExecutedContext filterContextExecuted = await next();
+            HttpRequest request = filterContextExecuted.HttpContext.Request;
+            HttpResponse response = filterContextExecuted.HttpContext.Response;
+
+            var obterUsuarioUseCase = filterContextExecuted.HttpContext.RequestServices.GetService<IObterUsuarioUseCase>();
+            int[] usuarioPerfilLista = await obterUsuarioUseCase.GetListaIdUsuarioPerfil(GetUsuarioEmail(filterContextExecuted));
+
+            Log l = new()
             {
-                int[] usuarioPerfilLista = await GetListaUsuarioPerfis(context);
-                IsUsuarioTemAcesso(context, usuarioPerfilLista, _rolesNecessarias);
-            }
+                TipoRequisicao = request.Method ?? string.Empty,
+                Endpoint = request.Path.Value ?? string.Empty,
+                Parametros = GetParametrosRequisicao(filterContextExecuting),
+                StatusResposta = response.StatusCode > 0 ? response.StatusCode : 0,
+                UsuarioId = usuarioPerfilLista.FirstOrDefault()
+            };
+
+            await _criarLogUseCase.ExecuteAsync(l);
         }
 
-        private static bool IsUsuarioAutenticado(AuthorizationFilterContext context)
+        private static string GetParametrosRequisicao(ActionExecutingContext filterContextExecuting)
         {
-            if (!context.HttpContext.User.Identity.IsAuthenticated)
+            var parametros = filterContextExecuting.ActionArguments.FirstOrDefault().Value ?? string.Empty;
+            string parametrosSerialiazed = !String.IsNullOrEmpty(parametros.ToString()) ? JsonConvert.SerializeObject(parametros) : string.Empty;
+
+            return parametrosSerialiazed;
+        }
+
+        private static string GetUsuarioEmail(ActionExecutedContext filterContextExecuted)
+        {
+            if (filterContextExecuted.HttpContext.User.Identity.IsAuthenticated)
             {
-                context.Result = new UnauthorizedResult();
-                return false;
-            }
-
-            return true;
-        }
-
-        private static async Task<int[]> GetListaUsuarioPerfis(AuthorizationFilterContext context)
-        {
-            var obterUsuarioUseCase = context.HttpContext.RequestServices.GetService<IObterUsuarioUseCase>();
-            int[] idUsuarioPerfilLista = await obterUsuarioUseCase.GetListaIdUsuarioPerfil(GetUsuarioEmail(context));
-
-            return idUsuarioPerfilLista;
-        }
-
-        private static string GetUsuarioEmail(AuthorizationFilterContext context)
-        {
-            if (context.HttpContext.User.Identity.IsAuthenticated)
-            {
-                var claim = context.HttpContext.User.Claims.First(c => c.Type == "preferred_username");
+                var claim = filterContextExecuted.HttpContext.User.Claims.First(c => c.Type == "preferred_username");
                 return claim.Value ?? string.Empty;
             }
 
             return string.Empty;
-        }
-
-        private static bool IsUsuarioTemAcesso(AuthorizationFilterContext context, int[] usuarioPerfilLista, int[] _rolesNecessarias)
-        {
-            if (_rolesNecessarias.Length == 0)
-            {
-                return true;
-            }
-
-            bool isUsuarioTemAcesso = usuarioPerfilLista.Any(x => _rolesNecessarias.Any(y => x == y));
-
-            if (!isUsuarioTemAcesso)
-            {
-                context.Result = new StatusCodeResult((int)HttpStatusCode.Forbidden);
-                return false;
-            }
-
-            return true;
-        }
-
-        private static int[] NormalizarRoles(UsuarioRoleEnum[] roles)
-        {
-            List<int> r = new();
-
-            foreach (var role in roles)
-            {
-                r.Add((int)role);
-            }
-
-            return r.ToArray();
         }
     }
 }
