@@ -2,8 +2,10 @@ using Swashbuckle.AspNetCore.SwaggerUI;
 using Wards.API;
 using Wards.Application;
 using Wards.Infrastructure;
+using Wards.Infrastructure.Data;
+using Wards.Infrastructure.Seed;
 
-var builder = WebApplication.CreateBuilder(args);
+WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 {
     builder.Services.AddDependencyInjectionAPI(builder);
     builder.Services.AddDependencyInjectionApplication();
@@ -16,10 +18,12 @@ var builder = WebApplication.CreateBuilder(args);
     });
 }
 
-var app = builder.Build();
+WebApplication app = builder.Build();
 {
     if (app.Environment.IsDevelopment())
     {
+        await DBInitialize(app, false);
+
         app.UseSwagger();
         app.UseSwaggerUI(c =>
         {
@@ -43,4 +47,23 @@ var app = builder.Build();
     app.MapControllers();
 
     app.Run();
+}
+
+static async Task DBInitialize(WebApplication app, bool isInitialize)
+{
+    if (isInitialize)
+    {
+        using IServiceScope scope = app.Services.CreateScope();
+        IServiceProvider services = scope.ServiceProvider;
+
+        try
+        {
+            WardsContext context = services.GetRequiredService<WardsContext>();
+            await DbInitializer.Initialize(context);
+        }
+        catch (Exception ex)
+        {
+            string erroBD = ex.Message.ToString();
+        }
+    }
 }

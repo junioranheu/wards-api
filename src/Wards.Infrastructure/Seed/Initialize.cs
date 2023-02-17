@@ -10,14 +10,10 @@ namespace Wards.Infrastructure.Seed
     {
         public static async Task Initialize(WardsContext context)
         {
-            // Exclui o esquema, copia as queries, cria esquema/tabelas, popula o BD;
-            if (false)
-            {
-                await context.Database.EnsureDeletedAsync();
-                await context.Database.EnsureCreatedAsync();
+            await context.Database.EnsureDeletedAsync();
+            await context.Database.EnsureCreatedAsync();
 
-                await Seed(context, HorarioBrasilia());
-            }
+            await Seed(context, HorarioBrasilia());
         }
 
         public static async Task Seed(WardsContext context, DateTime dataAgora)
