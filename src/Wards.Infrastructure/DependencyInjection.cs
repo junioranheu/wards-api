@@ -16,7 +16,7 @@ namespace Wards.Infrastructure
     {
         public static IServiceCollection AddDependencyInjectionInfrastructure(this IServiceCollection services, WebApplicationBuilder builder)
         {
-            AddServices(services);
+            AddServices(services, builder);
             AddAuth(services, builder);
             AddContext(builder);
             AddSwagger(builder);
@@ -25,9 +25,9 @@ namespace Wards.Infrastructure
             return services;
         }
 
-        private static void AddServices(IServiceCollection services)
+        private static void AddServices(IServiceCollection services, WebApplicationBuilder builder)
         {
-            services.AddScoped<IConnectionFactory, ConnectionFactory>();
+            services.AddScoped<IConnectionFactory>(x => ActivatorUtilities.CreateInstance<ConnectionFactory>(x, builder));
         }
 
         private static void AddAuth(IServiceCollection services, WebApplicationBuilder builder)
@@ -74,7 +74,7 @@ namespace Wards.Infrastructure
         {
             var secretSenhaBancoDados = builder.Configuration["SecretSenhaBancoDados"]; // secrets.json;
             string con = builder.Configuration.GetConnectionString(builder.Configuration["SystemSettings:NomeConnectionString"] ?? string.Empty) ?? string.Empty;
-            con = con.Replace("[secretSenhaBancoDados]", secretSenhaBancoDados); 
+            con = con.Replace("[secretSenhaBancoDados]", secretSenhaBancoDados);
             builder.Services.AddDbContext<WardsContext>(options => options.UseMySql(con, ServerVersion.AutoDetect(con)));
         }
 

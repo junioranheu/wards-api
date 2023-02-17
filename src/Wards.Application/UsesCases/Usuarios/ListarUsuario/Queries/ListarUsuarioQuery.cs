@@ -12,9 +12,10 @@ namespace Wards.Application.UsesCases.Usuarios.ListarUsuario.Queries
         {
             _connectionFactory = connectionFactory;
         }
+
         public async Task<IEnumerable<Usuario>> ExecuteAsync()
         {
-            string sql = "";
+            string sql = $@"SELECT * FROM Usuarios WHERE IsAtivo = 1;";
 
             return await _connectionFactory.CreateDbConnection().QueryAsync<Usuario>(sql);
         }
