@@ -3,16 +3,14 @@ using static Wards.Utils.Common;
 
 namespace Wards.Domain.Entities
 {
-    public sealed class Usuario
+    public class Role
     {
         [Key]
-        public int UsuarioId { get; set; }
+        public int RoleId { get; set; }
 
-        public string? NomeCompleto { get; set; } = string.Empty;
+        public string? Tipo { get; set; } = null;
 
-        public string? Email { get; set; } = string.Empty;
-
-        public string? Senha { get; set; } = string.Empty;
+        public string? Descricao { get; set; } = null;
 
         public bool IsAtivo { get; set; } = true;
 

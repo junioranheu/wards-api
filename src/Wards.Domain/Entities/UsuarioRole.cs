@@ -8,12 +8,12 @@ namespace Wards.Domain.Entities
         [Key]
         public int UsuarioRoleId { get; set; }
 
-        public string? Tipo { get; set; } = null;
+        public int UsuarioId { get; set; }
+        public Usuario? Usuarios { get; set; }
 
-        public string? Descricao { get; set; } = null;
+        public int RoleId { get; set; }
+        public Role? Roles { get; set; }
 
-        public bool IsAtivo { get; set; } = true;
-
-        public DateTime DataRegistro { get; set; } = HorarioBrasilia();
+        public DateTime Data { get; set; } = HorarioBrasilia();
     }
 }

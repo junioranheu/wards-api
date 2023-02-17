@@ -14,8 +14,9 @@ namespace Wards.Infrastructure.Data
         public DbSet<Log> Logs { get; set; }
 
         // Usuários;
-        public DbSet<UsuarioRole> UsuariosRoles { get; set; }
+        public DbSet<Role> Roles { get; set; }
         public DbSet<Usuario> Usuarios { get; set; }
+        public DbSet<UsuarioRole> UsuariosRoles { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
