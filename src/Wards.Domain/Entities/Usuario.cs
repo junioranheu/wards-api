@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Wards.Domain.Enums;
+using static Wards.Utils.Common;
 
 namespace Wards.Domain.Entities
 {

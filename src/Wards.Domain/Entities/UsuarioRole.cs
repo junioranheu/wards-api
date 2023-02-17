@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using static Wards.Utils.Common;
 
 namespace Wards.Domain.Entities
 {

@@ -12,6 +12,6 @@ namespace Wards.Application.UsesCases.Usuarios.Shared.Models
 
         public UsuarioRoleEnum Role { get; set; } = UsuarioRoleEnum.Comum;
 
-        public StatusAtivoInativoEnum IsAtivo { get; set; } = StatusAtivoInativoEnum.Ativo;
+        public bool IsAtivo { get; set; } = true;
     }
 }

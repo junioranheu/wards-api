@@ -2,6 +2,7 @@
 using Wards.Domain.Entities;
 using Wards.Domain.Enums;
 using Wards.Infrastructure.Data;
+using static Wards.Utils.Common;
 
 namespace Wards.Infrastructure.Seed
 {

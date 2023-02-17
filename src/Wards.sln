@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wards.Infrastructure", "War
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wards.UnitTests", "Wards.UnitTests\Wards.UnitTests.csproj", "{F31F7740-06EB-4C73-8CD7-C494C5769536}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wards.Utils", "Wards.Utils\Wards.Utils.csproj", "{CCF48C53-A150-4CE6-8FF8-6B31D147DBD8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{F31F7740-06EB-4C73-8CD7-C494C5769536}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F31F7740-06EB-4C73-8CD7-C494C5769536}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F31F7740-06EB-4C73-8CD7-C494C5769536}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CCF48C53-A150-4CE6-8FF8-6B31D147DBD8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CCF48C53-A150-4CE6-8FF8-6B31D147DBD8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CCF48C53-A150-4CE6-8FF8-6B31D147DBD8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CCF48C53-A150-4CE6-8FF8-6B31D147DBD8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
