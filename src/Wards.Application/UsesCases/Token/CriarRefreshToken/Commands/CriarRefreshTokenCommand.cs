@@ -4,7 +4,7 @@ using Wards.Infrastructure.Data;
 
 namespace Wards.Application.UsesCases.Token.CriarRefreshToken.Commands
 {
-    public sealed class CriarRefreshTokenCommand
+    public sealed class CriarRefreshTokenCommand : ICriarRefreshTokenCommand
     {
         public readonly WardsContext _context;
 
@@ -13,18 +13,24 @@ namespace Wards.Application.UsesCases.Token.CriarRefreshToken.Commands
             _context = context;
         }
 
-        public async Task? Criar(RefreshToken input)
+        public async Task<bool> Criar(RefreshToken input)
         {
-            // #1 - Excluir refresh token, caso exista;
+            await DeletarRefreshTokenAntigo(input);
+
+            await _context.AddAsync(input);
+            await _context.SaveChangesAsync();
+
+            return true;
+        }
+
+        private async Task DeletarRefreshTokenAntigo(RefreshToken input)
+        {
             var dados = await _context.RefreshTokens.Where(u => u.UsuarioId == input.UsuarioId).AsNoTracking().ToListAsync();
 
             if (dados is not null)
             {
                 _context.RefreshTokens.RemoveRange(dados);
             }
-
-            await _context.AddAsync(input);
-            await _context.SaveChangesAsync();
         }
     }
 }

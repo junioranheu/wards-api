@@ -3,7 +3,7 @@ using Wards.Domain.Entities;
 
 namespace Wards.Application.UsesCases.Token.CriarRefreshToken
 {
-    public sealed class CriarRefreshTokenUsecase
+    public sealed class CriarRefreshTokenUsecase : ICriarRefreshTokenUsecase
     {
         public readonly CriarRefreshTokenCommand _criarCommand;
 
@@ -12,9 +12,9 @@ namespace Wards.Application.UsesCases.Token.CriarRefreshToken
             _criarCommand = criarCommand;
         }
 
-        public async Task Criar(RefreshToken input)
+        public async Task<bool> Criar(RefreshToken input)
         {
-            await _criarCommand.Criar(input);
+            return await _criarCommand.Criar(input);
         }
     }
 }

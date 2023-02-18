@@ -1,5 +1,5 @@
 ﻿using Wards.Application.UsesCases.Usuarios.CriarUsuario.Commands;
-using Wards.Application.UsesCases.Usuarios.Shared.Models;
+using Wards.Domain.Entities;
 
 namespace Wards.Application.UsesCases.Usuarios.CriarUsuario
 {
@@ -12,9 +12,9 @@ namespace Wards.Application.UsesCases.Usuarios.CriarUsuario
             _criarCommand = criarCommand;
         }
 
-        public async Task<int> ExecuteAsync(UsuarioDTO dto)
+        public async Task<int> ExecuteAsync(Usuario input)
         {
-            return await _criarCommand.ExecuteAsync(dto);
+            return await _criarCommand.ExecuteAsync(input);
         }
     }
 }
