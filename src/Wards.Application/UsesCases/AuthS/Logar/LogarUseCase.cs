@@ -1,5 +1,4 @@
-﻿using System;
-using Wards.Application.UsesCases.Tokens.CriarRefreshToken;
+﻿using Wards.Application.UsesCases.Tokens.CriarRefreshToken;
 using Wards.Application.UsesCases.Usuarios.ObterUsuario;
 using Wards.Domain.DTOs;
 using Wards.Domain.Entities;
@@ -50,8 +49,8 @@ namespace Wards.Application.UsesCases.Auths.Logar
                 return erro;
             }
 
-            // #4 - Converter Usuario para UsuarioDTO;
-            UsuarioDTO usuarioDTO = ConverterParaUsuarioDTO(usuario);
+            // #4 - Converter para DTO;
+            UsuarioDTO usuarioDTO = ConverterUsuarioParaUsuarioDTO(usuario);
 
             // #5 - Criar token JWT;
             usuarioDTO.Token = _jwtTokenGenerator.GerarToken(usuarioDTO, null);
@@ -72,7 +71,7 @@ namespace Wards.Application.UsesCases.Auths.Logar
             return usuarioDTO;
         }
 
-        private static UsuarioDTO ConverterParaUsuarioDTO(Usuario input)
+        private static UsuarioDTO ConverterUsuarioParaUsuarioDTO(Usuario input)
         {
             return new UsuarioDTO()
             {
