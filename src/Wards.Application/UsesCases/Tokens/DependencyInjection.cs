@@ -12,7 +12,7 @@ namespace Wards.Application.UsesCases.Tokens
     {
         public static IServiceCollection AddTokensApplication(this IServiceCollection services)
         {
-            services.AddScoped<ICriarRefreshTokenUsecase, CriarRefreshTokenUsecase>();
+            services.AddScoped<ICriarRefreshTokenUseCase, CriarRefreshTokenUseCase>();
             services.AddScoped<ICriarRefreshTokenCommand, CriarRefreshTokenCommand>();
 
             services.AddScoped<IDeletarRefreshTokenUseCase, DeletarRefreshTokenUseCase>();

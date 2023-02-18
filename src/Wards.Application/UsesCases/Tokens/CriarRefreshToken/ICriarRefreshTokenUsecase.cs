@@ -2,7 +2,7 @@
 
 namespace Wards.Application.UsesCases.Tokens.CriarRefreshToken
 {
-    public interface ICriarRefreshTokenUsecase
+    public interface ICriarRefreshTokenUseCase
     {
         Task<bool> Criar(RefreshToken input);
     }

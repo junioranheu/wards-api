@@ -4,12 +4,12 @@ using Wards.Domain.Entities;
 
 namespace Wards.Application.UsesCases.Tokens.CriarRefreshToken
 {
-    public sealed class CriarRefreshTokenUsecase : ICriarRefreshTokenUsecase
+    public sealed class CriarRefreshTokenUseCase : ICriarRefreshTokenUseCase
     {
         public readonly CriarRefreshTokenCommand _criarCommand;
         public readonly DeletarRefreshTokenCommand _deletarCommand;
 
-        public CriarRefreshTokenUsecase(CriarRefreshTokenCommand criarCommand, DeletarRefreshTokenCommand deletarCommand)
+        public CriarRefreshTokenUseCase(CriarRefreshTokenCommand criarCommand, DeletarRefreshTokenCommand deletarCommand)
         {
             _criarCommand = criarCommand;
             _deletarCommand = deletarCommand;

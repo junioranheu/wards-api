@@ -13,12 +13,12 @@ namespace Wards.Application.UsesCases.Auths.Logar
     {
         private readonly IJwtTokenGenerator _jwtTokenGenerator;
         private readonly IObterUsuarioUseCase _obterUsuarioUseCase;
-        private readonly ICriarRefreshTokenUsecase _criarRefreshTokenUseCase;
+        private readonly ICriarRefreshTokenUseCase _criarRefreshTokenUseCase;
 
         public LogarUseCase(
             IJwtTokenGenerator jwtTokenGenerator,
             IObterUsuarioUseCase obterUsuarioUseCase,
-            ICriarRefreshTokenUsecase criarRefreshTokenUseCase)
+            ICriarRefreshTokenUseCase criarRefreshTokenUseCase)
         {
             _jwtTokenGenerator = jwtTokenGenerator;
             _obterUsuarioUseCase = obterUsuarioUseCase;
