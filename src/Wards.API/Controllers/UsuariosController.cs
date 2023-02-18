@@ -23,8 +23,7 @@ namespace Wards.API.Controllers
             IAtualizarUsuarioUseCase atualizarUsuarioUseCase,
             ICriarUsuarioUseCase criarUsuarioUseCase,
             IListarUsuarioUseCase listarUsuarioUseCase,
-            IObterUsuarioUseCase obterUsuarioUseCase
-            )
+            IObterUsuarioUseCase obterUsuarioUseCase)
         {
             _atualizarUsuarioUseCase = atualizarUsuarioUseCase;
             _criarUsuarioUseCase = criarUsuarioUseCase;

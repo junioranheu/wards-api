@@ -1,9 +1,9 @@
-﻿using Wards.Application.UsesCases.Usuarios.Shared.Models;
+﻿using Wards.Domain.Entities;
 
 namespace Wards.Application.UsesCases.Usuarios.CriarUsuario.Commands
 {
     public interface ICriarUsuarioCommand
     {
-        Task<int> ExecuteAsync(UsuarioDTO dto);
+        Task<int> ExecuteAsync(Usuario dto);
     }
 }

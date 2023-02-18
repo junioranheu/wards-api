@@ -1,19 +1,23 @@
-﻿using Wards.Application.UsesCases.Usuarios.Shared.Models;
+﻿using Wards.Application.UsesCases.Usuarios.ObterUsuario;
+using Wards.Application.UsesCases.Usuarios.Shared.Models;
 using Wards.Infrastructure.Auth.Token;
 using static Wards.Utils.Common;
 
 namespace Wards.Application.UsesCases.Autenticar.Logar
 {
-    public class LogarUseCase
+    public sealed class LogarUseCase : ILogarUseCase
     {
         private readonly IJwtTokenGenerator _jwtTokenGenerator;
-        private readonly IUsuarioRepository _usuarioRepository;
+        private readonly IObterUsuarioUseCase _obterUsuarioUseCase;
         private readonly IRefreshTokenRepository _refreshTokenRepository;
 
-        public LogarUseCase(IJwtTokenGenerator jwtTokenGenerator, IUsuarioRepository usuarioRepository, IRefreshTokenRepository refreshTokenRepository, IMapper map)
+        public LogarUseCase(
+            IJwtTokenGenerator jwtTokenGenerator,
+            IObterUsuarioUseCase obterUsuarioUseCase,
+            IRefreshTokenRepository refreshTokenRepository)
         {
             _jwtTokenGenerator = jwtTokenGenerator;
-            _usuarioRepository = usuarioRepository;
+            _obterUsuarioUseCase = obterUsuarioUseCase;
             _refreshTokenRepository = refreshTokenRepository;
         }
 

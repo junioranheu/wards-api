@@ -1,6 +1,6 @@
 ﻿using Dapper;
 using System.Data;
-using Wards.Application.UsesCases.Usuarios.Shared.Models;
+using Wards.Domain.Entities;
 
 namespace Wards.Application.UsesCases.Usuarios.CriarUsuario.Commands
 {
@@ -13,7 +13,7 @@ namespace Wards.Application.UsesCases.Usuarios.CriarUsuario.Commands
             _dbConnection = dbConnection;
         }
 
-        public async Task<int> ExecuteAsync(UsuarioDTO dto)
+        public async Task<int> ExecuteAsync(Usuario dto)
         {
             string sql = "";
 
