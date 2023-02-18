@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using static Wards.Utils.Common;
 
 namespace Wards.Domain.Entities
 {
@@ -18,6 +19,6 @@ namespace Wards.Domain.Entities
         public int UsuarioRoleId { get; set; }
         public UsuarioRole? UsuarioRoles { get; init; }
 
-        public DateTime Data { get; set; } = DateTime.UtcNow;
+        public DateTime Data { get; set; } = HorarioBrasilia();
     }
 }

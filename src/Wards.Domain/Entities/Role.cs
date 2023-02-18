@@ -3,7 +3,7 @@ using static Wards.Utils.Common;
 
 namespace Wards.Domain.Entities
 {
-    public class Role
+    public sealed class Role
     {
         [Key]
         public int RoleId { get; set; }

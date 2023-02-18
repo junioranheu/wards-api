@@ -1,8 +1,9 @@
-﻿using Wards.Domain.Enums;
+﻿using Wards.Domain.DTOs;
+using Wards.Domain.Enums;
 
 namespace Wards.Application.UsesCases.Usuarios.Shared.Models
 {
-    public sealed class UsuarioDTO
+    public sealed class UsuarioDTO : _RetornoApiDTO
     {
         public int UsuarioId { get; set; }
 

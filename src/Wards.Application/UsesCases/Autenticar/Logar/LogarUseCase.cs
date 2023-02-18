@@ -1,4 +1,6 @@
 ﻿using Wards.Application.UsesCases.Usuarios.Shared.Models;
+using Wards.Infrastructure.Auth.Token;
+using static Wards.Utils.Common;
 
 namespace Wards.Application.UsesCases.Autenticar.Logar
 {
@@ -7,14 +9,12 @@ namespace Wards.Application.UsesCases.Autenticar.Logar
         private readonly IJwtTokenGenerator _jwtTokenGenerator;
         private readonly IUsuarioRepository _usuarioRepository;
         private readonly IRefreshTokenRepository _refreshTokenRepository;
-        private readonly IMapper _map;
 
         public LogarUseCase(IJwtTokenGenerator jwtTokenGenerator, IUsuarioRepository usuarioRepository, IRefreshTokenRepository refreshTokenRepository, IMapper map)
         {
             _jwtTokenGenerator = jwtTokenGenerator;
             _usuarioRepository = usuarioRepository;
             _refreshTokenRepository = refreshTokenRepository;
-            _map = map;
         }
 
         public async Task<UsuarioDTO> Login(UsuarioDTO dto)

@@ -3,7 +3,7 @@ using static Wards.Utils.Common;
 
 namespace Wards.Domain.DTOs
 {
-    public class UsuarioSenhaDTO : _RetornoApiDTO
+    public sealed class UsuarioDTO : _RetornoApiDTO
     {
         [Key]
         public int UsuarioId { get; set; }
@@ -15,5 +15,9 @@ namespace Wards.Domain.DTOs
         public bool IsAtivo { get; set; } = true;
 
         public DateTime Data { get; set; } = HorarioBrasilia();
+
+        public string? Token { get; set; } = null;
+
+        public string? RefreshToken { get; set; } = null;
     }
 }
