@@ -1,9 +1,9 @@
 ﻿using Wards.Application.UsesCases.Usuarios.ObterUsuario;
-using Wards.Application.UsesCases.Usuarios.Shared.Models;
+using Wards.Domain.DTOs;
 using Wards.Infrastructure.Auth.Token;
 using static Wards.Utils.Common;
 
-namespace Wards.Application.UsesCases.Autenticar.Logar
+namespace Wards.Application.UsesCases.Auths.Logar
 {
     public sealed class LogarUseCase : ILogarUseCase
     {
@@ -21,7 +21,7 @@ namespace Wards.Application.UsesCases.Autenticar.Logar
             _refreshTokenRepository = refreshTokenRepository;
         }
 
-        public async Task<UsuarioDTO> Login(UsuarioDTO dto)
+        public async Task<UsuarioDTO> Logar(UsuarioDTO dto)
         {
             // #1 - Verificar se o usuário existe;
             var usuario = await _usuarioRepository.GetByEmailOuUsuarioSistema(dto?.Email, dto?.NomeUsuarioSistema);

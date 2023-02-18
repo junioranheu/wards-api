@@ -2,7 +2,7 @@
 using Wards.Domain.Entities;
 using Wards.Infrastructure.Data;
 
-namespace Wards.Application.UsesCases.Token.CriarRefreshToken.Commands
+namespace Wards.Application.UsesCases.Tokens.CriarRefreshToken.Commands
 {
     public sealed class CriarRefreshTokenCommand : ICriarRefreshTokenCommand
     {

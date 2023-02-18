@@ -1,7 +1,7 @@
-﻿using Wards.Application.UsesCases.Token.CriarRefreshToken.Commands;
+﻿using Wards.Application.UsesCases.Tokens.CriarRefreshToken.Commands;
 using Wards.Domain.Entities;
 
-namespace Wards.Application.UsesCases.Token.CriarRefreshToken
+namespace Wards.Application.UsesCases.Tokens.CriarRefreshToken
 {
     public sealed class CriarRefreshTokenUsecase : ICriarRefreshTokenUsecase
     {

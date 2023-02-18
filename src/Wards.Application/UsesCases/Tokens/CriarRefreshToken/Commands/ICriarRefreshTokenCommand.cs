@@ -1,6 +1,6 @@
 ﻿using Wards.Domain.Entities;
 
-namespace Wards.Application.UsesCases.Token.CriarRefreshToken.Commands
+namespace Wards.Application.UsesCases.Tokens.CriarRefreshToken.Commands
 {
     public interface ICriarRefreshTokenCommand
     {
