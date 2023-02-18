@@ -4,7 +4,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
-using Wards.Domain.DTOs;
+using Wards.Domain.Entities;
 using Wards.Infrastructure.Auth.Models;
 using static Wards.Utils.Common;
 
@@ -19,7 +19,7 @@ namespace Wards.Infrastructure.Auth.Token
             _jwtSettings = jwtOptions.Value;
         }
 
-        public string GerarToken(UsuarioDTO usuario, IEnumerable<Claim>? listaClaims)
+        public string GerarToken(Usuario usuario, IEnumerable<Claim>? listaClaims)
         {
             JwtSecurityTokenHandler tokenHandler = new();
 

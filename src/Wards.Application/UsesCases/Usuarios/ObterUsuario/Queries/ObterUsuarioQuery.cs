@@ -34,11 +34,14 @@ namespace Wards.Application.UsesCases.Usuarios.ObterUsuario.Queries
                 var byNomeUsuario = await _context.Usuarios.
                                     Where(n => n.NomeUsuarioSistema == nomeUsuarioSistema).AsNoTracking().FirstOrDefaultAsync();
 
-                byNomeUsuario!.Senha = string.Empty;
+                if (byNomeUsuario is null)
+                {
+                    return new Usuario();
+                }
+
                 return byNomeUsuario;
             }
 
-            byEmail!.Senha = string.Empty;
             return byEmail;
         }
     }

@@ -34,7 +34,7 @@ namespace Wards.Application.UsesCases.Auths.Logar
             }
 
             // #2 - Verificar se a senha está correta;
-            if (usuario.Senha != Criptografar(dto?.Senha))
+            if (usuario.Senha != Criptografar(input?.Senha ?? string.Empty))
             {
                 UsuarioDTO erro = new() { Erro = true, CodigoErro = (int)CodigoErrosEnum.UsuarioSenhaIncorretos, MensagemErro = GetDescricaoEnum(CodigoErrosEnum.UsuarioSenhaIncorretos) };
                 return erro;
@@ -65,6 +65,11 @@ namespace Wards.Application.UsesCases.Auths.Logar
             await _criarRefreshTokenUseCase.Criar(novoRefreshToken);
 
             return usuario;
+        }
+
+        private async Task<Usuario> ObterByEmailOuUsuarioSistema(Usuario input)
+        {
+
         }
     }
 }
