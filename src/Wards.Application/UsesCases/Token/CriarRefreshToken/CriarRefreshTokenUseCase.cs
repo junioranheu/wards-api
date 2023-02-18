@@ -12,7 +12,7 @@ namespace Wards.Application.UsesCases.Token.CriarRefreshToken
             _criarCommand = criarCommand;
         }
 
-        public async Task ExecuteAsync(RefreshToken input)
+        public async Task Criar(RefreshToken input)
         {
             await _criarCommand.Criar(input);
         }
