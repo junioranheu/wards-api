@@ -1,4 +1,5 @@
-﻿using Wards.Application.UsesCases.Tokens.CriarRefreshToken;
+﻿using System;
+using Wards.Application.UsesCases.Tokens.CriarRefreshToken;
 using Wards.Application.UsesCases.Usuarios.ObterUsuario;
 using Wards.Domain.DTOs;
 using Wards.Domain.Entities;
@@ -50,15 +51,14 @@ namespace Wards.Application.UsesCases.Auths.Logar
             }
 
             // #4 - Converter Usuario para UsuarioDTO;
-            xxx
+            UsuarioDTO usuarioDTO = ConverterParaUsuarioDTO(usuario);
 
             // #5 - Criar token JWT;
-            var token = _jwtTokenGenerator.GerarToken(usuario, null);
-            usuario.Token = token;
+            usuarioDTO.Token = _jwtTokenGenerator.GerarToken(usuarioDTO, null);
 
             // #6 - Gerar refresh token;
             var refreshToken = _jwtTokenGenerator.GerarRefreshToken();
-            usuario.RefreshToken = refreshToken;
+            usuarioDTO.RefreshToken = refreshToken;
 
             RefreshToken novoRefreshToken = new()
             {
@@ -69,12 +69,22 @@ namespace Wards.Application.UsesCases.Auths.Logar
 
             await _criarRefreshTokenUseCase.Criar(novoRefreshToken);
 
-            return usuario;
+            return usuarioDTO;
         }
 
-        private async Task<Usuario> ObterByEmailOuUsuarioSistema(Usuario input)
+        private static UsuarioDTO ConverterParaUsuarioDTO(Usuario input)
         {
-
+            return new UsuarioDTO()
+            {
+                UsuarioId = input.UsuarioId,
+                NomeCompleto = input.NomeCompleto,
+                NomeUsuarioSistema = input.NomeUsuarioSistema,
+                Email = input.Email,
+                IsAtivo = input.IsAtivo,
+                Data = input.Data,
+                Token = string.Empty,
+                RefreshToken = string.Empty
+            };
         }
     }
 }

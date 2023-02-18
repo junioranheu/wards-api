@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Wards.Application.UsesCases.Auths;
 using Wards.Application.UsesCases.Logs;
 using Wards.Application.UsesCases.Tokens;
 using Wards.Application.UsesCases.Usuarios;
