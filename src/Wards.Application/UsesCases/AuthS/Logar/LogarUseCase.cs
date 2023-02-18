@@ -2,6 +2,7 @@
 using Wards.Application.UsesCases.Usuarios.ObterUsuario;
 using Wards.Domain.DTOs;
 using Wards.Domain.Entities;
+using Wards.Domain.Enums;
 using Wards.Infrastructure.Auth.Token;
 using static Wards.Utils.Common;
 
@@ -25,6 +26,7 @@ namespace Wards.Application.UsesCases.Auths.Logar
 
         public async Task<UsuarioDTO> Logar(Usuario input)
         {
+            // #1 - Buscar usuário;
             Usuario usuario = await _obterUsuarioUseCase.ObterByEmailOuUsuarioSistema(input?.Email, input?.NomeUsuarioSistema);
 
             if (usuario is null)
@@ -47,11 +49,14 @@ namespace Wards.Application.UsesCases.Auths.Logar
                 return erro;
             }
 
-            // #4 - Criar token JWT;
+            // #4 - Converter Usuario para UsuarioDTO;
+            xxx
+
+            // #5 - Criar token JWT;
             var token = _jwtTokenGenerator.GerarToken(usuario, null);
             usuario.Token = token;
 
-            // #5 - Gerar refresh token;
+            // #6 - Gerar refresh token;
             var refreshToken = _jwtTokenGenerator.GerarRefreshToken();
             usuario.RefreshToken = refreshToken;
 
