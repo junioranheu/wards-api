@@ -5,9 +5,9 @@ namespace Wards.Application.UsesCases.Tokens.DeletarRefreshToken
 {
     public sealed class DeletarRefreshTokenUseCase : IDeletarRefreshTokenUseCase
     {
-        public readonly IDeletarRefreshTokenUseCase _deletarCommand;
+        public readonly IDeletarRefreshTokenCommand _deletarCommand;
 
-        public DeletarRefreshTokenUseCase(IDeletarRefreshTokenUseCase deletarCommand)
+        public DeletarRefreshTokenUseCase(IDeletarRefreshTokenCommand deletarCommand)
         {
             _deletarCommand = deletarCommand;
         }

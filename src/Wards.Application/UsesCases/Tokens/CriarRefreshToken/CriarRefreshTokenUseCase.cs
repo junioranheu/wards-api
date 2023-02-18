@@ -1,14 +1,15 @@
-﻿using Wards.Application.UsesCases.Tokens.DeletarRefreshToken.Commands;
+﻿using Wards.Application.UsesCases.Tokens.CriarRefreshToken.Commands;
+using Wards.Application.UsesCases.Tokens.DeletarRefreshToken.Commands;
 using Wards.Domain.Entities;
 
 namespace Wards.Application.UsesCases.Tokens.CriarRefreshToken
 {
     public sealed class CriarRefreshTokenUseCase : ICriarRefreshTokenUseCase
     {
-        public readonly ICriarRefreshTokenUseCase _criarCommand;
+        public readonly ICriarRefreshTokenCommand _criarCommand;
         public readonly IDeletarRefreshTokenCommand _deletarCommand;
 
-        public CriarRefreshTokenUseCase(ICriarRefreshTokenUseCase criarCommand, IDeletarRefreshTokenCommand deletarCommand)
+        public CriarRefreshTokenUseCase(ICriarRefreshTokenCommand criarCommand, IDeletarRefreshTokenCommand deletarCommand)
         {
             _criarCommand = criarCommand;
             _deletarCommand = deletarCommand;

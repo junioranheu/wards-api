@@ -4,9 +4,9 @@ namespace Wards.Application.UsesCases.Tokens.ObterRefreshToken
 {
     public sealed class ObterRefreshTokenUseCase : IObterRefreshTokenUseCase
     {
-        public readonly IObterRefreshTokenUseCase _obterQuery;
+        public readonly IObterRefreshTokenQuery _obterQuery;
 
-        public ObterRefreshTokenUseCase(IObterRefreshTokenUseCase obterQuery)
+        public ObterRefreshTokenUseCase(IObterRefreshTokenQuery obterQuery)
         {
             _obterQuery = obterQuery;
         }
