@@ -27,8 +27,8 @@ namespace Wards.Infrastructure.Seed
 
             if (!await context.Usuarios.AnyAsync())
             {
-                await context.Usuarios.AddAsync(new Usuario() { UsuarioId = 1, NomeCompleto = "Administrador", Email = "adm@Hotmail.com", Senha = Criptografar("123"), Data = dataAgora, IsAtivo = true });
-                await context.Usuarios.AddAsync(new Usuario() { UsuarioId = 2, NomeCompleto = "Junior Souza", Email = "juninholorena@Hotmail.com", Senha = Criptografar("123"), Data = dataAgora, IsAtivo = true });
+                await context.Usuarios.AddAsync(new Usuario() { UsuarioId = 1, NomeCompleto = "Administrador", NomeUsuarioSistema = "adm", Email = "adm@Hotmail.com", Senha = Criptografar("123"), Data = dataAgora, IsAtivo = true });
+                await context.Usuarios.AddAsync(new Usuario() { UsuarioId = 2, NomeCompleto = "Junior Souza", NomeUsuarioSistema = "junioranheu", Email = "junioranheu@Hotmail.com", Senha = Criptografar("123"), Data = dataAgora, IsAtivo = true });
             }
 
             if (!await context.UsuariosRoles.AnyAsync())

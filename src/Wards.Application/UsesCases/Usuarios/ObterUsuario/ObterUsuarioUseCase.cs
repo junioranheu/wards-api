@@ -16,5 +16,10 @@ namespace Wards.Application.UsesCases.Usuarios.ObterUsuario
         {
             return await _obterQuery.Obter(id);
         }
+
+        public async Task<Usuario> ObterByEmailOuUsuarioSistema(string? email, string? nomeUsuarioSistema)
+        {
+            return await _obterQuery.ObterByEmailOuUsuarioSistema(email, nomeUsuarioSistema);
+        }
     }
 }

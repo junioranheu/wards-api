@@ -10,6 +10,8 @@ namespace Wards.Domain.DTOs
 
         public string? NomeCompleto { get; set; } = string.Empty;
 
+        public string? NomeUsuarioSistema { get; set; } = string.Empty;
+
         public string? Email { get; set; } = string.Empty;
 
         public bool IsAtivo { get; set; } = true;

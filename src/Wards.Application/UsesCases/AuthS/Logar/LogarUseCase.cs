@@ -1,5 +1,7 @@
-﻿using Wards.Application.UsesCases.Usuarios.ObterUsuario;
+﻿using Wards.Application.UsesCases.Tokens.CriarRefreshToken;
+using Wards.Application.UsesCases.Usuarios.ObterUsuario;
 using Wards.Domain.DTOs;
+using Wards.Domain.Entities;
 using Wards.Infrastructure.Auth.Token;
 using static Wards.Utils.Common;
 
@@ -9,22 +11,21 @@ namespace Wards.Application.UsesCases.Auths.Logar
     {
         private readonly IJwtTokenGenerator _jwtTokenGenerator;
         private readonly IObterUsuarioUseCase _obterUsuarioUseCase;
-        private readonly IRefreshTokenRepository _refreshTokenRepository;
+        private readonly ICriarRefreshTokenUsecase _criarRefreshTokenUseCase;
 
         public LogarUseCase(
             IJwtTokenGenerator jwtTokenGenerator,
             IObterUsuarioUseCase obterUsuarioUseCase,
-            IRefreshTokenRepository refreshTokenRepository)
+            ICriarRefreshTokenUsecase criarRefreshTokenUseCase)
         {
             _jwtTokenGenerator = jwtTokenGenerator;
             _obterUsuarioUseCase = obterUsuarioUseCase;
-            _refreshTokenRepository = refreshTokenRepository;
+            _criarRefreshTokenUseCase = criarRefreshTokenUseCase;
         }
 
-        public async Task<UsuarioDTO> Logar(UsuarioDTO dto)
+        public async Task<UsuarioDTO> Logar(Usuario input)
         {
-            // #1 - Verificar se o usuário existe;
-            var usuario = await _usuarioRepository.GetByEmailOuUsuarioSistema(dto?.Email, dto?.NomeUsuarioSistema);
+            Usuario usuario = await _obterUsuarioUseCase.ObterByEmailOuUsuarioSistema(input?.Email, input?.NomeUsuarioSistema);
 
             if (usuario is null)
             {
@@ -54,19 +55,16 @@ namespace Wards.Application.UsesCases.Auths.Logar
             var refreshToken = _jwtTokenGenerator.GerarRefreshToken();
             usuario.RefreshToken = refreshToken;
 
-            RefreshTokenDTO novoRefreshToken = new()
+            RefreshToken novoRefreshToken = new()
             {
                 RefToken = refreshToken,
                 UsuarioId = usuario.UsuarioId,
                 DataRegistro = HorarioBrasilia()
             };
 
-            await _refreshTokenRepository.Adicionar(novoRefreshToken);
+            await _criarRefreshTokenUseCase.Criar(novoRefreshToken);
 
-            // #6 - Converter de UsuarioSenhaDTO para UsuarioDTO;
-            UsuarioDTO usuarioDTO = _map.Map<UsuarioDTO>(usuario);
-
-            return usuarioDTO;
+            return usuario;
         }
     }
 }
