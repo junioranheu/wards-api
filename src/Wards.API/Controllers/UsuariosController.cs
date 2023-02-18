@@ -5,6 +5,7 @@ using Wards.Application.UsesCases.Usuarios.CriarUsuario;
 using Wards.Application.UsesCases.Usuarios.ListarUsuario;
 using Wards.Application.UsesCases.Usuarios.ObterUsuario;
 using Wards.Application.UsesCases.Usuarios.Shared.Models;
+using Wards.Domain.DTOs;
 using Wards.Domain.Entities;
 using Wards.Domain.Enums;
 
@@ -34,14 +35,14 @@ namespace Wards.API.Controllers
         [HttpPut]
         public async Task<ActionResult<int>> AtualizarUsuario(UsuarioDTO dto)
         {
-            int id = await _atualizarUsuarioUseCase.ExecuteAsync(dto);
+            int id = await _atualizarUsuarioUseCase.Atualizar(dto);
             return Ok(id);
         }
 
         [HttpPost]
-        public async Task<ActionResult<int>> CriarUsuario(UsuarioDTO dto)
+        public async Task<ActionResult<int>> CriarUsuario(Usuario input)
         {
-            int id = await _criarUsuarioUseCase.ExecuteAsync(dto);
+            int id = await _criarUsuarioUseCase.Criar(input);
             return Ok(id);
         }
 
@@ -49,7 +50,7 @@ namespace Wards.API.Controllers
         [AuthorizeFilter(UsuarioRoleEnum.Adm)]
         public async Task<ActionResult<IEnumerable<Usuario>>> ListarUsuario()
         {
-            var lista = await _listarUsuarioUseCase.ExecuteAsync();
+            var lista = await _listarUsuarioUseCase.Listar();
 
             if (lista == null)
             {
@@ -62,7 +63,7 @@ namespace Wards.API.Controllers
         [HttpGet]
         public async Task<ActionResult<Usuario>> ObterUsuario(int id)
         {
-            var item = await _obterUsuarioUseCase.ExecuteAsync(id);
+            var item = await _obterUsuarioUseCase.Obter(id);
 
             if (item == null)
             {

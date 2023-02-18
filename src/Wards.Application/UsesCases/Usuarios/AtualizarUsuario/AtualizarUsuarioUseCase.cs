@@ -1,5 +1,5 @@
 ﻿using Wards.Application.UsesCases.Usuarios.AtualizarUsuario.Commands;
-using Wards.Application.UsesCases.Usuarios.Shared.Models;
+using Wards.Domain.DTOs;
 
 namespace Wards.Application.UsesCases.Usuarios.AtualizarUsuario
 {
@@ -12,9 +12,9 @@ namespace Wards.Application.UsesCases.Usuarios.AtualizarUsuario
             _atualizarCommand = atualizarCommand;
         }
 
-        public async Task<int> ExecuteAsync(UsuarioDTO dto)
+        public async Task<int> Atualizar(UsuarioDTO dto)
         {
-            return await _atualizarCommand.ExecuteAsync(dto);
+            return await _atualizarCommand.Atualizar(dto);
         }
     }
 }

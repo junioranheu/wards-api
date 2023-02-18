@@ -13,7 +13,7 @@ namespace Wards.Application.UsesCases.Usuarios.ObterUsuario.Queries
             _dbConnection = dbConnection;
         }
 
-        public async Task<Usuario> ExecuteAsync(int id)
+        public async Task<Usuario> Obter(int id)
         {
             string sql = "";
 

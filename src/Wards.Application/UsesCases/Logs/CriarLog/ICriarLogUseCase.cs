@@ -4,6 +4,6 @@ namespace Wards.Application.UsesCases.Logs.CriarLog
 {
     public interface ICriarLogUseCase
     {
-        Task<int> ExecuteAsync(Log dto);
+        Task<int> Criar(Log input);
     }
 }

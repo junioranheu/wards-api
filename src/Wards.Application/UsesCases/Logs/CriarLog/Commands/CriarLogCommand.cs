@@ -13,11 +13,11 @@ namespace Wards.Application.UsesCases.Logs.CriarLog.Commands
             _dbConnection = dbConnection;
         }
 
-        public async Task<int> ExecuteAsync(Log dto)
+        public async Task<int> Criar(Log input)
         {
             string sql = "";
 
-            return await _dbConnection.ExecuteAsync(sql, dto);
+            return await _dbConnection.ExecuteAsync(sql, input);
         }
     }
 }

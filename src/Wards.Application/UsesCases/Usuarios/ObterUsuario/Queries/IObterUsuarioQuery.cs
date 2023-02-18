@@ -4,6 +4,6 @@ namespace Wards.Application.UsesCases.Usuarios.ObterUsuario.Queries
 {
     public interface IObterUsuarioQuery
     {
-        Task<Usuario> ExecuteAsync(int id);
+        Task<Usuario> Obter(int id);
     }
 }

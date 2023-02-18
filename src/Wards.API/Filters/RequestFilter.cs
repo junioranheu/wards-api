@@ -33,7 +33,7 @@ namespace Wards.API.Filters
                 UsuarioRoleId = (usuarioRoles.FirstOrDefault()?.UsuarioRoleId > 0 ? usuarioRoles.FirstOrDefault().UsuarioRoleId : 0)
             };
 
-            await _criarLogUseCase.ExecuteAsync(l);
+            await _criarLogUseCase.Criar(l);
         }
 
         private static string GetParametrosRequisicao(ActionExecutingContext filterContextExecuting)

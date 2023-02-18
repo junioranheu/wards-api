@@ -12,9 +12,9 @@ namespace Wards.Application.UsesCases.Usuarios.ObterUsuario
             _obterQuery = obterQuery;
         }
 
-        public async Task<Usuario> ExecuteAsync(int id)
+        public async Task<Usuario> Obter(int id)
         {
-            return await _obterQuery.ExecuteAsync(id);
+            return await _obterQuery.Obter(id);
         }
     }
 }

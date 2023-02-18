@@ -13,7 +13,7 @@ namespace Wards.Application.UsesCases.Usuarios.CriarUsuario.Commands
             _dbConnection = dbConnection;
         }
 
-        public async Task<int> ExecuteAsync(Usuario dto)
+        public async Task<int> Criar(Usuario dto)
         {
             string sql = "";
 

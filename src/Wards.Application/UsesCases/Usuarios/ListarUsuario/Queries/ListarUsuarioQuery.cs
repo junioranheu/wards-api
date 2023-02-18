@@ -13,7 +13,7 @@ namespace Wards.Application.UsesCases.Usuarios.ListarUsuario.Queries
             _dbConnection = dbConnection;
         }
 
-        public async Task<IEnumerable<Usuario>> ExecuteAsync()
+        public async Task<IEnumerable<Usuario>> Listar()
         {
             string sql = $@"SELECT * FROM Usuarios WHERE IsAtivo = 1;";
 

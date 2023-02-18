@@ -1,9 +1,9 @@
-﻿using Wards.Application.UsesCases.Usuarios.Shared.Models;
+﻿using Wards.Domain.DTOs;
 
 namespace Wards.Application.UsesCases.Usuarios.AtualizarUsuario
 {
     public interface IAtualizarUsuarioUseCase
     {
-        Task<int> ExecuteAsync(UsuarioDTO dto);
+        Task<int> Atualizar(UsuarioDTO dto);
     }
 }
