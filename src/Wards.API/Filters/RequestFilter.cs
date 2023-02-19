@@ -22,7 +22,7 @@ namespace Wards.API.Filters
             HttpResponse response = filterContextExecuted.HttpContext.Response;
 
             var obterUsuarioRoleUseCase = filterContextExecuted.HttpContext.RequestServices.GetService<IObterUsuarioRoleUseCase>();
-            IEnumerable<UsuarioRole> usuarioRoles = await obterUsuarioRoleUseCase.ObterCacheObterUsuarioRolesByEmail(GetUsuarioEmail(filterContextExecuted));
+            IEnumerable<UsuarioRole> usuarioRoles = await obterUsuarioRoleUseCase.ObterUsuarioRolesByEmailComCache(GetUsuarioEmail(filterContextExecuted));
 
             Log l = new()
             {

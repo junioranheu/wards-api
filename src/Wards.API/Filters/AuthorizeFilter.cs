@@ -49,7 +49,7 @@ namespace Wards.API.Filters
         private static async Task<IEnumerable<UsuarioRole>> GetUsuarioRoles(AuthorizationFilterContext context)
         {
             var obterUsuarioRoleUseCase = context.HttpContext.RequestServices.GetService<IObterUsuarioRoleUseCase>();
-            IEnumerable<UsuarioRole> usuarioRoles = await obterUsuarioRoleUseCase.ObterCacheObterUsuarioRolesByEmail(GetUsuarioEmail(context));
+            IEnumerable<UsuarioRole> usuarioRoles = await obterUsuarioRoleUseCase.ObterUsuarioRolesByEmailComCache(GetUsuarioEmail(context));
 
             return usuarioRoles;
         }
