@@ -19,16 +19,21 @@ namespace Wards.Application.UsesCases.UsuariosRoles.ObterUsuarioRole
         {
             return await _obterQuery.ObterById(id);
         }
- 
+
         public async Task<IEnumerable<UsuarioRole>> ObterByEmail(string email)
         {
             return await _obterQuery.ObterByEmail(email);
         }
 
-        public async Task<IEnumerable<UsuarioRole>> ObterUsuarioRolesByEmailComCache(string email)
+        public async Task<IEnumerable<UsuarioRole>?> ObterUsuarioRolesByEmailComCache(string email)
         {
+            if (String.IsNullOrEmpty(email))
+            {
+                return null;
+            }
+
             const string keyCache = "keyCacheUsuarioRoles";
-            if (!_memoryCache.TryGetValue(keyCache, out IEnumerable<UsuarioRole> listaUsuarioRoles))
+            if (!_memoryCache.TryGetValue(keyCache, out IEnumerable<UsuarioRole>? listaUsuarioRoles))
             {
                 listaUsuarioRoles = await ObterByEmail(email);
 

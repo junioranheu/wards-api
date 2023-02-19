@@ -30,7 +30,7 @@ namespace Wards.API.Filters
         {
             if (IsUsuarioAutenticado(context))
             {
-                IEnumerable<UsuarioRole> usuarioRoles = await GetUsuarioRoles(context);
+                IEnumerable<UsuarioRole>? usuarioRoles = await GetUsuarioRoles(context);
                 IsUsuarioTemAcesso(context, usuarioRoles, _rolesNecessarias);
             }
         }
@@ -46,10 +46,10 @@ namespace Wards.API.Filters
             return true;
         }
 
-        private static async Task<IEnumerable<UsuarioRole>> GetUsuarioRoles(AuthorizationFilterContext context)
+        private static async Task<IEnumerable<UsuarioRole>?> GetUsuarioRoles(AuthorizationFilterContext context)
         {
             var obterUsuarioRoleUseCase = context.HttpContext.RequestServices.GetService<IObterUsuarioRoleUseCase>();
-            IEnumerable<UsuarioRole> usuarioRoles = await obterUsuarioRoleUseCase.ObterUsuarioRolesByEmailComCache(GetUsuarioEmail(context));
+            IEnumerable<UsuarioRole>? usuarioRoles = await obterUsuarioRoleUseCase.ObterUsuarioRolesByEmailComCache(GetUsuarioEmail(context));
 
             return usuarioRoles;
         }

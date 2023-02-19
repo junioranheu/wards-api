@@ -15,7 +15,9 @@ namespace Wards.Application.UsesCases.Logs.CriarLog.Commands
 
         public async Task<int> Criar(Log input)
         {
-            string sql = "";
+            string sql = $@"INSERT INTO Logs (TipoRequisicao, Endpoint, Parametros, StatusResposta, UsuarioRoleId, Data)
+                            VALUES('{input.TipoRequisicao}', '{input.Endpoint}', '{input.Parametros}', 
+                                   {input.StatusResposta}, {input.UsuarioRoleId}, NOW());";
 
             return await _dbConnection.ExecuteAsync(sql, input);
         }

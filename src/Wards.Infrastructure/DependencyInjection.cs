@@ -9,6 +9,7 @@ using Microsoft.OpenApi.Models;
 using MySqlConnector;
 using System.Data;
 using System.Text;
+using Wards.Infrastructure.Auth.Models;
 using Wards.Infrastructure.Auth.Token;
 using Wards.Infrastructure.Data;
 
@@ -18,7 +19,7 @@ namespace Wards.Infrastructure
     {
         public static IServiceCollection AddDependencyInjectionInfrastructure(this IServiceCollection services, WebApplicationBuilder builder)
         {
-            AddServices(services);
+            AddServices(services, builder);
             AddAuth(services, builder);
             AddContext(builder);
             AddSwagger(builder);
@@ -27,9 +28,10 @@ namespace Wards.Infrastructure
             return services;
         }
 
-        private static void AddServices(IServiceCollection services)
+        private static void AddServices(IServiceCollection services, WebApplicationBuilder builder)
         {
             services.AddSingleton<IJwtTokenGenerator, JwtTokenGenerator>();
+            services.Configure<JwtSettings>(builder.Configuration.GetSection(JwtSettings.SectionName));
         }
 
         private static void AddAuth(IServiceCollection services, WebApplicationBuilder builder)

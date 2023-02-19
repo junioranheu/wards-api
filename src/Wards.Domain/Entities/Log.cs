@@ -17,8 +17,8 @@ namespace Wards.Domain.Entities
         public int StatusResposta { get; set; }
 
         public int UsuarioRoleId { get; set; }
-        public UsuarioRole? UsuarioRoles { get; init; }
-
+        // public UsuarioRole? UsuarioRoles { get; init; }
+         
         public DateTime Data { get; set; } = HorarioBrasilia();
     }
 }

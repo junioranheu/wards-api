@@ -22,7 +22,7 @@ namespace Wards.API.Filters
             HttpResponse response = filterContextExecuted.HttpContext.Response;
 
             var obterUsuarioRoleUseCase = filterContextExecuted.HttpContext.RequestServices.GetService<IObterUsuarioRoleUseCase>();
-            IEnumerable<UsuarioRole> usuarioRoles = await obterUsuarioRoleUseCase.ObterUsuarioRolesByEmailComCache(GetUsuarioEmail(filterContextExecuted));
+            IEnumerable<UsuarioRole>? usuarioRoles = await obterUsuarioRoleUseCase.ObterUsuarioRolesByEmailComCache(GetUsuarioEmail(filterContextExecuted));
 
             Log l = new()
             {
@@ -30,7 +30,7 @@ namespace Wards.API.Filters
                 Endpoint = request.Path.Value ?? string.Empty,
                 Parametros = GetParametrosRequisicao(filterContextExecuting),
                 StatusResposta = response.StatusCode > 0 ? response.StatusCode : 0,
-                UsuarioRoleId = (usuarioRoles.FirstOrDefault()?.UsuarioRoleId > 0 ? usuarioRoles.FirstOrDefault().UsuarioRoleId : 0)
+                UsuarioRoleId = (usuarioRoles?.Count() > 0 ? usuarioRoles.FirstOrDefault().UsuarioRoleId : 0)
             };
 
             await _criarLogUseCase.Criar(l);
