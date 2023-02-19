@@ -13,7 +13,7 @@ namespace Wards.Application.UsesCases.UsuariosRoles.ObterUsuarioRole.Queries
             _dbConnection = dbConnection;
         }
 
-        public async Task<IEnumerable<UsuarioRole>> ObterById(int id)
+        public async Task<IEnumerable<UsuarioRole>> Obter(int id)
         {
             string sql = "";
 

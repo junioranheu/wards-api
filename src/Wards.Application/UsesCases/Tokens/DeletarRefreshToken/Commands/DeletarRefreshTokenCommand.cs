@@ -6,7 +6,7 @@ namespace Wards.Application.UsesCases.Tokens.DeletarRefreshToken.Commands
 {
     public sealed class DeletarRefreshTokenCommand : IDeletarRefreshTokenCommand
     {
-        public readonly WardsContext _context;
+        private readonly WardsContext _context;
 
         public DeletarRefreshTokenCommand(WardsContext context)
         {

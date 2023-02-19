@@ -8,7 +8,7 @@ namespace Wards.Application.UsesCases.Usuarios.ObterUsuario.Queries
 {
     public sealed class ObterUsuarioQuery : IObterUsuarioQuery
     {
-        public readonly WardsContext _context;
+        private readonly WardsContext _context;
         private readonly IDbConnection _dbConnection;
 
         public ObterUsuarioQuery(WardsContext context, IDbConnection dbConnection)

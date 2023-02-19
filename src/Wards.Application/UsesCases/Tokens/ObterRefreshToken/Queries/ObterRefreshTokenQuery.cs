@@ -5,7 +5,7 @@ namespace Wards.Application.UsesCases.Tokens.ObterRefreshToken.Queries
 {
     public sealed class ObterRefreshTokenQuery : IObterRefreshTokenQuery
     {
-        public readonly WardsContext _context;
+        private readonly WardsContext _context;
 
         public ObterRefreshTokenQuery(WardsContext context)
         {

@@ -5,7 +5,7 @@ namespace Wards.Application.UsesCases.Tokens.CriarRefreshToken.Commands
 {
     public sealed class CriarRefreshTokenCommand : ICriarRefreshTokenCommand
     {
-        public readonly WardsContext _context;
+        private readonly WardsContext _context;
 
         public CriarRefreshTokenCommand(WardsContext context)
         {

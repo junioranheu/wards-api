@@ -16,9 +16,9 @@ namespace Wards.Application.UsesCases.UsuariosRoles.ObterUsuarioRole
             _obterQuery = obterQuery;
         }
 
-        public async Task<IEnumerable<UsuarioRole>> ObterById(int id)
+        public async Task<IEnumerable<UsuarioRole>> Obter(int id)
         {
-            return await _obterQuery.ObterById(id);
+            return await _obterQuery.Obter(id);
         }
 
         public async Task<IEnumerable<UsuarioRole>> ObterByEmail(string email)
@@ -28,7 +28,7 @@ namespace Wards.Application.UsesCases.UsuariosRoles.ObterUsuarioRole
 
         public async Task<IEnumerable<UsuarioRole>?> ObterUsuarioRolesByEmailComCache(dynamic context)
         {
-            string email = ObterUsuarioEmail(context);
+            string email = ObterUsuarioEmailSeLogado(context);
 
             if (String.IsNullOrEmpty(email))
             {
@@ -46,7 +46,7 @@ namespace Wards.Application.UsesCases.UsuariosRoles.ObterUsuarioRole
             return listaUsuarioRoles;
         }
 
-        private static string ObterUsuarioEmail(dynamic context)
+        private static string ObterUsuarioEmailSeLogado(dynamic context)
         {
             if (context.HttpContext.User.Identity.IsAuthenticated)
             {

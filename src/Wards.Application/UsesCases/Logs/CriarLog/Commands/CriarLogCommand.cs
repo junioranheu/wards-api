@@ -1,25 +1,21 @@
-﻿using Dapper;
-using System.Data;
-using Wards.Domain.Entities;
+﻿using Wards.Domain.Entities;
+using Wards.Infrastructure.Data;
 
 namespace Wards.Application.UsesCases.Logs.CriarLog.Commands
 {
     public sealed class CriarLogCommand : ICriarLogCommand
     {
-        private readonly IDbConnection _dbConnection;
+        private readonly WardsContext _context;
 
-        public CriarLogCommand(IDbConnection dbConnection)
+        public CriarLogCommand(WardsContext context)
         {
-            _dbConnection = dbConnection;
+            _context = context;
         }
 
-        public async Task<int> Criar(Log input)
+        public async Task Criar(Log input)
         {
-            string sql = $@"INSERT INTO Logs (TipoRequisicao, Endpoint, Parametros, StatusResposta, UsuarioRoleId, Data)
-                            VALUES('{input.TipoRequisicao}', '{input.Endpoint}', '{input.Parametros}', 
-                                   {input.StatusResposta}, {input.UsuarioRoleId}, NOW());";
-
-            return await _dbConnection.ExecuteAsync(sql, input);
+            await _context.AddAsync(input);
+            await _context.SaveChangesAsync();
         }
     }
 }
