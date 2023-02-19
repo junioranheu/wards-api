@@ -46,7 +46,7 @@ namespace Wards.API.Controllers
         }
 
         [HttpGet("listar")]
-        [AuthorizeFilter(UsuarioRoleEnum.Comum)]
+        [AuthorizeFilter(UsuarioRoleEnum.Adm)]
         public async Task<ActionResult<IEnumerable<Usuario>>> ListarUsuario()
         {
             var lista = await _listarUsuarioUseCase.Listar();
@@ -60,6 +60,7 @@ namespace Wards.API.Controllers
         }
 
         [HttpGet]
+        [AuthorizeFilter(UsuarioRoleEnum.Adm)]
         public async Task<ActionResult<Usuario>> ObterUsuario(int id)
         {
             var item = await _obterUsuarioUseCase.Obter(id);

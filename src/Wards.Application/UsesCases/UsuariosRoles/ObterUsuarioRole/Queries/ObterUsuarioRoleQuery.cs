@@ -1,33 +1,33 @@
 ﻿using Dapper;
+using Microsoft.EntityFrameworkCore;
 using System.Data;
 using Wards.Domain.Entities;
+using Wards.Infrastructure.Data;
 
 namespace Wards.Application.UsesCases.UsuariosRoles.ObterUsuarioRole.Queries
 {
     public sealed class ObterUsuarioRoleQuery : IObterUsuarioRoleQuery
     {
-        private readonly IDbConnection _dbConnection;
+        private readonly WardsContext _context;
 
-        public ObterUsuarioRoleQuery(IDbConnection dbConnection)
+        public ObterUsuarioRoleQuery(WardsContext context)
         {
-            _dbConnection = dbConnection;
+            _context = context;
         }
 
-        public async Task<IEnumerable<UsuarioRole>> Obter(int id)
+        public async Task<IEnumerable<UsuarioRole>> ObterByUsuarioEmail(string email)
         {
-            string sql = "";
+            var byUsuarioEmail = await _context.UsuariosRoles.
+                                 Include(u => u.Usuarios).
+                                 Where(u => u.Usuarios.Email == email && u.Usuarios.IsAtivo == true).
+                                 AsNoTracking().ToListAsync();
 
-            return await _dbConnection.QueryAsync<UsuarioRole>(sql);
-        }
+            foreach (var item in byUsuarioEmail)
+            {
+                item.Usuarios.Senha = string.Empty;
+            }
 
-        public async Task<IEnumerable<UsuarioRole>> ObterByEmail(string email)
-        {
-            string sql = $@"SELECT UR.UsuarioRoleId, UR.UsuarioId, UR.RoleId
-                            FROM UsuariosRoles UR
-                            INNER JOIN Usuarios U ON U.UsuarioId = UR.UsuarioId
-                            WHERE U.Email = '{email}';";
-
-            return await _dbConnection.QueryAsync<UsuarioRole>(sql);
+            return byUsuarioEmail;
         }
     }
 }

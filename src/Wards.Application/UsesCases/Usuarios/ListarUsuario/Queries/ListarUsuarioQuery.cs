@@ -16,8 +16,14 @@ namespace Wards.Application.UsesCases.Usuarios.ListarUsuario.Queries
         public async Task<IEnumerable<Usuario>> Listar()
         {
             string sql = $@"SELECT * FROM Usuarios WHERE IsAtivo = 1;";
+            var usuarios = await _dbConnection.QueryAsync<Usuario>(sql);
 
-            return await _dbConnection.QueryAsync<Usuario>(sql);
+            foreach (var item in usuarios)
+            {
+                item.Senha = string.Empty;
+            }
+
+            return usuarios;
         }
     }
 }

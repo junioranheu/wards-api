@@ -16,14 +16,9 @@ namespace Wards.Application.UsesCases.UsuariosRoles.ObterUsuarioRole
             _obterQuery = obterQuery;
         }
 
-        public async Task<IEnumerable<UsuarioRole>> Obter(int id)
+        public async Task<IEnumerable<UsuarioRole>> ObterByUsuarioEmail(string email)
         {
-            return await _obterQuery.Obter(id);
-        }
-
-        public async Task<IEnumerable<UsuarioRole>> ObterByEmail(string email)
-        {
-            return await _obterQuery.ObterByEmail(email);
+            return await _obterQuery.ObterByUsuarioEmail(email);
         }
 
         public async Task<IEnumerable<UsuarioRole>?> ObterUsuarioRolesByEmailComCache(dynamic context)
@@ -38,7 +33,7 @@ namespace Wards.Application.UsesCases.UsuariosRoles.ObterUsuarioRole
             const string keyCache = "keyCacheUsuarioRoles";
             if (!_memoryCache.TryGetValue(keyCache, out IEnumerable<UsuarioRole>? listaUsuarioRoles))
             {
-                listaUsuarioRoles = await ObterByEmail(email);
+                listaUsuarioRoles = await ObterByUsuarioEmail(email);
 
                 _memoryCache.Set(keyCache, listaUsuarioRoles, TimeSpan.FromMinutes(5));
             }
