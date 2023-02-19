@@ -5,15 +5,15 @@ VisualStudioVersion = 17.4.33403.182
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wards.API", "Wards.API\Wards.API.csproj", "{378988C8-1132-4D26-84DC-9D6FB45BFF8F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wards.Application", "Wards.Application\Wards.Application.csproj", "{A770CBB1-2B12-455E-B9A6-94958835CBBF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wards.Application", "Wards.Application\Wards.Application.csproj", "{A770CBB1-2B12-455E-B9A6-94958835CBBF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wards.Domain", "Wards.Domain\Wards.Domain.csproj", "{E467337E-1813-47CB-8EDD-721B93329239}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wards.Domain", "Wards.Domain\Wards.Domain.csproj", "{E467337E-1813-47CB-8EDD-721B93329239}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wards.Infrastructure", "Wards.Infrastructure\Wards.Infrastructure.csproj", "{AB81D646-D610-47A1-B175-137C5D6CF3A4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wards.Infrastructure", "Wards.Infrastructure\Wards.Infrastructure.csproj", "{AB81D646-D610-47A1-B175-137C5D6CF3A4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wards.UnitTests", "Wards.UnitTests\Wards.UnitTests.csproj", "{F31F7740-06EB-4C73-8CD7-C494C5769536}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wards.Utils", "Wards.Utils\Wards.Utils.csproj", "{CCF48C53-A150-4CE6-8FF8-6B31D147DBD8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wards.Utils", "Wards.Utils\Wards.Utils.csproj", "{CCF48C53-A150-4CE6-8FF8-6B31D147DBD8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wards.UnitTests", "Wards.UnitTests\Wards.UnitTests.csproj", "{5805311C-D99E-4828-8F46-CD5325F497CC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,14 +37,14 @@ Global
 		{AB81D646-D610-47A1-B175-137C5D6CF3A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AB81D646-D610-47A1-B175-137C5D6CF3A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AB81D646-D610-47A1-B175-137C5D6CF3A4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F31F7740-06EB-4C73-8CD7-C494C5769536}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F31F7740-06EB-4C73-8CD7-C494C5769536}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F31F7740-06EB-4C73-8CD7-C494C5769536}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F31F7740-06EB-4C73-8CD7-C494C5769536}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CCF48C53-A150-4CE6-8FF8-6B31D147DBD8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CCF48C53-A150-4CE6-8FF8-6B31D147DBD8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CCF48C53-A150-4CE6-8FF8-6B31D147DBD8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CCF48C53-A150-4CE6-8FF8-6B31D147DBD8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5805311C-D99E-4828-8F46-CD5325F497CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5805311C-D99E-4828-8F46-CD5325F497CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5805311C-D99E-4828-8F46-CD5325F497CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5805311C-D99E-4828-8F46-CD5325F497CC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
