@@ -46,7 +46,7 @@ namespace Wards.API.Controllers
         }
 
         [HttpGet("listar")]
-        [AuthorizeFilter(UsuarioRoleEnum.Adm)]
+        [AuthorizeFilter(UsuarioRoleEnum.Comum)]
         public async Task<ActionResult<IEnumerable<Usuario>>> ListarUsuario()
         {
             var lista = await _listarUsuarioUseCase.Listar();

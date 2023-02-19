@@ -22,7 +22,7 @@ namespace Wards.Application.UsesCases.UsuariosRoles.ObterUsuarioRole.Queries
 
         public async Task<IEnumerable<UsuarioRole>> ObterByEmail(string email)
         {
-            string sql = $@"SELECT UR.UsuarioID, UR.RoleId
+            string sql = $@"SELECT UR.UsuarioRoleId, UR.UsuarioId, UR.RoleId
                             FROM UsuariosRoles UR
                             INNER JOIN Usuarios U ON U.UsuarioId = UR.UsuarioId
                             WHERE U.Email = '{email}';";

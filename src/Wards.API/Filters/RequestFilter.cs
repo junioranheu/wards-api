@@ -21,10 +21,9 @@ namespace Wards.API.Filters
             HttpRequest request = filterContextExecuted.HttpContext.Request;
             HttpResponse response = filterContextExecuted.HttpContext.Response;
 
-            var obterUsuarioRoleUseCase = filterContextExecuted.HttpContext.RequestServices.GetService<IObterUsuarioRoleUseCase>();
-            IEnumerable<UsuarioRole>? usuarioRoles = await obterUsuarioRoleUseCase.ObterUsuarioRolesByEmailComCache(GetUsuarioEmail(filterContextExecuted));
+            IEnumerable<UsuarioRole>? usuarioRoles = await GetUsuarioRoles(filterContextExecuted);
 
-            Log l = new()
+            Log log = new()
             {
                 TipoRequisicao = request.Method ?? string.Empty,
                 Endpoint = request.Path.Value ?? string.Empty,
@@ -33,7 +32,15 @@ namespace Wards.API.Filters
                 UsuarioRoleId = (usuarioRoles?.Count() > 0 ? usuarioRoles.FirstOrDefault().UsuarioRoleId : 0)
             };
 
-            await _criarLogUseCase.Criar(l);
+            await _criarLogUseCase.Criar(log);
+        }
+
+        private static async Task<IEnumerable<UsuarioRole>?> GetUsuarioRoles(ActionExecutedContext filterContextExecuted)
+        {
+            var obterUsuarioRoleUseCase = filterContextExecuted.HttpContext.RequestServices.GetService<IObterUsuarioRoleUseCase>();
+            IEnumerable<UsuarioRole>? usuarioRoles = await obterUsuarioRoleUseCase.ObterUsuarioRolesByEmailComCache(filterContextExecuted);
+
+            return usuarioRoles;
         }
 
         private static string GetParametrosRequisicao(ActionExecutingContext filterContextExecuting)
@@ -42,17 +49,6 @@ namespace Wards.API.Filters
             string parametrosSerialiazed = !String.IsNullOrEmpty(parametros.ToString()) ? JsonConvert.SerializeObject(parametros) : string.Empty;
 
             return parametrosSerialiazed;
-        }
-
-        private static string GetUsuarioEmail(ActionExecutedContext filterContextExecuted)
-        {
-            if (filterContextExecuted.HttpContext.User.Identity.IsAuthenticated)
-            {
-                var claim = filterContextExecuted.HttpContext.User.Claims.First(c => c.Type == "preferred_username");
-                return claim.Value ?? string.Empty;
-            }
-
-            return string.Empty;
         }
     }
 }

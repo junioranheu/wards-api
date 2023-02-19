@@ -6,6 +6,6 @@ namespace Wards.Application.UsesCases.UsuariosRoles.ObterUsuarioRole
     {
         Task<IEnumerable<UsuarioRole>> ObterById(int id);
         Task<IEnumerable<UsuarioRole>> ObterByEmail(string email);
-        Task<IEnumerable<UsuarioRole>?> ObterUsuarioRolesByEmailComCache(string email);
+        Task<IEnumerable<UsuarioRole>?> ObterUsuarioRolesByEmailComCache(dynamic context);
     }
 }

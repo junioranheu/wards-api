@@ -49,20 +49,9 @@ namespace Wards.API.Filters
         private static async Task<IEnumerable<UsuarioRole>?> GetUsuarioRoles(AuthorizationFilterContext context)
         {
             var obterUsuarioRoleUseCase = context.HttpContext.RequestServices.GetService<IObterUsuarioRoleUseCase>();
-            IEnumerable<UsuarioRole>? usuarioRoles = await obterUsuarioRoleUseCase.ObterUsuarioRolesByEmailComCache(GetUsuarioEmail(context));
+            IEnumerable<UsuarioRole>? usuarioRoles = await obterUsuarioRoleUseCase.ObterUsuarioRolesByEmailComCache(context);
 
             return usuarioRoles;
-        }
-
-        private static string GetUsuarioEmail(AuthorizationFilterContext context)
-        {
-            if (context.HttpContext.User.Identity.IsAuthenticated)
-            {
-                var claim = context.HttpContext.User.Claims.First(c => c.Type == "preferred_username");
-                return claim.Value ?? string.Empty;
-            }
-
-            return string.Empty;
         }
 
         private static bool IsUsuarioTemAcesso(AuthorizationFilterContext context, IEnumerable<UsuarioRole> usuarioRoles, int[] _rolesNecessarias)
