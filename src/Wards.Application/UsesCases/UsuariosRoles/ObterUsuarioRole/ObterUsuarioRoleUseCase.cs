@@ -19,7 +19,7 @@ namespace Wards.Application.UsesCases.UsuariosRoles.ObterUsuarioRole
         {
             return await _obterQuery.ObterById(id);
         }
-
+ 
         public async Task<IEnumerable<UsuarioRole>> ObterByEmail(string email)
         {
             return await _obterQuery.ObterByEmail(email);

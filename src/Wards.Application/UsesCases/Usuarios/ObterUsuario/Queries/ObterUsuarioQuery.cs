@@ -36,7 +36,7 @@ namespace Wards.Application.UsesCases.Usuarios.ObterUsuario.Queries
 
                 if (byNomeUsuario is null)
                 {
-                    return new Usuario();
+                    return null;
                 }
 
                 return byNomeUsuario;
