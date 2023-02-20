@@ -38,13 +38,6 @@ namespace Wards.API.Controllers
             return Ok(id);
         }
 
-        [HttpPost]
-        public async Task<ActionResult<UsuarioDTO>> CriarUsuario(Usuario input)
-        {
-            UsuarioDTO dto = await _criarUsuarioUseCase.Criar(input);
-            return Ok(dto);
-        }
-
         [HttpGet("listar")]
         [AuthorizeFilter(UsuarioRoleEnum.Adm)]
         public async Task<ActionResult<IEnumerable<UsuarioDTO>>> ListarUsuario()

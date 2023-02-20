@@ -1,7 +1,8 @@
 ﻿using Dapper;
 using System.Data;
-using Wards.Domain.DTOs;
+using System.Globalization;
 using Wards.Domain.Entities;
+using static Dapper.SqlMapper;
 
 namespace Wards.Application.UsesCases.Usuarios.CriarUsuario.Commands
 {
@@ -14,10 +15,18 @@ namespace Wards.Application.UsesCases.Usuarios.CriarUsuario.Commands
             _dbConnection = dbConnection;
         }
 
-        public async Task Criar(Usuario input)
+        public async Task<Usuario> Criar(Usuario input)
         {
-            string sql = "";
+            string sql = $@"INSERT INTO Usuarios (NomeCompleto, NomeUsuarioSistema, Email, Senha, IsAtivo, Data)
+                            VALUES ('{input.NomeCompleto}', '{input.NomeUsuarioSistema}',
+                                    '{input.Email}', '{input.Senha}',
+                                    {input.IsAtivo}, '{input.Data.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture)}');";
+           
             await _dbConnection.ExecuteAsync(sql, input);
+
+            input.UsuarioId = await _dbConnection.QueryFirstOrDefaultAsync<int>("SELECT LAST_INSERT_ID();"); ;
+
+            return input;
         }
     }
 }

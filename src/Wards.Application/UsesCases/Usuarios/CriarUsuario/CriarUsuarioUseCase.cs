@@ -18,8 +18,8 @@ namespace Wards.Application.UsesCases.Usuarios.CriarUsuario
 
         public async Task<UsuarioDTO> Criar(Usuario input)
         {
-            await _criarCommand.Criar(input);
-            return _map.Map<UsuarioDTO>(input);
+            Usuario u = await _criarCommand.Criar(input);
+            return _map.Map<UsuarioDTO>(u);
         }
     }
 }
