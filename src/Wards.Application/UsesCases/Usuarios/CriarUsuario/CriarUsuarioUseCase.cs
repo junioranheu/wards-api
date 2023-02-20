@@ -7,7 +7,7 @@ namespace Wards.Application.UsesCases.Usuarios.CriarUsuario
 {
     public sealed class CriarUsuarioUseCase : ICriarUsuarioUseCase
     {
-        public readonly ICriarUsuarioCommand _criarCommand;
+        private readonly ICriarUsuarioCommand _criarCommand;
         private readonly IMapper _map;
 
         public CriarUsuarioUseCase(ICriarUsuarioCommand criarCommand, IMapper map)

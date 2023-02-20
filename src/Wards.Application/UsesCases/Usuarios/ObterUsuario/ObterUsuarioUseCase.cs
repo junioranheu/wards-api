@@ -6,7 +6,7 @@ namespace Wards.Application.UsesCases.Usuarios.ObterUsuario
 {
     public sealed class ObterUsuarioUseCase : IObterUsuarioUseCase
     {
-        public readonly IObterUsuarioQuery _obterQuery;
+        private readonly IObterUsuarioQuery _obterQuery;
 
         public ObterUsuarioUseCase(IObterUsuarioQuery obterQuery)
         {

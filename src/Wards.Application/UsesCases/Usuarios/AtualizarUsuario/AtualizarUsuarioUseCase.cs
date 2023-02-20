@@ -5,7 +5,7 @@ namespace Wards.Application.UsesCases.Usuarios.AtualizarUsuario
 {
     public sealed class AtualizarUsuarioUseCase : IAtualizarUsuarioUseCase
     {
-        public readonly IAtualizarUsuarioCommand _atualizarCommand;
+        private readonly IAtualizarUsuarioCommand _atualizarCommand;
 
         public AtualizarUsuarioUseCase(IAtualizarUsuarioCommand atualizarCommand)
         {

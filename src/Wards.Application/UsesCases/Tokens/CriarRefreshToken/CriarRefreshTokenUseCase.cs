@@ -6,8 +6,8 @@ namespace Wards.Application.UsesCases.Tokens.CriarRefreshToken
 {
     public sealed class CriarRefreshTokenUseCase : ICriarRefreshTokenUseCase
     {
-        public readonly ICriarRefreshTokenCommand _criarCommand;
-        public readonly IDeletarRefreshTokenCommand _deletarCommand;
+        private readonly ICriarRefreshTokenCommand _criarCommand;
+        private readonly IDeletarRefreshTokenCommand _deletarCommand;
 
         public CriarRefreshTokenUseCase(ICriarRefreshTokenCommand criarCommand, IDeletarRefreshTokenCommand deletarCommand)
         {

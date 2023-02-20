@@ -5,7 +5,7 @@ namespace Wards.Application.UsesCases.Logs.CriarLog
 {
     public sealed class CriarLogUseCase : ICriarLogUseCase
     {
-        public readonly ICriarLogCommand _criarLogCommand;
+        private readonly ICriarLogCommand _criarLogCommand;
 
         public CriarLogUseCase(ICriarLogCommand criarLogCommand)
         {

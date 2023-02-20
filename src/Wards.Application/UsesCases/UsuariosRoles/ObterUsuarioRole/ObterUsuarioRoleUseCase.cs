@@ -8,7 +8,7 @@ namespace Wards.Application.UsesCases.UsuariosRoles.ObterUsuarioRole
     public sealed class ObterUsuarioRoleUseCase : IObterUsuarioRoleUseCase
     {
         private readonly IMemoryCache _memoryCache;
-        public readonly IObterUsuarioRoleQuery _obterQuery;
+        private readonly IObterUsuarioRoleQuery _obterQuery;
 
         public ObterUsuarioRoleUseCase(IMemoryCache memoryCache, IObterUsuarioRoleQuery obterQuery)
         {

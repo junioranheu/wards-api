@@ -5,7 +5,7 @@ namespace Wards.Application.UsesCases.Usuarios.ListarUsuario
 {
     public sealed class ListarUsuarioUseCase : IListarUsuarioUseCase
     {
-        public readonly IListarUsuarioQuery _listarQuery;
+        private readonly IListarUsuarioQuery _listarQuery;
 
         public ListarUsuarioUseCase(IListarUsuarioQuery listarQuery)
         {
