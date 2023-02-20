@@ -14,13 +14,10 @@ namespace Wards.Application.UsesCases.Usuarios.CriarUsuario.Commands
             _dbConnection = dbConnection;
         }
 
-        public async Task<UsuarioDTO> Criar(Usuario input)
+        public async Task Criar(Usuario input)
         {
             string sql = "";
             await _dbConnection.ExecuteAsync(sql, input);
-
-            // Converter aqui
-            return dto;
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Wards.Application.UsesCases.Tokens.CriarRefreshToken;
+﻿using AutoMapper;
+using Wards.Application.UsesCases.Tokens.CriarRefreshToken;
 using Wards.Application.UsesCases.Usuarios.ObterUsuario;
 using Wards.Domain.DTOs;
 using Wards.Domain.Entities;
@@ -13,15 +14,18 @@ namespace Wards.Application.UsesCases.Auths.Logar
         private readonly IJwtTokenGenerator _jwtTokenGenerator;
         private readonly IObterUsuarioUseCase _obterUsuarioUseCase;
         private readonly ICriarRefreshTokenUseCase _criarRefreshTokenUseCase;
+        private readonly IMapper _map;
 
         public LogarUseCase(
             IJwtTokenGenerator jwtTokenGenerator,
             IObterUsuarioUseCase obterUsuarioUseCase,
-            ICriarRefreshTokenUseCase criarRefreshTokenUseCase)
+            ICriarRefreshTokenUseCase criarRefreshTokenUseCase,
+            IMapper map)
         {
             _jwtTokenGenerator = jwtTokenGenerator;
             _obterUsuarioUseCase = obterUsuarioUseCase;
             _criarRefreshTokenUseCase = criarRefreshTokenUseCase;
+            _map = map;
         }
 
         public async Task<UsuarioDTO> Logar(Usuario input)
@@ -49,8 +53,8 @@ namespace Wards.Application.UsesCases.Auths.Logar
                 return erro;
             }
 
-            // #4 - Converter para DTO;
-            UsuarioDTO usuarioDTO = ConverterUsuarioParaUsuarioDTO(usuario);
+            // #4 - AutoMapper;
+            UsuarioDTO usuarioDTO = _map.Map<UsuarioDTO>(usuario);
 
             // #5 - Criar token JWT;
             usuarioDTO.Token = _jwtTokenGenerator.GerarToken(usuarioDTO, null);
@@ -69,21 +73,6 @@ namespace Wards.Application.UsesCases.Auths.Logar
             await _criarRefreshTokenUseCase.Criar(novoRefreshToken);
 
             return usuarioDTO;
-        }
-
-        private static UsuarioDTO ConverterUsuarioParaUsuarioDTO(Usuario input)
-        {
-            return new UsuarioDTO()
-            {
-                UsuarioId = input.UsuarioId,
-                NomeCompleto = input.NomeCompleto,
-                NomeUsuarioSistema = input.NomeUsuarioSistema,
-                Email = input.Email,
-                IsAtivo = input.IsAtivo,
-                Data = input.Data,
-                Token = string.Empty,
-                RefreshToken = string.Empty
-            };
         }
     }
 }

@@ -82,20 +82,23 @@ namespace Wards.Application.UsesCases.Auths.Registrar
             UsuarioDTO usuarioAdicionado = await _criarUsuarioUseCase.Criar(novoUsuario);
 
             // #4 - Automaticamente atualizar o valor da Foto com um valor padrão após criar o novo usuário e adicionar ao ovjeto novoUsuario;
-            string nomeNovaFoto = $"{usuarioAdicionado.UsuarioId}{GerarStringAleatoria(5, true)}.webp";
-            await _usuarioRepository.AtualizarFoto(usuarioAdicionado.UsuarioId, nomeNovaFoto);
-            novoUsuario.Foto = nomeNovaFoto;
+            //string nomeNovaFoto = $"{usuarioAdicionado.UsuarioId}{GerarStringAleatoria(5, true)}.webp";
+            //await _usuarioRepository.AtualizarFoto(usuarioAdicionado.UsuarioId, nomeNovaFoto);
+            //novoUsuario.Foto = nomeNovaFoto;
 
-            // #5 - Adicionar ao objeto novoUsuario o id do novo usuário;
-            novoUsuario.UsuarioId = usuarioAdicionado.UsuarioId;
+            // #5 - Converter de UsuarioSenhaDTO para UsuarioDTO;
+            UsuarioDTO usuarioDTO = _map.Map<UsuarioDTO>(novoUsuario);
 
-            // #6 - Criar token JWT;
-            var token = _jwtTokenGenerator.GerarToken(novoUsuario, null);
-            novoUsuario.Token = token;
+            // #6 - Adicionar ao objeto novoUsuario o id do novo usuário;
+            usuarioDTO.UsuarioId = usuarioAdicionado.UsuarioId;
 
-            // #7 - Gerar refresh token;
+            // #7 - Criar token JWT;
+            var token = _jwtTokenGenerator.GerarToken(usuarioDTO, null);
+            usuarioDTO.Token = token;
+
+            // #8 - Gerar refresh token;
             var refreshToken = _jwtTokenGenerator.GerarRefreshToken();
-            novoUsuario.RefreshToken = refreshToken;
+            usuarioDTO.RefreshToken = refreshToken;
 
             RefreshToken novoRefreshToken = new()
             {
@@ -106,21 +109,18 @@ namespace Wards.Application.UsesCases.Auths.Registrar
 
             await _criarRefreshTokenUseCase.Criar(novoRefreshToken);
 
-            // #8 - Converter de UsuarioSenhaDTO para UsuarioDTO;
-            UsuarioDTO usuarioDTO = _map.Map<UsuarioDTO>(novoUsuario);
-
             // #9 - Enviar e-mail de verificação de conta;
-            try
-            {
-                if (!String.IsNullOrEmpty(usuarioDTO?.Email) && !String.IsNullOrEmpty(usuarioDTO?.NomeCompleto) && !String.IsNullOrEmpty(codigoVerificacao))
-                {
-                    usuarioDTO.IsEmailVerificacaoContaEnviado = await EnviarEmailVerificacaoConta(usuarioDTO?.Email, usuarioDTO?.NomeCompleto, codigoVerificacao);
-                }
-            }
-            catch (Exception)
-            {
-                usuarioDTO.IsEmailVerificacaoContaEnviado = false;
-            }
+            //try
+            //{
+            //    if (!String.IsNullOrEmpty(usuarioDTO?.Email) && !String.IsNullOrEmpty(usuarioDTO?.NomeCompleto) && !String.IsNullOrEmpty(codigoVerificacao))
+            //    {
+            //        usuarioDTO.IsEmailVerificacaoContaEnviado = await EnviarEmailVerificacaoConta(usuarioDTO?.Email, usuarioDTO?.NomeCompleto, codigoVerificacao);
+            //    }
+            //}
+            //catch (Exception)
+            //{
+            //    usuarioDTO.IsEmailVerificacaoContaEnviado = false;
+            //}
 
             return usuarioDTO;
         }

@@ -39,10 +39,10 @@ namespace Wards.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<int>> CriarUsuario(Usuario input)
+        public async Task<ActionResult<UsuarioDTO>> CriarUsuario(Usuario input)
         {
-            int id = await _criarUsuarioUseCase.Criar(input);
-            return Ok(id);
+            UsuarioDTO dto = await _criarUsuarioUseCase.Criar(input);
+            return Ok(dto);
         }
 
         [HttpGet("listar")]
