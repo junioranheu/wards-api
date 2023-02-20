@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using System.Data;
+using Wards.Domain.DTOs;
 using Wards.Domain.Entities;
 
 namespace Wards.Application.UsesCases.Usuarios.CriarUsuario.Commands
@@ -13,11 +14,13 @@ namespace Wards.Application.UsesCases.Usuarios.CriarUsuario.Commands
             _dbConnection = dbConnection;
         }
 
-        public async Task<int> Criar(Usuario dto)
+        public async Task<UsuarioDTO> Criar(Usuario input)
         {
             string sql = "";
+            await _dbConnection.ExecuteAsync(sql, input);
 
-            return await _dbConnection.ExecuteAsync(sql, dto);
+            // Converter aqui
+            return dto;
         }
     }
 }

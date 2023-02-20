@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -11,6 +12,7 @@ using System.Data;
 using System.Text;
 using Wards.Infrastructure.Auth.Models;
 using Wards.Infrastructure.Auth.Token;
+using Wards.Infrastructure.AutoMapper;
 using Wards.Infrastructure.Data;
 
 namespace Wards.Infrastructure
@@ -21,6 +23,7 @@ namespace Wards.Infrastructure
         {
             AddServices(services, builder);
             AddAuth(services, builder);
+            AddAutoMapper(services);
             AddContext(builder);
             AddSwagger(builder);
             AddCors(builder);
@@ -72,6 +75,17 @@ namespace Wards.Infrastructure
                             ValidateIssuer = false
                         };
                     });
+        }
+
+        private static void AddAutoMapper(IServiceCollection services)
+        {
+            var mapperConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new AutoMapperConfig());
+            });
+
+            IMapper mapper = mapperConfig.CreateMapper();
+            services.AddSingleton(mapper);
         }
 
         private static void AddContext(WebApplicationBuilder builder)

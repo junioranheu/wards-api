@@ -1,4 +1,5 @@
-﻿using Wards.Application.UsesCases.Tokens.CriarRefreshToken;
+﻿using AutoMapper;
+using Wards.Application.UsesCases.Tokens.CriarRefreshToken;
 using Wards.Application.UsesCases.Usuarios.CriarUsuario;
 using Wards.Application.UsesCases.Usuarios.ObterUsuario;
 using Wards.Domain.DTOs;
@@ -15,17 +16,20 @@ namespace Wards.Application.UsesCases.Auths.Registrar
         private readonly ICriarUsuarioUseCase _criarUsuarioUseCase;
         private readonly IObterUsuarioUseCase _obterUsuarioUseCase;
         private readonly ICriarRefreshTokenUseCase _criarRefreshTokenUseCase;
+        private readonly IMapper _map;
 
         public RegistrarUseCase(
             IJwtTokenGenerator jwtTokenGenerator,
             ICriarUsuarioUseCase criarUsuarioUseCase,
             IObterUsuarioUseCase obterUsuarioUseCase,
-            ICriarRefreshTokenUseCase criarRefreshTokenUseCase)
+            ICriarRefreshTokenUseCase criarRefreshTokenUseCase,
+            IMapper map)
         {
             _jwtTokenGenerator = jwtTokenGenerator;
             _criarUsuarioUseCase = criarUsuarioUseCase;
             _obterUsuarioUseCase = obterUsuarioUseCase;
             _criarRefreshTokenUseCase = criarRefreshTokenUseCase;
+            _map = map;
         }
 
         public async Task<UsuarioDTO> Registrar(Usuario input)
@@ -54,7 +58,7 @@ namespace Wards.Application.UsesCases.Auths.Registrar
             }
 
             // #2.3 - Verificar requisitos de senha;
-            var validarSenha = ValidarSenha(input?.Senha ?? string.Empty, input?.NomeCompleto ?? string.Empty, input?.NomeUsuarioSistema ?? string.Empty, input?.Email ?? string.Empty;
+            var validarSenha = ValidarSenha(input?.Senha ?? string.Empty, input?.NomeCompleto ?? string.Empty, input?.NomeUsuarioSistema ?? string.Empty, input?.Email ?? string.Empty);
             if (!validarSenha.Item1)
             {
                 UsuarioDTO erro = new() { Erro = true, CodigoErro = (int)CodigoErrosEnum.RequisitosSenhaNaoCumprido, MensagemErro = validarSenha.Item2 };
