@@ -33,11 +33,11 @@ namespace Wards.API.Controllers
             return Ok(authResultado);
         }
 
-        //[HttpPost("refreshToken")]
-        //public async Task<ActionResult<Usuario>> RefreshToken(UsuarioDTO input)
-        //{
-        //    var authResultado = await _autenticarService.RefreshToken(input.Token, input.RefreshToken);
-        //    return Ok(authResultado);
-        //}
+        [HttpPost("refreshToken")]
+        public async Task<ActionResult<Usuario>> RefreshToken(UsuarioDTO input)
+        {
+            var authResultado = await _autenticarService.RefreshToken(input.Token, input.RefreshToken);
+            return Ok(authResultado);
+        }
     }
 }
