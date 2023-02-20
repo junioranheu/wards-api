@@ -1,5 +1,5 @@
 ﻿using Wards.Application.UsesCases.Usuarios.ListarUsuario.Queries;
-using Wards.Domain.Entities;
+using Wards.Domain.DTOs;
 
 namespace Wards.Application.UsesCases.Usuarios.ListarUsuario
 {
@@ -12,7 +12,7 @@ namespace Wards.Application.UsesCases.Usuarios.ListarUsuario
             _listarQuery = listarQuery;
         }
 
-        public async Task<IEnumerable<Usuario>> Listar()
+        public async Task<IEnumerable<UsuarioDTO>> Listar()
         {
             return await _listarQuery.Listar();
         }

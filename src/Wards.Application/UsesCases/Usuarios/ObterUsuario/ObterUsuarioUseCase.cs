@@ -1,4 +1,5 @@
 ﻿using Wards.Application.UsesCases.Usuarios.ObterUsuario.Queries;
+using Wards.Domain.DTOs;
 using Wards.Domain.Entities;
 
 namespace Wards.Application.UsesCases.Usuarios.ObterUsuario
@@ -12,7 +13,7 @@ namespace Wards.Application.UsesCases.Usuarios.ObterUsuario
             _obterQuery = obterQuery;
         }
 
-        public async Task<Usuario> Obter(int id)
+        public async Task<UsuarioDTO> Obter(int id)
         {
             return await _obterQuery.Obter(id);
         }

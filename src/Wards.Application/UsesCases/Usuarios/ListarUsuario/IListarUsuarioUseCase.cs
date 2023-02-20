@@ -1,9 +1,9 @@
-﻿using Wards.Domain.Entities;
+﻿using Wards.Domain.DTOs;
 
 namespace Wards.Application.UsesCases.Usuarios.ListarUsuario
 {
     public interface IListarUsuarioUseCase
     {
-        Task<IEnumerable<Usuario>> Listar();
+        Task<IEnumerable<UsuarioDTO>> Listar();
     }
 }

@@ -1,6 +1,8 @@
-﻿using Dapper;
+﻿using AutoMapper;
+using Dapper;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
+using Wards.Domain.DTOs;
 using Wards.Domain.Entities;
 using Wards.Infrastructure.Data;
 
@@ -10,18 +12,24 @@ namespace Wards.Application.UsesCases.Usuarios.ObterUsuario.Queries
     {
         private readonly WardsContext _context;
         private readonly IDbConnection _dbConnection;
+        private readonly IMapper _map;
 
-        public ObterUsuarioQuery(WardsContext context, IDbConnection dbConnection)
+        public ObterUsuarioQuery(
+            WardsContext context,
+            IDbConnection dbConnection,
+            IMapper map)
         {
             _context = context;
             _dbConnection = dbConnection;
+            _map = map;
         }
 
-        public async Task<Usuario> Obter(int id)
+        public async Task<UsuarioDTO> Obter(int id)
         {
-            string sql = "";
+            string sql = $"SELECT * FROM Usuarios WHERE UsuarioId = {id}";
+            Usuario usuario = await _dbConnection.QueryFirstOrDefaultAsync<Usuario>(sql, new { id });
 
-            return await _dbConnection.QueryFirstOrDefaultAsync<Usuario>(sql, new { id });
+            return _map.Map<UsuarioDTO>(usuario);
         }
 
         public async Task<Usuario> ObterByEmailOuUsuarioSistema(string? email, string? nomeUsuarioSistema)

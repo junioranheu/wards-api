@@ -47,7 +47,7 @@ namespace Wards.API.Controllers
 
         [HttpGet("listar")]
         [AuthorizeFilter(UsuarioRoleEnum.Adm)]
-        public async Task<ActionResult<IEnumerable<Usuario>>> ListarUsuario()
+        public async Task<ActionResult<IEnumerable<UsuarioDTO>>> ListarUsuario()
         {
             var lista = await _listarUsuarioUseCase.Listar();
 
@@ -61,7 +61,7 @@ namespace Wards.API.Controllers
 
         [HttpGet]
         [AuthorizeFilter(UsuarioRoleEnum.Adm)]
-        public async Task<ActionResult<Usuario>> ObterUsuario(int id)
+        public async Task<ActionResult<UsuarioDTO>> ObterUsuario(int id)
         {
             var item = await _obterUsuarioUseCase.Obter(id);
 
