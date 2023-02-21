@@ -43,8 +43,9 @@ namespace Wards.API.Controllers
         [HttpPost("refreshToken")]
         public async Task<ActionResult<Usuario>> RefreshToken(UsuarioDTO input)
         {
-            string email = HttpContext.User.FindFirst(ClaimTypes.Email).Value ?? string.Empty;
+            string email = HttpContext?.User?.FindFirst(ClaimTypes.Email)?.Value ?? string.Empty;
             var authResultado = await _refreshTokenUseCase.RefreshToken(input.Token ?? string.Empty, input.RefreshToken ?? string.Empty, email);
+
             return Ok(authResultado);
         }
     }

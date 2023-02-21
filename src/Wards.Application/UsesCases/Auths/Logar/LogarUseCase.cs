@@ -60,19 +60,26 @@ namespace Wards.Application.UsesCases.Auths.Logar
             usuarioDTO.Token = _jwtTokenGenerator.GerarToken(usuarioDTO, null);
 
             // #6 - Gerar refresh token;
+            usuarioDTO = await GerarRefreshToken(usuarioDTO, usuario.UsuarioId);
+
+            return usuarioDTO;
+        }
+
+        private async Task<UsuarioDTO> GerarRefreshToken(UsuarioDTO dto, int usuarioId)
+        {
             var refreshToken = _jwtTokenGenerator.GerarRefreshToken();
-            usuarioDTO.RefreshToken = refreshToken;
+            dto.RefreshToken = refreshToken;
 
             Domain.Entities.RefreshToken novoRefreshToken = new()
             {
                 RefToken = refreshToken,
-                UsuarioId = usuario.UsuarioId,
+                UsuarioId = usuarioId,
                 DataRegistro = HorarioBrasilia()
             };
 
             await _criarRefreshTokenUseCase.Criar(novoRefreshToken);
 
-            return usuarioDTO;
+            return dto;
         }
     }
 }
