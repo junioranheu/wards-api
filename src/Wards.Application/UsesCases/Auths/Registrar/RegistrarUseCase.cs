@@ -80,34 +80,25 @@ namespace Wards.Application.UsesCases.Auths.Registrar
             };
 
             UsuarioDTO usuarioAdicionado = await _criarUsuarioUseCase.Criar(novoUsuario);
+            int usuarioId = usuarioAdicionado.UsuarioId;
 
             // #4 - Automaticamente atualizar o valor da Foto com um valor padrão após criar o novo usuário e adicionar ao ovjeto novoUsuario;
-            //string nomeNovaFoto = $"{usuarioAdicionado.UsuarioId}{GerarStringAleatoria(5, true)}.webp";
-            //await _usuarioRepository.AtualizarFoto(usuarioAdicionado.UsuarioId, nomeNovaFoto);
+            //string nomeNovaFoto = $"{usuarioId}{GerarStringAleatoria(5, true)}.webp";
+            //await _usuarioRepository.AtualizarFoto(usuarioId, nomeNovaFoto);
             //novoUsuario.Foto = nomeNovaFoto;
 
             // #5 - Converter de UsuarioSenhaDTO para UsuarioDTO;
             UsuarioDTO usuarioDTO = _map.Map<UsuarioDTO>(novoUsuario);
 
             // #6 - Adicionar ao objeto novoUsuario o id do novo usuário;
-            usuarioDTO.UsuarioId = usuarioAdicionado.UsuarioId;
+            usuarioDTO.UsuarioId = usuarioId;
 
             // #7 - Criar token JWT;
             var token = _jwtTokenGenerator.GerarToken(usuarioDTO, null);
             usuarioDTO.Token = token;
 
             // #8 - Gerar refresh token;
-            var refreshToken = _jwtTokenGenerator.GerarRefreshToken();
-            usuarioDTO.RefreshToken = refreshToken;
-
-            Domain.Entities.RefreshToken novoRefreshToken = new()
-            {
-                RefToken = refreshToken,
-                UsuarioId = usuarioAdicionado.UsuarioId,
-                DataRegistro = HorarioBrasilia()
-            };
-
-            await _criarRefreshTokenUseCase.Criar(novoRefreshToken);
+            usuarioDTO = await GerarRefreshToken(usuarioDTO, usuarioId);
 
             // #9 - Enviar e-mail de verificação de conta;
             //try
@@ -123,6 +114,23 @@ namespace Wards.Application.UsesCases.Auths.Registrar
             //}
 
             return usuarioDTO;
+        }
+
+        private async Task<UsuarioDTO> GerarRefreshToken(UsuarioDTO dto, int usuarioId)
+        {
+            var refreshToken = _jwtTokenGenerator.GerarRefreshToken();
+            dto.RefreshToken = refreshToken;
+
+            Domain.Entities.RefreshToken novoRefreshToken = new()
+            {
+                RefToken = refreshToken,
+                UsuarioId = usuarioId,
+                DataRegistro = HorarioBrasilia()
+            };
+
+            await _criarRefreshTokenUseCase.Criar(novoRefreshToken);
+
+            return dto;
         }
     }
 }
