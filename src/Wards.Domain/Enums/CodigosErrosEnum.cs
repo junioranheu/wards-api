@@ -2,7 +2,7 @@
 
 namespace Wards.Domain.Enums
 {
-    public enum CodigoErrosEnum
+    public enum CodigosErrosEnum
     {
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=- 100 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         [Description("Já existe outro usuário cadastrado com este e-mail ou nome de usuário")]

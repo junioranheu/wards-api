@@ -19,7 +19,7 @@ namespace Wards.Infrastructure.Auth.Token
             _jwtSettings = jwtOptions.Value;
         }
 
-        public string GerarToken(UsuarioDTO usuario, IEnumerable<Claim>? listaClaims)
+        public string GerarToken(UsuarioDTO? usuario, IEnumerable<Claim>? listaClaims)
         {
             JwtSecurityTokenHandler tokenHandler = new();
 

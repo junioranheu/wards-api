@@ -39,21 +39,21 @@ namespace Wards.Application.UsesCases.Auths.Registrar
 
             if (verificarUsuario is not null)
             {
-                UsuarioDTO erro = new() { Erro = true, CodigoErro = (int)CodigoErrosEnum.UsuarioExistente, MensagemErro = GetDescricaoEnum(CodigoErrosEnum.UsuarioExistente) };
+                UsuarioDTO erro = new() { Erro = true, CodigoErro = (int)CodigosErrosEnum.UsuarioExistente, MensagemErro = GetDescricaoEnum(CodigosErrosEnum.UsuarioExistente) };
                 return erro;
             }
 
             // #2.1 - Verificar requisitos gerais;
             if (input?.NomeCompleto?.Length < 3 || input?.NomeUsuarioSistema?.Length < 3)
             {
-                UsuarioDTO erro = new() { Erro = true, CodigoErro = (int)CodigoErrosEnum.RequisitosNome, MensagemErro = GetDescricaoEnum(CodigoErrosEnum.RequisitosNome) };
+                UsuarioDTO erro = new() { Erro = true, CodigoErro = (int)CodigosErrosEnum.RequisitosNome, MensagemErro = GetDescricaoEnum(CodigosErrosEnum.RequisitosNome) };
                 return erro;
             }
 
             // #2.2 - Verificar e-mail;
             if (!ValidarEmail(input?.Email ?? string.Empty))
             {
-                UsuarioDTO erro = new() { Erro = true, CodigoErro = (int)CodigoErrosEnum.EmailInvalido, MensagemErro = GetDescricaoEnum(CodigoErrosEnum.EmailInvalido) };
+                UsuarioDTO erro = new() { Erro = true, CodigoErro = (int)CodigosErrosEnum.EmailInvalido, MensagemErro = GetDescricaoEnum(CodigosErrosEnum.EmailInvalido) };
                 return erro;
             }
 
@@ -61,7 +61,7 @@ namespace Wards.Application.UsesCases.Auths.Registrar
             var validarSenha = ValidarSenha(input?.Senha ?? string.Empty, input?.NomeCompleto ?? string.Empty, input?.NomeUsuarioSistema ?? string.Empty, input?.Email ?? string.Empty);
             if (!validarSenha.Item1)
             {
-                UsuarioDTO erro = new() { Erro = true, CodigoErro = (int)CodigoErrosEnum.RequisitosSenhaNaoCumprido, MensagemErro = validarSenha.Item2 };
+                UsuarioDTO erro = new() { Erro = true, CodigoErro = (int)CodigosErrosEnum.RequisitosSenhaNaoCumprido, MensagemErro = validarSenha.Item2 };
                 return erro;
             }
 
@@ -100,7 +100,7 @@ namespace Wards.Application.UsesCases.Auths.Registrar
             var refreshToken = _jwtTokenGenerator.GerarRefreshToken();
             usuarioDTO.RefreshToken = refreshToken;
 
-            RefreshToken novoRefreshToken = new()
+            Domain.Entities.RefreshToken novoRefreshToken = new()
             {
                 RefToken = refreshToken,
                 UsuarioId = usuarioAdicionado.UsuarioId,

@@ -35,21 +35,21 @@ namespace Wards.Application.UsesCases.Auths.Logar
 
             if (usuario is null)
             {
-                UsuarioDTO erro = new() { Erro = true, CodigoErro = (int)CodigoErrosEnum.UsuarioNaoEncontrado, MensagemErro = GetDescricaoEnum(CodigoErrosEnum.UsuarioNaoEncontrado) };
+                UsuarioDTO erro = new() { Erro = true, CodigoErro = (int)CodigosErrosEnum.UsuarioNaoEncontrado, MensagemErro = GetDescricaoEnum(CodigosErrosEnum.UsuarioNaoEncontrado) };
                 return erro;
             }
 
             // #2 - Verificar se a senha está correta;
             if (usuario.Senha != Criptografar(input?.Senha ?? string.Empty))
             {
-                UsuarioDTO erro = new() { Erro = true, CodigoErro = (int)CodigoErrosEnum.UsuarioSenhaIncorretos, MensagemErro = GetDescricaoEnum(CodigoErrosEnum.UsuarioSenhaIncorretos) };
+                UsuarioDTO erro = new() { Erro = true, CodigoErro = (int)CodigosErrosEnum.UsuarioSenhaIncorretos, MensagemErro = GetDescricaoEnum(CodigosErrosEnum.UsuarioSenhaIncorretos) };
                 return erro;
             }
 
             // #3 - Verificar se o usuário está ativo;
             if (!usuario.IsAtivo)
             {
-                UsuarioDTO erro = new() { Erro = true, CodigoErro = (int)CodigoErrosEnum.ContaDesativada, MensagemErro = GetDescricaoEnum(CodigoErrosEnum.ContaDesativada) };
+                UsuarioDTO erro = new() { Erro = true, CodigoErro = (int)CodigosErrosEnum.ContaDesativada, MensagemErro = GetDescricaoEnum(CodigosErrosEnum.ContaDesativada) };
                 return erro;
             }
 
@@ -63,7 +63,7 @@ namespace Wards.Application.UsesCases.Auths.Logar
             var refreshToken = _jwtTokenGenerator.GerarRefreshToken();
             usuarioDTO.RefreshToken = refreshToken;
 
-            RefreshToken novoRefreshToken = new()
+            Domain.Entities.RefreshToken novoRefreshToken = new()
             {
                 RefToken = refreshToken,
                 UsuarioId = usuario.UsuarioId,

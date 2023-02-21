@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Wards.Application.UsesCases.Auths.Logar;
+using Wards.Application.UsesCases.Auths.RefreshToken;
 using Wards.Application.UsesCases.Auths.Registrar;
 
 namespace Wards.Application.UsesCases.Auths
@@ -11,6 +12,8 @@ namespace Wards.Application.UsesCases.Auths
             services.AddScoped<ILogarUseCase, LogarUseCase>();
 
             services.AddScoped<IRegistrarUseCase, RegistrarUseCase>();
+
+            services.AddScoped<IRefreshTokenUseCase, RefreshTokenUseCase>();
 
             return services;
         }

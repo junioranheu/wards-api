@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Wards.Application.UsesCases.Auths.Logar;
+using Wards.Application.UsesCases.Auths.RefreshToken;
 using Wards.Application.UsesCases.Auths.Registrar;
 using Wards.Domain.DTOs;
 using Wards.Domain.Entities;
@@ -10,33 +11,38 @@ namespace Wards.API.Controllers
     [Route("api/[controller]")]
     public class AutenticarController : Controller
     {
-        private readonly ILogarUseCase _logarService;
-        private readonly IRegistrarUseCase _registrarService;
+        private readonly ILogarUseCase _logarUseCase;
+        private readonly IRegistrarUseCase _registrarUseCase;
+        private readonly IRefreshTokenUseCase _refreshTokenUseCase;
 
-        public AutenticarController(ILogarUseCase logarService, IRegistrarUseCase registrarService)
+        public AutenticarController(
+            ILogarUseCase logarUseCase,
+            IRegistrarUseCase registrarUseCase,
+            IRefreshTokenUseCase refreshTokenUseCase)
         {
-            _logarService = logarService;
-            _registrarService = registrarService;
+            _logarUseCase = logarUseCase;
+            _registrarUseCase = registrarUseCase;
+            _refreshTokenUseCase = refreshTokenUseCase;
         }
 
         [HttpPost("login")]
         public async Task<ActionResult<UsuarioDTO>> Logar(Usuario input)
         {
-            var authResultado = await _logarService.Logar(input);
+            var authResultado = await _logarUseCase.Logar(input);
             return Ok(authResultado);
         }
 
         [HttpPost("registrar")]
         public async Task<ActionResult<UsuarioDTO>> Registrar(Usuario input)
         {
-            var authResultado = await _registrarService.Registrar(input);
+            var authResultado = await _registrarUseCase.Registrar(input);
             return Ok(authResultado);
         }
 
         [HttpPost("refreshToken")]
         public async Task<ActionResult<Usuario>> RefreshToken(UsuarioDTO input)
         {
-            var authResultado = await _autenticarService.RefreshToken(input.Token, input.RefreshToken);
+            var authResultado = await _refreshTokenUseCase.RefreshToken(input.Token ?? string.Empty, input.RefreshToken ?? string.Empty);
             return Ok(authResultado);
         }
     }
