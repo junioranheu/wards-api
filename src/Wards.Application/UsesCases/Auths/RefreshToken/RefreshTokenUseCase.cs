@@ -1,6 +1,8 @@
-﻿using System.Security.Claims;
+﻿using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
 using Wards.Application.UsesCases.Tokens.CriarRefreshToken;
 using Wards.Application.UsesCases.Tokens.ObterRefreshToken;
+using Wards.Application.UsesCases.Usuarios.ObterUsuario;
 using Wards.Domain.DTOs;
 using Wards.Domain.Enums;
 using Wards.Infrastructure.Auth.Token;
@@ -10,25 +12,35 @@ namespace Wards.Application.UsesCases.Auths.RefreshToken
 {
     public sealed class RefreshTokenUseCase : IRefreshTokenUseCase
     {
+        private readonly IObterUsuarioUseCase _obterUsuarioUseCase;
         private readonly IJwtTokenGenerator _jwtTokenGenerator;
         private readonly IObterRefreshTokenUseCase _obterRefreshTokenUseCase;
         private readonly ICriarRefreshTokenUseCase _criarRefreshTokenUseCase;
 
         public RefreshTokenUseCase(
+            IObterUsuarioUseCase obterUsuarioUseCase,
             IJwtTokenGenerator jwtTokenGenerator,
             IObterRefreshTokenUseCase obterRefreshTokenUseCase,
             ICriarRefreshTokenUseCase criarRefreshTokenUseCase)
         {
+            _obterUsuarioUseCase = obterUsuarioUseCase;
             _jwtTokenGenerator = jwtTokenGenerator;
             _obterRefreshTokenUseCase = obterRefreshTokenUseCase;
             _criarRefreshTokenUseCase = criarRefreshTokenUseCase;
         }
 
-        public async Task<UsuarioDTO> RefreshToken(string token, string refreshToken)
+        public async Task<UsuarioDTO> RefreshToken(string token, string refreshToken, string email)
         {
             var principal = _jwtTokenGenerator.GetInfoTokenExpirado(token);
-            int usuarioId = Convert.ToInt32(principal?.Claims.Where(x => x.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).FirstOrDefault());
+            UsuarioDTO usuarioDTO = await _obterUsuarioUseCase.ObterByEmailComCache(email);
 
+            if (usuarioDTO is null)
+            {
+                UsuarioDTO erro = new() { Erro = true, CodigoErro = (int)CodigosErrosEnum.NaoEncontrado, MensagemErro = GetDescricaoEnum(CodigosErrosEnum.NaoEncontrado) };
+                return erro;
+            }
+
+            int usuarioId = usuarioDTO.UsuarioId;
             var refreshTokenSalvoAnteriormente = await _obterRefreshTokenUseCase.ObterByUsuarioId(usuarioId);
             if (refreshTokenSalvoAnteriormente != refreshToken)
             {

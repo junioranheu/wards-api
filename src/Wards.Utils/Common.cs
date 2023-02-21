@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Net;
 using System.Net.Mail;
 using System.Reflection;
+using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -367,6 +368,7 @@ namespace Wards.Utils
             return true;
         }
 
+        // Ajustar HTML do e-mail;
         private static string AjustarConteudoEmailHTML(string caminhoFinalArquivoHTML, List<EmailDadosReplace>? listaDadosReplace)
         {
             string conteudoEmailHtml = string.Empty;

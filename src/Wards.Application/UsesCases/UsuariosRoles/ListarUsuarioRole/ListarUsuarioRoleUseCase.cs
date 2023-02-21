@@ -5,23 +5,23 @@ using Wards.Domain.Entities;
 
 namespace Wards.Application.UsesCases.UsuariosRoles.ObterUsuarioRole
 {
-    public sealed class ObterUsuarioRoleUseCase : IObterUsuarioRoleUseCase
+    public sealed class ListarUsuarioRoleUseCase : IListarUsuarioRoleUseCase
     {
         private readonly IMemoryCache _memoryCache;
-        private readonly IObterUsuarioRoleQuery _obterQuery;
+        private readonly IListarUsuarioRoleQuery _obterQuery;
 
-        public ObterUsuarioRoleUseCase(IMemoryCache memoryCache, IObterUsuarioRoleQuery obterQuery)
+        public ListarUsuarioRoleUseCase(IMemoryCache memoryCache, IListarUsuarioRoleQuery obterQuery)
         {
             _memoryCache = memoryCache;
             _obterQuery = obterQuery;
         }
 
-        public async Task<IEnumerable<UsuarioRole>> ObterByUsuarioEmail(string email)
+        public async Task<IEnumerable<UsuarioRole>> ListarByEmail(string email)
         {
-            return await _obterQuery.ObterByUsuarioEmail(email);
+            return await _obterQuery.ListarByEmail(email);
         }
 
-        public async Task<IEnumerable<UsuarioRole>?> ObterUsuarioRolesByEmailComCache(dynamic context)
+        public async Task<IEnumerable<UsuarioRole>?> ListarUsuarioRolesByEmailComCache(dynamic context)
         {
             string email = ObterUsuarioEmailSeLogado(context);
 
@@ -30,10 +30,10 @@ namespace Wards.Application.UsesCases.UsuariosRoles.ObterUsuarioRole
                 return null;
             }
 
-            const string keyCache = "keyCacheUsuarioRoles";
+            const string keyCache = "keyListarUsuarioRolesByEmailComCache";
             if (!_memoryCache.TryGetValue(keyCache, out IEnumerable<UsuarioRole>? listaUsuarioRoles))
             {
-                listaUsuarioRoles = await ObterByUsuarioEmail(email);
+                listaUsuarioRoles = await ListarByEmail(email);
 
                 _memoryCache.Set(keyCache, listaUsuarioRoles, TimeSpan.FromMinutes(5));
             }

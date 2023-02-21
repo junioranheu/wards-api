@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using Wards.Application.UsesCases.Auths.Logar;
 using Wards.Application.UsesCases.Auths.RefreshToken;
 using Wards.Application.UsesCases.Auths.Registrar;
@@ -42,7 +43,8 @@ namespace Wards.API.Controllers
         [HttpPost("refreshToken")]
         public async Task<ActionResult<Usuario>> RefreshToken(UsuarioDTO input)
         {
-            var authResultado = await _refreshTokenUseCase.RefreshToken(input.Token ?? string.Empty, input.RefreshToken ?? string.Empty);
+            string email = HttpContext.User.FindFirst(ClaimTypes.Email).Value ?? string.Empty;
+            var authResultado = await _refreshTokenUseCase.RefreshToken(input.Token ?? string.Empty, input.RefreshToken ?? string.Empty, email);
             return Ok(authResultado);
         }
     }

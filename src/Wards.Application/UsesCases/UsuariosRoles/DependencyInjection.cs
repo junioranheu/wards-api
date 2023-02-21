@@ -8,8 +8,8 @@ namespace Wards.Application.UsesCases.UsuariosRoles
     {
         public static IServiceCollection AddUsuariosRolesApplication(this IServiceCollection services)
         {
-            services.AddScoped<IObterUsuarioRoleUseCase, ObterUsuarioRoleUseCase>();
-            services.AddScoped<IObterUsuarioRoleQuery, ObterUsuarioRoleQuery>();
+            services.AddScoped<IListarUsuarioRoleUseCase, ListarUsuarioRoleUseCase>();
+            services.AddScoped<IListarUsuarioRoleQuery, ListarUsuarioRoleQuery>();
 
             return services;
         }

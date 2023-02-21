@@ -52,5 +52,13 @@ namespace Wards.Application.UsesCases.Usuarios.ObterUsuario.Queries
 
             return byEmail;
         }
+
+        public async Task<UsuarioDTO> ObterByEmail(string email)
+        {
+            string sql = $"SELECT * FROM Usuarios WHERE Email = '{email}'";
+            Usuario usuario = await _dbConnection.QueryFirstOrDefaultAsync<Usuario>(sql, new { email });
+
+            return _map.Map<UsuarioDTO>(usuario);
+        }
     }
 }

@@ -2,8 +2,8 @@
 
 namespace Wards.Application.UsesCases.UsuariosRoles.ObterUsuarioRole.Queries
 {
-    public interface IObterUsuarioRoleQuery
+    public interface IListarUsuarioRoleQuery
     {
-        Task<IEnumerable<UsuarioRole>> ObterByUsuarioEmail(string email);
+        Task<IEnumerable<UsuarioRole>> ListarByEmail(string email);
     }
 }
