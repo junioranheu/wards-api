@@ -15,11 +15,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wards.Utils", "Wards.Utils\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wards.UnitTests", "Wards.UnitTests\Wards.UnitTests.csproj", "{5805311C-D99E-4828-8F46-CD5325F497CC}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Itens de Solução", "Itens de Solução", "{700610DD-01B6-43DB-9A4E-E5D93726AF11}"
-	ProjectSection(SolutionItems) = preProject
-		wards.txt = wards.txt
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

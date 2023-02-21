@@ -1,2 +1,0 @@
-- refresh token;
-- colocar todas as features (e-mail, imagem) do registrar (auth também);

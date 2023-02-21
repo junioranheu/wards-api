@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using Wards.Application.UsesCases.Tokens.CriarRefreshToken;
 using Wards.Application.UsesCases.Tokens.ObterRefreshToken;
 using Wards.Application.UsesCases.Usuarios.ObterUsuario;
@@ -31,8 +30,7 @@ namespace Wards.Application.UsesCases.Auths.RefreshToken
 
         public async Task<UsuarioDTO> RefreshToken(string token, string refreshToken, string email)
         {
-            var principal = _jwtTokenGenerator.GetInfoTokenExpirado(token);
-            UsuarioDTO usuarioDTO = await _obterUsuarioUseCase.ObterByEmailComCache(email);
+            UsuarioDTO? usuarioDTO = await _obterUsuarioUseCase.ObterByEmailComCache(email);
 
             if (usuarioDTO is null)
             {
@@ -48,6 +46,14 @@ namespace Wards.Application.UsesCases.Auths.RefreshToken
                 return erro;
             }
 
+            ClaimsPrincipal? principal = _jwtTokenGenerator.GetInfoTokenExpirado(token);
+            UsuarioDTO dto = await GerarRefreshToken(principal, usuarioId);
+
+            return dto;
+        }
+
+        private async Task<UsuarioDTO> GerarRefreshToken(ClaimsPrincipal? principal, int usuarioId)
+        {
             var novoToken = _jwtTokenGenerator.GerarToken(null, principal?.Claims);
             var novoRefreshToken = _jwtTokenGenerator.GerarRefreshToken();
 
