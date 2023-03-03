@@ -1,9 +1,8 @@
-﻿using Wards.Domain.DTOs;
-using Wards.Domain.Entities;
+﻿using Wards.Domain.Entities;
 
 namespace Wards.Application.UsesCases.Usuarios.Shared.Input
 {
-    public sealed class UsuarioInput : _RetornoApiDTO
+    public sealed class UsuarioInput
     {
         public Usuario? Usuarios { get; init; }
 
