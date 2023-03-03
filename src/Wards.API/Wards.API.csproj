@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Wards.Application\Wards.Application.csproj" />
+    <ProjectReference Include="..\Wards.DesignPatterns.Adapter\Wards.DesignPatterns.Adapter.csproj" />
     <ProjectReference Include="..\Wards.Domain\Wards.Domain.csproj" />
     <ProjectReference Include="..\Wards.Infrastructure\Wards.Infrastructure.csproj" />
   </ItemGroup>

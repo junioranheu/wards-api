@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -12,7 +11,6 @@ using System.Data;
 using System.Text;
 using Wards.Infrastructure.Auth.Models;
 using Wards.Infrastructure.Auth.Token;
-using Wards.Infrastructure.AutoMapper;
 using Wards.Infrastructure.Data;
 
 namespace Wards.Infrastructure

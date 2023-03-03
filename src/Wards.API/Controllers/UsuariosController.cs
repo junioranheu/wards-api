@@ -7,8 +7,6 @@ using Wards.Application.UsesCases.Usuarios.ObterUsuario;
 using Wards.Application.UsesCases.Usuarios.Shared.Input;
 using Wards.Application.UsesCases.Usuarios.Shared.Output;
 using Wards.Application.UsesCases.UsuariosRoles.CriarUsuarioRole;
-using Wards.Domain.DTOs;
-using Wards.Domain.Entities;
 using Wards.Domain.Enums;
 
 namespace Wards.API.Controllers
@@ -41,7 +39,8 @@ namespace Wards.API.Controllers
         [AuthorizeFilter(UsuarioRoleEnum.Adm)]
         public async Task<ActionResult<UsuarioOutput>> CriarUsuario(UsuarioInput input)
         {
-            UsuarioOutput output = await _criarUsuarioUseCase.Criar(input);
+            UsuarioOutput output = _map.Map<UsuarioOutput>(input);
+             = await _criarUsuarioUseCase.Criar(input);
 
             if (output.Usuarios!.UsuarioId > 0)
                 await _criarUsuarioRoleUseCase.Criar(dto.UsuariosRolesId!, usuarioDTO.Usuarios!.UsuarioId);

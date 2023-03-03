@@ -1,6 +1,4 @@
-﻿using AutoMapper;
-using Wards.Application.UsesCases.Usuarios.CriarUsuario.Commands;
-using Wards.Domain.DTOs;
+﻿using Wards.Application.UsesCases.Usuarios.CriarUsuario.Commands;
 using Wards.Domain.Entities;
 
 namespace Wards.Application.UsesCases.Usuarios.CriarUsuario

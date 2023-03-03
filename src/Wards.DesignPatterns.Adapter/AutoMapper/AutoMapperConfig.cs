@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
+using Wards.Application.UsesCases.Usuarios.Shared.Input;
 using Wards.Domain.Entities;
 
-namespace Wards.Infrastructure.AutoMapper
+namespace Wards.DesignPatterns.Adapter.AutoMapper
 {
     public sealed class AutoMapperConfig : Profile
     {
