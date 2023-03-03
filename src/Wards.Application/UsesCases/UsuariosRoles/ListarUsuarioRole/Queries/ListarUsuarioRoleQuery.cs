@@ -18,12 +18,12 @@ namespace Wards.Application.UsesCases.UsuariosRoles.ObterUsuarioRole.Queries
         {
             var ByEmail = await _context.UsuariosRoles.
                                  Include(u => u.Usuarios).
-                                 Where(u => u.Usuarios.Email == email && u.Usuarios.IsAtivo == true).
+                                 Where(u => u.Usuarios!.Email == email && u.Usuarios.IsAtivo == true).
                                  AsNoTracking().ToListAsync();
 
             foreach (var item in ByEmail)
             {
-                item.Usuarios.Senha = string.Empty;
+                item.Usuarios!.Senha = string.Empty;
             }
 
             return ByEmail;

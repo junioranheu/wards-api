@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Wards.Domain.DTOs;
 using Wards.Domain.Entities;
 
 namespace Wards.Infrastructure.AutoMapper
@@ -8,7 +7,7 @@ namespace Wards.Infrastructure.AutoMapper
     {
         public AutoMapperConfig()
         {
-            CreateMap<Usuario, UsuarioDTO>().ReverseMap();
+            CreateMap<Usuario, UsuarioInput>().ReverseMap();
         }
     }
 }

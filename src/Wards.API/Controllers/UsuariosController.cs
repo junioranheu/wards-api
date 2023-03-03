@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Wards.API.Filters;
-using Wards.Application.UsesCases.Usuarios.AtualizarUsuario;
 using Wards.Application.UsesCases.Usuarios.CriarUsuario;
 using Wards.Application.UsesCases.Usuarios.ListarUsuario;
 using Wards.Application.UsesCases.Usuarios.ObterUsuario;
@@ -14,28 +14,33 @@ namespace Wards.API.Controllers
     [ApiController]
     public class UsuariosController : Controller
     {
-        private readonly IAtualizarUsuarioUseCase _atualizarUsuarioUseCase;
+        private readonly IMapper _map;
         private readonly ICriarUsuarioUseCase _criarUsuarioUseCase;
         private readonly IListarUsuarioUseCase _listarUsuarioUseCase;
         private readonly IObterUsuarioUseCase _obterUsuarioUseCase;
 
         public UsuariosController(
-            IAtualizarUsuarioUseCase atualizarUsuarioUseCase,
+            IMapper map,
             ICriarUsuarioUseCase criarUsuarioUseCase,
             IListarUsuarioUseCase listarUsuarioUseCase,
             IObterUsuarioUseCase obterUsuarioUseCase)
         {
-            _atualizarUsuarioUseCase = atualizarUsuarioUseCase;
+            _map = map;
             _criarUsuarioUseCase = criarUsuarioUseCase;
             _listarUsuarioUseCase = listarUsuarioUseCase;
             _obterUsuarioUseCase = obterUsuarioUseCase;
         }
 
-        [HttpPut]
-        public async Task<ActionResult<int>> AtualizarUsuario(UsuarioDTO dto)
+        [HttpPost]
+        [AuthorizeFilter(UsuarioRoleEnum.Adm)]
+        public async Task<ActionResult<UsuarioDTO>> CriarUsuario(Usuario input)
         {
-            int id = await _atualizarUsuarioUseCase.Atualizar(dto);
-            return Ok(id);
+            UsuarioDTO usuarioDTO = await _criarUsuarioUseCase.Criar(input);
+
+            if (usuarioDTO.Usuarios!.UsuarioId > 0)
+                await _criarUsuarioPerfilUseCase.ExecuteAsync(dto.UsuariosRolesId!, usuarioDTO.Usuarios!.UsuarioId);
+
+            return Ok(usuarioDTO);
         }
 
         [HttpGet("listar")]

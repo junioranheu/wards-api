@@ -5,8 +5,7 @@ namespace Wards.Application.UsesCases.Usuarios.ObterUsuario.Queries
 {
     public interface IObterUsuarioQuery
     {
-        Task<UsuarioDTO> Obter(int id);
-        Task<UsuarioDTO> ObterByEmail(string email);
+        Task<Usuario?> Obter(int id, string email);
         Task<Usuario> ObterByEmailOuUsuarioSistema(string? email, string? nomeUsuarioSistema);
     }
 }

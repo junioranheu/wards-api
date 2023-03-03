@@ -2,7 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System.Net;
-using Wards.Application.UsesCases.UsuariosRoles.ObterUsuarioRole;
+using System.Security.Claims;
+using Wards.Application.Services.Usuarios.ListarUsuarioRolesCache;
 using Wards.Domain.Entities;
 using Wards.Domain.Enums;
 
@@ -30,14 +31,14 @@ namespace Wards.API.Filters
         {
             if (IsUsuarioAutenticado(context))
             {
-                IEnumerable<UsuarioRole>? usuarioRoles = await GetUsuarioRoles(context);
+                IEnumerable<UsuarioRole>? usuarioRoles = await ListarUsuarioRoles(context);
                 IsUsuarioTemAcesso(context, usuarioRoles, _rolesNecessarias);
             }
         }
 
         private static bool IsUsuarioAutenticado(AuthorizationFilterContext context)
         {
-            if (!context.HttpContext.User.Identity.IsAuthenticated)
+            if (!context.HttpContext.User.Identity!.IsAuthenticated)
             {
                 context.Result = new UnauthorizedResult();
                 return false;
@@ -46,15 +47,31 @@ namespace Wards.API.Filters
             return true;
         }
 
-        private static async Task<IEnumerable<UsuarioRole>?> GetUsuarioRoles(AuthorizationFilterContext context)
+        private static string ObterUsuarioEmail(AuthorizationFilterContext filterContextExecuted)
         {
-            var obterUsuarioRoleUseCase = context.HttpContext.RequestServices.GetService<IListarUsuarioRoleUseCase>();
-            IEnumerable<UsuarioRole>? usuarioRoles = await obterUsuarioRoleUseCase.ListarUsuarioRolesByEmailComCache(context);
+            if (filterContextExecuted.HttpContext.User.Identity!.IsAuthenticated)
+            {
+                // Obter o e-mail do usuário pela Azure;
+                //var claim = filterContextExecuted.HttpContext.User.Claims.First(c => c.Type == "preferred_username");
+                //return claim.Value ?? string.Empty;
+
+                // Obter o e-mail do usuário pela autenticação própria;
+                string email = filterContextExecuted.HttpContext.User.FindFirst(ClaimTypes.Email)!.Value;
+                return email ?? string.Empty;
+            }
+
+            return string.Empty;
+        }
+
+        private static async Task<IEnumerable<UsuarioRole>?> ListarUsuarioRoles(AuthorizationFilterContext context)
+        {
+            var service = context.HttpContext.RequestServices.GetService<IListarUsuarioRolesCacheService>();
+            IEnumerable<UsuarioRole>? usuarioRoles = await service!.ListarUsuarioRolesCache(ObterUsuarioEmail(context));
 
             return usuarioRoles;
         }
 
-        private static bool IsUsuarioTemAcesso(AuthorizationFilterContext context, IEnumerable<UsuarioRole> usuarioRoles, int[] _rolesNecessarias)
+        private static bool IsUsuarioTemAcesso(AuthorizationFilterContext context, IEnumerable<UsuarioRole>? usuarioRoles, int[] _rolesNecessarias)
         {
             if (_rolesNecessarias.Length == 0)
             {

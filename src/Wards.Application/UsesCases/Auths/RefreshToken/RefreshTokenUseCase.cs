@@ -30,7 +30,7 @@ namespace Wards.Application.UsesCases.Auths.RefreshToken
 
         public async Task<UsuarioDTO> RefreshToken(string token, string refreshToken, string email)
         {
-            UsuarioDTO? usuarioDTO = await _obterUsuarioUseCase.ObterByEmailComCache(email);
+            UsuarioDTO? usuarioDTO = await _obterUsuarioUseCase.Obter(email: email);
 
             if (usuarioDTO is null)
             {

@@ -1,8 +1,5 @@
-﻿using AutoMapper;
-using Dapper;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using System.Data;
-using Wards.Domain.DTOs;
 using Wards.Domain.Entities;
 using Wards.Infrastructure.Data;
 
@@ -11,25 +8,23 @@ namespace Wards.Application.UsesCases.Usuarios.ObterUsuario.Queries
     public sealed class ObterUsuarioQuery : IObterUsuarioQuery
     {
         private readonly WardsContext _context;
-        private readonly IDbConnection _dbConnection;
-        private readonly IMapper _map;
-
-        public ObterUsuarioQuery(
-            WardsContext context,
-            IDbConnection dbConnection,
-            IMapper map)
+       
+        public ObterUsuarioQuery(WardsContext context)
         {
             _context = context;
-            _dbConnection = dbConnection;
-            _map = map;
         }
 
-        public async Task<UsuarioDTO> Obter(int id)
+        public async Task<Usuario?> Obter(int id, string email)
         {
-            string sql = $"SELECT * FROM Usuarios WHERE UsuarioId = {id}";
-            Usuario usuario = await _dbConnection.QueryFirstOrDefaultAsync<Usuario>(sql, new { id });
+            var linq = await _context.Usuarios.
+                             Include(ur => ur.UsuarioRoles).
+                             Where(u =>
+                                 id > 0 ? u.UsuarioId == id : true
+                                 && !string.IsNullOrEmpty(email) ? u.Email == email : true
+                                 && u.IsLatest == true // É necessário ser o último para referenciar o "UsuarioPerfis" atual; 
+                             ).AsNoTracking().FirstOrDefaultAsync();
 
-            return _map.Map<UsuarioDTO>(usuario);
+            return linq;
         }
 
         public async Task<Usuario> ObterByEmailOuUsuarioSistema(string? email, string? nomeUsuarioSistema)
@@ -44,7 +39,7 @@ namespace Wards.Application.UsesCases.Usuarios.ObterUsuario.Queries
 
                 if (byNomeUsuario is null)
                 {
-                    return null;
+                    return new Usuario();
                 }
 
                 return byNomeUsuario;
@@ -53,12 +48,13 @@ namespace Wards.Application.UsesCases.Usuarios.ObterUsuario.Queries
             return byEmail;
         }
 
-        public async Task<UsuarioDTO> ObterByEmail(string email)
-        {
-            string sql = $"SELECT * FROM Usuarios WHERE Email = '{email}'";
-            Usuario usuario = await _dbConnection.QueryFirstOrDefaultAsync<Usuario>(sql, new { email });
+        // EXEMPLO DAPPER;
+        //public async Task<UsuarioDTO> Obter(int id)
+        //{
+        //    string sql = $"SELECT * FROM Usuarios WHERE UsuarioId = {id}";
+        //    Usuario usuario = await _dbConnection.QueryFirstOrDefaultAsync<Usuario>(sql, new { id });
 
-            return _map.Map<UsuarioDTO>(usuario);
-        }
+        //    return _map.Map<UsuarioDTO>(usuario);
+        //}
     }
 }

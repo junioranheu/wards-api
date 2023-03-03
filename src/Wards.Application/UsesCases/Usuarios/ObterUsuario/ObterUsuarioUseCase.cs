@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Caching.Memory;
+﻿using AutoMapper;
 using Wards.Application.UsesCases.Usuarios.ObterUsuario.Queries;
 using Wards.Domain.DTOs;
 using Wards.Domain.Entities;
@@ -7,46 +7,24 @@ namespace Wards.Application.UsesCases.Usuarios.ObterUsuario
 {
     public sealed class ObterUsuarioUseCase : IObterUsuarioUseCase
     {
-        private readonly IMemoryCache _memoryCache;
+        private readonly IMapper _map;
         private readonly IObterUsuarioQuery _obterQuery;
 
-        public ObterUsuarioUseCase(IMemoryCache memoryCache, IObterUsuarioQuery obterQuery)
+        public ObterUsuarioUseCase(IMapper map, IObterUsuarioQuery obterQuery)
         {
-            _memoryCache = memoryCache;
+            _map = map;
             _obterQuery = obterQuery;
         }
 
-        public async Task<UsuarioDTO> Obter(int id)
+        public async Task<UsuarioDTO?> Obter(int id = 0, string email = "")
         {
-            return await _obterQuery.Obter(id);
+            Usuario? usuario = await _obterQuery.Obter(id, email);
+            return _map.Map<UsuarioDTO?>(usuario);
         }
 
         public async Task<Usuario> ObterByEmailOuUsuarioSistema(string? email, string? nomeUsuarioSistema)
         {
             return await _obterQuery.ObterByEmailOuUsuarioSistema(email, nomeUsuarioSistema);
-        }
-
-        public async Task<UsuarioDTO> ObterByEmail(string email)
-        {
-            return await _obterQuery.ObterByEmail(email);
-        }
-
-        public async Task<UsuarioDTO?> ObterByEmailComCache(string email)
-        {
-            if (String.IsNullOrEmpty(email))
-            {
-                return null;
-            }
-
-            const string keyCache = "keyObterByEmailComCache";
-            if (!_memoryCache.TryGetValue(keyCache, out UsuarioDTO? dto))
-            {
-                dto = await ObterByEmail(email);
-
-                _memoryCache.Set(keyCache, dto, TimeSpan.FromMinutes(5));
-            }
-
-            return dto;
         }
     }
 }
