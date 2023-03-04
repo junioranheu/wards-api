@@ -1,5 +1,4 @@
-﻿using Wards.Domain.DTOs;
-using Wards.Domain.Entities;
+﻿using Wards.Domain.Entities;
 
 namespace Wards.Application.UsesCases.Usuarios.ObterUsuario.Queries
 {

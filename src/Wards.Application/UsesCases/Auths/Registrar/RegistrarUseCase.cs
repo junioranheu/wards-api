@@ -100,7 +100,7 @@ namespace Wards.Application.UsesCases.Auths.Registrar
             //    usuarioDTO.IsEmailVerificacaoContaEnviado = false;
             //}
 
-            return input;
+            return (input, string.Empty);
         }
 
         private async Task<UsuarioInput> GerarRefreshToken(UsuarioInput input, int usuarioId)
