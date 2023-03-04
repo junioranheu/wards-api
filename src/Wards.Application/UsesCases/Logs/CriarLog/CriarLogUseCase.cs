@@ -12,9 +12,9 @@ namespace Wards.Application.UsesCases.Logs.CriarLog
             _criarLogCommand = criarLogCommand;
         }
 
-        public async Task Criar(Log input)
+        public async Task Execute(Log input)
         {
-             await _criarLogCommand.Criar(input);
+             await _criarLogCommand.Execute(input);
         }
     }
 }

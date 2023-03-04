@@ -14,7 +14,7 @@ namespace Wards.Application.UsesCases.Usuarios.ObterUsuario.Queries
             _context = context;
         }
 
-        public async Task<Usuario?> Obter(int id, string email)
+        public async Task<Usuario?> Execute(int id, string email)
         {
             var linq = await _context.Usuarios.
                              Include(ur => ur.UsuarioRoles).
@@ -25,27 +25,6 @@ namespace Wards.Application.UsesCases.Usuarios.ObterUsuario.Queries
                              ).AsNoTracking().FirstOrDefaultAsync();
 
             return linq;
-        }
-
-        public async Task<Usuario> ObterByEmailOuUsuarioSistema(string? email, string? nomeUsuarioSistema)
-        {
-            var byEmail = await _context.Usuarios.
-                          Where(e => e.Email == email).AsNoTracking().FirstOrDefaultAsync();
-
-            if (byEmail is null)
-            {
-                var byNomeUsuario = await _context.Usuarios.
-                                    Where(n => n.NomeUsuarioSistema == nomeUsuarioSistema).AsNoTracking().FirstOrDefaultAsync();
-
-                if (byNomeUsuario is null)
-                {
-                    return new Usuario();
-                }
-
-                return byNomeUsuario;
-            }
-
-            return byEmail;
         }
 
         // EXEMPLO DAPPER;

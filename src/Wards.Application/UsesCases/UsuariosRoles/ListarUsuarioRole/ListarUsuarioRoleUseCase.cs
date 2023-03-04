@@ -12,9 +12,9 @@ namespace Wards.Application.UsesCases.UsuariosRoles.ObterUsuarioRole
             _obterQuery = obterQuery;
         }
 
-        public async Task<IEnumerable<UsuarioRole>> ListarByEmail(string email)
+        public async Task<IEnumerable<UsuarioRole>> Execute(string email)
         {
-            return await _obterQuery.ListarByEmail(email);
+            return await _obterQuery.Execute(email);
         }
     }
 }

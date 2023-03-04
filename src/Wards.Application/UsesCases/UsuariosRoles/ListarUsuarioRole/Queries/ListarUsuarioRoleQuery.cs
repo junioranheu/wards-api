@@ -14,7 +14,7 @@ namespace Wards.Application.UsesCases.UsuariosRoles.ObterUsuarioRole.Queries
             _context = context;
         }
 
-        public async Task<IEnumerable<UsuarioRole>> ListarByEmail(string email)
+        public async Task<IEnumerable<UsuarioRole>> Execute(string email)
         {
             var ByEmail = await _context.UsuariosRoles.
                                  Include(u => u.Usuarios).

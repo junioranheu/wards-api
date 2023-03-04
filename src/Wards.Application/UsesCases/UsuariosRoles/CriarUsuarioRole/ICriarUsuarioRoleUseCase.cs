@@ -2,6 +2,6 @@
 {
     public interface ICriarUsuarioRoleUseCase
     {
-        Task Criar(int[] rolesId, int usuarioId);
+        Task Execute(int[] rolesId, int usuarioId);
     }
 }

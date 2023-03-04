@@ -12,7 +12,7 @@ namespace Wards.Application.UsesCases.UsuariosRoles.CriarUsuarioRole.Commands
             _context = context;
         }
 
-        public async Task Criar(int[] rolesId, int usuarioId)
+        public async Task Execute(int[] rolesId, int usuarioId)
         {
             List<UsuarioRole> listUp = new();
 

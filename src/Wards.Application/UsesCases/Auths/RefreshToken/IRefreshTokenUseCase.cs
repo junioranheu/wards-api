@@ -4,6 +4,6 @@ namespace Wards.Application.UsesCases.Auths.RefreshToken
 {
     public interface IRefreshTokenUseCase
     {
-        Task<(UsuarioInput?, string)> RefreshToken(string token, string refreshToken, string email);
+        Task<(UsuarioInput?, string)> Execute(string token, string refreshToken, string email);
     }
 }

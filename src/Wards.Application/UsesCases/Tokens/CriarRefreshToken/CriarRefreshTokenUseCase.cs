@@ -15,10 +15,10 @@ namespace Wards.Application.UsesCases.Tokens.CriarRefreshToken
             _deletarCommand = deletarCommand;
         }
 
-        public async Task<bool> Criar(RefreshToken input)
+        public async Task<bool> Execute(RefreshToken input)
         {
-            await _deletarCommand.Deletar(input);
-            return await _criarCommand.Criar(input);
+            await _deletarCommand.Execute(input);
+            return await _criarCommand.Execute(input);
         }
     }
 }

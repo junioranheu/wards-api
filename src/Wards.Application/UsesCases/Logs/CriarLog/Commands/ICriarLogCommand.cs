@@ -4,6 +4,6 @@ namespace Wards.Application.UsesCases.Logs.CriarLog.Commands
 {
     public interface ICriarLogCommand
     {
-        Task Criar(Log input);
+        Task Execute(Log input);
     }
 }

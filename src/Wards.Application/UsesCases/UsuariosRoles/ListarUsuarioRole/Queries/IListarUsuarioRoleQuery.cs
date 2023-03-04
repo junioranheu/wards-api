@@ -4,6 +4,6 @@ namespace Wards.Application.UsesCases.UsuariosRoles.ObterUsuarioRole.Queries
 {
     public interface IListarUsuarioRoleQuery
     {
-        Task<IEnumerable<UsuarioRole>> ListarByEmail(string email);
+        Task<IEnumerable<UsuarioRole>> Execute(string email);
     }
 }

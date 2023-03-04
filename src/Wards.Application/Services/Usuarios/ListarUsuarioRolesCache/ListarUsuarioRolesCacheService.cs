@@ -17,7 +17,7 @@ namespace Wards.Application.Services.Usuarios.ListarUsuarioRolesCache
             _listarUsuarioRolelUseCase = listarUsuarioPerfilUseCase;
         }
 
-        public async Task<IEnumerable<UsuarioRole>?> ListarUsuarioRolesCache(string email)
+        public async Task<IEnumerable<UsuarioRole>?> Execute(string email)
         {
             if (String.IsNullOrEmpty(email))
             {
@@ -27,7 +27,7 @@ namespace Wards.Application.Services.Usuarios.ListarUsuarioRolesCache
             const string keyCache = "keyListarUsuarioRolesCache";
             if (!_memoryCache.TryGetValue(keyCache, out IEnumerable<UsuarioRole>? listaUsuarioRoles))
             {
-                listaUsuarioRoles = await _listarUsuarioRolelUseCase.ListarByEmail(email);
+                listaUsuarioRoles = await _listarUsuarioRolelUseCase.Execute(email);
                 _memoryCache.Set(keyCache, listaUsuarioRoles, TimeSpan.FromMinutes(1));
             }
 

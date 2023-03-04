@@ -33,7 +33,7 @@ namespace Wards.API.Filters
                 UsuarioId = usuarioId > 0 ? usuarioId : null
             };
 
-            await _criarLogUseCase.Criar(log);
+            await _criarLogUseCase.Execute(log);
         }
 
 
@@ -56,7 +56,7 @@ namespace Wards.API.Filters
         private static async Task<int> ObterUsuarioId(ActionExecutedContext filterContextExecuted)
         {
             var service = filterContextExecuted.HttpContext.RequestServices.GetService<IObterUsuarioCacheService>();
-            Usuario? usuario = await service!.ObterUsuarioCache(ObterUsuarioEmail(filterContextExecuted));
+            Usuario? usuario = await service!.Execute(ObterUsuarioEmail(filterContextExecuted));
 
             return usuario is not null ? usuario.UsuarioId : 0;
         }

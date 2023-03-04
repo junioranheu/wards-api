@@ -13,7 +13,7 @@ namespace Wards.Application.UsesCases.Tokens.DeletarRefreshToken.Commands
             _context = context;
         }
 
-        public async Task<bool> Deletar(RefreshToken input)
+        public async Task<bool> Execute(RefreshToken input)
         {
             var dados = await _context.RefreshTokens.Where(u => u.UsuarioId == input.UsuarioId).AsNoTracking().ToListAsync();
 

@@ -66,7 +66,7 @@ namespace Wards.API.Filters
         private static async Task<IEnumerable<UsuarioRole>?> ListarUsuarioRoles(AuthorizationFilterContext context)
         {
             var service = context.HttpContext.RequestServices.GetService<IListarUsuarioRolesCacheService>();
-            IEnumerable<UsuarioRole>? usuarioRoles = await service!.ListarUsuarioRolesCache(ObterUsuarioEmail(context));
+            IEnumerable<UsuarioRole>? usuarioRoles = await service!.Execute(ObterUsuarioEmail(context));
 
             return usuarioRoles;
         }

@@ -12,9 +12,9 @@ namespace Wards.Application.UsesCases.Tokens.DeletarRefreshToken
             _deletarCommand = deletarCommand;
         }
 
-        public async Task<bool> Deletar(RefreshToken input)
+        public async Task<bool> Execute(RefreshToken input)
         {
-            return await _deletarCommand.Deletar(input);
+            return await _deletarCommand.Execute(input);
         }
     }
 }

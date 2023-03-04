@@ -2,6 +2,6 @@
 {
     public interface IObterRefreshTokenQuery
     {
-        Task<string> ObterByUsuarioId(int id);
+        Task<string> Execute(int id);
     }
 }

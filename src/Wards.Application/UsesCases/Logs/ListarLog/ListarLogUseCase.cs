@@ -12,9 +12,9 @@ namespace Wards.Application.UsesCases.Logs.ListarLog
             _listarQuery = listarQuery;
         }
 
-        public async Task<IEnumerable<Log>?> Listar()
+        public async Task<IEnumerable<Log>?> Execute()
         {
-            return await _listarQuery.Listar();
+            return await _listarQuery.Execute();
         }
     }
 }

@@ -14,7 +14,7 @@ namespace Wards.Application.UsesCases.Usuarios.CriarUsuario.Commands
             _context = context;
         }
 
-        public async Task<int> Criar(Usuario input)
+        public async Task<int> Execute(Usuario input)
         {
             await AtualizarFlags(input);
 

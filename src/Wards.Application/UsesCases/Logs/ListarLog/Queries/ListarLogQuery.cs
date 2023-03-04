@@ -13,7 +13,7 @@ namespace Wards.Application.UsesCases.Logs.ListarLog.Queries
             _context = context;
         }
 
-        public async Task<IEnumerable<Log>> Listar()
+        public async Task<IEnumerable<Log>> Execute()
         {
             var linq = await _context.Logs.
                              Include(u => u.Usuarios).

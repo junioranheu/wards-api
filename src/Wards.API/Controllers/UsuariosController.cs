@@ -46,10 +46,10 @@ namespace Wards.API.Controllers
                 HistPerfisAtivos = input.Usuarios!.HistPerfisAtivos?.Length > 0 ? string.Join(", ", input.Usuarios!.HistPerfisAtivos) : string.Empty
             };
 
-            int usuarioId = await _criarUsuarioUseCase.Criar(usuario);
+            int usuarioId = await _criarUsuarioUseCase.Execute(usuario);
 
             if (input.Usuarios!.UsuarioId > 0)
-                await _criarUsuarioRoleUseCase.Criar(input.UsuariosRolesId!, usuarioId);
+                await _criarUsuarioRoleUseCase.Execute(input.UsuariosRolesId!, usuarioId);
 
             return Ok(usuarioId);
         }
@@ -59,7 +59,7 @@ namespace Wards.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<Usuario>))]
         public async Task<ActionResult<IEnumerable<Usuario>>> ListarUsuario()
         {
-            var lista = await _listarUsuarioUseCase.Listar();
+            var lista = await _listarUsuarioUseCase.Execute();
 
             if (lista == null)
             {
@@ -74,7 +74,7 @@ namespace Wards.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Usuario))]
         public async Task<ActionResult<Usuario>> ObterUsuario(int id)
         {
-            var item = await _obterUsuarioUseCase.Obter(id);
+            var item = await _obterUsuarioUseCase.Execute(id);
 
             if (item == null)
             {

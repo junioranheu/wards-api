@@ -4,6 +4,6 @@ namespace Wards.Application.Services.Usuarios.ListarUsuarioRolesCache
 {
     public interface IListarUsuarioRolesCacheService
     {
-        Task<IEnumerable<UsuarioRole>?> ListarUsuarioRolesCache(string email);
+        Task<IEnumerable<UsuarioRole>?> Execute(string email);
     }
 }

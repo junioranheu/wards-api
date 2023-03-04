@@ -4,6 +4,6 @@ namespace Wards.Application.Services.Usuarios.ObterUsuarioCache
 {
     public interface IObterUsuarioCacheService
     {
-        Task<Usuario?> ObterUsuarioCache(string email);
+        Task<Usuario?> Execute(string email);
     }
 }

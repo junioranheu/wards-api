@@ -12,9 +12,9 @@ namespace Wards.Application.UsesCases.Usuarios.ListarUsuario
             _listarQuery = listarQuery;
         }
 
-        public async Task<IEnumerable<Usuario>?> Listar()
+        public async Task<IEnumerable<Usuario>?> Execute()
         {
-            return await _listarQuery.Listar();
+            return await _listarQuery.Execute();
         }
     }
 }

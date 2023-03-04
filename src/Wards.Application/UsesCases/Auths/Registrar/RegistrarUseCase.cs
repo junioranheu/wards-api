@@ -1,6 +1,7 @@
 ﻿using Wards.Application.UsesCases.Tokens.CriarRefreshToken;
 using Wards.Application.UsesCases.Usuarios.CriarUsuario;
 using Wards.Application.UsesCases.Usuarios.ObterUsuario;
+using Wards.Application.UsesCases.Usuarios.ObterUsuarioCondicaoArbitraria;
 using Wards.Application.UsesCases.Usuarios.Shared.Input;
 using Wards.Domain.Entities;
 using Wards.Domain.Enums;
@@ -13,25 +14,25 @@ namespace Wards.Application.UsesCases.Auths.Registrar
     {
         private readonly IJwtTokenGenerator _jwtTokenGenerator;
         private readonly ICriarUsuarioUseCase _criarUsuarioUseCase;
-        private readonly IObterUsuarioUseCase _obterUsuarioUseCase;
+        private readonly IObterUsuarioCondicaoArbitrariaUseCase _obterUsuarioCondicaoArbitrariaUseCase;
         private readonly ICriarRefreshTokenUseCase _criarRefreshTokenUseCase;
 
         public RegistrarUseCase(
             IJwtTokenGenerator jwtTokenGenerator,
             ICriarUsuarioUseCase criarUsuarioUseCase,
-            IObterUsuarioUseCase obterUsuarioUseCase,
+            IObterUsuarioCondicaoArbitrariaUseCase obterUsuarioCondicaoArbitrariaUseCase,
             ICriarRefreshTokenUseCase criarRefreshTokenUseCase)
         {
             _jwtTokenGenerator = jwtTokenGenerator;
             _criarUsuarioUseCase = criarUsuarioUseCase;
-            _obterUsuarioUseCase = obterUsuarioUseCase;
+            _obterUsuarioCondicaoArbitrariaUseCase = obterUsuarioCondicaoArbitrariaUseCase;
             _criarRefreshTokenUseCase = criarRefreshTokenUseCase;
         }
 
-        public async Task<(UsuarioInput?, string)> Registrar(UsuarioInput input)
+        public async Task<(UsuarioInput?, string)> Execute(UsuarioInput input)
         {
             // #1 - Verificar se o usuário já existe com o e-mail ou nome de usuário do sistema informados. Se existir, aborte;
-            var verificarUsuario = await _obterUsuarioUseCase.ObterByEmailOuUsuarioSistema(input?.Usuarios!.Email, input?.Usuarios!.NomeUsuarioSistema);
+            var verificarUsuario = await _obterUsuarioCondicaoArbitrariaUseCase.Execute(input?.Usuarios!.Email, input?.Usuarios!.NomeUsuarioSistema);
 
             if (verificarUsuario is not null)
             {
@@ -71,7 +72,7 @@ namespace Wards.Application.UsesCases.Auths.Registrar
                 IsAtivo = true
             };
 
-            int usuarioId = await _criarUsuarioUseCase.Criar(novoUsuario);
+            int usuarioId = await _criarUsuarioUseCase.Execute(novoUsuario);
 
             // #4 - Automaticamente atualizar o valor da Foto com um valor padrão após criar o novo usuário e adicionar ao ovjeto novoUsuario;
             //string nomeNovaFoto = $"{usuarioId}{GerarStringAleatoria(5, true)}.webp";
@@ -115,7 +116,7 @@ namespace Wards.Application.UsesCases.Auths.Registrar
                 DataRegistro = HorarioBrasilia()
             };
 
-            await _criarRefreshTokenUseCase.Criar(novoRefreshToken);
+            await _criarRefreshTokenUseCase.Execute(novoRefreshToken);
 
             return input;
         }

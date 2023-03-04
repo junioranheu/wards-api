@@ -12,7 +12,7 @@ namespace Wards.Application.UsesCases.Tokens.ObterRefreshToken.Queries
             _context = context;
         }
 
-        public async Task<string> ObterByUsuarioId(int id)
+        public async Task<string> Execute(int id)
         {
             // É necessário verificar se o refresh token com base no id do usuário e se o usuário de fato está ativo...
             // Isso para ajudar numa possível "black-list";

@@ -11,9 +11,9 @@ namespace Wards.Application.UsesCases.Tokens.ObterRefreshToken
             _obterQuery = obterQuery;
         }
 
-        public async Task<string> ObterByUsuarioId(int id)
+        public async Task<string> Execute(int id)
         {
-            return await _obterQuery.ObterByUsuarioId(id);
+            return await _obterQuery.Execute(id);
         }
     }
 }

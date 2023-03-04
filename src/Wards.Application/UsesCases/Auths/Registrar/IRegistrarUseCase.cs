@@ -4,6 +4,6 @@ namespace Wards.Application.UsesCases.Auths.Registrar
 {
     public interface IRegistrarUseCase
     {
-        Task<(UsuarioInput?, string)> Registrar(UsuarioInput input);
+        Task<(UsuarioInput?, string)> Execute(UsuarioInput input);
     }
 }

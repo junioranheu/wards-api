@@ -12,7 +12,7 @@ namespace Wards.Application.UsesCases.Logs.CriarLog.Commands
             _context = context;
         }
 
-        public async Task Criar(Log input)
+        public async Task Execute(Log input)
         {
             await _context.AddAsync(input);
             await _context.SaveChangesAsync();

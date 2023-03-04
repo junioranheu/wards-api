@@ -12,9 +12,9 @@ namespace Wards.Application.UsesCases.Usuarios.CriarUsuario
             _criarCommand = criarCommand;
         }
 
-        public async Task<int> Criar(Usuario input)
+        public async Task<int> Execute(Usuario input)
         {
-            return await _criarCommand.Criar(input);
+            return await _criarCommand.Execute(input);
         }
     }
 }

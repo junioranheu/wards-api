@@ -17,7 +17,7 @@ namespace Wards.Application.Services.Usuarios.ObterUsuarioCache
             _obterUsuarioUseCase = obterUsuarioUseCase;
         }
 
-        public async Task<Usuario?> ObterUsuarioCache(string email)
+        public async Task<Usuario?> Execute(string email)
         {
             if (String.IsNullOrEmpty(email))
             {
@@ -27,7 +27,7 @@ namespace Wards.Application.Services.Usuarios.ObterUsuarioCache
             const string keyCache = "keyObterUsuarioCache";
             if (!_memoryCache.TryGetValue(keyCache, out Usuario? usuario))
             {
-                usuario = await _obterUsuarioUseCase.Obter(email: email);
+                usuario = await _obterUsuarioUseCase.Execute(email: email);
                 _memoryCache.Set(keyCache, usuario, TimeSpan.FromMinutes(1));
             }
 

@@ -29,9 +29,9 @@ namespace Wards.Application.UsesCases.Auths.RefreshToken
             _criarRefreshTokenUseCase = criarRefreshTokenUseCase;
         }
 
-        public async Task<(UsuarioInput?, string)> RefreshToken(string token, string refreshToken, string email)
+        public async Task<(UsuarioInput?, string)> Execute(string token, string refreshToken, string email)
         {
-            Usuario? usuario = await _obterUsuarioUseCase.Obter(email: email);
+            Usuario? usuario = await _obterUsuarioUseCase.Execute(email: email);
 
             if (usuario is null)
             {
@@ -39,7 +39,7 @@ namespace Wards.Application.UsesCases.Auths.RefreshToken
             }
 
             int usuarioId = usuario.UsuarioId;
-            var refreshTokenSalvoAnteriormente = await _obterRefreshTokenUseCase.ObterByUsuarioId(usuarioId);
+            var refreshTokenSalvoAnteriormente = await _obterRefreshTokenUseCase.Execute(usuarioId);
             if (refreshTokenSalvoAnteriormente != refreshToken)
             {
                 return (new UsuarioInput(), GetDescricaoEnum(CodigosErrosEnum.RefreshTokenInvalido));
@@ -64,7 +64,7 @@ namespace Wards.Application.UsesCases.Auths.RefreshToken
                 DataRegistro = HorarioBrasilia()
             };
 
-            await _criarRefreshTokenUseCase.Criar(novoRefreshTokenInput);
+            await _criarRefreshTokenUseCase.Execute(novoRefreshTokenInput);
 
             // Retornar o novo token e o novo refresh token;
             UsuarioInput input = new()

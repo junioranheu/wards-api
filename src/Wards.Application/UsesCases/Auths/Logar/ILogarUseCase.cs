@@ -4,6 +4,6 @@ namespace Wards.Application.UsesCases.Auths.Logar
 {
     public interface ILogarUseCase
     {
-        Task<(UsuarioInput?, string)> Logar(UsuarioInput input);
+        Task<(UsuarioInput?, string)> Execute(UsuarioInput input);
     }
 }

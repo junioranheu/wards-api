@@ -1,5 +1,5 @@
 ﻿using Wards.Application.UsesCases.Tokens.CriarRefreshToken;
-using Wards.Application.UsesCases.Usuarios.ObterUsuario;
+using Wards.Application.UsesCases.Usuarios.ObterUsuarioCondicaoArbitraria;
 using Wards.Application.UsesCases.Usuarios.Shared.Input;
 using Wards.Domain.Entities;
 using Wards.Domain.Enums;
@@ -11,23 +11,23 @@ namespace Wards.Application.UsesCases.Auths.Logar
     public sealed class LogarUseCase : ILogarUseCase
     {
         private readonly IJwtTokenGenerator _jwtTokenGenerator;
-        private readonly IObterUsuarioUseCase _obterUsuarioUseCase;
+        private readonly IObterUsuarioCondicaoArbitrariaUseCase _obterUsuarioCondicaoArbitrariaUseCase;
         private readonly ICriarRefreshTokenUseCase _criarRefreshTokenUseCase;
 
         public LogarUseCase(
             IJwtTokenGenerator jwtTokenGenerator,
-            IObterUsuarioUseCase obterUsuarioUseCase,
+            IObterUsuarioCondicaoArbitrariaUseCase obterUsuarioCondicaoArbitrariaUseCase,
             ICriarRefreshTokenUseCase criarRefreshTokenUseCase)
         {
             _jwtTokenGenerator = jwtTokenGenerator;
-            _obterUsuarioUseCase = obterUsuarioUseCase;
+            _obterUsuarioCondicaoArbitrariaUseCase = obterUsuarioCondicaoArbitrariaUseCase;
             _criarRefreshTokenUseCase = criarRefreshTokenUseCase;
         }
 
-        public async Task<(UsuarioInput?, string)> Logar(UsuarioInput input)
+        public async Task<(UsuarioInput?, string)> Execute(UsuarioInput input)
         {
             // #1 - Buscar usuário;
-            Usuario usuario = await _obterUsuarioUseCase.ObterByEmailOuUsuarioSistema(input?.Usuarios!.Email, input?.Usuarios!.NomeUsuarioSistema);
+            Usuario usuario = await _obterUsuarioCondicaoArbitrariaUseCase.Execute(input?.Usuarios!.Email, input?.Usuarios!.NomeUsuarioSistema);
 
             if (usuario is null)
             {
@@ -67,7 +67,7 @@ namespace Wards.Application.UsesCases.Auths.Logar
                 DataRegistro = HorarioBrasilia()
             };
 
-            await _criarRefreshTokenUseCase.Criar(novoRefreshToken);
+            await _criarRefreshTokenUseCase.Execute(novoRefreshToken);
 
             return input;
         }

@@ -28,7 +28,7 @@ namespace Wards.API.Controllers
         protected async Task<int> ObterUsuarioId()
         {
             var service = HttpContext.RequestServices.GetService<IObterUsuarioCacheService>();
-            Usuario? usuario = await service!.ObterUsuarioCache(ObterUsuarioEmail());
+            Usuario? usuario = await service!.Execute(ObterUsuarioEmail());
 
             return usuario is not null ? usuario.UsuarioId : 0;
         }
