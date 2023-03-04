@@ -6,18 +6,15 @@ namespace Wards.Application.UsesCases.Usuarios.CriarUsuario
     public sealed class CriarUsuarioUseCase : ICriarUsuarioUseCase
     {
         private readonly ICriarUsuarioCommand _criarCommand;
-        private readonly IMapper _map;
 
-        public CriarUsuarioUseCase(ICriarUsuarioCommand criarCommand, IMapper map)
+        public CriarUsuarioUseCase(ICriarUsuarioCommand criarCommand)
         {
             _criarCommand = criarCommand;
-            _map = map;
         }
 
-        public async Task<UsuarioDTO> Criar(Usuario input)
+        public async Task<int> Criar(Usuario input)
         {
-            Usuario u = await _criarCommand.Criar(input);
-            return _map.Map<UsuarioDTO>(u);
+            return await _criarCommand.Criar(input);
         }
     }
 }

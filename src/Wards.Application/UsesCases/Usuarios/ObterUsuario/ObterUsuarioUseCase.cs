@@ -1,25 +1,20 @@
-﻿using AutoMapper;
-using Wards.Application.UsesCases.Usuarios.ObterUsuario.Queries;
-using Wards.Domain.DTOs;
+﻿using Wards.Application.UsesCases.Usuarios.ObterUsuario.Queries;
 using Wards.Domain.Entities;
 
 namespace Wards.Application.UsesCases.Usuarios.ObterUsuario
 {
     public sealed class ObterUsuarioUseCase : IObterUsuarioUseCase
     {
-        private readonly IMapper _map;
         private readonly IObterUsuarioQuery _obterQuery;
 
-        public ObterUsuarioUseCase(IMapper map, IObterUsuarioQuery obterQuery)
+        public ObterUsuarioUseCase(IObterUsuarioQuery obterQuery)
         {
-            _map = map;
             _obterQuery = obterQuery;
         }
 
-        public async Task<UsuarioDTO?> Obter(int id = 0, string email = "")
+        public async Task<Usuario?> Obter(int id = 0, string email = "")
         {
-            Usuario? usuario = await _obterQuery.Obter(id, email);
-            return _map.Map<UsuarioDTO?>(usuario);
+            return await _obterQuery.Obter(id, email);
         }
 
         public async Task<Usuario> ObterByEmailOuUsuarioSistema(string? email, string? nomeUsuarioSistema)

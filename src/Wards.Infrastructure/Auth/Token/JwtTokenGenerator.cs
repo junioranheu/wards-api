@@ -4,7 +4,6 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
-using Wards.Domain.DTOs;
 using Wards.Infrastructure.Auth.Models;
 using static Wards.Utils.Common;
 

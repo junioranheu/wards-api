@@ -17,4 +17,9 @@
     <ProjectReference Include="..\Wards.Infrastructure\Wards.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="UsesCases\Usuarios\Shared\Input\" />
+    <Folder Include="UsesCases\Usuarios\Shared\Output\" />
+  </ItemGroup>
+
 </Project>

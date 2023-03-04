@@ -14,14 +14,14 @@ namespace Wards.Application.UsesCases.Usuarios.CriarUsuario.Commands
             _context = context;
         }
 
-        public async Task<Usuario> Criar(Usuario input)
+        public async Task<int> Criar(Usuario input)
         {
             await AtualizarFlags(input);
 
             await _context.AddAsync(input);
             await _context.SaveChangesAsync();
 
-            return input;
+            return input.UsuarioId;
         }
 
         private async Task AtualizarFlags(Usuario input)
