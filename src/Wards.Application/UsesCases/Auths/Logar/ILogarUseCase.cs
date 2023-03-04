@@ -1,10 +1,9 @@
-﻿using Wards.Domain.DTOs;
-using Wards.Domain.Entities;
+﻿using Wards.Application.UsesCases.Usuarios.Shared.Input;
 
 namespace Wards.Application.UsesCases.Auths.Logar
 {
     public interface ILogarUseCase
     {
-        Task<UsuarioDTO> Logar(Usuario input);
+        Task<(UsuarioInput?, string)> Logar(UsuarioInput input);
     }
 }

@@ -1,8 +1,6 @@
-﻿using AutoMapper;
-using Wards.Application.UsesCases.Tokens.CriarRefreshToken;
+﻿using Wards.Application.UsesCases.Tokens.CriarRefreshToken;
 using Wards.Application.UsesCases.Usuarios.CriarUsuario;
 using Wards.Application.UsesCases.Usuarios.ObterUsuario;
-using Wards.Domain.DTOs;
 using Wards.Domain.Entities;
 using Wards.Domain.Enums;
 using Wards.Infrastructure.Auth.Token;
@@ -16,20 +14,17 @@ namespace Wards.Application.UsesCases.Auths.Registrar
         private readonly ICriarUsuarioUseCase _criarUsuarioUseCase;
         private readonly IObterUsuarioUseCase _obterUsuarioUseCase;
         private readonly ICriarRefreshTokenUseCase _criarRefreshTokenUseCase;
-        private readonly IMapper _map;
 
         public RegistrarUseCase(
             IJwtTokenGenerator jwtTokenGenerator,
             ICriarUsuarioUseCase criarUsuarioUseCase,
             IObterUsuarioUseCase obterUsuarioUseCase,
-            ICriarRefreshTokenUseCase criarRefreshTokenUseCase,
-            IMapper map)
+            ICriarRefreshTokenUseCase criarRefreshTokenUseCase)
         {
             _jwtTokenGenerator = jwtTokenGenerator;
             _criarUsuarioUseCase = criarUsuarioUseCase;
             _obterUsuarioUseCase = obterUsuarioUseCase;
             _criarRefreshTokenUseCase = criarRefreshTokenUseCase;
-            _map = map;
         }
 
         public async Task<UsuarioDTO> Registrar(Usuario input)

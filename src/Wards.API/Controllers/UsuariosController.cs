@@ -33,6 +33,7 @@ namespace Wards.API.Controllers
 
         [HttpPost]
         [AuthorizeFilter(UsuarioRoleEnum.Adm)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
         public async Task<ActionResult<int>> CriarUsuario(UsuarioInput input)
         {
             Usuario usuario = new()
@@ -55,6 +56,7 @@ namespace Wards.API.Controllers
 
         [HttpGet("listar")]
         [AuthorizeFilter(UsuarioRoleEnum.Adm)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<Usuario>))]
         public async Task<ActionResult<IEnumerable<Usuario>>> ListarUsuario()
         {
             var lista = await _listarUsuarioUseCase.Listar();
@@ -69,6 +71,7 @@ namespace Wards.API.Controllers
 
         [HttpGet]
         [AuthorizeFilter(UsuarioRoleEnum.Adm)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Usuario))]
         public async Task<ActionResult<Usuario>> ObterUsuario(int id)
         {
             var item = await _obterUsuarioUseCase.Obter(id);

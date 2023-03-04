@@ -21,7 +21,6 @@ namespace Wards.Infrastructure
         {
             AddServices(services, builder);
             AddAuth(services, builder);
-            AddAutoMapper(services);
             AddContext(builder);
             AddSwagger(builder);
             AddCors(builder);
@@ -73,17 +72,6 @@ namespace Wards.Infrastructure
                             ValidateIssuer = false
                         };
                     });
-        }
-
-        private static void AddAutoMapper(IServiceCollection services)
-        {
-            var mapperConfig = new MapperConfiguration(mc =>
-            {
-                mc.AddProfile(new AutoMapperConfig());
-            });
-
-            IMapper mapper = mapperConfig.CreateMapper();
-            services.AddSingleton(mapper);
         }
 
         private static void AddContext(WebApplicationBuilder builder)

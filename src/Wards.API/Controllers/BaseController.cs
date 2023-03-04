@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using Wards.Application.Services.Usuarios.ObterUsuarioCache;
-using Wards.Domain.DTOs;
+using Wards.Domain.Entities;
 
 namespace Wards.API.Controllers
 {
@@ -28,7 +28,7 @@ namespace Wards.API.Controllers
         protected async Task<int> ObterUsuarioId()
         {
             var service = HttpContext.RequestServices.GetService<IObterUsuarioCacheService>();
-            UsuarioDTO? usuario = await service!.ObterUsuarioCache(ObterUsuarioEmail());
+            Usuario? usuario = await service!.ObterUsuarioCache(ObterUsuarioEmail());
 
             return usuario is not null ? usuario.UsuarioId : 0;
         }

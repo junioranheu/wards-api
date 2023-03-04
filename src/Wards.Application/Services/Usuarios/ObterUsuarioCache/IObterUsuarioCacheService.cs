@@ -1,9 +1,9 @@
-﻿using Wards.Domain.DTOs;
+﻿using Wards.Domain.Entities;
 
 namespace Wards.Application.Services.Usuarios.ObterUsuarioCache
 {
     public interface IObterUsuarioCacheService
     {
-        Task<UsuarioDTO?> ObterUsuarioCache(string email);
+        Task<Usuario?> ObterUsuarioCache(string email);
     }
 }

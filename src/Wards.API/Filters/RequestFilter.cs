@@ -3,7 +3,6 @@ using Newtonsoft.Json;
 using System.Security.Claims;
 using Wards.Application.Services.Usuarios.ObterUsuarioCache;
 using Wards.Application.UsesCases.Logs.CriarLog;
-using Wards.Domain.DTOs;
 using Wards.Domain.Entities;
 
 namespace Wards.API.Filters
@@ -57,7 +56,7 @@ namespace Wards.API.Filters
         private static async Task<int> ObterUsuarioId(ActionExecutedContext filterContextExecuted)
         {
             var service = filterContextExecuted.HttpContext.RequestServices.GetService<IObterUsuarioCacheService>();
-            UsuarioDTO? usuario = await service!.ObterUsuarioCache(ObterUsuarioEmail(filterContextExecuted));
+            Usuario? usuario = await service!.ObterUsuarioCache(ObterUsuarioEmail(filterContextExecuted));
 
             return usuario is not null ? usuario.UsuarioId : 0;
         }

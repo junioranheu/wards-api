@@ -18,7 +18,7 @@ namespace Wards.Infrastructure.Auth.Token
             _jwtSettings = jwtOptions.Value;
         }
 
-        public string GerarToken(UsuarioDTO? usuario, IEnumerable<Claim>? listaClaims)
+        public string GerarToken(string nomeCompleto, string email, IEnumerable<Claim>? listaClaims)
         {
             JwtSecurityTokenHandler tokenHandler = new();
 
@@ -39,8 +39,8 @@ namespace Wards.Infrastructure.Auth.Token
             {
                 claims = new(new Claim[]
                 {
-                    new Claim(type: ClaimTypes.Name, usuario.NomeCompleto ?? string.Empty),
-                    new Claim(type: ClaimTypes.Email, usuario.Email ?? string.Empty),
+                    new Claim(type: ClaimTypes.Name, nomeCompleto ?? string.Empty),
+                    new Claim(type: ClaimTypes.Email, email ?? string.Empty),
 
                     // Imitando o cenário do Azure, onde só tem e-mail e nome, e não role e ID;
                     // new Claim(type: ClaimTypes.Role, usuario.UsuarioTipoId.ToString()),
