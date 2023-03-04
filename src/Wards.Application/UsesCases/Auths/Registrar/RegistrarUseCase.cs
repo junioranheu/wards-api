@@ -85,7 +85,7 @@ namespace Wards.Application.UsesCases.Auths.Registrar
             input.Token = _jwtTokenGenerator.GerarToken(nomeCompleto: input?.Usuarios!.NomeCompleto!, email: input?.Usuarios!.Email!, listaClaims: null);
 
             // #7 - Gerar refresh token;
-            input = await GerarRefreshToken(input, usuarioId);
+            input = await GerarRefreshToken(input!, usuarioId);
 
             // #8 - Enviar e-mail de verificação de conta;
             //try

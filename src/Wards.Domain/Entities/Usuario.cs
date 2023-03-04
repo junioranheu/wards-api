@@ -17,10 +17,10 @@ namespace Wards.Domain.Entities
 
         public string? Senha { get; set; } = string.Empty;
 
-        public string? Chamado { get; set; }
+        public string? Chamado { get; set; } = string.Empty;
 
         [JsonIgnore]
-        public string? HistPerfisAtivos { get; set; }
+        public string? HistPerfisAtivos { get; set; } = string.Empty;
 
         public bool IsAtivo { get; set; } = true;
 
