@@ -29,7 +29,7 @@ namespace Wards.API.Controllers
         [HttpPost("login")]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Usuario))]
-        [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(List<string>))]
+        [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(string))]
         public async Task<ActionResult<UsuarioInput>> Logar(UsuarioInput input)
         {
             (UsuarioInput?, string) authResultado = await _logarUseCase.Logar(input);
@@ -43,22 +43,24 @@ namespace Wards.API.Controllers
         [HttpPost("registrar")]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Usuario))]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(List<string>))]
+        [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(string))]
         public async Task<ActionResult<Usuario>> Registrar(UsuarioInput input)
         {
-            var authResultado = await _registrarUseCase.Registrar(input);
-            return Ok(authResultado);
+            (UsuarioInput?, string) authResultado = await _registrarUseCase.Registrar(input);
+
+            if (!string.IsNullOrEmpty(authResultado.Item2))
+                return StatusCode(StatusCodes.Status403Forbidden, authResultado.Item2);
+
+            return Ok(authResultado.Item1);
         }
 
         [HttpPost("refreshToken")]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Usuario))]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(List<string>))]
         public async Task<ActionResult<Usuario>> RefreshToken(UsuarioInput input)
         {
             var authResultado = await _refreshTokenUseCase.RefreshToken(input.Token ?? string.Empty, input.RefreshToken ?? string.Empty, ObterUsuarioEmail());
-
-            return Ok(authResultado);
+            return Ok(authResultado.Item1);
         }
     }
 }

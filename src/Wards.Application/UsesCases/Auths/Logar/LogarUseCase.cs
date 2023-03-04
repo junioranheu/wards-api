@@ -26,38 +26,33 @@ namespace Wards.Application.UsesCases.Auths.Logar
 
         public async Task<(UsuarioInput?, string)> Logar(UsuarioInput input)
         {
-            string msgErro = string.Empty;
-
             // #1 - Buscar usuário;
             Usuario usuario = await _obterUsuarioUseCase.ObterByEmailOuUsuarioSistema(input?.Usuarios!.Email, input?.Usuarios!.NomeUsuarioSistema);
 
             if (usuario is null)
             {
-                msgErro = GetDescricaoEnum(CodigosErrosEnum.UsuarioNaoEncontrado);
-                return (new UsuarioInput(), msgErro);
+                return (new UsuarioInput(), GetDescricaoEnum(CodigosErrosEnum.UsuarioNaoEncontrado));
             }
 
             // #2 - Verificar se a senha está correta;
             if (usuario.Senha != Criptografar(input?.Usuarios!.Senha ?? string.Empty))
             {
-                msgErro = GetDescricaoEnum(CodigosErrosEnum.UsuarioSenhaIncorretos);
-                return (new UsuarioInput(), msgErro);
+                return (new UsuarioInput(), GetDescricaoEnum(CodigosErrosEnum.UsuarioSenhaIncorretos));
             }
 
             // #3 - Verificar se o usuário está ativo;
             if (!usuario.IsAtivo)
             {
-                msgErro = GetDescricaoEnum(CodigosErrosEnum.ContaDesativada);
-                return (new UsuarioInput(), msgErro);
+                return (new UsuarioInput(), GetDescricaoEnum(CodigosErrosEnum.ContaDesativada));
             }
 
             // #4 - Criar token JWT;
-            input!.Token = _jwtTokenGenerator.GerarToken(input.Usuarios!.NomeCompleto!, input.Usuarios!.Email!, null);
+            input!.Token = _jwtTokenGenerator.GerarToken(nomeCompleto: input.Usuarios!.NomeCompleto!, email: input.Usuarios!.Email!, listaClaims: null);
 
             // #5 - Gerar refresh token;
             input = await GerarRefreshToken(input, usuario.UsuarioId);
 
-            return (input, msgErro);
+            return (input, string.Empty);
         }
 
         private async Task<UsuarioInput> GerarRefreshToken(UsuarioInput input, int usuarioId)

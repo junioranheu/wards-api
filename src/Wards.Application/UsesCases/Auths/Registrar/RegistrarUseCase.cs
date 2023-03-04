@@ -1,6 +1,7 @@
 ﻿using Wards.Application.UsesCases.Tokens.CriarRefreshToken;
 using Wards.Application.UsesCases.Usuarios.CriarUsuario;
 using Wards.Application.UsesCases.Usuarios.ObterUsuario;
+using Wards.Application.UsesCases.Usuarios.Shared.Input;
 using Wards.Domain.Entities;
 using Wards.Domain.Enums;
 using Wards.Infrastructure.Auth.Token;
@@ -27,37 +28,33 @@ namespace Wards.Application.UsesCases.Auths.Registrar
             _criarRefreshTokenUseCase = criarRefreshTokenUseCase;
         }
 
-        public async Task<UsuarioDTO> Registrar(Usuario input)
+        public async Task<(UsuarioInput?, string)> Registrar(UsuarioInput input)
         {
             // #1 - Verificar se o usuário já existe com o e-mail ou nome de usuário do sistema informados. Se existir, aborte;
-            var verificarUsuario = await _obterUsuarioUseCase.ObterByEmailOuUsuarioSistema(input?.Email, input?.NomeUsuarioSistema);
+            var verificarUsuario = await _obterUsuarioUseCase.ObterByEmailOuUsuarioSistema(input?.Usuarios!.Email, input?.Usuarios!.NomeUsuarioSistema);
 
             if (verificarUsuario is not null)
             {
-                UsuarioDTO erro = new() { Erro = true, CodigoErro = (int)CodigosErrosEnum.UsuarioExistente, MensagemErro = GetDescricaoEnum(CodigosErrosEnum.UsuarioExistente) };
-                return erro;
+                return (new UsuarioInput(), GetDescricaoEnum(CodigosErrosEnum.UsuarioExistente));
             }
 
             // #2.1 - Verificar requisitos gerais;
-            if (input?.NomeCompleto?.Length < 3 || input?.NomeUsuarioSistema?.Length < 3)
+            if (input?.Usuarios!.NomeCompleto?.Length < 3 || input?.Usuarios!.NomeUsuarioSistema?.Length < 3)
             {
-                UsuarioDTO erro = new() { Erro = true, CodigoErro = (int)CodigosErrosEnum.RequisitosNome, MensagemErro = GetDescricaoEnum(CodigosErrosEnum.RequisitosNome) };
-                return erro;
+                return (new UsuarioInput(), GetDescricaoEnum(CodigosErrosEnum.RequisitosNome));
             }
 
             // #2.2 - Verificar e-mail;
-            if (!ValidarEmail(input?.Email ?? string.Empty))
+            if (!ValidarEmail(input?.Usuarios!.Email!))
             {
-                UsuarioDTO erro = new() { Erro = true, CodigoErro = (int)CodigosErrosEnum.EmailInvalido, MensagemErro = GetDescricaoEnum(CodigosErrosEnum.EmailInvalido) };
-                return erro;
+                return (new UsuarioInput(), GetDescricaoEnum(CodigosErrosEnum.EmailInvalido));
             }
 
             // #2.3 - Verificar requisitos de senha;
-            var validarSenha = ValidarSenha(input?.Senha ?? string.Empty, input?.NomeCompleto ?? string.Empty, input?.NomeUsuarioSistema ?? string.Empty, input?.Email ?? string.Empty);
+            var validarSenha = ValidarSenha(input?.Usuarios!.Senha!, input?.Usuarios!.NomeCompleto!, input?.Usuarios!.NomeUsuarioSistema!, input?.Usuarios!.Email!);
             if (!validarSenha.Item1)
             {
-                UsuarioDTO erro = new() { Erro = true, CodigoErro = (int)CodigosErrosEnum.RequisitosSenhaNaoCumprido, MensagemErro = validarSenha.Item2 };
-                return erro;
+                return (new UsuarioInput(), validarSenha.Item2);
             }
 
             // #3.1 - Gerar código de verificação para usar no processo de criação e no envio de e-mail;
@@ -66,36 +63,31 @@ namespace Wards.Application.UsesCases.Auths.Registrar
             // #3.2 - Criar usuário;
             Usuario novoUsuario = new()
             {
-                NomeCompleto = input?.NomeCompleto,
-                Email = input?.Email,
-                NomeUsuarioSistema = input?.NomeUsuarioSistema,
-                Senha = Criptografar(input?.Senha ?? string.Empty),
+                NomeCompleto = input?.Usuarios!.NomeCompleto,
+                Email = input?.Usuarios!.Email,
+                NomeUsuarioSistema = input?.Usuarios!.NomeUsuarioSistema,
+                Senha = Criptografar(input?.Usuarios!.Senha!),
                 Data = HorarioBrasilia(),
                 IsAtivo = true
             };
 
-            UsuarioDTO usuarioAdicionado = await _criarUsuarioUseCase.Criar(novoUsuario);
-            int usuarioId = usuarioAdicionado.UsuarioId;
+            int usuarioId = await _criarUsuarioUseCase.Criar(novoUsuario);
 
             // #4 - Automaticamente atualizar o valor da Foto com um valor padrão após criar o novo usuário e adicionar ao ovjeto novoUsuario;
             //string nomeNovaFoto = $"{usuarioId}{GerarStringAleatoria(5, true)}.webp";
             //await _usuarioRepository.AtualizarFoto(usuarioId, nomeNovaFoto);
             //novoUsuario.Foto = nomeNovaFoto;
 
-            // #5 - Converter de UsuarioSenhaDTO para UsuarioDTO;
-            UsuarioDTO usuarioDTO = _map.Map<UsuarioDTO>(novoUsuario);
+            // #5 - Adicionar ao objeto novoUsuario o id do novo usuário;
+            input!.Usuarios!.UsuarioId = usuarioId;
 
-            // #6 - Adicionar ao objeto novoUsuario o id do novo usuário;
-            usuarioDTO.UsuarioId = usuarioId;
+            // #6 - Criar token JWT;
+            input.Token = _jwtTokenGenerator.GerarToken(nomeCompleto: input?.Usuarios!.NomeCompleto!, email: input?.Usuarios!.Email!, listaClaims: null);
 
-            // #7 - Criar token JWT;
-            var token = _jwtTokenGenerator.GerarToken(usuarioDTO, null);
-            usuarioDTO.Token = token;
+            // #7 - Gerar refresh token;
+            input = await GerarRefreshToken(input, usuarioId);
 
-            // #8 - Gerar refresh token;
-            usuarioDTO = await GerarRefreshToken(usuarioDTO, usuarioId);
-
-            // #9 - Enviar e-mail de verificação de conta;
+            // #8 - Enviar e-mail de verificação de conta;
             //try
             //{
             //    if (!String.IsNullOrEmpty(usuarioDTO?.Email) && !String.IsNullOrEmpty(usuarioDTO?.NomeCompleto) && !String.IsNullOrEmpty(codigoVerificacao))
@@ -108,13 +100,13 @@ namespace Wards.Application.UsesCases.Auths.Registrar
             //    usuarioDTO.IsEmailVerificacaoContaEnviado = false;
             //}
 
-            return usuarioDTO;
+            return input;
         }
 
-        private async Task<UsuarioDTO> GerarRefreshToken(UsuarioDTO dto, int usuarioId)
+        private async Task<UsuarioInput> GerarRefreshToken(UsuarioInput input, int usuarioId)
         {
             var refreshToken = _jwtTokenGenerator.GerarRefreshToken();
-            dto.RefreshToken = refreshToken;
+            input.RefreshToken = refreshToken;
 
             Domain.Entities.RefreshToken novoRefreshToken = new()
             {
@@ -125,7 +117,7 @@ namespace Wards.Application.UsesCases.Auths.Registrar
 
             await _criarRefreshTokenUseCase.Criar(novoRefreshToken);
 
-            return dto;
+            return input;
         }
     }
 }
