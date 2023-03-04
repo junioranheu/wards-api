@@ -10,13 +10,13 @@ namespace Wards.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class AutenticarController : BaseController<Controller>
+    public class AuthController : BaseController<AuthController>
     {
         private readonly ILogarUseCase _logarUseCase;
         private readonly IRegistrarUseCase _registrarUseCase;
         private readonly IRefreshTokenUseCase _refreshTokenUseCase;
 
-        public AutenticarController(
+        public AuthController(
             ILogarUseCase logarUseCase,
             IRegistrarUseCase registrarUseCase,
             IRefreshTokenUseCase refreshTokenUseCase)
