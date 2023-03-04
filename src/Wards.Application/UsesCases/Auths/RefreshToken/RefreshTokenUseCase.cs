@@ -2,7 +2,8 @@
 using Wards.Application.UsesCases.Tokens.CriarRefreshToken;
 using Wards.Application.UsesCases.Tokens.ObterRefreshToken;
 using Wards.Application.UsesCases.Usuarios.ObterUsuario;
-using Wards.Domain.DTOs;
+using Wards.Application.UsesCases.Usuarios.Shared.Input;
+using Wards.Domain.Entities;
 using Wards.Domain.Enums;
 using Wards.Infrastructure.Auth.Token;
 using static Wards.Utils.Common;
@@ -28,33 +29,31 @@ namespace Wards.Application.UsesCases.Auths.RefreshToken
             _criarRefreshTokenUseCase = criarRefreshTokenUseCase;
         }
 
-        public async Task<UsuarioDTO> RefreshToken(string token, string refreshToken, string email)
+        public async Task<(UsuarioInput?, string)> RefreshToken(string token, string refreshToken, string email)
         {
-            UsuarioDTO? usuarioDTO = await _obterUsuarioUseCase.Obter(email: email);
+            Usuario? usuario = await _obterUsuarioUseCase.Obter(email: email);
 
-            if (usuarioDTO is null)
+            if (usuario is null)
             {
-                UsuarioDTO erro = new() { Erro = true, CodigoErro = (int)CodigosErrosEnum.NaoEncontrado, MensagemErro = GetDescricaoEnum(CodigosErrosEnum.NaoEncontrado) };
-                return erro;
+                return (new UsuarioInput(), GetDescricaoEnum(CodigosErrosEnum.NaoEncontrado));
             }
 
-            int usuarioId = usuarioDTO.UsuarioId;
+            int usuarioId = usuario.UsuarioId;
             var refreshTokenSalvoAnteriormente = await _obterRefreshTokenUseCase.ObterByUsuarioId(usuarioId);
             if (refreshTokenSalvoAnteriormente != refreshToken)
             {
-                UsuarioDTO erro = new() { Erro = true, CodigoErro = (int)CodigosErrosEnum.RefreshTokenInvalido, MensagemErro = GetDescricaoEnum(CodigosErrosEnum.RefreshTokenInvalido) };
-                return erro;
+                return (new UsuarioInput(), GetDescricaoEnum(CodigosErrosEnum.RefreshTokenInvalido));
             }
 
             ClaimsPrincipal? principal = _jwtTokenGenerator.GetInfoTokenExpirado(token);
-            UsuarioDTO dto = await GerarRefreshToken(principal, usuarioId);
+            UsuarioInput output = await GerarRefreshToken(principal, usuarioId);
 
-            return dto;
+            return (output, string.Empty);
         }
 
-        private async Task<UsuarioDTO> GerarRefreshToken(ClaimsPrincipal? principal, int usuarioId)
+        private async Task<UsuarioInput> GerarRefreshToken(ClaimsPrincipal? principal, int usuarioId)
         {
-            var novoToken = _jwtTokenGenerator.GerarToken(null, principal?.Claims);
+            var novoToken = _jwtTokenGenerator.GerarToken(nomeCompleto: string.Empty, email: string.Empty, listaClaims: principal?.Claims);
             var novoRefreshToken = _jwtTokenGenerator.GerarRefreshToken();
 
             // Criar novo registro com o novo refresh token gerado;
@@ -68,13 +67,13 @@ namespace Wards.Application.UsesCases.Auths.RefreshToken
             await _criarRefreshTokenUseCase.Criar(novoRefreshTokenInput);
 
             // Retornar o novo token e o novo refresh token;
-            UsuarioDTO dto = new()
+            UsuarioInput input = new()
             {
                 Token = novoToken,
                 RefreshToken = novoRefreshToken
             };
 
-            return dto;
+            return input;
         }
     }
 }
