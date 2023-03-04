@@ -22,14 +22,14 @@ namespace Wards.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<Log>))]
         public async Task<ActionResult<IEnumerable<Usuario>>> ListarUsuario()
         {
-            var lista = await _listarUseCase.Execute();
+            var resp = await _listarUseCase.Execute();
 
-            if (lista == null)
+            if (resp == null)
             {
                 return NotFound();
             }
 
-            return Ok(lista);
+            return Ok(resp);
         }
     }
 }

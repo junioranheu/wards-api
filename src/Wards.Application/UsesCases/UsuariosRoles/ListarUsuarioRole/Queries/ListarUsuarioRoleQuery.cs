@@ -16,17 +16,17 @@ namespace Wards.Application.UsesCases.UsuariosRoles.ObterUsuarioRole.Queries
 
         public async Task<IEnumerable<UsuarioRole>> Execute(string email)
         {
-            var ByEmail = await _context.UsuariosRoles.
-                                 Include(u => u.Usuarios).
-                                 Where(u => u.Usuarios!.Email == email && u.Usuarios.IsAtivo == true).
-                                 AsNoTracking().ToListAsync();
+            var linq = await _context.UsuariosRoles.
+                             Include(u => u.Usuarios).
+                             Where(u => u.Usuarios!.Email == email && u.Usuarios.IsAtivo == true).
+                             AsNoTracking().ToListAsync();
 
-            foreach (var item in ByEmail)
+            foreach (var item in linq)
             {
                 item.Usuarios!.Senha = string.Empty;
             }
 
-            return ByEmail;
+            return linq;
         }
     }
 }

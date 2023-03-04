@@ -4,6 +4,6 @@ namespace Wards.Application.UsesCases.Tokens.CriarRefreshToken
 {
     public interface ICriarRefreshTokenUseCase
     {
-        Task<bool> Execute(RefreshToken input);
+        Task Execute(RefreshToken input);
     }
 }

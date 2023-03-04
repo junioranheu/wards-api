@@ -59,14 +59,14 @@ namespace Wards.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<Usuario>))]
         public async Task<ActionResult<IEnumerable<Usuario>>> ListarUsuario()
         {
-            var lista = await _listarUsuarioUseCase.Execute();
+            var resp = await _listarUsuarioUseCase.Execute();
 
-            if (lista == null)
+            if (resp == null)
             {
                 return NotFound();
             }
 
-            return Ok(lista);
+            return Ok(resp);
         }
 
         [HttpGet]
@@ -74,14 +74,14 @@ namespace Wards.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Usuario))]
         public async Task<ActionResult<Usuario>> ObterUsuario(int id)
         {
-            var item = await _obterUsuarioUseCase.Execute(id);
+            var resp = await _obterUsuarioUseCase.Execute(id);
 
-            if (item == null)
+            if (resp == null)
             {
                 return NotFound();
             }
 
-            return Ok(item);
+            return Ok(resp);
         }
     }
 }

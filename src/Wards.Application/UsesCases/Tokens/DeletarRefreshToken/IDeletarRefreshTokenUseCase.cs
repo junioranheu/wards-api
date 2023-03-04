@@ -4,6 +4,6 @@ namespace Wards.Application.UsesCases.Tokens.DeletarRefreshToken
 {
     public interface IDeletarRefreshTokenUseCase
     {
-        Task<bool> Execute(RefreshToken input);
+        Task Execute(RefreshToken input);
     }
 }

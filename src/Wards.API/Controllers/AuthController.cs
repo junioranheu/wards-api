@@ -32,12 +32,12 @@ namespace Wards.API.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(string))]
         public async Task<ActionResult<UsuarioInput>> Logar(UsuarioInput input)
         {
-            (UsuarioInput?, string) authResultado = await _logarUseCase.Execute(input);
+            (UsuarioInput?, string) resp = await _logarUseCase.Execute(input);
 
-            if (!string.IsNullOrEmpty(authResultado.Item2))
-                return StatusCode(StatusCodes.Status403Forbidden, authResultado.Item2);
+            if (!string.IsNullOrEmpty(resp.Item2))
+                return StatusCode(StatusCodes.Status403Forbidden, resp.Item2);
 
-            return Ok(authResultado.Item1);
+            return Ok(resp.Item1);
         }
 
         [HttpPost("registrar")]
@@ -46,12 +46,12 @@ namespace Wards.API.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(string))]
         public async Task<ActionResult<Usuario>> Registrar(UsuarioInput input)
         {
-            (UsuarioInput?, string) authResultado = await _registrarUseCase.Execute(input);
+            (UsuarioInput?, string) resp = await _registrarUseCase.Execute(input);
 
-            if (!string.IsNullOrEmpty(authResultado.Item2))
-                return StatusCode(StatusCodes.Status403Forbidden, authResultado.Item2);
+            if (!string.IsNullOrEmpty(resp.Item2))
+                return StatusCode(StatusCodes.Status403Forbidden, resp.Item2);
 
-            return Ok(authResultado.Item1);
+            return Ok(resp.Item1);
         }
 
         [HttpPost("refreshToken")]
@@ -60,12 +60,12 @@ namespace Wards.API.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(string))]
         public async Task<ActionResult<Usuario>> RefreshToken(UsuarioInput input)
         {
-            (UsuarioInput?, string) authResultado = await _refreshTokenUseCase.Execute(input.Token!, input.RefreshToken!, ObterUsuarioEmail());
+            (UsuarioInput?, string) resp = await _refreshTokenUseCase.Execute(input.Token!, input.RefreshToken!, ObterUsuarioEmail());
 
-            if (!string.IsNullOrEmpty(authResultado.Item2))
-                return StatusCode(StatusCodes.Status403Forbidden, authResultado.Item2);
+            if (!string.IsNullOrEmpty(resp.Item2))
+                return StatusCode(StatusCodes.Status403Forbidden, resp.Item2);
 
-            return Ok(authResultado.Item1);
+            return Ok(resp.Item1);
         }
     }
 }

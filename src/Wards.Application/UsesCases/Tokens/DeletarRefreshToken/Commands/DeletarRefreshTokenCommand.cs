@@ -13,16 +13,16 @@ namespace Wards.Application.UsesCases.Tokens.DeletarRefreshToken.Commands
             _context = context;
         }
 
-        public async Task<bool> Execute(RefreshToken input)
+        public async Task Execute(RefreshToken input)
         {
-            var dados = await _context.RefreshTokens.Where(u => u.UsuarioId == input.UsuarioId).AsNoTracking().ToListAsync();
+            var linq = await _context.RefreshTokens.
+                             Where(u => u.UsuarioId == input.UsuarioId).
+                             AsNoTracking().ToListAsync();
 
-            if (dados is not null)
+            if (linq is not null)
             {
-                _context.RefreshTokens.RemoveRange(dados);
+                _context.RefreshTokens.RemoveRange(linq);
             }
-
-            return true;
         }
     }
 }

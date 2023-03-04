@@ -12,12 +12,10 @@ namespace Wards.Application.UsesCases.Tokens.CriarRefreshToken.Commands
             _context = context;
         }
 
-        public async Task<bool> Execute(RefreshToken input)
+        public async Task Execute(RefreshToken input)
         {
             await _context.AddAsync(input);
             await _context.SaveChangesAsync();
-
-            return true;
         }
     }
 }

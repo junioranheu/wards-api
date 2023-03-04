@@ -16,12 +16,12 @@ namespace Wards.Application.UsesCases.Tokens.ObterRefreshToken.Queries
         {
             // É necessário verificar se o refresh token com base no id do usuário e se o usuário de fato está ativo...
             // Isso para ajudar numa possível "black-list";
-            var byId = await _context.RefreshTokens.
-                       Include(u => u.Usuarios).
-                       Where(r => r.UsuarioId == id && r.Usuarios.IsAtivo == true).
-                       AsNoTracking().FirstOrDefaultAsync();
+            var linq = await _context.RefreshTokens.
+                             Include(u => u.Usuarios).
+                             Where(r => r.UsuarioId == id && r.Usuarios.IsAtivo == true).
+                             AsNoTracking().FirstOrDefaultAsync();
 
-            return byId?.RefToken ?? string.Empty;
+            return linq?.RefToken ?? string.Empty;
         }
     }
 }
