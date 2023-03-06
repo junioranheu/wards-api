@@ -1,6 +1,5 @@
 ﻿using Wards.Application.UsesCases.Tokens.CriarRefreshToken;
 using Wards.Application.UsesCases.Usuarios.CriarUsuario;
-using Wards.Application.UsesCases.Usuarios.ObterUsuario;
 using Wards.Application.UsesCases.Usuarios.ObterUsuarioCondicaoArbitraria;
 using Wards.Application.UsesCases.Usuarios.Shared.Input;
 using Wards.Domain.Entities;
@@ -32,12 +31,12 @@ namespace Wards.Application.UsesCases.Auths.Registrar
         public async Task<(UsuarioInput?, string)> Execute(UsuarioInput input)
         {
             // #1 - Verificar se o usuário já existe com o e-mail ou nome de usuário do sistema informados. Se existir, aborte;
-            var verificarUsuario = await _obterUsuarioCondicaoArbitrariaUseCase.Execute(input?.Usuarios!.Email, input?.Usuarios!.NomeUsuarioSistema);
+            //var verificarUsuario = await _obterUsuarioCondicaoArbitrariaUseCase.Execute(input?.Usuarios!.Email, input?.Usuarios!.NomeUsuarioSistema);
 
-            if (verificarUsuario is not null)
-            {
-                return (new UsuarioInput(), GetDescricaoEnum(CodigosErrosEnum.UsuarioExistente));
-            }
+            //if (verificarUsuario is not null)
+            //{
+            //    return (new UsuarioInput(), GetDescricaoEnum(CodigosErrosEnum.UsuarioExistente));
+            //}
 
             // #2.1 - Verificar requisitos gerais;
             if (input?.Usuarios!.NomeCompleto?.Length < 3 || input?.Usuarios!.NomeUsuarioSistema?.Length < 3)
@@ -68,8 +67,8 @@ namespace Wards.Application.UsesCases.Auths.Registrar
                 Email = input?.Usuarios!.Email,
                 NomeUsuarioSistema = input?.Usuarios!.NomeUsuarioSistema,
                 Senha = Criptografar(input?.Usuarios!.Senha!),
-                Data = HorarioBrasilia(),
-                IsAtivo = true
+                Chamado = input?.Usuarios!.Chamado,
+                HistPerfisAtivos = input?.Usuarios!.HistPerfisAtivos?.Length > 0 ? string.Join(", ", input.Usuarios!.HistPerfisAtivos) : string.Empty
             };
 
             int usuarioId = await _criarUsuarioUseCase.Execute(novoUsuario);

@@ -8,6 +8,9 @@ namespace Wards.Domain.Enums
         Adm = 1,
 
         [Description("Usuário comum")]
-        Comum = 2
+        Comum = 2,
+
+        [Description("Suporte")]
+        Suporte = 3
     }
 }

@@ -1,10 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Wards.API.Filters;
 using Wards.Application.UsesCases.Auths.Logar;
 using Wards.Application.UsesCases.Auths.RefreshToken;
 using Wards.Application.UsesCases.Auths.Registrar;
 using Wards.Application.UsesCases.Usuarios.Shared.Input;
+using Wards.Application.UsesCases.UsuariosRoles.CriarUsuarioRole;
 using Wards.Domain.Entities;
+using Wards.Domain.Enums;
 
 namespace Wards.API.Controllers
 {
@@ -15,15 +18,18 @@ namespace Wards.API.Controllers
         private readonly ILogarUseCase _logarUseCase;
         private readonly IRegistrarUseCase _registrarUseCase;
         private readonly IRefreshTokenUseCase _refreshTokenUseCase;
+        private readonly ICriarUsuarioRoleUseCase _criarUsuarioRoleUseCase;
 
         public AuthController(
             ILogarUseCase logarUseCase,
             IRegistrarUseCase registrarUseCase,
-            IRefreshTokenUseCase refreshTokenUseCase)
+            IRefreshTokenUseCase refreshTokenUseCase,
+            ICriarUsuarioRoleUseCase criarUsuarioRoleUseCase)
         {
             _logarUseCase = logarUseCase;
             _registrarUseCase = registrarUseCase;
             _refreshTokenUseCase = refreshTokenUseCase;
+            _criarUsuarioRoleUseCase = criarUsuarioRoleUseCase;
         }
 
         [HttpPost("login")]
@@ -41,7 +47,7 @@ namespace Wards.API.Controllers
         }
 
         [HttpPost("registrar")]
-        [AllowAnonymous]
+        [AuthorizeFilter(UsuarioRoleEnum.Adm, UsuarioRoleEnum.Suporte)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Usuario))]
         [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(string))]
         public async Task<ActionResult<Usuario>> Registrar(UsuarioInput input)
@@ -50,6 +56,8 @@ namespace Wards.API.Controllers
 
             if (!string.IsNullOrEmpty(resp.Item2))
                 return StatusCode(StatusCodes.Status403Forbidden, resp.Item2);
+
+            await _criarUsuarioRoleUseCase.Execute(input.UsuariosRolesId!, resp.Item1!.Usuarios!.UsuarioId);
 
             return Ok(resp.Item1);
         }
