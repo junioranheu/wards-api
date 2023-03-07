@@ -10,6 +10,9 @@ namespace Wards.Infrastructure.Data
 
         }
 
+        // Exemplos;
+        public DbSet<CsvImportExemploUsuario> CsvImportExemploUsuarios { get; set; }
+
         // Outros;
         public DbSet<RefreshToken> RefreshTokens { get; set; }
         public DbSet<Log> Logs { get; set; }

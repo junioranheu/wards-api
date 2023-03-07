@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
@@ -12,6 +11,7 @@ using System.Text;
 using Wards.Infrastructure.Auth.Models;
 using Wards.Infrastructure.Auth.Token;
 using Wards.Infrastructure.Data;
+using Wards.Infrastructure.Factory;
 
 namespace Wards.Infrastructure
 {
@@ -21,6 +21,7 @@ namespace Wards.Infrastructure
         {
             AddServices(services, builder);
             AddAuth(services, builder);
+            AddFactory(services);
             AddContext(builder);
             AddSwagger(builder);
             AddCors(builder);
@@ -74,11 +75,14 @@ namespace Wards.Infrastructure
                     });
         }
 
+        private static void AddFactory(IServiceCollection services)
+        {
+            services.AddSingleton<IConnectionFactory, ConnectionFactory>();
+        }
+
         private static void AddContext(WebApplicationBuilder builder)
         {
-            var secretSenhaBancoDados = builder.Configuration["SecretSenhaBancoDados"]; // secrets.json;
-            string con = builder.Configuration.GetConnectionString(builder.Configuration["SystemSettings:NomeConnectionString"] ?? string.Empty) ?? string.Empty;
-            con = con.Replace("[SecretSenhaBancoDados]", secretSenhaBancoDados);
+            string con = new ConnectionFactory(builder.Configuration).CreateDbStringConnection();
 
             // Entity Framework;
             builder.Services.AddDbContext<WardsContext>(options => options.UseMySql(con, ServerVersion.AutoDetect(con)));

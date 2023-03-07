@@ -1,6 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Wards.Application.Services.Import.CSV;
 using Wards.Application.Services.Usuarios;
 using Wards.Application.UsesCases.Auths;
+using Wards.Application.UsesCases.Imports;
 using Wards.Application.UsesCases.Logs;
 using Wards.Application.UsesCases.Tokens;
 using Wards.Application.UsesCases.Usuarios;
@@ -18,9 +20,11 @@ namespace Wards.Application
             services.AddLogsApplication();
             services.AddUsuariosApplication();
             services.AddUsuariosRolesApplication();
-
+            services.AddImportsApplication();
+        
             // Services;
             services.AddUsuariosService();
+            services.AddCsvImportService();
 
             return services;
         }
