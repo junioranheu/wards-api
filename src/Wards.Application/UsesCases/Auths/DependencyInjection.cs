@@ -11,9 +11,9 @@ namespace Wards.Application.UsesCases.Auths
         {
             services.AddScoped<ILogarUseCase, LogarUseCase>();
 
-            services.AddScoped<IRegistrarUseCase, RegistrarUseCase>();
-
             services.AddScoped<IRefreshTokenUseCase, RefreshTokenUseCase>();
+
+            services.AddScoped<IRegistrarUseCase, RegistrarUseCase>();
 
             return services;
         }

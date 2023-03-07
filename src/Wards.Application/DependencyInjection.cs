@@ -16,15 +16,15 @@ namespace Wards.Application
         {
             // UseCases;
             services.AddAuthsApplication();
-            services.AddTokensApplication();
+            services.AddImportsApplication();
             services.AddLogsApplication();
+            services.AddTokensApplication();
             services.AddUsuariosApplication();
             services.AddUsuariosRolesApplication();
-            services.AddImportsApplication();
-        
+
             // Services;
-            services.AddUsuariosService();
             services.AddCsvImportService();
+            services.AddUsuariosService();
 
             return services;
         }
