@@ -18,7 +18,7 @@ namespace Wards.API.Controllers
         }
 
         [HttpPost]
-        //[AuthorizeFilter]
+        [AuthorizeFilter]
         [RequestSizeLimit(2 * 1_048_576)]
         public async Task<ActionResult<string>?> CriarExemploUsuario([FromForm] ImportInput importInput)
         {
