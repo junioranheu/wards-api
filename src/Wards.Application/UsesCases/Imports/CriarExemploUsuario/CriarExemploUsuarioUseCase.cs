@@ -16,7 +16,7 @@ namespace Wards.Application.UsesCases.Imports.CriarExemploUsuario
 
         public async Task<(DataTable?, bool)> Execute(IFormFile formFile, int justificativaId)
         {
-            return await _importHandler.InserirCsv("CsvImportExemploUsuarios", new CsvImportExemploUsuario(), formFile, justificativaId, isVerificarData: true);
+            return await _importHandler.InserirCsv("CsvImportExemploUsuarios", new CsvImportExemploUsuario(), formFile, justificativaId, isVerificarData: false, nomesEquipamentos: new List<string>());
         }
     }
 }

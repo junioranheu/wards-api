@@ -47,7 +47,7 @@ namespace Wards.Application.UsesCases.Auths.Logar
             }
 
             // #4 - Criar token JWT;
-            input!.Token = _jwtTokenGenerator.GerarToken(nomeCompleto: input.Usuarios!.NomeCompleto!, email: input.Usuarios!.Email!, listaClaims: null);
+            input!.Token = _jwtTokenGenerator.GerarToken(nomeCompleto: usuario.NomeCompleto!, email: usuario.Email!, listaClaims: null);
 
             // #5 - Gerar refresh token;
             input = await GerarRefreshToken(input, usuario.UsuarioId);

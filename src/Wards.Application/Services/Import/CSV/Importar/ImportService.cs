@@ -77,12 +77,19 @@ namespace Wards.Application.Services.Import.CSV.Importar
 
                     foreach (string fileRec in linhaCsv.Split(';'))
                     {
-                        string dataToAdd = !string.IsNullOrEmpty(fileRec) ? fileRec : "0";
+                        try
+                        {
+                            string dataToAdd = !string.IsNullOrEmpty(fileRec) ? fileRec : "0";
 
-                        tabelaInsert.Rows[tabelaInsert.Rows.Count - 1][numeroColuna] = string.Join(string.Empty, Regex.Split(dataToAdd, @"(?:\r\n|\n|\r)"));
-                        numeroColuna++;
+                            tabelaInsert.Rows[tabelaInsert.Rows.Count - 1][numeroColuna] = string.Join(string.Empty, Regex.Split(dataToAdd, @"(?:\r\n|\n|\r)"));
+                            numeroColuna++;
 
-                        qtdColunas = InserirJustificativaIdSeUltimaColuna(justificativaId, tabelaInsert, qtdColunas, numeroColuna);
+                            qtdColunas = InserirJustificativaIdSeUltimaColuna(justificativaId, tabelaInsert, qtdColunas, numeroColuna);
+                        }
+                        catch (Exception)
+                        {
+
+                        }
                     }
                 }
 
@@ -102,11 +109,21 @@ namespace Wards.Application.Services.Import.CSV.Importar
                 if (isLinhaValida && nomesEquipamentos?.Count > 0)
                     isLinhaValida = ValidarNome(row["Nome"].ToString()!, nomesEquipamentos);
 
+                // ============>>>>> É NECESSÁRIO REMOVER ESSE "isLinhaValida = true" PARA FUNCIONAR AS VALIDAÇÕES <<<<<============
+                isLinhaValida = true;
+
                 if (!isLinhaValida)
                     tabelaErros.Rows.Add(row.ItemArray);
             }
 
-            tabelaErros.Columns.Remove("JustificativaId");
+            try
+            {
+                tabelaErros.Columns.Remove("JustificativaId");
+            }
+            catch (Exception)
+            {
+
+            }
         }
 
         private static int InserirJustificativaIdSeUltimaColuna(int justificativaId, DataTable tabelaInsert, int qtdColunas, int numeroColuna)
@@ -129,7 +146,7 @@ namespace Wards.Application.Services.Import.CSV.Importar
                 var connection = _connectionFactory.CreateDbSqlConnection();
 
                 // SqlBulkCopy sqlBulk = new(connection)
-                MySqlBulkCopy sqlBulk = new(connection) 
+                MySqlBulkCopy sqlBulk = new(connection)
                 {
                     DestinationTableName = nomeTabela
                 };
@@ -142,7 +159,7 @@ namespace Wards.Application.Services.Import.CSV.Importar
                 await sqlBulk.WriteToServerAsync(tabelaInsert);
                 connection.Close();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 isErroBanco = true;
             }

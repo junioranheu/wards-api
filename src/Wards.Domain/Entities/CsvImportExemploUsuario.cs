@@ -21,7 +21,5 @@ namespace Wards.Domain.Entities
         public string? Department { get; set; } = null;
 
         public string? Location { get; set; } = null;
-
-        public DateTime Data { get; set; } = HorarioBrasilia();
     }
 }

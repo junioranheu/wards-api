@@ -21,7 +21,10 @@ namespace Wards.Application.UsesCases.Logs.ListarLog.Queries
 
             foreach (var item in linq)
             {
-                item.Usuarios!.Senha = string.Empty;
+                if (item.Usuarios is not null)
+                {
+                    item.Usuarios.Senha = string.Empty;
+                }
             }
 
             return linq;
