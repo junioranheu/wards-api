@@ -18,7 +18,7 @@ namespace Wards.Application.UsesCases.Tokens.ObterRefreshToken.Queries
             // Isso para ajudar numa possível "black-list";
             var linq = await _context.RefreshTokens.
                              Include(u => u.Usuarios).
-                             Where(r => r.UsuarioId == id && r.Usuarios.IsAtivo == true).
+                             Where(r => r.UsuarioId == id && r.Usuarios!.IsAtivo == true).
                              AsNoTracking().FirstOrDefaultAsync();
 
             return linq?.RefToken ?? string.Empty;

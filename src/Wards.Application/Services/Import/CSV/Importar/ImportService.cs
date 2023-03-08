@@ -1,9 +1,9 @@
-﻿using Wards.Infrastructure.Factory;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using MySqlConnector;
 using System.Data;
 using System.Globalization;
 using System.Text.RegularExpressions;
+using Wards.Infrastructure.Factory;
 
 namespace Wards.Application.Services.Import.CSV.Importar
 {
@@ -142,7 +142,7 @@ namespace Wards.Application.Services.Import.CSV.Importar
                 await sqlBulk.WriteToServerAsync(tabelaInsert);
                 connection.Close();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 isErroBanco = true;
             }

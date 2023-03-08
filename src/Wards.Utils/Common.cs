@@ -81,7 +81,7 @@ namespace Wards.Utils
 
             using (Aes encryptor = Aes.Create())
             {
-                Rfc2898DeriveBytes pdb = new(password: _encriptionKey, new byte[] { 0x49, 0x76, 0x61, 0x6e, 0x20, 0x4d, 0x65, 0x64, 0x76, 0x65, 0x64, 0x65, 0x76 });
+                Rfc2898DeriveBytes pdb = new(password: _encriptionKey, salt: new byte[] { 0x49, 0x76, 0x61, 0x6e, 0x20, 0x4d, 0x65, 0x64, 0x76, 0x65, 0x64, 0x65, 0x76 });
                 encryptor.Key = pdb.GetBytes(32);
                 encryptor.IV = pdb.GetBytes(16);
 
@@ -105,7 +105,7 @@ namespace Wards.Utils
 
             using (Aes encryptor = Aes.Create())
             {
-                Rfc2898DeriveBytes pdb = new(password: _encriptionKey, new byte[] { 0x49, 0x76, 0x61, 0x6e, 0x20, 0x4d, 0x65, 0x64, 0x76, 0x65, 0x64, 0x65, 0x76 });
+                Rfc2898DeriveBytes pdb = new(password: _encriptionKey, salt: new byte[] { 0x49, 0x76, 0x61, 0x6e, 0x20, 0x4d, 0x65, 0x64, 0x76, 0x65, 0x64, 0x65, 0x76 });
                 encryptor.Key = pdb.GetBytes(32);
                 encryptor.IV = pdb.GetBytes(16);
 
@@ -126,8 +126,9 @@ namespace Wards.Utils
         public static string GetDescricaoEnum(Enum enumVal)
         {
             MemberInfo[] memInfo = enumVal.GetType().GetMember(enumVal.ToString());
-            DescriptionAttribute attribute = CustomAttributeExtensions.GetCustomAttribute<DescriptionAttribute>(memInfo[0]);
-            return attribute.Description;
+            DescriptionAttribute? attribute = CustomAttributeExtensions.GetCustomAttribute<DescriptionAttribute>(memInfo[0]);
+
+            return attribute!.Description;
         }
 
         // Converter Base64 para imagem;
@@ -158,7 +159,7 @@ namespace Wards.Utils
                 dblSByte = bytes / 1024.0;
             }
 
-            return String.Format("{0:0.##} {1}", dblSByte, Suffix[i]);
+            return string.Format("{0:0.##} {1}", dblSByte, Suffix[i]);
         }
 
         // Validar se o e-mail do usuário;
@@ -249,19 +250,6 @@ namespace Wards.Utils
             string? stringAleatoria = new(Enumerable.Repeat(caracteres, qtdCaracteres).Select(s => s[random.Next(s.Length)]).ToArray());
 
             return stringAleatoria;
-        }
-
-        // Pegar o tipo da extensão de um arquivo;
-        public static string GetMimeType(string caminhoArquivo)
-        {
-            string mimeType = "application/unknown";
-            string ext = System.IO.Path.GetExtension(caminhoArquivo).ToLower();
-            Microsoft.Win32.RegistryKey regKey = Microsoft.Win32.Registry.ClassesRoot.OpenSubKey(ext);
-
-            if (regKey != null && regKey.GetValue("Content Type") != null)
-                mimeType = regKey.GetValue("Content Type").ToString();
-
-            return mimeType;
         }
 
         // Gerar um código hash para o usuário com base no usuarioId + string aleatória;
@@ -360,7 +348,7 @@ namespace Wards.Utils
                 smtp.EnableSsl = true;
                 await smtp.SendMailAsync(mail);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return false;
             }
