@@ -1,24 +1,41 @@
-﻿using Dapper;
-using System.Data;
+﻿using Microsoft.EntityFrameworkCore;
 using Wards.Domain.Entities;
+using Wards.Infrastructure.Data;
 
 namespace Wards.Application.UsesCases.Usuarios.ListarUsuario.Queries
 {
     public sealed class ListarUsuarioQuery : IListarUsuarioQuery
     {
-        private readonly IDbConnection _dbConnection;
+        private readonly WardsContext _context;
 
-        public ListarUsuarioQuery(IDbConnection dbConnection)
+        public ListarUsuarioQuery(WardsContext context)
         {
-            _dbConnection = dbConnection;
+            _context = context;
         }
 
         public async Task<IEnumerable<Usuario>?> Execute()
         {
-            string sql = $@"SELECT * FROM Usuarios WHERE IsAtivo = 1;";
-            var usuarios = await _dbConnection.QueryAsync<Usuario>(sql);
+            var linq = await _context.Usuarios.
+                             Include(ur => ur.UsuarioRoles).
+                             AsNoTracking().ToListAsync();
 
-            return usuarios;
+            return linq;
         }
+
+        // EXEMPLO DAPPER;
+        //private readonly IDbConnection _dbConnection;
+
+        //public ListarUsuarioQuery(IDbConnection dbConnection)
+        //{
+        //    _dbConnection = dbConnection;
+        //}
+
+        //public async Task<IEnumerable<Usuario>?> Execute()
+        //{
+        //    string sql = $@"SELECT * FROM Usuarios WHERE IsAtivo = 1;";
+        //    var usuarios = await _dbConnection.QueryAsync<Usuario>(sql);
+
+        //    return usuarios;
+        //}
     }
 }
