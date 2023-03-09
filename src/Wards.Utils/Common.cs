@@ -177,7 +177,7 @@ namespace Wards.Utils
         public static Tuple<bool, string> ValidarSenha(string senha, string nomeCompleto, string nomeUsuario, string email)
         {
             bool isValido = true;
-            string msgErro = "";
+            string msgErro = string.Empty;
 
             var temNumero = new Regex(@"[0-9]+");
             if (!temNumero.IsMatch(senha))
@@ -256,7 +256,7 @@ namespace Wards.Utils
         public static string GerarHashUsuario(int usuarioId)
         {
             string palavraAleatoria = $"{usuarioId}_{GerarStringAleatoria(GerarNumeroAleatorio(10, 15), false)}";
-            string hash = Criptografar(palavraAleatoria).Replace("/", "");
+            string hash = Criptografar(palavraAleatoria).Replace("/", string.Empty);
 
             return hash;
         }

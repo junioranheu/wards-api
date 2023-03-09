@@ -1,4 +1,5 @@
 ﻿using Wards.Domain.Entities;
+using Wards.Domain.Enums;
 using Wards.Infrastructure.Data;
 
 namespace Wards.Application.UsesCases.UsuariosRoles.CriarUsuarioRole.Commands
@@ -21,7 +22,7 @@ namespace Wards.Application.UsesCases.UsuariosRoles.CriarUsuarioRole.Commands
                 UsuarioRole up = new()
                 {
                     UsuarioId = usuarioId,
-                    RoleId = rolesId[i]
+                    RoleId = (UsuarioRoleEnum)rolesId[i]
                 };
 
                 listUp.Add(up);

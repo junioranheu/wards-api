@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Wards.Domain.Enums;
 using static Wards.Utils.Common;
 
 namespace Wards.Domain.Entities
@@ -6,7 +7,7 @@ namespace Wards.Domain.Entities
     public sealed class Role
     {
         [Key]
-        public int RoleId { get; set; }
+        public UsuarioRoleEnum RoleId { get; set; }
 
         public string? Tipo { get; set; } = null;
 

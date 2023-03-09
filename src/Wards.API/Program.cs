@@ -40,7 +40,7 @@ WebApplication app = builder.Build();
         app.UseHttpsRedirection();
     }
 
-    app.UseCors(builder.Configuration["CORSSettings:Cors"] ?? "");
+    app.UseCors(builder.Configuration["CORSSettings:Cors"]!);
 
     app.UseAuthentication();
     app.UseAuthorization();

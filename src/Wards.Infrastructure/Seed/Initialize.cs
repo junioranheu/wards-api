@@ -21,8 +21,8 @@ namespace Wards.Infrastructure.Seed
             #region seed_usuarios           
             if (!await context.Roles.AnyAsync())
             {
-                await context.Roles.AddAsync(new Role() { RoleId = (int)UsuarioRoleEnum.Adm, Tipo = nameof(UsuarioRoleEnum.Adm), Descricao = "Administrador do sistema", IsAtivo = true, Data = dataAgora });
-                await context.Roles.AddAsync(new Role() { RoleId = (int)UsuarioRoleEnum.Comum, Tipo = GetDescricaoEnum(UsuarioRoleEnum.Comum), Descricao = "Usuário comum", IsAtivo = true, Data = dataAgora });
+                await context.Roles.AddAsync(new Role() { RoleId = UsuarioRoleEnum.Adm, Tipo = nameof(UsuarioRoleEnum.Adm), Descricao = "Administrador do sistema", IsAtivo = true, Data = dataAgora });
+                await context.Roles.AddAsync(new Role() { RoleId = UsuarioRoleEnum.Comum, Tipo = GetDescricaoEnum(UsuarioRoleEnum.Comum), Descricao = "Usuário comum", IsAtivo = true, Data = dataAgora });
             }
 
             if (!await context.Usuarios.AnyAsync())
@@ -33,9 +33,9 @@ namespace Wards.Infrastructure.Seed
 
             if (!await context.UsuariosRoles.AnyAsync())
             {
-                await context.UsuariosRoles.AddAsync(new UsuarioRole() { UsuarioId = 1, RoleId = (int)UsuarioRoleEnum.Adm });
-                await context.UsuariosRoles.AddAsync(new UsuarioRole() { UsuarioId = 1, RoleId = (int)UsuarioRoleEnum.Comum });
-                await context.UsuariosRoles.AddAsync(new UsuarioRole() { UsuarioId = 2, RoleId = (int)UsuarioRoleEnum.Comum });
+                await context.UsuariosRoles.AddAsync(new UsuarioRole() { UsuarioId = 1, RoleId = UsuarioRoleEnum.Adm });
+                await context.UsuariosRoles.AddAsync(new UsuarioRole() { UsuarioId = 1, RoleId = UsuarioRoleEnum.Comum });
+                await context.UsuariosRoles.AddAsync(new UsuarioRole() { UsuarioId = 2, RoleId = UsuarioRoleEnum.Comum });
             }
             #endregion
 

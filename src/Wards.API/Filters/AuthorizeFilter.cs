@@ -78,7 +78,7 @@ namespace Wards.API.Filters
                 return true;
             }
 
-            bool isUsuarioTemAcesso = usuarioRoles!.Any(x => _rolesNecessarias.Any(y => x.RoleId == y));
+            bool isUsuarioTemAcesso = usuarioRoles!.Any(x => _rolesNecessarias.Any(y => x.RoleId == (UsuarioRoleEnum)y));
 
             if (!isUsuarioTemAcesso)
             {
