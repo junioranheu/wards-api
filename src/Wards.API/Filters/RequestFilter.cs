@@ -64,9 +64,16 @@ namespace Wards.API.Filters
         private static string ObterParametrosRequisicao(ActionExecutingContext filterContextExecuting)
         {
             var parametros = filterContextExecuting.ActionArguments.FirstOrDefault().Value ?? string.Empty;
-            string parametrosSerialiazed = !String.IsNullOrEmpty(parametros.ToString()) ? JsonConvert.SerializeObject(parametros) : string.Empty;
 
-            return parametrosSerialiazed;
+            try
+            {
+                string parametrosSerialiazed = !String.IsNullOrEmpty(parametros.ToString()) ? JsonConvert.SerializeObject(parametros) : string.Empty;
+                return parametrosSerialiazed;
+            }
+            catch (Exception)
+            {
+                return string.Empty;
+            }
         }
     }
 }
