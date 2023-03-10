@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using AutoMapper;
+using Microsoft.Extensions.DependencyInjection;
+using Wards.Application.AutoMapper;
 using Wards.Application.Services.Import.CSV;
 using Wards.Application.Services.Usuarios;
 using Wards.Application.UsesCases.Auths;
@@ -14,6 +16,8 @@ namespace Wards.Application
     {
         public static IServiceCollection AddDependencyInjectionApplication(this IServiceCollection services)
         {
+            AddAutoMapper(services);
+
             // UseCases;
             services.AddAuthsApplication();
             services.AddImportsApplication();
@@ -27,6 +31,17 @@ namespace Wards.Application
             services.AddUsuariosService();
 
             return services;
+        }
+
+        private static void AddAutoMapper(IServiceCollection services)
+        {
+            var mapperConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new AutoMapperConfig());
+            });
+
+            IMapper mapper = mapperConfig.CreateMapper();
+            services.AddSingleton(mapper);
         }
     }
 }
