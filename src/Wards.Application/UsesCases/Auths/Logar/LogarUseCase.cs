@@ -29,7 +29,7 @@ namespace Wards.Application.UsesCases.Auths.Logar
             // #1 - Buscar usuário e sua senha (para não expor no output);
             (UsuarioOutput?, string) resp = await _obterUsuarioCondicaoArbitrariaUseCase.Execute(input?.Email, input?.NomeUsuarioSistema);
             UsuarioOutput? output = resp.Item1;
-            string senha = resp.Item2;
+            string senhaCriptografada = resp.Item2;
 
             if (output is null)
             {
@@ -37,8 +37,7 @@ namespace Wards.Application.UsesCases.Auths.Logar
             }
 
             // #2 - Verificar se a senha está correta;
-            if (senha != Criptografar(input!.Senha ?? string.Empty))
-            {
+            if (!VerificarCriptografia(senha: input!.Senha ?? string.Empty, senhaCriptografada: senhaCriptografada)) {
                 return (new UsuarioOutput(), GetDescricaoEnum(CodigosErrosEnum.UsuarioSenhaIncorretos));
             }
 
