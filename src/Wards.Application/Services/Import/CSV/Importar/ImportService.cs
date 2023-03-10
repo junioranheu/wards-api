@@ -159,7 +159,7 @@ namespace Wards.Application.Services.Import.CSV.Importar
                 await sqlBulk.WriteToServerAsync(tabelaInsert);
                 connection.Close();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 isErroBanco = true;
             }

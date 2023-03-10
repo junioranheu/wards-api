@@ -74,7 +74,7 @@ namespace Wards.Utils
             return result.ToString();
         }
 
-        // Criptografar e decriptografar senha: https://stackoverflow.com/questions/10168240/encrypting-decrypting-a-string-in-c-sharp;
+        // Criptografar e decriptografar senha: https://code-maze.com/csharp-string-encryption-decryption/;
         public static string Criptografar(string clearText)
         {
             byte[] clearBytes = Encoding.Unicode.GetBytes(clearText);

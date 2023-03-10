@@ -1,9 +1,9 @@
-﻿using Wards.Domain.Entities;
+﻿using Wards.Application.UsesCases.Usuarios.Shared.Output;
 
 namespace Wards.Application.UsesCases.Usuarios.ListarUsuario
 {
     public interface IListarUsuarioUseCase
     {
-        Task<IEnumerable<Usuario>?> Execute();
+        Task<IEnumerable<UsuarioOutput>?> Execute();
     }
 }

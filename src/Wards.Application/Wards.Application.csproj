@@ -20,7 +20,6 @@
 
   <ItemGroup>
     <Folder Include="UsesCases\Usuarios\Shared\Input\" />
-    <Folder Include="UsesCases\Usuarios\Shared\Output\" />
   </ItemGroup>
 
 </Project>

@@ -1,9 +1,9 @@
-﻿using Wards.Domain.Entities;
+﻿using Wards.Application.UsesCases.Usuarios.Shared.Output;
 
 namespace Wards.Application.Services.Usuarios.ObterUsuarioCache
 {
     public interface IObterUsuarioCacheService
     {
-        Task<Usuario?> Execute(string email);
+        Task<UsuarioOutput?> Execute(string email);
     }
 }

@@ -4,6 +4,6 @@ namespace Wards.Application.UsesCases.Usuarios.ObterUsuarioCondicaoArbitraria.Qu
 {
     public interface IObterUsuarioCondicaoArbitrariaQuery
     {
-        Task<Usuario> Execute(string? email, string? nomeUsuarioSistema);
+        Task<(Usuario, string)> Execute(string? email, string? nomeUsuarioSistema);
     }
 }

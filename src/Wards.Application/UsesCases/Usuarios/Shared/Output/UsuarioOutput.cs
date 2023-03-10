@@ -1,11 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Wards.Domain.Entities;
 using static Wards.Utils.Common;
 
-namespace Wards.Domain.Entities
+namespace Wards.Application.UsesCases.Usuarios.Shared.Output
 {
-    public sealed class Usuario
+    public sealed class UsuarioOutput
     {
-        [Key]
         public int UsuarioId { get; set; }
 
         public string? NomeCompleto { get; set; } = string.Empty;
@@ -14,18 +13,17 @@ namespace Wards.Domain.Entities
 
         public string? Email { get; set; } = string.Empty;
 
-        public string? Senha { get; set; } = string.Empty;
-
         public string? Chamado { get; set; } = string.Empty;
 
-        public string? HistPerfisAtivos { get; set; } = string.Empty;
-
         public bool IsAtivo { get; set; } = true;
-
-        public bool IsLatest { get; set; } = true;
 
         public DateTime Data { get; set; } = HorarioBrasilia();
 
         public IEnumerable<UsuarioRole>? UsuarioRoles { get; init; }
+
+        // Extra;
+        public string? Token { get; set; } = null;
+
+        public string? RefreshToken { get; set; } = null;
     }
 }

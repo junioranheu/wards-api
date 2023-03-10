@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
 using Wards.Application.UsesCases.Usuarios.ObterUsuario;
-using Wards.Domain.Entities;
+using Wards.Application.UsesCases.Usuarios.Shared.Output;
 
 namespace Wards.Application.Services.Usuarios.ObterUsuarioCache
 {
@@ -17,7 +17,7 @@ namespace Wards.Application.Services.Usuarios.ObterUsuarioCache
             _obterUsuarioUseCase = obterUsuarioUseCase;
         }
 
-        public async Task<Usuario?> Execute(string email)
+        public async Task<UsuarioOutput?> Execute(string email)
         {
             if (String.IsNullOrEmpty(email))
             {
@@ -25,7 +25,7 @@ namespace Wards.Application.Services.Usuarios.ObterUsuarioCache
             }
 
             const string keyCache = "keyObterUsuarioCache";
-            if (!_memoryCache.TryGetValue(keyCache, out Usuario? usuario))
+            if (!_memoryCache.TryGetValue(keyCache, out UsuarioOutput? usuario))
             {
                 usuario = await _obterUsuarioUseCase.Execute(email: email);
                 _memoryCache.Set(keyCache, usuario, TimeSpan.FromMinutes(1));

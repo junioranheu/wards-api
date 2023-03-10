@@ -2,7 +2,7 @@
 using Wards.API.Filters;
 using Wards.Application.UsesCases.Usuarios.ListarUsuario;
 using Wards.Application.UsesCases.Usuarios.ObterUsuario;
-using Wards.Domain.Entities;
+using Wards.Application.UsesCases.Usuarios.Shared.Output;
 using Wards.Domain.Enums;
 
 namespace Wards.API.Controllers
@@ -24,8 +24,8 @@ namespace Wards.API.Controllers
 
         [HttpGet("listar")]
         [AuthorizeFilter(UsuarioRoleEnum.Adm)]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<Usuario>))]
-        public async Task<ActionResult<IEnumerable<Usuario>>> ListarUsuario()
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<UsuarioOutput>))]
+        public async Task<ActionResult<IEnumerable<UsuarioOutput>>> ListarUsuario()
         {
             var resp = await _listarUsuarioUseCase.Execute();
 
@@ -39,8 +39,8 @@ namespace Wards.API.Controllers
 
         [HttpGet]
         [AuthorizeFilter(UsuarioRoleEnum.Adm)]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Usuario))]
-        public async Task<ActionResult<Usuario>> ObterUsuario(int id)
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UsuarioOutput))]
+        public async Task<ActionResult<UsuarioOutput>> ObterUsuario(int id)
         {
             var resp = await _obterUsuarioUseCase.Execute(id);
 

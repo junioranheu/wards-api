@@ -1,9 +1,9 @@
-﻿using Wards.Domain.Entities;
+﻿using Wards.Application.UsesCases.Usuarios.Shared.Input;
 
 namespace Wards.Application.UsesCases.Usuarios.CriarUsuario
 {
     public interface ICriarUsuarioUseCase
     {
-        Task<int> Execute(Usuario input);
+        Task<int> Execute(UsuarioInput input);
     }
 }

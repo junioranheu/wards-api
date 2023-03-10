@@ -1,4 +1,7 @@
 ﻿using AutoMapper;
+using Wards.Application.UsesCases.Usuarios.Shared.Input;
+using Wards.Application.UsesCases.Usuarios.Shared.Output;
+using Wards.Domain.Entities;
 
 namespace Wards.Application.AutoMapper
 {
@@ -6,8 +9,8 @@ namespace Wards.Application.AutoMapper
     {
         public AutoMapperConfig()
         {
-            CreateMap<CurvaTipica, CurvaTipicaInput>().ReverseMap();
-            CreateMap<CurvaTipicaResponse, CurvaTipica>().ReverseMap();
+            CreateMap<Usuario, UsuarioInput>().ReverseMap();
+            CreateMap<UsuarioOutput, Usuario>().ReverseMap();
         }
     }
 }

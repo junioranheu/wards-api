@@ -13,7 +13,7 @@ namespace Wards.Application.UsesCases.Usuarios.ObterUsuarioCondicaoArbitraria.Qu
             _context = context;
         }
 
-        public async Task<Usuario> Execute(string? email, string? nomeUsuarioSistema)
+        public async Task<(Usuario, string)> Execute(string? email, string? nomeUsuarioSistema)
         {
             var byEmail = await _context.Usuarios.
                           Where(e => e.Email == email).
@@ -27,13 +27,13 @@ namespace Wards.Application.UsesCases.Usuarios.ObterUsuarioCondicaoArbitraria.Qu
 
                 if (byNomeUsuario is null)
                 {
-                    return new Usuario();
+                    return (new Usuario(), string.Empty);
                 }
 
-                return byNomeUsuario;
+                return (byNomeUsuario, byNomeUsuario.Senha ?? string.Empty);
             }
 
-            return byEmail;
+            return (byEmail, byEmail.Senha ?? string.Empty);
         }
     }
 }

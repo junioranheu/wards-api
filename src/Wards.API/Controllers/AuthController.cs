@@ -5,6 +5,7 @@ using Wards.Application.UsesCases.Auths.Logar;
 using Wards.Application.UsesCases.Auths.RefreshToken;
 using Wards.Application.UsesCases.Auths.Registrar;
 using Wards.Application.UsesCases.Usuarios.Shared.Input;
+using Wards.Application.UsesCases.Usuarios.Shared.Output;
 using Wards.Application.UsesCases.UsuariosRoles.CriarUsuarioRole;
 using Wards.Domain.Entities;
 using Wards.Domain.Enums;
@@ -57,7 +58,7 @@ namespace Wards.API.Controllers
             if (!string.IsNullOrEmpty(resp.Item2))
                 return StatusCode(StatusCodes.Status403Forbidden, resp.Item2);
 
-            await _criarUsuarioRoleUseCase.Execute(input.UsuariosRolesId!, resp.Item1!.Usuarios!.UsuarioId);
+            await _criarUsuarioRoleUseCase.Execute(input.UsuariosRolesId!, (int)resp.Item1!.UsuarioId!);
 
             return Ok(resp.Item1);
         }
@@ -68,7 +69,7 @@ namespace Wards.API.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(string))]
         public async Task<ActionResult<Usuario>> RefreshToken(UsuarioInput input)
         {
-            (UsuarioInput?, string) resp = await _refreshTokenUseCase.Execute(input.Token!, input.RefreshToken!, ObterUsuarioEmail());
+            (UsuarioOutput?, string) resp = await _refreshTokenUseCase.Execute(input.Token!, input.RefreshToken!, ObterUsuarioEmail());
 
             if (!string.IsNullOrEmpty(resp.Item2))
                 return StatusCode(StatusCodes.Status403Forbidden, resp.Item2);

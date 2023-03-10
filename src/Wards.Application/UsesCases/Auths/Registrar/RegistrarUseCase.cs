@@ -2,7 +2,6 @@
 using Wards.Application.UsesCases.Usuarios.CriarUsuario;
 using Wards.Application.UsesCases.Usuarios.ObterUsuarioCondicaoArbitraria;
 using Wards.Application.UsesCases.Usuarios.Shared.Input;
-using Wards.Domain.Entities;
 using Wards.Domain.Enums;
 using Wards.Infrastructure.Auth.Token;
 using static Wards.Utils.Common;
@@ -31,7 +30,7 @@ namespace Wards.Application.UsesCases.Auths.Registrar
         public async Task<(UsuarioInput?, string)> Execute(UsuarioInput input)
         {
             // #1 - Verificar se o usuário já existe com o e-mail ou nome de usuário do sistema informados. Se existir, aborte;
-            //var verificarUsuario = await _obterUsuarioCondicaoArbitrariaUseCase.Execute(input?.Usuarios!.Email, input?.Usuarios!.NomeUsuarioSistema);
+            //var verificarUsuario = await _obterUsuarioCondicaoArbitrariaUseCase.Execute(input?.Email, input?.NomeUsuarioSistema);
 
             //if (verificarUsuario is not null)
             //{
@@ -39,19 +38,19 @@ namespace Wards.Application.UsesCases.Auths.Registrar
             //}
 
             // #2.1 - Verificar requisitos gerais;
-            if (input?.Usuarios!.NomeCompleto?.Length < 3 || input?.Usuarios!.NomeUsuarioSistema?.Length < 3)
+            if (input?.NomeCompleto?.Length < 3 || input?.NomeUsuarioSistema?.Length < 3)
             {
                 return (new UsuarioInput(), GetDescricaoEnum(CodigosErrosEnum.RequisitosNome));
             }
 
             // #2.2 - Verificar e-mail;
-            if (!ValidarEmail(input?.Usuarios!.Email!))
+            if (!ValidarEmail(input?.Email!))
             {
                 return (new UsuarioInput(), GetDescricaoEnum(CodigosErrosEnum.EmailInvalido));
             }
 
             // #2.3 - Verificar requisitos de senha;
-            var validarSenha = ValidarSenha(input?.Usuarios!.Senha!, input?.Usuarios!.NomeCompleto!, input?.Usuarios!.NomeUsuarioSistema!, input?.Usuarios!.Email!);
+            var validarSenha = ValidarSenha(input?.Senha!, input?.NomeCompleto!, input?.NomeUsuarioSistema!, input?.Email!);
             if (!validarSenha.Item1)
             {
                 return (new UsuarioInput(), validarSenha.Item2);
@@ -61,14 +60,14 @@ namespace Wards.Application.UsesCases.Auths.Registrar
             string codigoVerificacao = GerarStringAleatoria(6, true);
 
             // #3.2 - Criar usuário;
-            Usuario novoUsuario = new()
+            UsuarioInput novoUsuario = new()
             {
-                NomeCompleto = input?.Usuarios!.NomeCompleto,
-                Email = input?.Usuarios!.Email,
-                NomeUsuarioSistema = input?.Usuarios!.NomeUsuarioSistema,
-                Senha = Criptografar(input?.Usuarios!.Senha!),
-                Chamado = input?.Usuarios!.Chamado,
-                HistPerfisAtivos = input?.Usuarios!.HistPerfisAtivos?.Length > 0 ? string.Join(", ", input.Usuarios!.HistPerfisAtivos) : string.Empty
+                NomeCompleto = input?.NomeCompleto,
+                Email = input?.Email,
+                NomeUsuarioSistema = input?.NomeUsuarioSistema,
+                Senha = Criptografar(input?.Senha!),
+                Chamado = input?.Chamado,
+                HistPerfisAtivos = input?.UsuariosRolesId?.Length > 0 ? string.Join(", ", input.UsuariosRolesId) : string.Empty
             };
 
             int usuarioId = await _criarUsuarioUseCase.Execute(novoUsuario);
@@ -79,10 +78,10 @@ namespace Wards.Application.UsesCases.Auths.Registrar
             //novoUsuario.Foto = nomeNovaFoto;
 
             // #5 - Adicionar ao objeto novoUsuario o id do novo usuário;
-            input!.Usuarios!.UsuarioId = usuarioId;
+            input!.UsuarioId = usuarioId;
 
             // #6 - Criar token JWT;
-            input.Token = _jwtTokenGenerator.GerarToken(nomeCompleto: input?.Usuarios!.NomeCompleto!, email: input?.Usuarios!.Email!, listaClaims: null);
+            input.Token = _jwtTokenGenerator.GerarToken(nomeCompleto: input?.NomeCompleto!, email: input?.Email!, listaClaims: null);
 
             // #7 - Gerar refresh token;
             input = await GerarRefreshToken(input!, usuarioId);

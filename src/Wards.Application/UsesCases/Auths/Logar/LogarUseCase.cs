@@ -1,7 +1,7 @@
 ﻿using Wards.Application.UsesCases.Tokens.CriarRefreshToken;
 using Wards.Application.UsesCases.Usuarios.ObterUsuarioCondicaoArbitraria;
 using Wards.Application.UsesCases.Usuarios.Shared.Input;
-using Wards.Domain.Entities;
+using Wards.Application.UsesCases.Usuarios.Shared.Output;
 using Wards.Domain.Enums;
 using Wards.Infrastructure.Auth.Token;
 using static Wards.Utils.Common;
@@ -26,8 +26,10 @@ namespace Wards.Application.UsesCases.Auths.Logar
 
         public async Task<(UsuarioInput?, string)> Execute(UsuarioInput input)
         {
-            // #1 - Buscar usuário;
-            Usuario usuario = await _obterUsuarioCondicaoArbitrariaUseCase.Execute(input?.Usuarios!.Email, input?.Usuarios!.NomeUsuarioSistema);
+            // #1 - Buscar usuário e sua senha (para não expor no output);
+            (UsuarioOutput?, string) resp = await _obterUsuarioCondicaoArbitrariaUseCase.Execute(input?.Email, input?.NomeUsuarioSistema);
+            UsuarioOutput? usuario = resp.Item1;
+            string senha = resp.Item2;
 
             if (usuario is null)
             {
@@ -35,7 +37,7 @@ namespace Wards.Application.UsesCases.Auths.Logar
             }
 
             // #2 - Verificar se a senha está correta;
-            if (usuario.Senha != Criptografar(input?.Usuarios!.Senha ?? string.Empty))
+            if (senha != Criptografar(input!.Senha ?? string.Empty))
             {
                 return (new UsuarioInput(), GetDescricaoEnum(CodigosErrosEnum.UsuarioSenhaIncorretos));
             }
