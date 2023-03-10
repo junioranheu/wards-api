@@ -17,12 +17,14 @@ namespace Wards.Application.UsesCases.Usuarios.ObterUsuarioCondicaoArbitraria.Qu
         {
             var byEmail = await _context.Usuarios.
                           Where(e => e.Email == email).
+                          Include(ur => ur.UsuarioRoles).
                           AsNoTracking().FirstOrDefaultAsync();
 
             if (byEmail is null)
             {
                 var byNomeUsuario = await _context.Usuarios.
                                     Where(n => n.NomeUsuarioSistema == nomeUsuarioSistema).
+                                    Include(ur => ur.UsuarioRoles).
                                     AsNoTracking().FirstOrDefaultAsync();
 
                 if (byNomeUsuario is null)

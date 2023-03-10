@@ -1,9 +1,9 @@
-﻿using Wards.Application.UsesCases.Usuarios.Shared.Output;
+﻿using Wards.Application.UsesCases.Auths.RefreshToken.Models;
 
 namespace Wards.Application.UsesCases.Auths.RefreshToken
 {
     public interface IRefreshTokenUseCase
     {
-        Task<(UsuarioOutput?, string)> Execute(string token, string refreshToken, string email);
+        Task<(RefreshTokenOutput?, string)> Execute(string token, string refreshToken, string email);
     }
 }

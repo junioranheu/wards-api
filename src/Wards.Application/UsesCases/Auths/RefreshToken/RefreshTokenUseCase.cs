@@ -1,4 +1,5 @@
 ﻿using System.Security.Claims;
+using Wards.Application.UsesCases.Auths.RefreshToken.Models;
 using Wards.Application.UsesCases.Tokens.CriarRefreshToken;
 using Wards.Application.UsesCases.Tokens.ObterRefreshToken;
 using Wards.Application.UsesCases.Usuarios.ObterUsuario;
@@ -28,29 +29,29 @@ namespace Wards.Application.UsesCases.Auths.RefreshToken
             _criarRefreshTokenUseCase = criarRefreshTokenUseCase;
         }
 
-        public async Task<(UsuarioOutput?, string)> Execute(string token, string refreshToken, string email)
+        public async Task<(RefreshTokenOutput?, string)> Execute(string token, string refreshToken, string email)
         {
             UsuarioOutput? usuario = await _obterUsuarioUseCase.Execute(email: email);
 
             if (usuario is null)
             {
-                return (new UsuarioOutput(), GetDescricaoEnum(CodigosErrosEnum.NaoEncontrado));
+                return (new RefreshTokenOutput(), GetDescricaoEnum(CodigosErrosEnum.NaoEncontrado));
             }
 
             int usuarioId = usuario.UsuarioId;
             var refreshTokenSalvoAnteriormente = await _obterRefreshTokenUseCase.Execute(usuarioId);
             if (refreshTokenSalvoAnteriormente != refreshToken)
             {
-                return (new UsuarioOutput(), GetDescricaoEnum(CodigosErrosEnum.RefreshTokenInvalido));
+                return (new RefreshTokenOutput(), GetDescricaoEnum(CodigosErrosEnum.RefreshTokenInvalido));
             }
 
             ClaimsPrincipal? principal = _jwtTokenGenerator.GetInfoTokenExpirado(token);
-            UsuarioOutput? output = await GerarRefreshToken(principal, usuarioId);
+            RefreshTokenOutput? output = await GerarRefreshToken(principal, usuarioId);
 
             return (output, string.Empty);
         }
 
-        private async Task<UsuarioOutput> GerarRefreshToken(ClaimsPrincipal? principal, int usuarioId)
+        private async Task<RefreshTokenOutput> GerarRefreshToken(ClaimsPrincipal? principal, int usuarioId)
         {
             var novoToken = _jwtTokenGenerator.GerarToken(nomeCompleto: string.Empty, email: string.Empty, listaClaims: principal?.Claims);
             var novoRefreshToken = _jwtTokenGenerator.GerarRefreshToken();
@@ -66,7 +67,7 @@ namespace Wards.Application.UsesCases.Auths.RefreshToken
             await _criarRefreshTokenUseCase.Execute(novoRefreshTokenInput);
 
             // Retornar o novo token e o novo refresh token;
-            UsuarioOutput output = new()
+            RefreshTokenOutput output = new()
             {
                 Token = novoToken,
                 RefreshToken = novoRefreshToken

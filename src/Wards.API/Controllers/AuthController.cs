@@ -3,11 +3,11 @@ using Microsoft.AspNetCore.Mvc;
 using Wards.API.Filters;
 using Wards.Application.UsesCases.Auths.Logar;
 using Wards.Application.UsesCases.Auths.RefreshToken;
+using Wards.Application.UsesCases.Auths.RefreshToken.Models;
 using Wards.Application.UsesCases.Auths.Registrar;
 using Wards.Application.UsesCases.Usuarios.Shared.Input;
 using Wards.Application.UsesCases.Usuarios.Shared.Output;
 using Wards.Application.UsesCases.UsuariosRoles.CriarUsuarioRole;
-using Wards.Domain.Entities;
 using Wards.Domain.Enums;
 
 namespace Wards.API.Controllers
@@ -51,7 +51,7 @@ namespace Wards.API.Controllers
         [AuthorizeFilter(UsuarioRoleEnum.Adm, UsuarioRoleEnum.Suporte)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UsuarioOutput))]
         [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(string))]
-        public async Task<ActionResult<Usuario>> Registrar(UsuarioInput input)
+        public async Task<ActionResult<UsuarioOutput>> Registrar(UsuarioInput input)
         {
             (UsuarioOutput?, string) resp = await _registrarUseCase.Execute(input);
 
@@ -65,11 +65,11 @@ namespace Wards.API.Controllers
 
         [HttpPost("refreshToken")]
         [AllowAnonymous]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UsuarioOutput))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(RefreshTokenOutput))]
         [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(string))]
-        public async Task<ActionResult<Usuario>> RefreshToken(UsuarioInput input)
+        public async Task<ActionResult<RefreshTokenOutput>> RefreshToken(UsuarioInput input)
         {
-            (UsuarioOutput?, string) resp = await _refreshTokenUseCase.Execute(input.Token!, input.RefreshToken!, ObterUsuarioEmail());
+            (RefreshTokenOutput?, string) resp = await _refreshTokenUseCase.Execute(input.Token!, input.RefreshToken!, ObterUsuarioEmail());
 
             if (!string.IsNullOrEmpty(resp.Item2))
                 return StatusCode(StatusCodes.Status403Forbidden, resp.Item2);

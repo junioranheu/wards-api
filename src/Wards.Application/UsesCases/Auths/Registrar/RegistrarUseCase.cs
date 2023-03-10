@@ -70,16 +70,13 @@ namespace Wards.Application.UsesCases.Auths.Registrar
             //await _usuarioRepository.AtualizarFoto(usuarioId, nomeNovaFoto);
             //novoUsuario.Foto = nomeNovaFoto;
 
-            // #5 - Adicionar ao objeto novoUsuario o id do novo usuário;
-            input!.UsuarioId = output.UsuarioId;
+            // #5 - Criar token JWT;
+            output.Token = _jwtTokenGenerator.GerarToken(nomeCompleto: input?.NomeCompleto!, email: input?.Email!, listaClaims: null);
 
-            // #6 - Criar token JWT;
-            input.Token = _jwtTokenGenerator.GerarToken(nomeCompleto: input?.NomeCompleto!, email: input?.Email!, listaClaims: null);
-
-            // #7 - Gerar refresh token;
+            // #6 - Gerar refresh token;
             output = await GerarRefreshToken(output!, output.UsuarioId);
 
-            // #8 - Enviar e-mail de verificação de conta;
+            // #7 - Enviar e-mail de verificação de conta;
             //try
             //{
             //    if (!String.IsNullOrEmpty(usuarioDTO?.Email) && !String.IsNullOrEmpty(usuarioDTO?.NomeCompleto) && !String.IsNullOrEmpty(codigoVerificacao))
