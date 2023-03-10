@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Wards.Application.UsesCases.Usuarios.CriarUsuario.Commands;
 using Wards.Application.UsesCases.Usuarios.Shared.Input;
+using Wards.Application.UsesCases.Usuarios.Shared.Output;
 using Wards.Domain.Entities;
 
 namespace Wards.Application.UsesCases.Usuarios.CriarUsuario
@@ -16,9 +17,10 @@ namespace Wards.Application.UsesCases.Usuarios.CriarUsuario
             _criarCommand = criarCommand;
         }
 
-        public async Task<int> Execute(UsuarioInput input)
+        public async Task<UsuarioOutput> Execute(UsuarioInput input)
         {
-            return await _criarCommand.Execute(_map.Map<Usuario>(input));
+            Usuario usuario = await _criarCommand.Execute(_map.Map<Usuario>(input));
+            return _map.Map<UsuarioOutput>(usuario);
         }
     }
 }

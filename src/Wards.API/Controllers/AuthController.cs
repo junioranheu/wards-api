@@ -35,11 +35,11 @@ namespace Wards.API.Controllers
 
         [HttpPost("login")]
         [AllowAnonymous]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Usuario))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UsuarioOutput))]
         [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(string))]
         public async Task<ActionResult<UsuarioInput>> Logar(UsuarioInput input)
         {
-            (UsuarioInput?, string) resp = await _logarUseCase.Execute(input);
+            (UsuarioOutput?, string) resp = await _logarUseCase.Execute(input);
 
             if (!string.IsNullOrEmpty(resp.Item2))
                 return StatusCode(StatusCodes.Status403Forbidden, resp.Item2);
@@ -49,11 +49,11 @@ namespace Wards.API.Controllers
 
         [HttpPost("registrar")]
         [AuthorizeFilter(UsuarioRoleEnum.Adm, UsuarioRoleEnum.Suporte)]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Usuario))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UsuarioOutput))]
         [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(string))]
         public async Task<ActionResult<Usuario>> Registrar(UsuarioInput input)
         {
-            (UsuarioInput?, string) resp = await _registrarUseCase.Execute(input);
+            (UsuarioOutput?, string) resp = await _registrarUseCase.Execute(input);
 
             if (!string.IsNullOrEmpty(resp.Item2))
                 return StatusCode(StatusCodes.Status403Forbidden, resp.Item2);
@@ -65,7 +65,7 @@ namespace Wards.API.Controllers
 
         [HttpPost("refreshToken")]
         [AllowAnonymous]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Usuario))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UsuarioOutput))]
         [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(string))]
         public async Task<ActionResult<Usuario>> RefreshToken(UsuarioInput input)
         {

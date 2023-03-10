@@ -2,6 +2,7 @@
 using Wards.Application.UsesCases.Usuarios.CriarUsuario;
 using Wards.Application.UsesCases.Usuarios.ObterUsuarioCondicaoArbitraria;
 using Wards.Application.UsesCases.Usuarios.Shared.Input;
+using Wards.Application.UsesCases.Usuarios.Shared.Output;
 using Wards.Domain.Enums;
 using Wards.Infrastructure.Auth.Token;
 using static Wards.Utils.Common;
@@ -27,7 +28,7 @@ namespace Wards.Application.UsesCases.Auths.Registrar
             _criarRefreshTokenUseCase = criarRefreshTokenUseCase;
         }
 
-        public async Task<(UsuarioInput?, string)> Execute(UsuarioInput input)
+        public async Task<(UsuarioOutput?, string)> Execute(UsuarioInput input)
         {
             // #1 - Verificar se o usuário já existe com o e-mail ou nome de usuário do sistema informados. Se existir, aborte;
             //var verificarUsuario = await _obterUsuarioCondicaoArbitrariaUseCase.Execute(input?.Email, input?.NomeUsuarioSistema);
@@ -40,37 +41,29 @@ namespace Wards.Application.UsesCases.Auths.Registrar
             // #2.1 - Verificar requisitos gerais;
             if (input?.NomeCompleto?.Length < 3 || input?.NomeUsuarioSistema?.Length < 3)
             {
-                return (new UsuarioInput(), GetDescricaoEnum(CodigosErrosEnum.RequisitosNome));
+                return (new UsuarioOutput(), GetDescricaoEnum(CodigosErrosEnum.RequisitosNome));
             }
 
             // #2.2 - Verificar e-mail;
             if (!ValidarEmail(input?.Email!))
             {
-                return (new UsuarioInput(), GetDescricaoEnum(CodigosErrosEnum.EmailInvalido));
+                return (new UsuarioOutput(), GetDescricaoEnum(CodigosErrosEnum.EmailInvalido));
             }
 
             // #2.3 - Verificar requisitos de senha;
             var validarSenha = ValidarSenha(input?.Senha!, input?.NomeCompleto!, input?.NomeUsuarioSistema!, input?.Email!);
             if (!validarSenha.Item1)
             {
-                return (new UsuarioInput(), validarSenha.Item2);
+                return (new UsuarioOutput(), validarSenha.Item2);
             }
 
             // #3.1 - Gerar código de verificação para usar no processo de criação e no envio de e-mail;
             string codigoVerificacao = GerarStringAleatoria(6, true);
 
             // #3.2 - Criar usuário;
-            UsuarioInput novoUsuario = new()
-            {
-                NomeCompleto = input?.NomeCompleto,
-                Email = input?.Email,
-                NomeUsuarioSistema = input?.NomeUsuarioSistema,
-                Senha = Criptografar(input?.Senha!),
-                Chamado = input?.Chamado,
-                HistPerfisAtivos = input?.UsuariosRolesId?.Length > 0 ? string.Join(", ", input.UsuariosRolesId) : string.Empty
-            };
-
-            int usuarioId = await _criarUsuarioUseCase.Execute(novoUsuario);
+            input!.Senha = Criptografar(input?.Senha!);
+            input!.HistPerfisAtivos = input?.UsuariosRolesId?.Length > 0 ? string.Join(", ", input.UsuariosRolesId) : string.Empty;
+            UsuarioOutput output = await _criarUsuarioUseCase.Execute(input!);
 
             // #4 - Automaticamente atualizar o valor da Foto com um valor padrão após criar o novo usuário e adicionar ao ovjeto novoUsuario;
             //string nomeNovaFoto = $"{usuarioId}{GerarStringAleatoria(5, true)}.webp";
@@ -78,13 +71,13 @@ namespace Wards.Application.UsesCases.Auths.Registrar
             //novoUsuario.Foto = nomeNovaFoto;
 
             // #5 - Adicionar ao objeto novoUsuario o id do novo usuário;
-            input!.UsuarioId = usuarioId;
+            input!.UsuarioId = output.UsuarioId;
 
             // #6 - Criar token JWT;
             input.Token = _jwtTokenGenerator.GerarToken(nomeCompleto: input?.NomeCompleto!, email: input?.Email!, listaClaims: null);
 
             // #7 - Gerar refresh token;
-            input = await GerarRefreshToken(input!, usuarioId);
+            output = await GerarRefreshToken(output!, output.UsuarioId);
 
             // #8 - Enviar e-mail de verificação de conta;
             //try
@@ -99,13 +92,13 @@ namespace Wards.Application.UsesCases.Auths.Registrar
             //    usuarioDTO.IsEmailVerificacaoContaEnviado = false;
             //}
 
-            return (input, string.Empty);
+            return (output, string.Empty);
         }
 
-        private async Task<UsuarioInput> GerarRefreshToken(UsuarioInput input, int usuarioId)
+        private async Task<UsuarioOutput> GerarRefreshToken(UsuarioOutput output, int usuarioId)
         {
             var refreshToken = _jwtTokenGenerator.GerarRefreshToken();
-            input.RefreshToken = refreshToken;
+            output.RefreshToken = refreshToken;
 
             Domain.Entities.RefreshToken novoRefreshToken = new()
             {
@@ -116,7 +109,7 @@ namespace Wards.Application.UsesCases.Auths.Registrar
 
             await _criarRefreshTokenUseCase.Execute(novoRefreshToken);
 
-            return input;
+            return output;
         }
     }
 }

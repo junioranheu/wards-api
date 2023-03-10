@@ -1,9 +1,10 @@
-﻿using Wards.Domain.Entities;
+﻿using Wards.Application.UsesCases.Usuarios.Shared.Output;
+using Wards.Domain.Entities;
 
 namespace Wards.Application.UsesCases.Usuarios.CriarUsuario.Commands
 {
     public interface ICriarUsuarioCommand
     {
-        Task<int> Execute(Usuario input);
+        Task<Usuario> Execute(Usuario input);
     }
 }

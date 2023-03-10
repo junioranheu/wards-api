@@ -24,43 +24,43 @@ namespace Wards.Application.UsesCases.Auths.Logar
             _criarRefreshTokenUseCase = criarRefreshTokenUseCase;
         }
 
-        public async Task<(UsuarioInput?, string)> Execute(UsuarioInput input)
+        public async Task<(UsuarioOutput?, string)> Execute(UsuarioInput input)
         {
             // #1 - Buscar usuário e sua senha (para não expor no output);
             (UsuarioOutput?, string) resp = await _obterUsuarioCondicaoArbitrariaUseCase.Execute(input?.Email, input?.NomeUsuarioSistema);
-            UsuarioOutput? usuario = resp.Item1;
+            UsuarioOutput? output = resp.Item1;
             string senha = resp.Item2;
 
-            if (usuario is null)
+            if (output is null)
             {
-                return (new UsuarioInput(), GetDescricaoEnum(CodigosErrosEnum.UsuarioNaoEncontrado));
+                return (new UsuarioOutput(), GetDescricaoEnum(CodigosErrosEnum.UsuarioNaoEncontrado));
             }
 
             // #2 - Verificar se a senha está correta;
             if (senha != Criptografar(input!.Senha ?? string.Empty))
             {
-                return (new UsuarioInput(), GetDescricaoEnum(CodigosErrosEnum.UsuarioSenhaIncorretos));
+                return (new UsuarioOutput(), GetDescricaoEnum(CodigosErrosEnum.UsuarioSenhaIncorretos));
             }
 
             // #3 - Verificar se o usuário está ativo;
-            if (!usuario.IsAtivo)
+            if (!output.IsAtivo)
             {
-                return (new UsuarioInput(), GetDescricaoEnum(CodigosErrosEnum.ContaDesativada));
+                return (new UsuarioOutput(), GetDescricaoEnum(CodigosErrosEnum.ContaDesativada));
             }
 
             // #4 - Criar token JWT;
-            input!.Token = _jwtTokenGenerator.GerarToken(nomeCompleto: usuario.NomeCompleto!, email: usuario.Email!, listaClaims: null);
+            output!.Token = _jwtTokenGenerator.GerarToken(nomeCompleto: output.NomeCompleto!, email: output.Email!, listaClaims: null);
 
             // #5 - Gerar refresh token;
-            input = await GerarRefreshToken(input, usuario.UsuarioId);
+            output = await GerarRefreshToken(output, output.UsuarioId);
 
-            return (input, string.Empty);
+            return (output, string.Empty);
         }
 
-        private async Task<UsuarioInput> GerarRefreshToken(UsuarioInput input, int usuarioId)
+        private async Task<UsuarioOutput> GerarRefreshToken(UsuarioOutput output, int usuarioId)
         {
             var refreshToken = _jwtTokenGenerator.GerarRefreshToken();
-            input.RefreshToken = refreshToken;
+            output.RefreshToken = refreshToken;
 
             Domain.Entities.RefreshToken novoRefreshToken = new()
             {
@@ -71,7 +71,7 @@ namespace Wards.Application.UsesCases.Auths.Logar
 
             await _criarRefreshTokenUseCase.Execute(novoRefreshToken);
 
-            return input;
+            return output;
         }
     }
 }
