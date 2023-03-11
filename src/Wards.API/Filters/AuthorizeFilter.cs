@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using System.Net;
 using System.Security.Claims;
 using Wards.Application.Services.Usuarios.ListarUsuarioRolesCache;
+using Wards.Application.UsesCases.UsuariosRoles.Shared.Output;
 using Wards.Domain.Entities;
 using Wards.Domain.Enums;
 
@@ -31,7 +32,7 @@ namespace Wards.API.Filters
         {
             if (IsUsuarioAutenticado(context))
             {
-                IEnumerable<UsuarioRole>? usuarioRoles = await ListarUsuarioRoles(context);
+                IEnumerable<UsuarioRoleOutput>? usuarioRoles = await ListarUsuarioRoles(context);
                 IsUsuarioTemAcesso(context, usuarioRoles, _rolesNecessarias);
             }
         }
@@ -63,15 +64,15 @@ namespace Wards.API.Filters
             return string.Empty;
         }
 
-        private static async Task<IEnumerable<UsuarioRole>?> ListarUsuarioRoles(AuthorizationFilterContext context)
+        private static async Task<IEnumerable<UsuarioRoleOutput>?> ListarUsuarioRoles(AuthorizationFilterContext context)
         {
             var service = context.HttpContext.RequestServices.GetService<IListarUsuarioRolesCacheService>();
-            IEnumerable<UsuarioRole>? usuarioRoles = await service!.Execute(ObterUsuarioEmail(context));
+            IEnumerable<UsuarioRoleOutput>? usuarioRoles = await service!.Execute(ObterUsuarioEmail(context));
 
             return usuarioRoles;
         }
 
-        private static bool IsUsuarioTemAcesso(AuthorizationFilterContext context, IEnumerable<UsuarioRole>? usuarioRoles, int[] _rolesNecessarias)
+        private static bool IsUsuarioTemAcesso(AuthorizationFilterContext context, IEnumerable<UsuarioRoleOutput>? usuarioRoles, int[] _rolesNecessarias)
         {
             if (_rolesNecessarias.Length == 0)
             {

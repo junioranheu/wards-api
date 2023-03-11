@@ -21,11 +21,6 @@ namespace Wards.Application.UsesCases.UsuariosRoles.ObterUsuarioRole.Queries
                              Where(u => u.Usuarios!.Email == email && u.Usuarios.IsAtivo == true).
                              AsNoTracking().ToListAsync();
 
-            foreach (var item in linq)
-            {
-                item.Usuarios!.Senha = string.Empty;
-            }
-
             return linq;
         }
     }

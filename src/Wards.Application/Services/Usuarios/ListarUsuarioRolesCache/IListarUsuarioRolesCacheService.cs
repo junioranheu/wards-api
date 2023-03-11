@@ -1,9 +1,9 @@
-﻿using Wards.Domain.Entities;
+﻿using Wards.Application.UsesCases.UsuariosRoles.Shared.Output;
 
 namespace Wards.Application.Services.Usuarios.ListarUsuarioRolesCache
 {
     public interface IListarUsuarioRolesCacheService
     {
-        Task<IEnumerable<UsuarioRole>?> Execute(string email);
+        Task<IEnumerable<UsuarioRoleOutput>?> Execute(string email);
     }
 }

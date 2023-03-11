@@ -1,20 +1,23 @@
-﻿using Wards.Application.UsesCases.UsuariosRoles.ObterUsuarioRole.Queries;
-using Wards.Domain.Entities;
+﻿using AutoMapper;
+using Wards.Application.UsesCases.UsuariosRoles.ObterUsuarioRole.Queries;
+using Wards.Application.UsesCases.UsuariosRoles.Shared.Output;
 
 namespace Wards.Application.UsesCases.UsuariosRoles.ObterUsuarioRole
 {
     public sealed class ListarUsuarioRoleUseCase : IListarUsuarioRoleUseCase
     {
-        private readonly IListarUsuarioRoleQuery _obterQuery;
+        private readonly IMapper _map;
+        private readonly IListarUsuarioRoleQuery _listarQuery;
 
-        public ListarUsuarioRoleUseCase(IListarUsuarioRoleQuery obterQuery)
+        public ListarUsuarioRoleUseCase(IMapper map, IListarUsuarioRoleQuery listarQuery)
         {
-            _obterQuery = obterQuery;
+            _map = map;
+            _listarQuery = listarQuery;
         }
 
-        public async Task<IEnumerable<UsuarioRole>> Execute(string email)
+        public async Task<IEnumerable<UsuarioRoleOutput>?> Execute(string email)
         {
-            return await _obterQuery.Execute(email);
+            return _map.Map<IEnumerable<UsuarioRoleOutput>>(await _listarQuery.Execute(email));
         }
     }
 }

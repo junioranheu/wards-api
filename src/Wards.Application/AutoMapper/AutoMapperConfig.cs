@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Wards.Application.UsesCases.Usuarios.Shared.Input;
 using Wards.Application.UsesCases.Usuarios.Shared.Output;
+using Wards.Application.UsesCases.UsuariosRoles.Shared.Output;
 using Wards.Domain.Entities;
 
 namespace Wards.Application.AutoMapper
@@ -11,6 +12,8 @@ namespace Wards.Application.AutoMapper
         {
             CreateMap<Usuario, UsuarioInput>().ReverseMap();
             CreateMap<UsuarioOutput, Usuario>().ReverseMap();
+
+            CreateMap<UsuarioRoleOutput, UsuarioRole>().ReverseMap();      
         }
     }
 }
