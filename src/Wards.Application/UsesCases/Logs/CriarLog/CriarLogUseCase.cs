@@ -1,20 +1,24 @@
-﻿using Wards.Application.UsesCases.Logs.CriarLog.Commands;
+﻿using AutoMapper;
+using Wards.Application.UsesCases.Logs.CriarLog.Commands;
+using Wards.Application.UsesCases.Logs.Shared.Input;
 using Wards.Domain.Entities;
 
 namespace Wards.Application.UsesCases.Logs.CriarLog
 {
     public sealed class CriarLogUseCase : ICriarLogUseCase
     {
-        private readonly ICriarLogCommand _criarLogCommand;
+        private readonly IMapper _map;
+        private readonly ICriarLogCommand _criarCommand;
 
-        public CriarLogUseCase(ICriarLogCommand criarLogCommand)
+        public CriarLogUseCase(IMapper map, ICriarLogCommand criarCommand)
         {
-            _criarLogCommand = criarLogCommand;
+            _map = map;
+            _criarCommand = criarCommand;
         }
 
-        public async Task Execute(Log input)
+        public async Task Execute(LogInput input)
         {
-             await _criarLogCommand.Execute(input);
+            await _criarCommand.Execute(_map.Map<Log>(input));
         }
     }
 }

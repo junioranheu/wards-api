@@ -1,9 +1,9 @@
-﻿using Wards.Domain.Entities;
+﻿using Wards.Application.UsesCases.Logs.Shared.Output;
 
 namespace Wards.Application.UsesCases.Logs.ListarLog
 {
     public interface IListarLogUseCase
     {
-        Task<IEnumerable<Log>?> Execute();
+        Task<IEnumerable<LogOutput>?> Execute();
     }
 }

@@ -3,8 +3,8 @@ using Newtonsoft.Json;
 using System.Security.Claims;
 using Wards.Application.Services.Usuarios.ObterUsuarioCache;
 using Wards.Application.UsesCases.Logs.CriarLog;
+using Wards.Application.UsesCases.Logs.Shared.Input;
 using Wards.Application.UsesCases.Usuarios.Shared.Output;
-using Wards.Domain.Entities;
 
 namespace Wards.API.Filters
 {
@@ -25,7 +25,7 @@ namespace Wards.API.Filters
 
             int usuarioId = await ObterUsuarioId(filterContextExecuted);
 
-            Log log = new()
+            LogInput log = new()
             {
                 TipoRequisicao = request.Method ?? string.Empty,
                 Endpoint = request.Path.Value ?? string.Empty,

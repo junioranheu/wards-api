@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text.Json.Serialization;
 using static Wards.Utils.Common;
 
 namespace Wards.Domain.Entities
@@ -19,7 +18,7 @@ namespace Wards.Domain.Entities
         public int StatusResposta { get; set; }
 
         public int? UsuarioId { get; set; }
-        [JsonIgnore, ForeignKey(nameof(UsuarioId))]
+        [ForeignKey(nameof(UsuarioId))]
         public Usuario? Usuarios { get; init; }
 
         public DateTime Data { get; set; } = HorarioBrasilia();

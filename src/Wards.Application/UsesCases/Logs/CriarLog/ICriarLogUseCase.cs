@@ -1,9 +1,9 @@
-﻿using Wards.Domain.Entities;
+﻿using Wards.Application.UsesCases.Logs.Shared.Input;
 
 namespace Wards.Application.UsesCases.Logs.CriarLog
 {
     public interface ICriarLogUseCase
     {
-        Task Execute(Log input);
+        Task Execute(LogInput input);
     }
 }
