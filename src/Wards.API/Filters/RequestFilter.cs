@@ -37,7 +37,6 @@ namespace Wards.API.Filters
             await _criarLogUseCase.Execute(log);
         }
 
-
         private static string ObterUsuarioEmail(ActionExecutedContext filterContextExecuted)
         {
             if (filterContextExecuted.HttpContext.User.Identity!.IsAuthenticated)
