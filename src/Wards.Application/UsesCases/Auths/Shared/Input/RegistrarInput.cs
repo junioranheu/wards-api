@@ -1,12 +1,9 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace Wards.Application.UsesCases.Usuarios.Shared.Input
+namespace Wards.Application.UsesCases.Auths.Shared.Input
 {
-    public sealed class UsuarioInput
+    public sealed class RegistrarInput
     {
-        [JsonIgnore]
-        public int? UsuarioId { get; set; } = 0;
-
         public string? NomeCompleto { get; set; } = string.Empty;
 
         public string? NomeUsuarioSistema { get; set; } = string.Empty;
@@ -21,10 +18,6 @@ namespace Wards.Application.UsesCases.Usuarios.Shared.Input
         public string? HistPerfisAtivos { get; set; } = string.Empty;
 
         // Extra;
-        public string? Token { get; set; } = null;
-
-        public string? RefreshToken { get; set; } = null;
-
         public int[]? UsuariosRolesId { get; set; } = null;
     }
 }

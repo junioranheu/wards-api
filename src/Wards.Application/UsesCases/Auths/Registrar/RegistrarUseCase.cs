@@ -1,4 +1,6 @@
-﻿using Wards.Application.UsesCases.Tokens.CriarRefreshToken;
+﻿using AutoMapper;
+using Wards.Application.UsesCases.Auths.Shared.Input;
+using Wards.Application.UsesCases.Tokens.CriarRefreshToken;
 using Wards.Application.UsesCases.Usuarios.CriarUsuario;
 using Wards.Application.UsesCases.Usuarios.ObterUsuarioCondicaoArbitraria;
 using Wards.Application.UsesCases.Usuarios.Shared.Input;
@@ -11,24 +13,27 @@ namespace Wards.Application.UsesCases.Auths.Registrar
 {
     public sealed class RegistrarUseCase : IRegistrarUseCase
     {
+        private readonly IMapper _map;
         private readonly IJwtTokenGenerator _jwtTokenGenerator;
         private readonly ICriarUsuarioUseCase _criarUsuarioUseCase;
         private readonly IObterUsuarioCondicaoArbitrariaUseCase _obterUsuarioCondicaoArbitrariaUseCase;
         private readonly ICriarRefreshTokenUseCase _criarRefreshTokenUseCase;
 
         public RegistrarUseCase(
+            IMapper map,
             IJwtTokenGenerator jwtTokenGenerator,
             ICriarUsuarioUseCase criarUsuarioUseCase,
             IObterUsuarioCondicaoArbitrariaUseCase obterUsuarioCondicaoArbitrariaUseCase,
             ICriarRefreshTokenUseCase criarRefreshTokenUseCase)
         {
+            _map = map;
             _jwtTokenGenerator = jwtTokenGenerator;
             _criarUsuarioUseCase = criarUsuarioUseCase;
             _obterUsuarioCondicaoArbitrariaUseCase = obterUsuarioCondicaoArbitrariaUseCase;
             _criarRefreshTokenUseCase = criarRefreshTokenUseCase;
         }
 
-        public async Task<(UsuarioOutput?, string)> Execute(UsuarioInput input)
+        public async Task<(UsuarioOutput?, string)> Execute(RegistrarInput input)
         {
             // #1 - Verificar se o usuário já existe com o e-mail ou nome de usuário do sistema informados. Se existir, aborte;
             //var verificarUsuario = await _obterUsuarioCondicaoArbitrariaUseCase.Execute(input?.Email, input?.NomeUsuarioSistema);
@@ -63,7 +68,7 @@ namespace Wards.Application.UsesCases.Auths.Registrar
             // #3.2 - Criar usuário;
             input!.Senha = Criptografar(input?.Senha!);
             input!.HistPerfisAtivos = input?.UsuariosRolesId?.Length > 0 ? string.Join(", ", input.UsuariosRolesId) : string.Empty;
-            UsuarioOutput output = await _criarUsuarioUseCase.Execute(input!);
+            UsuarioOutput output = await _criarUsuarioUseCase.Execute(_map.Map<UsuarioInput>(input));
 
             // #4 - Automaticamente atualizar o valor da Foto com um valor padrão após criar o novo usuário e adicionar ao ovjeto novoUsuario;
             //string nomeNovaFoto = $"{usuarioId}{GerarStringAleatoria(5, true)}.webp";

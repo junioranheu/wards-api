@@ -1,6 +1,6 @@
-﻿using Wards.Application.UsesCases.Tokens.CriarRefreshToken;
+﻿using Wards.Application.UsesCases.Auths.Shared.Input;
+using Wards.Application.UsesCases.Tokens.CriarRefreshToken;
 using Wards.Application.UsesCases.Usuarios.ObterUsuarioCondicaoArbitraria;
-using Wards.Application.UsesCases.Usuarios.Shared.Input;
 using Wards.Application.UsesCases.Usuarios.Shared.Output;
 using Wards.Domain.Enums;
 using Wards.Infrastructure.Auth.Token;
@@ -24,7 +24,7 @@ namespace Wards.Application.UsesCases.Auths.Logar
             _criarRefreshTokenUseCase = criarRefreshTokenUseCase;
         }
 
-        public async Task<(UsuarioOutput?, string)> Execute(UsuarioInput input)
+        public async Task<(UsuarioOutput?, string)> Execute(LogarInput input)
         {
             // #1 - Buscar usuário e sua senha (para não expor no output);
             (UsuarioOutput?, string) resp = await _obterUsuarioCondicaoArbitrariaUseCase.Execute(input?.Email, input?.NomeUsuarioSistema);

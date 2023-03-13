@@ -1,4 +1,4 @@
-﻿using Wards.Domain.Entities;
+﻿using Wards.Application.UsesCases.UsuariosRoles.Shared.Output;
 using static Wards.Utils.Common;
 
 namespace Wards.Application.UsesCases.Usuarios.Shared.Output
@@ -19,7 +19,7 @@ namespace Wards.Application.UsesCases.Usuarios.Shared.Output
 
         public DateTime Data { get; set; } = HorarioBrasilia();
 
-        public IEnumerable<UsuarioRole>? UsuarioRoles { get; init; }
+        public IEnumerable<UsuarioRoleOutput>? UsuarioRoles { get; init; }
 
         // Extra;
         public string? Token { get; set; } = null;

@@ -5,7 +5,7 @@ using Wards.Application.UsesCases.Auths.Logar;
 using Wards.Application.UsesCases.Auths.RefreshToken;
 using Wards.Application.UsesCases.Auths.RefreshToken.Models;
 using Wards.Application.UsesCases.Auths.Registrar;
-using Wards.Application.UsesCases.Usuarios.Shared.Input;
+using Wards.Application.UsesCases.Auths.Shared.Input;
 using Wards.Application.UsesCases.Usuarios.Shared.Output;
 using Wards.Application.UsesCases.UsuariosRoles.CriarUsuarioRole;
 using Wards.Domain.Enums;
@@ -37,7 +37,7 @@ namespace Wards.API.Controllers
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UsuarioOutput))]
         [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(string))]
-        public async Task<ActionResult<UsuarioInput>> Logar(UsuarioInput input)
+        public async Task<ActionResult<UsuarioOutput>> Logar(LogarInput input)
         {
             (UsuarioOutput?, string) resp = await _logarUseCase.Execute(input);
 
@@ -51,7 +51,7 @@ namespace Wards.API.Controllers
         [AuthorizeFilter(UsuarioRoleEnum.Adm, UsuarioRoleEnum.Suporte)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UsuarioOutput))]
         [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(string))]
-        public async Task<ActionResult<UsuarioOutput>> Registrar(UsuarioInput input)
+        public async Task<ActionResult<UsuarioOutput>> Registrar(RegistrarInput input)
         {
             (UsuarioOutput?, string) resp = await _registrarUseCase.Execute(input);
 
@@ -67,7 +67,7 @@ namespace Wards.API.Controllers
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(RefreshTokenOutput))]
         [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(string))]
-        public async Task<ActionResult<RefreshTokenOutput>> RefreshToken(UsuarioInput input)
+        public async Task<ActionResult<RefreshTokenOutput>> RefreshToken(RefreshTokenInput input)
         {
             (RefreshTokenOutput?, string) resp = await _refreshTokenUseCase.Execute(input.Token!, input.RefreshToken!, ObterUsuarioEmail());
 
