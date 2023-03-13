@@ -21,9 +21,7 @@ namespace Wards.Application.Services.Usuarios.ListarUsuarioRolesCache
         public async Task<IEnumerable<UsuarioRoleOutput>?> Execute(string email)
         {
             if (String.IsNullOrEmpty(email))
-            {
                 return null;
-            }
 
             const string keyCache = "keyListarUsuarioRolesCache";
             if (!_memoryCache.TryGetValue(keyCache, out IEnumerable<UsuarioRoleOutput>? listaUsuarioRoles))
