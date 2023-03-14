@@ -67,7 +67,7 @@ namespace Wards.API.Controllers
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(RefreshTokenOutput))]
         [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(string))]
-        public async Task<ActionResult<RefreshTokenOutput>> RefreshToken(RefreshTokenInput input)
+        public async Task<ActionResult<RefreshTokenOutput>> RefreshToken(AuthsRefreshTokenInput input)
         {
             (RefreshTokenOutput?, string) resp = await _refreshTokenUseCase.Execute(input.Token!, input.RefreshToken!, ObterUsuarioEmail());
 

@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Wards.Application.UsesCases.Tokens.Shared.Input
+﻿namespace Wards.Application.UsesCases.Tokens.Shared.Input
 {
-    internal class RefreshTokenInput
+    public sealed class RefreshTokenInput
     {
+        public string? RefToken { get; set; } = null;
+
+        public int UsuarioId { get; set; }
     }
 }

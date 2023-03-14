@@ -1,9 +1,9 @@
-﻿using Wards.Domain.Entities;
+﻿using Wards.Application.UsesCases.Tokens.Shared.Input;
 
 namespace Wards.Application.UsesCases.Tokens.CriarRefreshToken
 {
     public interface ICriarRefreshTokenUseCase
     {
-        Task Execute(RefreshToken input);
+        Task Execute(RefreshTokenInput input);
     }
 }

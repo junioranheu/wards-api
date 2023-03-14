@@ -2,6 +2,7 @@
 using Wards.Application.UsesCases.Auths.RefreshToken.Models;
 using Wards.Application.UsesCases.Tokens.CriarRefreshToken;
 using Wards.Application.UsesCases.Tokens.ObterRefreshToken;
+using Wards.Application.UsesCases.Tokens.Shared.Input;
 using Wards.Application.UsesCases.Usuarios.ObterUsuario;
 using Wards.Application.UsesCases.Usuarios.Shared.Output;
 using Wards.Domain.Enums;
@@ -57,11 +58,10 @@ namespace Wards.Application.UsesCases.Auths.RefreshToken
             var novoRefreshToken = _jwtTokenGenerator.GerarRefreshToken();
 
             // Criar novo registro com o novo refresh token gerado;
-            Domain.Entities.RefreshToken novoRefreshTokenInput = new()
+            RefreshTokenInput novoRefreshTokenInput = new()
             {
                 RefToken = novoRefreshToken,
-                UsuarioId = usuarioId,
-                DataRegistro = HorarioBrasilia()
+                UsuarioId = usuarioId
             };
 
             await _criarRefreshTokenUseCase.Execute(novoRefreshTokenInput);

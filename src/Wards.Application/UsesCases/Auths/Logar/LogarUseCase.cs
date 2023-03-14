@@ -1,5 +1,6 @@
 ﻿using Wards.Application.UsesCases.Auths.Shared.Input;
 using Wards.Application.UsesCases.Tokens.CriarRefreshToken;
+using Wards.Application.UsesCases.Tokens.Shared.Input;
 using Wards.Application.UsesCases.Usuarios.ObterUsuarioCondicaoArbitraria;
 using Wards.Application.UsesCases.Usuarios.Shared.Output;
 using Wards.Domain.Enums;
@@ -61,11 +62,10 @@ namespace Wards.Application.UsesCases.Auths.Logar
             var refreshToken = _jwtTokenGenerator.GerarRefreshToken();
             output.RefreshToken = refreshToken;
 
-            Domain.Entities.RefreshToken novoRefreshToken = new()
+            RefreshTokenInput novoRefreshToken = new()
             {
                 RefToken = refreshToken,
-                UsuarioId = usuarioId,
-                DataRegistro = HorarioBrasilia()
+                UsuarioId = usuarioId
             };
 
             await _criarRefreshTokenUseCase.Execute(novoRefreshToken);
