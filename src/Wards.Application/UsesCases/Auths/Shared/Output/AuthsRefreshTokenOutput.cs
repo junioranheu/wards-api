@@ -1,6 +1,6 @@
-﻿namespace Wards.Application.UsesCases.Auths.RefreshToken.Models
+﻿namespace Wards.Application.UsesCases.Auths.Shared.Output
 {
-    public sealed class RefreshTokenOutput
+    public sealed class AuthsRefreshTokenOutput
     {
         public string? Token { get; set; } = null;
 
