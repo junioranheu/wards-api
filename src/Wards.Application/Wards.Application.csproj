@@ -19,6 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="UsesCases\Tokens\Shared\Output\" />
     <Folder Include="UsesCases\Usuarios\Shared\Input\" />
   </ItemGroup>
 

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Wards.API.Filters;
 using Wards.Application.UsesCases.Logs.ListarLog;
-using Wards.Domain.Entities;
+using Wards.Application.UsesCases.Logs.Shared.Output;
 using Wards.Domain.Enums;
 
 namespace Wards.API.Controllers
@@ -19,8 +19,8 @@ namespace Wards.API.Controllers
 
         [HttpGet("listar")]
         [AuthorizeFilter(UsuarioRoleEnum.Adm)]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<Log>))]
-        public async Task<ActionResult<IEnumerable<Usuario>>> ListarUsuario()
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<LogOutput>))]
+        public async Task<ActionResult<IEnumerable<LogOutput>>> ListarUsuario()
         {
             var resp = await _listarUseCase.Execute();
 
