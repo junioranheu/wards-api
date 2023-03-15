@@ -1,4 +1,7 @@
-﻿using Wards.API.Filters;
+﻿using FluentValidation;
+using FluentValidation.AspNetCore;
+using Wards.API.Filters;
+using Wards.Application.UsesCases.Usuarios.Shared.Input;
 
 namespace Wards.API
 {
@@ -10,7 +13,17 @@ namespace Wards.API
             builder.Services.AddControllers(o => o.Filters.Add<ErrorFilter>());
             builder.Services.AddMemoryCache();
 
+            services.AddFluentValidationAutoValidation();
+            services.AddFluentValidationClientsideAdapters();
+
+            AddValidators(services);
+
             return services;
+        }
+
+        private static void AddValidators(IServiceCollection services)
+        {
+            services.AddValidatorsFromAssemblyContaining<UsuarioInputValidator>();
         }
     }
 }
