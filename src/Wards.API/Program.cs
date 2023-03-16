@@ -36,6 +36,8 @@ WebApplication app = builder.Build();
 
     app.UseCors(builder.Configuration["CORSSettings:Cors"]!);
 
+    app.UseResponseCompression();
+
     app.UseAuthentication();
     app.UseAuthorization();
     app.MapControllers();
