@@ -10,12 +10,6 @@ WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
     builder.Services.AddDependencyInjectionAPI(builder);
     builder.Services.AddDependencyInjectionApplication();
     builder.Services.AddDependencyInjectionInfrastructure(builder);
-
-    builder.Services.AddControllers().AddNewtonsoftJson(options =>
-    {
-        options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
-        options.SerializerSettings.Formatting = Newtonsoft.Json.Formatting.Indented;
-    });
 }
 
 WebApplication app = builder.Build();
