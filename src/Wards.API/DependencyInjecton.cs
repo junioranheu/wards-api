@@ -21,21 +21,21 @@ namespace Wards.API
 
         private static void AddCompression(WebApplicationBuilder builder)
         {
-            builder.Services.AddResponseCompression(options =>
+            builder.Services.AddResponseCompression(o =>
             {
-                options.EnableForHttps = true;
-                options.Providers.Add<BrotliCompressionProvider>();
-                options.Providers.Add<GzipCompressionProvider>();
+                o.EnableForHttps = true;
+                o.Providers.Add<BrotliCompressionProvider>();
+                o.Providers.Add<GzipCompressionProvider>();
             });
 
             builder.Services.Configure<BrotliCompressionProviderOptions>(o =>
             {
-                o.Level = CompressionLevel.Fastest;
+                o.Level = CompressionLevel.Optimal;
             });
 
             builder.Services.Configure<GzipCompressionProviderOptions>(o =>
             {
-                o.Level = CompressionLevel.SmallestSize;
+                o.Level = CompressionLevel.Optimal;
             });
         }
 

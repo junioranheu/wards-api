@@ -85,7 +85,7 @@ namespace Wards.Infrastructure
             string con = new ConnectionFactory(builder.Configuration).CreateDbStringConnection();
 
             // Entity Framework;
-            builder.Services.AddDbContext<WardsContext>(options => options.UseMySql(con, ServerVersion.AutoDetect(con)));
+            builder.Services.AddDbContext<WardsContext>(o => o.UseMySql(con, ServerVersion.AutoDetect(con)));
 
             // Dapper;
             builder.Services.AddScoped<IDbConnection>((sp) => new MySqlConnection(con));
@@ -124,8 +124,8 @@ namespace Wards.Infrastructure
 
         private static void AddCors(WebApplicationBuilder builder)
         {
-            builder.Services.AddCors(options =>
-                options.AddPolicy(name: builder.Configuration["CORSSettings:Cors"] ?? string.Empty, builder =>
+            builder.Services.AddCors(o =>
+                o.AddPolicy(name: builder.Configuration["CORSSettings:Cors"] ?? string.Empty, builder =>
                 {
                     builder.AllowAnyHeader()
                         .AllowAnyMethod()
