@@ -24,10 +24,8 @@ namespace Wards.API.Controllers
         {
             var resp = await _listarUseCase.Execute();
 
-            if (resp == null)
-            {
+            if (resp is null)
                 return NotFound();
-            }
 
             return Ok(resp);
         }

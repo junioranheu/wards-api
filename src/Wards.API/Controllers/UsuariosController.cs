@@ -29,10 +29,8 @@ namespace Wards.API.Controllers
         {
             var resp = await _listarUsuarioUseCase.Execute();
 
-            if (resp == null)
-            {
+            if (resp is null)
                 return NotFound();
-            }
 
             return Ok(resp);
         }
@@ -44,10 +42,8 @@ namespace Wards.API.Controllers
         {
             var resp = await _obterUsuarioUseCase.Execute(id);
 
-            if (resp == null)
-            {
+            if (resp is null)
                 return NotFound();
-            }
 
             return Ok(resp);
         }
