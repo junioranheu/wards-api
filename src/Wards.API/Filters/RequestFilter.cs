@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.Filters;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Newtonsoft.Json;
 using System.Security.Claims;
 using Wards.Application.Services.Usuarios.ObterUsuarioCache;
@@ -21,7 +22,8 @@ namespace Wards.API.Filters
         {
             ActionExecutedContext filterContextExecuted = await next();
             HttpRequest request = filterContextExecuted.HttpContext.Request;
-            HttpResponse response = filterContextExecuted.HttpContext.Response;
+            // HttpResponse response = filterContextExecuted.HttpContext.Response;
+            int? statusResposta = (filterContextExecuted.Result as ObjectResult)?.StatusCode;
 
             int usuarioId = await ObterUsuarioId(filterContextExecuted);
 
@@ -30,7 +32,7 @@ namespace Wards.API.Filters
                 TipoRequisicao = request.Method ?? string.Empty,
                 Endpoint = request.Path.Value ?? string.Empty,
                 Parametros = ObterParametrosRequisicao(filterContextExecuting),
-                StatusResposta = response.StatusCode > 0 ? response.StatusCode : 0,
+                StatusResposta = statusResposta > 0 ? (int)statusResposta : 0,
                 UsuarioId = usuarioId > 0 ? usuarioId : null
             };
 

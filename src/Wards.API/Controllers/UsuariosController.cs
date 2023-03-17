@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using Wards.API.Filters;
 using Wards.Application.UsesCases.Usuarios.ListarUsuario;
 using Wards.Application.UsesCases.Usuarios.ObterUsuario;
