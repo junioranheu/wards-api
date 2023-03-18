@@ -21,7 +21,6 @@
 
   <ItemGroup>
     <Folder Include="UsesCases\Tokens\Shared\Output\" />
-    <Folder Include="UsesCases\Wards\CriarWard\" />
     <Folder Include="UsesCases\Wards\ListarWard\" />
     <Folder Include="UsesCases\Wards\DeletarWard\" />
     <Folder Include="UsesCases\Wards\ObterWard\" />
