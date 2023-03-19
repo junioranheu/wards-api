@@ -3,7 +3,7 @@ using Wards.Infrastructure.Data;
 
 namespace Wards.Application.UsesCases.Wards.CriarWard.Commands
 {
-    public sealed class CriarWardCommand
+    public sealed class CriarWardCommand : ICriarWardCommand
     {
         private readonly WardsContext _context;
 

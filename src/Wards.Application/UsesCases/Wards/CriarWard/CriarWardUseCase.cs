@@ -1,12 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using AutoMapper;
+using Wards.Application.UsesCases.Wards.CriarWard.Commands;
+using Wards.Domain.Entities;
 
 namespace Wards.Application.UsesCases.Wards.CriarWard
 {
-    internal class CriarWardUseCase
+    public sealed class CriarWardUseCase : ICriarWardUseCase
     {
+        private readonly IMapper _map;
+        private readonly ICriarWardCommand _criarCommand;
+
+        public CriarWardUseCase(IMapper map, ICriarWardCommand criarCommand)
+        {
+            _map = map;
+            _criarCommand = criarCommand;
+        }
+
+        public async Task<int> Execute(WardInput input)
+        {
+            return await _criarCommand.Execute(_map.Map<Ward>(input));
+        }
     }
 }

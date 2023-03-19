@@ -1,4 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Wards.Application.UsesCases.Wards.CriarWard;
+using Wards.Application.UsesCases.Wards.CriarWard.Commands;
 
 namespace Wards.Application.UsesCases.Wards
 {
