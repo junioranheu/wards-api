@@ -1,4 +1,5 @@
-﻿using Wards.Infrastructure.Data;
+﻿using Wards.Domain.Entities;
+using Wards.Infrastructure.Data;
 
 namespace Wards.Application.UsesCases.Wards.CriarWard.Commands
 {
