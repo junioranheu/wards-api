@@ -2,6 +2,7 @@
 using Wards.Domain.Entities;
 using Wards.Domain.Enums;
 using Wards.Infrastructure.Data;
+using Wards.Infrastructure.Seed.Seeds;
 using static Wards.Utils.Common;
 
 namespace Wards.Infrastructure.Seed
@@ -37,6 +38,10 @@ namespace Wards.Infrastructure.Seed
                 await context.UsuariosRoles.AddAsync(new UsuarioRole() { UsuarioId = 1, RoleId = UsuarioRoleEnum.Comum });
                 await context.UsuariosRoles.AddAsync(new UsuarioRole() { UsuarioId = 2, RoleId = UsuarioRoleEnum.Comum });
             }
+            #endregion
+
+            #region seed_outros
+            await SeedWards.Seed(context);
             #endregion
 
             await context.SaveChangesAsync();
