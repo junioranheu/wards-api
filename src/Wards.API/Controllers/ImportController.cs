@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using Wards.API.Filters;
 using Wards.Application.Services.Import.CSV.Shared;
 using Wards.Application.UsesCases.Imports.CriarExemploUsuario;
+using Wards.Domain.Consts;
 
 namespace Wards.API.Controllers
 {
@@ -19,8 +20,8 @@ namespace Wards.API.Controllers
 
         [HttpPost]
         [AuthorizeFilter]
-        [RequestSizeLimit(2 * 1_048_576)]
-        public async Task<ActionResult<string>?> CriarExemplo([FromForm] ImportInput importInput)
+        [RequestSizeLimit(SistemaConst.QtdLimiteMBsImport)]
+        public async Task<ActionResult<string>?> CriarExemploUsuario([FromForm] ImportInput importInput)
         {
             if (!importInput.FormFile!.FileName.EndsWith(".csv"))
                 return BadRequest();

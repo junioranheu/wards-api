@@ -33,6 +33,7 @@ namespace Wards.API.Controllers
 
         [HttpPost]
         [AuthorizeFilter(UsuarioRoleEnum.Adm)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
         public async Task<ActionResult<int>> Criar(WardInput input)
         {
             var resp = await _criarUseCase.Execute(input);
@@ -45,6 +46,7 @@ namespace Wards.API.Controllers
 
         [HttpPost]
         [AuthorizeFilter(UsuarioRoleEnum.Adm)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<int>> Deletar(int id)
         {
             await _deletarUseCase.Execute(id);
