@@ -19,14 +19,6 @@ namespace Wards.Application.UsesCases.Logs.ListarLog.Queries
                              Include(u => u.Usuarios).
                              AsNoTracking().ToListAsync();
 
-            foreach (var item in linq)
-            {
-                if (item.Usuarios is not null)
-                {
-                    item.Usuarios.Senha = string.Empty;
-                }
-            }
-
             return linq;
         }
     }

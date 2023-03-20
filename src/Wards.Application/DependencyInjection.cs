@@ -9,6 +9,7 @@ using Wards.Application.UsesCases.Logs;
 using Wards.Application.UsesCases.Tokens;
 using Wards.Application.UsesCases.Usuarios;
 using Wards.Application.UsesCases.UsuariosRoles;
+using Wards.Application.UsesCases.Wards;
 
 namespace Wards.Application
 {
@@ -25,6 +26,7 @@ namespace Wards.Application
             services.AddTokensApplication();
             services.AddUsuariosApplication();
             services.AddUsuariosRolesApplication();
+            services.AddWardsApplication();
 
             // Services;
             services.AddCsvImportService();
