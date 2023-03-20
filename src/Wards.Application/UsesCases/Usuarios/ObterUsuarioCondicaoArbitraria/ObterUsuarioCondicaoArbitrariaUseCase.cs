@@ -16,9 +16,9 @@ namespace Wards.Application.UsesCases.Usuarios.ObterUsuarioCondicaoArbitraria
             _obterQuery = obterQuery;
         }
 
-        public async Task<(UsuarioOutput?, string)> Execute(string? email, string? nomeUsuarioSistema)
+        public async Task<(UsuarioOutput?, string)> Execute(string login)
         {
-            (Usuario, string) resp = await _obterQuery.Execute(email, nomeUsuarioSistema);
+            (Usuario, string) resp = await _obterQuery.Execute(login);
             return (_map.Map<UsuarioOutput>(resp.Item1), resp.Item2);
         }
     }

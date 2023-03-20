@@ -28,7 +28,7 @@ namespace Wards.Application.UsesCases.Auths.Logar
         public async Task<(UsuarioOutput?, string)> Execute(LogarInput input)
         {
             // #1 - Buscar usuário e sua senha (para não expor no output);
-            (UsuarioOutput?, string) resp = await _obterUsuarioCondicaoArbitrariaUseCase.Execute(input?.Email, input?.NomeUsuarioSistema);
+            (UsuarioOutput?, string) resp = await _obterUsuarioCondicaoArbitrariaUseCase.Execute(input?.Login ?? string.Empty);
             UsuarioOutput? output = resp.Item1;
             string senhaCriptografada = resp.Item2;
 
@@ -38,7 +38,7 @@ namespace Wards.Application.UsesCases.Auths.Logar
             }
 
             // #2 - Verificar se a senha está correta;
-            if (!VerificarCriptografia(senha: input!.Senha ?? string.Empty, senhaCriptografada: senhaCriptografada)) {
+            if (!VerificarCriptografia(senha: input?.Senha ?? string.Empty, senhaCriptografada: senhaCriptografada)) {
                 return (new UsuarioOutput(), GetDescricaoEnum(CodigosErrosEnum.UsuarioSenhaIncorretos));
             }
 

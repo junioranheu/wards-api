@@ -13,23 +13,23 @@ namespace Wards.Application.UsesCases.Usuarios.ObterUsuarioCondicaoArbitraria.Qu
             _context = context;
         }
 
-        public async Task<(Usuario, string)> Execute(string? email, string? nomeUsuarioSistema)
+        public async Task<(Usuario?, string)> Execute(string login)
         {
             var byEmail = await _context.Usuarios.
-                          Where(e => e.Email == email).
+                          Where(e => e.Email == login).
                           Include(ur => ur.UsuarioRoles).
                           AsNoTracking().FirstOrDefaultAsync();
 
             if (byEmail is null)
             {
                 var byNomeUsuario = await _context.Usuarios.
-                                    Where(n => n.NomeUsuarioSistema == nomeUsuarioSistema).
+                                    Where(n => n.NomeUsuarioSistema == login).
                                     Include(ur => ur.UsuarioRoles).
                                     AsNoTracking().FirstOrDefaultAsync();
 
                 if (byNomeUsuario is null)
                 {
-                    return (new Usuario(), string.Empty);
+                    return (null, string.Empty);
                 }
 
                 return (byNomeUsuario, byNomeUsuario.Senha ?? string.Empty);
