@@ -1,4 +1,6 @@
-﻿namespace Wards.Application.UsesCases.Logs.Shared.Input
+﻿using System.Text.Json.Serialization;
+
+namespace Wards.Application.UsesCases.Logs.Shared.Input
 {
     public sealed class LogInput
     {
@@ -10,6 +12,7 @@
 
         public int StatusResposta { get; set; }
 
+        [JsonIgnore]
         public int? UsuarioId { get; set; }
     }
 }

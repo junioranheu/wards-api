@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Wards.Application.UsesCases.Wards.CriarWard.Commands;
+using Wards.Application.UsesCases.Wards.Shared.Input;
 using Wards.Domain.Entities;
 
 namespace Wards.Application.UsesCases.Wards.CriarWard

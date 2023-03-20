@@ -6,6 +6,8 @@ using Wards.Application.UsesCases.Tokens.Shared.Input;
 using Wards.Application.UsesCases.Usuarios.Shared.Input;
 using Wards.Application.UsesCases.Usuarios.Shared.Output;
 using Wards.Application.UsesCases.UsuariosRoles.Shared.Output;
+using Wards.Application.UsesCases.Wards.Shared.Input;
+using Wards.Application.UsesCases.Wards.Shared.Output;
 using Wards.Domain.Entities;
 
 namespace Wards.Application.AutoMapper
@@ -14,16 +16,19 @@ namespace Wards.Application.AutoMapper
     {
         public AutoMapperConfig()
         {
-            CreateMap<Usuario, UsuarioInput>().ReverseMap();
-            CreateMap<UsuarioOutput, Usuario>().ReverseMap();
-            CreateMap<UsuarioInput, RegistrarInput>().ReverseMap();
+            CreateMap<UsuarioInput, Usuario>();
+            CreateMap<Usuario, UsuarioOutput>();
+            CreateMap<RegistrarInput, UsuarioInput>();
 
-            CreateMap<UsuarioRoleOutput, UsuarioRole>().ReverseMap();
+            CreateMap<UsuarioRole, UsuarioRoleOutput>();
 
-            CreateMap<RefreshToken, RefreshTokenInput>().ReverseMap();
+            CreateMap<RefreshTokenInput, RefreshToken>();
 
-            CreateMap<Log, LogInput>().ReverseMap();
-            CreateMap<LogOutput, Log>().ReverseMap();
+            CreateMap<LogInput, Log>();
+            CreateMap<Log, LogOutput>();
+
+            CreateMap<WardInput, Ward>();
+            CreateMap<Ward, WardOutput>();
         }
     }
 }
