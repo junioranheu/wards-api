@@ -1,6 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Wards.Application.UsesCases.Wards.CriarWard;
 using Wards.Application.UsesCases.Wards.CriarWard.Commands;
+using Wards.Application.UsesCases.Wards.ListarWard;
+using Wards.Application.UsesCases.Wards.ListarWard.Queries;
 using Wards.Application.UsesCases.Wards.ObterWard;
 using Wards.Application.UsesCases.Wards.ObterWard.Queries;
 
