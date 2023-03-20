@@ -11,23 +11,23 @@ namespace Wards.API.Controllers
     [ApiController]
     public class UsuariosController : Controller
     {
-        private readonly IListarUsuarioUseCase _listarUsuarioUseCase;
-        private readonly IObterUsuarioUseCase _obterUsuarioUseCase;
+        private readonly IListarUsuarioUseCase _listarUseCase;
+        private readonly IObterUsuarioUseCase _obterUseCase;
 
         public UsuariosController(
-            IListarUsuarioUseCase listarUsuarioUseCase,
-            IObterUsuarioUseCase obterUsuarioUseCase)
+            IListarUsuarioUseCase listarUseCase,
+            IObterUsuarioUseCase obterUseCase)
         {
-            _listarUsuarioUseCase = listarUsuarioUseCase;
-            _obterUsuarioUseCase = obterUsuarioUseCase;
+            _listarUseCase = listarUseCase;
+            _obterUseCase = obterUseCase;
         }
 
         [HttpGet("listar")]
         [AuthorizeFilter(UsuarioRoleEnum.Adm)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<UsuarioOutput>))]
-        public async Task<ActionResult<IEnumerable<UsuarioOutput>>> ListarUsuario()
+        public async Task<ActionResult<IEnumerable<UsuarioOutput>>> Listar()
         {
-            var resp = await _listarUsuarioUseCase.Execute();
+            var resp = await _listarUseCase.Execute();
 
             if (resp is null)
                 return NotFound();
@@ -38,9 +38,9 @@ namespace Wards.API.Controllers
         [HttpGet]
         [AuthorizeFilter(UsuarioRoleEnum.Adm)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UsuarioOutput))]
-        public async Task<ActionResult<UsuarioOutput>> ObterUsuario(int id)
+        public async Task<ActionResult<UsuarioOutput>> Obter(int id)
         {
-            var resp = await _obterUsuarioUseCase.Execute(id);
+            var resp = await _obterUseCase.Execute(id);
 
             if (resp is null)
                 return NotFound();

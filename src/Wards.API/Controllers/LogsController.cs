@@ -20,7 +20,7 @@ namespace Wards.API.Controllers
         [HttpGet("listar")]
         [AuthorizeFilter(UsuarioRoleEnum.Adm)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<LogOutput>))]
-        public async Task<ActionResult<IEnumerable<LogOutput>>> ListarUsuario()
+        public async Task<ActionResult<IEnumerable<LogOutput>>> Listar()
         {
             var resp = await _listarUseCase.Execute();
 
