@@ -54,6 +54,7 @@ namespace Wards.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
         public async Task<ActionResult<int>> Criar(WardInput input)
         {
+            input.UsuarioId = await ObterUsuarioId();
             var resp = await _criarUseCase.Execute(input);
 
             if (resp < 0)
@@ -72,7 +73,6 @@ namespace Wards.API.Controllers
         }
 
         [HttpGet("listar")]
-        [AuthorizeFilter(UsuarioRoleEnum.Adm)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<WardOutput>))]
         public async Task<ActionResult<IEnumerable<WardOutput>>> Listar()
         {
@@ -85,7 +85,6 @@ namespace Wards.API.Controllers
         }
 
         [HttpGet]
-        [AuthorizeFilter(UsuarioRoleEnum.Adm)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(WardOutput))]
         public async Task<ActionResult<WardOutput>> Obter(int id)
         {

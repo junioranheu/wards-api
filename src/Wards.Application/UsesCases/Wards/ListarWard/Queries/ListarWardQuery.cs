@@ -17,6 +17,7 @@ namespace Wards.Application.UsesCases.Wards.ListarWard.Queries
         {
             var linq = await _context.Wards.
                              Include(u => u.Usuarios).
+                             Include(u => u.UsuariosMods).
                              AsNoTracking().ToListAsync();
 
             return linq;

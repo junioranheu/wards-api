@@ -4,6 +4,7 @@ namespace Wards.Application.UsesCases.Wards.Shared.Input
 {
     public sealed class WardInput
     {
+        public int WardId { get; set; }
         public string? Conteudo { get; set; }
 
         [JsonIgnore]
