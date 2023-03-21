@@ -14,6 +14,7 @@ namespace Wards.API.Controllers
     [Route("api/[controller]")]
     public class WardsController : Controller
     {
+        private readonly IAtualizarWardUseCase _atualizarUseCase;
         private readonly ICriarWardUseCase _criarUseCase;
         private readonly IDeletarWardUseCase _deletarUseCase;
         private readonly IListarWardUseCase _listarUseCase;
@@ -31,18 +32,18 @@ namespace Wards.API.Controllers
             _obterUseCase = obterUseCase;
         }
 
-        //[HttpPost]
-        //[AuthorizeFilter(UsuarioRoleEnum.Adm)]
-        //[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
-        //public async Task<ActionResult<int>> Atualizar(WardInput input)
-        //{
-        //    var resp = await _atualizarUseCase.Execute(input);
+        [HttpPost]
+        [AuthorizeFilter(UsuarioRoleEnum.Adm)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
+        public async Task<ActionResult<int>> Atualizar(WardInput input)
+        {
+            var resp = await _atualizarUseCase.Execute(input);
 
-        //    if (resp < 0)
-        //        return BadRequest();
+            if (resp < 0)
+                return BadRequest();
 
-        //    return Ok(resp);
-        //}
+            return Ok(resp);
+        }
 
         [HttpPost]
         [AuthorizeFilter(UsuarioRoleEnum.Adm)]

@@ -14,6 +14,9 @@ namespace Wards.Application.UsesCases.Wards
     {
         public static IServiceCollection AddWardsApplication(this IServiceCollection services)
         {
+            services.AddScoped<IAtualizarWardUseCase, AtualizarWardUseCase>();
+            services.AddScoped<IAtualizarWardCommand, AtualizarWardCommand>();
+
             services.AddScoped<ICriarWardUseCase, CriarWardUseCase>();
             services.AddScoped<ICriarWardCommand, CriarWardCommand>();
 
