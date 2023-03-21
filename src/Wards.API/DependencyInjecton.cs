@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.ResponseCompression;
 using System.IO.Compression;
 using Wards.API.Filters;
@@ -42,11 +43,12 @@ namespace Wards.API
 
         private static void AddControllers(WebApplicationBuilder builder)
         {
-            builder.Services.AddControllers(o => o.Filters.Add<RequestFilter>());
-            builder.Services.AddControllers(o => o.Filters.Add<ErrorFilter>());
-
-            builder.Services.AddControllers()
-                .AddNewtonsoftJson(o =>
+            builder.Services.AddControllers(o =>
+            {
+                o.Filters.Add<RequestFilter>();
+                o.Filters.Add<ErrorFilter>();
+            }).
+                AddNewtonsoftJson(o => 
                 {
                     o.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
                     o.SerializerSettings.Formatting = Newtonsoft.Json.Formatting.Indented;
@@ -60,6 +62,20 @@ namespace Wards.API
 
         private static void AddValidators(IServiceCollection services)
         {
+            services.Configure<ApiBehaviorOptions>(o =>
+                o.InvalidModelStateResponseFactory = actionContext =>
+                    {
+                        return new BadRequestObjectResult(new
+                        {
+                            Code = StatusCodes.Status400BadRequest,
+                            Request_Id = Guid.NewGuid(),
+                            Messages = actionContext.ModelState.Values.
+                                SelectMany(x => x.Errors).
+                                Select(x => x.ErrorMessage)
+                        });
+                    }
+            );
+
             services.AddFluentValidationAutoValidation();
             services.AddFluentValidationClientsideAdapters();
 
