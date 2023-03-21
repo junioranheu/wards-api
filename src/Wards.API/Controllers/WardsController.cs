@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Wards.API.Filters;
+using Wards.Application.UsesCases.Wards.AtualizarWard;
 using Wards.Application.UsesCases.Wards.CriarWard;
 using Wards.Application.UsesCases.Wards.DeletarWard;
 using Wards.Application.UsesCases.Wards.ListarWard;
@@ -12,7 +13,7 @@ namespace Wards.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class WardsController : Controller
+    public class WardsController : BaseController<WardsController>
     {
         private readonly IAtualizarWardUseCase _atualizarUseCase;
         private readonly ICriarWardUseCase _criarUseCase;
@@ -21,22 +22,25 @@ namespace Wards.API.Controllers
         private readonly IObterWardUseCase _obterUseCase;
 
         public WardsController(
+            IAtualizarWardUseCase atualizarUseCase,
             ICriarWardUseCase criarUseCase,
             IDeletarWardUseCase deletarUseCase,
             IListarWardUseCase listarUseCase,
             IObterWardUseCase obterUseCase)
         {
+            _atualizarUseCase = atualizarUseCase;
             _criarUseCase = criarUseCase;
             _deletarUseCase = deletarUseCase;
             _listarUseCase = listarUseCase;
             _obterUseCase = obterUseCase;
         }
 
-        [HttpPost]
+        [HttpPut]
         [AuthorizeFilter(UsuarioRoleEnum.Adm)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
         public async Task<ActionResult<int>> Atualizar(WardInput input)
         {
+            input.UsuarioModId = await ObterUsuarioId();
             var resp = await _atualizarUseCase.Execute(input);
 
             if (resp < 0)

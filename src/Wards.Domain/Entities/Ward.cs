@@ -12,10 +12,15 @@ namespace Wards.Domain.Entities
         public string? Conteudo { get; set; }
 
         public int? UsuarioId { get; set; }
-        [ForeignKey(nameof(UsuarioId))]
         public Usuario? Usuarios { get; init; }
 
         public DateTime Data { get; set; } = HorarioBrasilia();
+
+        public int? UsuarioModId { get; set; }
+        [ForeignKey(nameof(UsuarioModId))]
+        public Usuario? UsuariosMods { get; init; }
+
+        public DateTime? DataMod { get; set; } = null;
 
         public bool IsAtivo { get; set; } = true;
     }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Wards.Application.UsesCases.Wards.AtualizarWard;
 using Wards.Application.UsesCases.Wards.AtualizarWard.Commands;
 using Wards.Application.UsesCases.Wards.CriarWard;
 using Wards.Application.UsesCases.Wards.CriarWard.Commands;

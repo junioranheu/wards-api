@@ -24,7 +24,8 @@ namespace Wards.Application.UsesCases.Wards.AtualizarWard.Commands
                 return 0;
 
             item.Conteudo = !String.IsNullOrEmpty(input.Conteudo) ? input.Conteudo : item.Conteudo;
-            item.Data = HorarioBrasilia();
+            item.UsuarioModId = input.UsuarioModId;
+            item.DataMod = HorarioBrasilia();
             item.IsAtivo = input.IsAtivo;
 
             _context.Update(item);

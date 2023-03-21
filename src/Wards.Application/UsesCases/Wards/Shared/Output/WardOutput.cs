@@ -14,6 +14,11 @@ namespace Wards.Application.UsesCases.Wards.Shared.Output
 
         public DateTime Data { get; set; } = HorarioBrasilia();
 
+        public int? UsuarioModId { get; set; }
+        public UsuarioOutput? UsuariosMods { get; init; }
+
+        public DateTime? DataMod { get; set; } = null;
+
         public bool IsAtivo { get; set; } = true;
     }
 }

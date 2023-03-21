@@ -8,5 +8,8 @@ namespace Wards.Application.UsesCases.Wards.Shared.Input
 
         [JsonIgnore]
         public int? UsuarioId { get; set; }
+
+        [JsonIgnore]
+        public int? UsuarioModId { get; set; }
     }
 }
