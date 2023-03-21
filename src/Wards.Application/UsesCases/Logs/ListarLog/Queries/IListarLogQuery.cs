@@ -4,6 +4,6 @@ namespace Wards.Application.UsesCases.Logs.ListarLog.Queries
 {
     public interface IListarLogQuery
     {
-        Task<IEnumerable<Log>> Execute();
+        Task<IEnumerable<Log>> Execute(int pagina, int tamanhoPagina);
     }
 }

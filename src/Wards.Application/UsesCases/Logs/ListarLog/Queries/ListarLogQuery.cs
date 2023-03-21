@@ -13,10 +13,11 @@ namespace Wards.Application.UsesCases.Logs.ListarLog.Queries
             _context = context;
         }
 
-        public async Task<IEnumerable<Log>> Execute()
+        public async Task<IEnumerable<Log>> Execute(int pagina, int tamanhoPagina)
         {
             var linq = await _context.Logs.
                              Include(u => u.Usuarios).
+                             Skip(pagina * tamanhoPagina).Take(tamanhoPagina).
                              AsNoTracking().ToListAsync();
 
             return linq;

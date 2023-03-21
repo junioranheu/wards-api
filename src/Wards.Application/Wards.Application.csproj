@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <Folder Include="UsesCases\Tokens\Shared\Output\" />
+    <Folder Include="UsesCases\Wards\AtualizarWard\" />
   </ItemGroup>
 
 </Project>

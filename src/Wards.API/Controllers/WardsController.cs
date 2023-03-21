@@ -31,6 +31,19 @@ namespace Wards.API.Controllers
             _obterUseCase = obterUseCase;
         }
 
+        //[HttpPost]
+        //[AuthorizeFilter(UsuarioRoleEnum.Adm)]
+        //[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
+        //public async Task<ActionResult<int>> Atualizar(WardInput input)
+        //{
+        //    var resp = await _atualizarUseCase.Execute(input);
+
+        //    if (resp < 0)
+        //        return BadRequest();
+
+        //    return Ok(resp);
+        //}
+
         [HttpPost]
         [AuthorizeFilter(UsuarioRoleEnum.Adm)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
@@ -44,7 +57,7 @@ namespace Wards.API.Controllers
             return Ok(resp);
         }
 
-        [HttpPost]
+        [HttpDelete]
         [AuthorizeFilter(UsuarioRoleEnum.Adm)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<int>> Deletar(int id)

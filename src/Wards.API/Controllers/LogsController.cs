@@ -20,9 +20,9 @@ namespace Wards.API.Controllers
         [HttpGet("listar")]
         [AuthorizeFilter(UsuarioRoleEnum.Adm)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<LogOutput>))]
-        public async Task<ActionResult<IEnumerable<LogOutput>>> Listar()
+        public async Task<ActionResult<IEnumerable<LogOutput>>> Listar(int pagina = 0, int tamanhoPagina = 10)
         {
-            var resp = await _listarUseCase.Execute();
+            var resp = await _listarUseCase.Execute(pagina, tamanhoPagina);
 
             if (resp is null)
                 return NotFound();
