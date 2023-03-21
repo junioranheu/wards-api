@@ -11,9 +11,9 @@ namespace Wards.Application.UsesCases.Wards.DeletarWard
             _deletarCommand = deletarCommand;
         }
 
-        public async Task Execute(int id)
+        public async Task<bool> Execute(int id)
         {
-            await _deletarCommand.Execute(id);
+            return await _deletarCommand.Execute(id);
         }
     }
 }

@@ -12,16 +12,20 @@ namespace Wards.Application.UsesCases.Wards.DeletarWard.Commands
             _context = context;
         }
 
-        public async Task Execute(int id)
+        public async Task<bool> Execute(int id)
         {
             var linq = await _context.Wards.
                              Where(w => w.WardId == id).
                              AsNoTracking().FirstOrDefaultAsync();
 
-            if (linq is not null)
+            if (linq is null)
             {
-                _context.Wards.Remove(linq);
+                return false;
             }
+
+            _context.Wards.Remove(linq);
+
+            return true;
         }
     }
 }

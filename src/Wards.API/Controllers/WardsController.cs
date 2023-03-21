@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 using Wards.API.Filters;
 using Wards.Application.UsesCases.Wards.AtualizarWard;
 using Wards.Application.UsesCases.Wards.CriarWard;
@@ -38,6 +39,7 @@ namespace Wards.API.Controllers
         [HttpPut]
         [AuthorizeFilter(UsuarioRoleEnum.Adm)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(BadRequest))]
         public async Task<ActionResult<int>> Atualizar(WardInput input)
         {
             input.UsuarioModId = await ObterUsuarioId();
@@ -52,6 +54,7 @@ namespace Wards.API.Controllers
         [HttpPost]
         [AuthorizeFilter(UsuarioRoleEnum.Adm)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(BadRequest))]
         public async Task<ActionResult<int>> Criar(WardInput input)
         {
             input.UsuarioId = await ObterUsuarioId();
@@ -65,15 +68,16 @@ namespace Wards.API.Controllers
 
         [HttpDelete]
         [AuthorizeFilter(UsuarioRoleEnum.Adm)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<int>> Deletar(int id)
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(bool))]
+        public async Task<ActionResult<bool>> Deletar(int id)
         {
-            await _deletarUseCase.Execute(id);
-            return Ok();
+            var resp = await _deletarUseCase.Execute(id);
+            return Ok(resp);
         }
 
         [HttpGet("listar")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<WardOutput>))]
+        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(NotFound))]
         public async Task<ActionResult<IEnumerable<WardOutput>>> Listar()
         {
             var resp = await _listarUseCase.Execute();
@@ -86,6 +90,7 @@ namespace Wards.API.Controllers
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(WardOutput))]
+        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(NotFound))]
         public async Task<ActionResult<WardOutput>> Obter(int id)
         {
             var resp = await _obterUseCase.Execute(id);

@@ -2,6 +2,6 @@
 {
     public interface IDeletarWardCommand
     {
-        Task Execute(int id);
+        Task<bool> Execute(int id);
     }
 }
