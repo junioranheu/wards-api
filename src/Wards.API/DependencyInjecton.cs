@@ -3,6 +3,7 @@ using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.ResponseCompression;
 using System.IO.Compression;
 using Wards.API.Filters;
+using Wards.Application.UsesCases.Auths.Shared.Input;
 using Wards.Application.UsesCases.Usuarios.Shared.Input;
 
 namespace Wards.API
@@ -63,6 +64,7 @@ namespace Wards.API
             services.AddFluentValidationClientsideAdapters();
 
             services.AddValidatorsFromAssemblyContaining<UsuarioInputValidator>();
+            services.AddValidatorsFromAssemblyContaining<RegistrarInputValidator>();
         }
     }
 }
