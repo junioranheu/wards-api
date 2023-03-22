@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Wards.Infrastructure.Data;
 
-namespace Wards.UnitTests
+namespace Wards.UnitTests.Utils
 {
     public class Configuration
     {

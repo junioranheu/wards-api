@@ -30,13 +30,13 @@ namespace Wards.API.Controllers
             if (!importInput.FormFile!.FileName.EndsWith(".csv"))
                 return BadRequest();
 
-            // int justificativaId = await _criarJustificativaUseCase.ExecuteAsync(importInput.Descricao!, await ObterUsuarioId());
+            // int justificativaId = await _criarJustificativaUseCase.Execute(importInput.Descricao!, await ObterUsuarioId());
             int justificativaId = 1;
             var resultados = await _criarExemploUsuarioUseCase.Execute(importInput.FormFile!, justificativaId);
 
             if (resultados.Item2 || resultados.Item1?.Rows.Count > 0)
             {
-                // await _deletarJustificativaUseCase.ExecuteAsync(justificativaId);
+                // await _deletarJustificativaUseCase.Execute(justificativaId);
                 return StatusCode(StatusCodes.Status400BadRequest, (resultados.Item1?.Rows.Count > 0 ? JsonConvert.SerializeObject(resultados.Item1) : GetDescricaoEnum(CodigosErrosEnum.ErroInterno)));
             }
 

@@ -50,7 +50,7 @@ namespace Wards.Application.UsesCases.Usuarios.CriarUsuario.Commands
         //                             '{input.Email}', '{input.Senha}',
         //                             {input.IsAtivo}, '{input.Data.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture)}');";
 
-        //     await _dbConnection.ExecuteAsync(sql, input);
+        //     await _dbConnection.Execute(sql, input);
 
         //     input.UsuarioId = await _dbConnection.QueryFirstOrDefaultAsync<int>("SELECT LAST_INSERT_ID();"); ;
 
