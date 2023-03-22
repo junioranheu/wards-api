@@ -39,7 +39,7 @@ namespace Wards.API.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(UsuarioOutput))]
         public async Task<ActionResult<UsuarioOutput>> Logar(LogarInput input)
         {
-            UsuarioOutput resp = await _logarUseCase.Execute(input);
+            var resp = await _logarUseCase.Execute(input);
 
             if (resp.Messages!.Length > 0)
                 return StatusCode(StatusCodes.Status403Forbidden, resp);
@@ -53,7 +53,7 @@ namespace Wards.API.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(UsuarioOutput))]
         public async Task<ActionResult<UsuarioOutput>> Registrar(RegistrarInput input)
         {
-            UsuarioOutput resp = await _registrarUseCase.Execute(input);
+            var resp = await _registrarUseCase.Execute(input);
 
             if (resp.Messages!.Length > 0)
                 return StatusCode(StatusCodes.Status403Forbidden, resp);
@@ -69,7 +69,7 @@ namespace Wards.API.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(UsuarioOutput))]
         public async Task<ActionResult<AuthsRefreshTokenOutput>> RefreshToken(AuthsRefreshTokenInput input)
         {
-            AuthsRefreshTokenOutput resp = await _refreshTokenUseCase.Execute(input.Token!, input.RefreshToken!, ObterUsuarioEmail());
+            var resp = await _refreshTokenUseCase.Execute(input.Token!, input.RefreshToken!, ObterUsuarioEmail());
 
             if (resp.Messages!.Length > 0)
                 return StatusCode(StatusCodes.Status403Forbidden, resp);

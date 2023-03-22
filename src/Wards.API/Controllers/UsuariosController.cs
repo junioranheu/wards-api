@@ -27,7 +27,7 @@ namespace Wards.API.Controllers
         [HttpGet("listar")]
         [AuthorizeFilter(UsuarioRoleEnum.Adm)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<UsuarioOutput>))]
-        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(NotFound))]
+        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(UsuarioOutput))]
         public async Task<ActionResult<IEnumerable<UsuarioOutput>>> Listar()
         {
             var resp = await _listarUseCase.Execute();
@@ -41,7 +41,7 @@ namespace Wards.API.Controllers
         [HttpGet]
         [AuthorizeFilter(UsuarioRoleEnum.Adm)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UsuarioOutput))]
-        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(NotFound))]
+        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(UsuarioOutput))]
         public async Task<ActionResult<UsuarioOutput>> Obter(int id)
         {
             var resp = await _obterUseCase.Execute(id);

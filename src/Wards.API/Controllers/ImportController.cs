@@ -23,6 +23,8 @@ namespace Wards.API.Controllers
         [HttpPost]
         [AuthorizeFilter]
         [RequestSizeLimit(SistemaConst.QtdLimiteMBsImport)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
         public async Task<ActionResult<string>?> CriarExemploUsuario([FromForm] ImportInput importInput)
         {
             if (!importInput.FormFile!.FileName.EndsWith(".csv"))
