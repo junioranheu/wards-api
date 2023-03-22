@@ -35,7 +35,7 @@ WebApplication app = builder.Build();
     }
 
     app.UseCors(builder.Configuration["CORSSettings:Cors"]!);
-
+    app.UseHealthChecks("/status");
     app.UseResponseCompression();
 
     app.UseAuthentication();

@@ -17,6 +17,7 @@ namespace Wards.API
             AddControllers(builder);
             AddMisc(builder);
             AddValidators(services);
+            AddHealthCheck(services);
 
             return services;
         }
@@ -81,6 +82,11 @@ namespace Wards.API
 
             services.AddValidatorsFromAssemblyContaining<UsuarioInputValidator>();
             services.AddValidatorsFromAssemblyContaining<RegistrarInputValidator>();
+        }
+
+        private static void AddHealthCheck(IServiceCollection services)
+        {
+            services.AddHealthChecks();
         }
     }
 }
