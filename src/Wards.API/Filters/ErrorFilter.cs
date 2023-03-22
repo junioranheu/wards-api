@@ -21,7 +21,7 @@ namespace Wards.API.Filters
         {
             var excecao = context.Exception;
 
-            string mensagemErro = $"Ocorreu um erro ao processar sua requisição. Caminho: {context.HttpContext.Request.Path}. {(!string.IsNullOrEmpty(excecao.InnerException?.Message) ? $"Mais informações {excecao.InnerException.Message}" : $"Mais informações {excecao.Message}")}";
+            string mensagemErro = $"Ocorreu um erro ao processar sua requisição. Caminho: {context.HttpContext.Request.Path}. {(!string.IsNullOrEmpty(excecao.InnerException?.Message) ? $"Mais informações: {excecao.InnerException.Message}" : $"Mais informações: {excecao.Message}")}";
 
             var detalhes = new BadRequestObjectResult(new
             {
