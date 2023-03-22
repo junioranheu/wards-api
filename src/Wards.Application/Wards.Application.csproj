@@ -19,8 +19,4 @@
     <ProjectReference Include="..\Wards.Infrastructure\Wards.Infrastructure.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="UsesCases\Tokens\Shared\Output\" />
-  </ItemGroup>
-
 </Project>

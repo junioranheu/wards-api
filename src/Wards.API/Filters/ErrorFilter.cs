@@ -1,6 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.AspNetCore.Mvc;
-using System.Net;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace Wards.API.Filters
 {
@@ -10,15 +9,14 @@ namespace Wards.API.Filters
         {
             var excecao = context.Exception;
 
-            var detalhes = new ProblemDetails
+            var detalhes = new BadRequestObjectResult(new
             {
-                Title = "Ocorreu um erro ao processar sua requisição",
-                Detail = excecao.Message,
-                Status = (int)HttpStatusCode.InternalServerError,
-                Instance = context.HttpContext.Request.Path
-            };
+                Code = StatusCodes.Status500InternalServerError,
+                Request_Id = Guid.NewGuid(),
+                Messages = new string[] { $"Ocorreu um erro ao processar sua requisição. Caminho: {context.HttpContext.Request.Path}. {(!string.IsNullOrEmpty(excecao.Message) ? $"Mais informações {excecao.Message}" : string.Empty)}" },
+            });
 
-            context.Result = new ObjectResult(detalhes);
+            context.Result = detalhes;
 
             context.ExceptionHandled = true;
         }

@@ -1,9 +1,10 @@
-﻿using Wards.Application.UsesCases.UsuariosRoles.Shared.Output;
+﻿using Wards.Application.UsesCases.Shared.Models;
+using Wards.Application.UsesCases.UsuariosRoles.Shared.Output;
 using static Wards.Utils.Common;
 
 namespace Wards.Application.UsesCases.Usuarios.Shared.Output
 {
-    public sealed class UsuarioOutput
+    public sealed class UsuarioOutput : ApiResponse
     {
         public int UsuarioId { get; set; }
 

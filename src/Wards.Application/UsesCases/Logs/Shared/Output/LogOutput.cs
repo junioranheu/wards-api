@@ -1,8 +1,9 @@
-﻿using Wards.Application.UsesCases.Usuarios.Shared.Output;
+﻿using Wards.Application.UsesCases.Shared.Models;
+using Wards.Application.UsesCases.Usuarios.Shared.Output;
 
 namespace Wards.Application.UsesCases.Logs.Shared.Output
 {
-    public sealed class LogOutput
+    public sealed class LogOutput : ApiResponse
     {
         public string? TipoRequisicao { get; set; }
 
