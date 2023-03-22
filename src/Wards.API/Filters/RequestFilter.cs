@@ -33,6 +33,7 @@ namespace Wards.API.Filters
                 TipoRequisicao = request.Method ?? string.Empty,
                 Endpoint = request.Path.Value ?? string.Empty,
                 Parametros = parametros.Contains("Senha") ? string.Empty : parametros,
+                Descricao = string.Empty,
                 StatusResposta = statusResposta > 0 ? (int)statusResposta : 0,
                 UsuarioId = usuarioId > 0 ? usuarioId : null
             };

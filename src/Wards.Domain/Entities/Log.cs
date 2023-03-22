@@ -15,6 +15,8 @@ namespace Wards.Domain.Entities
 
         public string? Parametros { get; set; }
 
+        public string? Descricao { get; set; }
+
         public int StatusResposta { get; set; }
 
         public int? UsuarioId { get; set; }

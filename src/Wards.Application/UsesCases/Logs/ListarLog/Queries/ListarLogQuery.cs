@@ -18,6 +18,7 @@ namespace Wards.Application.UsesCases.Logs.ListarLog.Queries
             var linq = await _context.Logs.
                              Include(u => u.Usuarios).
                              Skip(pagina * tamanhoPagina).Take(tamanhoPagina).
+                             OrderByDescending(l => l.LogId).
                              AsNoTracking().ToListAsync();
 
             return linq;

@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-
-namespace Wards.Application.UsesCases.Shared.Models
+﻿namespace Wards.Application.UsesCases.Shared.Models
 {
     public class ApiResponse
     {

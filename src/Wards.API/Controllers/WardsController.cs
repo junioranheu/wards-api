@@ -46,7 +46,7 @@ namespace Wards.API.Controllers
             input.UsuarioModId = await ObterUsuarioId();
             var resp = await _atualizarUseCase.Execute(input);
 
-            if (resp < 0)
+            if (resp < 1)
                 return StatusCode(StatusCodes.Status400BadRequest, new WardOutput() { Messages = new string[] { GetDescricaoEnum(CodigosErrosEnum.BadRequest) } });
 
             return Ok(resp);
@@ -61,7 +61,7 @@ namespace Wards.API.Controllers
             input.UsuarioId = await ObterUsuarioId();
             var resp = await _criarUseCase.Execute(input);
 
-            if (resp < 0)
+            if (resp < 1)
                 return StatusCode(StatusCodes.Status400BadRequest, new WardOutput() { Messages = new string[] { GetDescricaoEnum(CodigosErrosEnum.BadRequest) } });
 
             return Ok(resp);

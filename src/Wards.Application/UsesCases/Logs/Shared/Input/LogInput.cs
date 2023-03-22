@@ -10,6 +10,8 @@ namespace Wards.Application.UsesCases.Logs.Shared.Input
 
         public string? Parametros { get; set; }
 
+        public string? Descricao { get; set; }
+
         public int StatusResposta { get; set; }
 
         [JsonIgnore]

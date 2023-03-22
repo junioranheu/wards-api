@@ -14,6 +14,8 @@ namespace Wards.Application.UsesCases.Logs.CriarLog.Commands
 
         public async Task Execute(Log input)
         {
+            _context.ChangeTracker.Clear();
+
             await _context.AddAsync(input);
             await _context.SaveChangesAsync();
         }
