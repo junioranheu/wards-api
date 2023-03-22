@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Wards.Application.UsesCases.Auths.Shared.Input;
 using Wards.Application.UsesCases.Tokens.CriarRefreshToken;
 using Wards.Application.UsesCases.Tokens.Shared.Input;
@@ -34,7 +35,7 @@ namespace Wards.Application.UsesCases.Auths.Registrar
             _criarRefreshTokenUseCase = criarRefreshTokenUseCase;
         }
 
-        public async Task<(UsuarioOutput?, string)> Execute(RegistrarInput input)
+        public async Task<UsuarioOutput> Execute(RegistrarInput input)
         {
             // #1 - Verificar se o usuário já existe com o e-mail ou nome de usuário do sistema informados. Se existir, aborte;
             //var verificarUsuario = await _obterUsuarioCondicaoArbitrariaUseCase.Execute(input?.Email, input?.NomeUsuarioSistema);
@@ -46,22 +47,16 @@ namespace Wards.Application.UsesCases.Auths.Registrar
 
             // #2.1 - Verificar requisitos gerais;
             if (input?.NomeCompleto?.Length < 3 || input?.NomeUsuarioSistema?.Length < 3)
-            {
-                return (new UsuarioOutput(), GetDescricaoEnum(CodigosErrosEnum.RequisitosNome));
-            }
+                return (new UsuarioOutput() { Messages = new string[] { GetDescricaoEnum(CodigosErrosEnum.RequisitosNome) }, Code = StatusCodes.Status403Forbidden });
 
             // #2.2 - Verificar e-mail;
             if (!ValidarEmail(input?.Email!))
-            {
-                return (new UsuarioOutput(), GetDescricaoEnum(CodigosErrosEnum.EmailInvalido));
-            }
+                return (new UsuarioOutput() { Messages = new string[] { GetDescricaoEnum(CodigosErrosEnum.EmailInvalido) }, Code = StatusCodes.Status403Forbidden });
 
             // #2.3 - Verificar requisitos de senha;
             var validarSenha = ValidarSenha(input?.Senha!, input?.NomeCompleto!, input?.NomeUsuarioSistema!, input?.Email!);
             if (!validarSenha.Item1)
-            {
-                return (new UsuarioOutput(), validarSenha.Item2);
-            }
+                return (new UsuarioOutput() { Messages = new string[] { validarSenha.Item2 }, Code = StatusCodes.Status403Forbidden });
 
             // #3.1 - Gerar código de verificação para usar no processo de criação e no envio de e-mail;
             string codigoVerificacao = GerarStringAleatoria(6, true);
@@ -95,7 +90,7 @@ namespace Wards.Application.UsesCases.Auths.Registrar
             //    usuarioDTO.IsEmailVerificacaoContaEnviado = false;
             //}
 
-            return (output, string.Empty);
+            return output;
         }
 
         private async Task<UsuarioOutput> GerarRefreshToken(UsuarioOutput output, int usuarioId)

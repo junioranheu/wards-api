@@ -1,4 +1,5 @@
-﻿using System.Security.Claims;
+﻿using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
 using Wards.Application.UsesCases.Auths.Shared.Output;
 using Wards.Application.UsesCases.Tokens.CriarRefreshToken;
 using Wards.Application.UsesCases.Tokens.ObterRefreshToken;
@@ -30,26 +31,22 @@ namespace Wards.Application.UsesCases.Auths.RefreshToken
             _criarRefreshTokenUseCase = criarRefreshTokenUseCase;
         }
 
-        public async Task<(AuthsRefreshTokenOutput?, string)> Execute(string token, string refreshToken, string email)
+        public async Task<AuthsRefreshTokenOutput> Execute(string token, string refreshToken, string email)
         {
             UsuarioOutput? usuario = await _obterUsuarioUseCase.Execute(email: email);
 
             if (usuario is null)
-            {
-                return (new AuthsRefreshTokenOutput(), GetDescricaoEnum(CodigosErrosEnum.NaoEncontrado));
-            }
+                return (new AuthsRefreshTokenOutput() { Messages = new string[] { GetDescricaoEnum(CodigosErrosEnum.NaoEncontrado) }, Code = StatusCodes.Status404NotFound });
 
             int usuarioId = usuario.UsuarioId;
             var refreshTokenSalvoAnteriormente = await _obterRefreshTokenUseCase.Execute(usuarioId);
             if (refreshTokenSalvoAnteriormente != refreshToken)
-            {
-                return (new AuthsRefreshTokenOutput(), GetDescricaoEnum(CodigosErrosEnum.RefreshTokenInvalido));
-            }
+                return (new AuthsRefreshTokenOutput() { Messages = new string[] { GetDescricaoEnum(CodigosErrosEnum.RefreshTokenInvalido) }, Code = StatusCodes.Status401Unauthorized });
 
             ClaimsPrincipal? principal = _jwtTokenGenerator.GetInfoTokenExpirado(token);
             AuthsRefreshTokenOutput? output = await GerarRefreshToken(principal, usuarioId);
 
-            return (output, string.Empty);
+            return output;
         }
 
         private async Task<AuthsRefreshTokenOutput> GerarRefreshToken(ClaimsPrincipal? principal, int usuarioId)

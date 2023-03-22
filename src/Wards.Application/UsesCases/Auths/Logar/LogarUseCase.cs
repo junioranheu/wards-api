@@ -1,4 +1,5 @@
-﻿using Wards.Application.UsesCases.Auths.Shared.Input;
+﻿using Microsoft.AspNetCore.Http;
+using Wards.Application.UsesCases.Auths.Shared.Input;
 using Wards.Application.UsesCases.Tokens.CriarRefreshToken;
 using Wards.Application.UsesCases.Tokens.Shared.Input;
 using Wards.Application.UsesCases.Usuarios.ObterUsuarioCondicaoArbitraria;
@@ -25,7 +26,7 @@ namespace Wards.Application.UsesCases.Auths.Logar
             _criarRefreshTokenUseCase = criarRefreshTokenUseCase;
         }
 
-        public async Task<(UsuarioOutput?, string)> Execute(LogarInput input)
+        public async Task<UsuarioOutput> Execute(LogarInput input)
         {
             // #1 - Buscar usuário e sua senha (para não expor no output);
             (UsuarioOutput?, string) resp = await _obterUsuarioCondicaoArbitrariaUseCase.Execute(input?.Login ?? string.Empty);
@@ -33,20 +34,16 @@ namespace Wards.Application.UsesCases.Auths.Logar
             string senhaCriptografada = resp.Item2;
 
             if (output is null)
-            {
-                return (new UsuarioOutput(), GetDescricaoEnum(CodigosErrosEnum.UsuarioNaoEncontrado));
-            }
+                return (new UsuarioOutput() { Messages = new string[] { GetDescricaoEnum(CodigosErrosEnum.UsuarioNaoEncontrado) }, Code = StatusCodes.Status403Forbidden });
+
 
             // #2 - Verificar se a senha está correta;
-            if (!VerificarCriptografia(senha: input?.Senha ?? string.Empty, senhaCriptografada: senhaCriptografada)) {
-                return (new UsuarioOutput(), GetDescricaoEnum(CodigosErrosEnum.UsuarioSenhaIncorretos));
-            }
+            if (!VerificarCriptografia(senha: input?.Senha ?? string.Empty, senhaCriptografada: senhaCriptografada))
+                return (new UsuarioOutput() { Messages = new string[] { GetDescricaoEnum(CodigosErrosEnum.UsuarioSenhaIncorretos) }, Code = StatusCodes.Status403Forbidden });
 
             // #3 - Verificar se o usuário está ativo;
             if (!output.IsAtivo)
-            {
-                return (new UsuarioOutput(), GetDescricaoEnum(CodigosErrosEnum.ContaDesativada));
-            }
+                return (new UsuarioOutput() { Messages = new string[] { GetDescricaoEnum(CodigosErrosEnum.ContaDesativada) }, Code = StatusCodes.Status403Forbidden });
 
             // #4 - Criar token JWT;
             output!.Token = _jwtTokenGenerator.GerarToken(nomeCompleto: output.NomeCompleto!, email: output.Email!, listaClaims: null);
@@ -54,7 +51,7 @@ namespace Wards.Application.UsesCases.Auths.Logar
             // #5 - Gerar refresh token;
             output = await GerarRefreshToken(output, output.UsuarioId);
 
-            return (output, string.Empty);
+            return output;
         }
 
         private async Task<UsuarioOutput> GerarRefreshToken(UsuarioOutput output, int usuarioId)

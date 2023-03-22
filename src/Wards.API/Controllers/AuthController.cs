@@ -36,45 +36,45 @@ namespace Wards.API.Controllers
         [HttpPost("login")]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UsuarioOutput))]
-        [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(string))]
+        [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(UsuarioOutput))]
         public async Task<ActionResult<UsuarioOutput>> Logar(LogarInput input)
         {
-            (UsuarioOutput?, string) resp = await _logarUseCase.Execute(input);
+            UsuarioOutput resp = await _logarUseCase.Execute(input);
 
-            if (!string.IsNullOrEmpty(resp.Item2))
-                return StatusCode(StatusCodes.Status403Forbidden, resp.Item2);
+            if (resp.Messages!.Length > 0)
+                return StatusCode(StatusCodes.Status403Forbidden, resp);
 
-            return Ok(resp.Item1);
+            return Ok(resp);
         }
 
         [HttpPost("registrar")]
         [AuthorizeFilter(UsuarioRoleEnum.Adm, UsuarioRoleEnum.Suporte)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UsuarioOutput))]
-        [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(string))]
+        [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(UsuarioOutput))]
         public async Task<ActionResult<UsuarioOutput>> Registrar(RegistrarInput input)
         {
-            (UsuarioOutput?, string) resp = await _registrarUseCase.Execute(input);
+            UsuarioOutput resp = await _registrarUseCase.Execute(input);
 
-            if (!string.IsNullOrEmpty(resp.Item2))
-                return StatusCode(StatusCodes.Status403Forbidden, resp.Item2);
+            if (resp.Messages!.Length > 0)
+                return StatusCode(StatusCodes.Status403Forbidden, resp);
 
-            await _criarUsuarioRoleUseCase.Execute(input.UsuariosRolesId!, (int)resp.Item1!.UsuarioId!);
+            await _criarUsuarioRoleUseCase.Execute(input.UsuariosRolesId!, resp.UsuarioId);
 
-            return Ok(resp.Item1);
+            return Ok(resp);
         }
 
         [HttpPost("refreshToken")]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AuthsRefreshTokenOutput))]
-        [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(string))]
+        [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(UsuarioOutput))]
         public async Task<ActionResult<AuthsRefreshTokenOutput>> RefreshToken(AuthsRefreshTokenInput input)
         {
-            (AuthsRefreshTokenOutput?, string) resp = await _refreshTokenUseCase.Execute(input.Token!, input.RefreshToken!, ObterUsuarioEmail());
+            AuthsRefreshTokenOutput resp = await _refreshTokenUseCase.Execute(input.Token!, input.RefreshToken!, ObterUsuarioEmail());
 
-            if (!string.IsNullOrEmpty(resp.Item2))
-                return StatusCode(StatusCodes.Status403Forbidden, resp.Item2);
+            if (resp.Messages!.Length > 0)
+                return StatusCode(StatusCodes.Status403Forbidden, resp);
 
-            return Ok(resp.Item1);
+            return Ok(resp);
         }
     }
 }
