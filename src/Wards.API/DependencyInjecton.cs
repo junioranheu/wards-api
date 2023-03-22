@@ -65,6 +65,7 @@ namespace Wards.API
 
         private static void AddValidators(IServiceCollection services)
         {
+            #region api_behavior
             services.Configure<ApiBehaviorOptions>(o =>
                 o.InvalidModelStateResponseFactory = actionContext =>
                     {
@@ -78,6 +79,7 @@ namespace Wards.API
                         });
                     }
             );
+            #endregion
 
             services.AddFluentValidationAutoValidation();
             services.AddFluentValidationClientsideAdapters();
