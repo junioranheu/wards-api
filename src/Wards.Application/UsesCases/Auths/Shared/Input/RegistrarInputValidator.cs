@@ -2,7 +2,7 @@
 
 namespace Wards.Application.UsesCases.Auths.Shared.Input
 {
-    public class RegistrarInputValidator : AbstractValidator<RegistrarInput>
+    public sealed class RegistrarInputValidator : AbstractValidator<RegistrarInput>
     {
         public RegistrarInputValidator()
         {

@@ -1,7 +1,8 @@
-﻿using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Wards.API.Filters;
+using Wards.Application.UsesCases.Logs.CriarLog;
 using Wards.Application.UsesCases.Logs.ListarLog;
+using Wards.Application.UsesCases.Logs.Shared.Input;
 using Wards.Application.UsesCases.Logs.Shared.Output;
 using Wards.Domain.Enums;
 using static Wards.Utils.Common;
@@ -12,11 +13,23 @@ namespace Wards.API.Controllers
     [Route("api/[controller]")]
     public class LogsController : Controller
     {
+        private readonly ICriarLogUseCase _criarUseCase;
         private readonly IListarLogUseCase _listarUseCase;
 
-        public LogsController(IListarLogUseCase listarUseCase)
+        public LogsController(ICriarLogUseCase criarUseCase, IListarLogUseCase listarUseCase)
         {
+            _criarUseCase = criarUseCase;
             _listarUseCase = listarUseCase;
+        }
+
+        [HttpPost]
+        [AuthorizeFilter(UsuarioRoleEnum.Adm)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(bool))]
+        [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(bool))]
+        public async Task<ActionResult<bool>> Registrar(LogInput input)
+        {
+            await _criarUseCase.Execute(input);
+            return Ok(true);
         }
 
         [HttpGet("listar")]

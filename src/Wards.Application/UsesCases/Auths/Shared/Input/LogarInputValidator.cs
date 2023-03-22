@@ -2,7 +2,7 @@
 
 namespace Wards.Application.UsesCases.Auths.Shared.Input
 {
-    public class LogarInputValidator : AbstractValidator<LogarInput>
+    public sealed class LogarInputValidator : AbstractValidator<LogarInput>
     {
         public LogarInputValidator()
         {

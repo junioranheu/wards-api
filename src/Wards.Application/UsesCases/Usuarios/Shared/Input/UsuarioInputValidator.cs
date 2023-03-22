@@ -2,7 +2,7 @@
 
 namespace Wards.Application.UsesCases.Usuarios.Shared.Input
 {
-    public class UsuarioInputValidator : AbstractValidator<UsuarioInput>
+    public sealed class UsuarioInputValidator : AbstractValidator<UsuarioInput>
     {
         public UsuarioInputValidator()
         {

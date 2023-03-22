@@ -7,6 +7,7 @@ using Wards.API.Filters;
 using Wards.Application.UsesCases.Auths.Shared.Input;
 using Wards.Application.UsesCases.Logs.Shared.Input;
 using Wards.Application.UsesCases.Usuarios.Shared.Input;
+using Wards.Application.UsesCases.Wards.Shared.Input;
 using Wards.Infrastructure.Data;
 
 namespace Wards.API
@@ -86,6 +87,7 @@ namespace Wards.API
             services.AddValidatorsFromAssemblyContaining<LogarInputValidator>();
             services.AddValidatorsFromAssemblyContaining<AuthsRefreshTokenInputValidator>();
             services.AddValidatorsFromAssemblyContaining<LogInputValidator>();
+            services.AddValidatorsFromAssemblyContaining<WardInputValidator>();
         }
 
         private static void AddHealthCheck(IServiceCollection services)

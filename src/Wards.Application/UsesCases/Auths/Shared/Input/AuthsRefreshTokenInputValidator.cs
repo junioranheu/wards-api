@@ -2,7 +2,7 @@
 
 namespace Wards.Application.UsesCases.Auths.Shared.Input
 {
-    public class AuthsRefreshTokenInputValidator : AbstractValidator<AuthsRefreshTokenInput>
+    public sealed class AuthsRefreshTokenInputValidator : AbstractValidator<AuthsRefreshTokenInput>
     {
         public AuthsRefreshTokenInputValidator()
         {
