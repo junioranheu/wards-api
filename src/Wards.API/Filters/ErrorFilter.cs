@@ -47,26 +47,26 @@ namespace Wards.API.Filters
             context.ExceptionHandled = true;
         }
 
-        private static string ObterUsuarioEmail(ExceptionContext filterContextExecuted)
+        private static string ObterUsuarioEmail(ExceptionContext context)
         {
-            if (filterContextExecuted.HttpContext.User.Identity!.IsAuthenticated)
+            if (context.HttpContext.User.Identity!.IsAuthenticated)
             {
                 // Obter o e-mail do usuário pela Azure;
                 //var claim = filterContextExecuted.HttpContext.User.Claims.First(c => c.Type == "preferred_username");
                 //return claim.Value ?? string.Empty;
 
                 // Obter o e-mail do usuário pela autenticação própria;
-                string email = filterContextExecuted.HttpContext.User.FindFirst(ClaimTypes.Email)!.Value;
+                string email = context.HttpContext.User.FindFirst(ClaimTypes.Email)!.Value;
                 return email ?? string.Empty;
             }
 
             return string.Empty;
         }
 
-        private static async Task<int> ObterUsuarioId(ExceptionContext filterContextExecuted)
+        private static async Task<int> ObterUsuarioId(ExceptionContext context)
         {
-            var service = filterContextExecuted.HttpContext.RequestServices.GetService<IObterUsuarioCacheService>();
-            UsuarioOutput? usuario = await service!.Execute(ObterUsuarioEmail(filterContextExecuted));
+            var service = context.HttpContext.RequestServices.GetService<IObterUsuarioCacheService>();
+            UsuarioOutput? usuario = await service!.Execute(ObterUsuarioEmail(context));
 
             return usuario is not null ? usuario.UsuarioId : 0;
         }
