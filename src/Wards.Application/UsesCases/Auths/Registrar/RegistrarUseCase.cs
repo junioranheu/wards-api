@@ -47,16 +47,16 @@ namespace Wards.Application.UsesCases.Auths.Registrar
 
             // #2.1 - Verificar requisitos gerais;
             if (input?.NomeCompleto?.Length < 3 || input?.NomeUsuarioSistema?.Length < 3)
-                return (new UsuarioOutput() { Messages = new string[] { GetDescricaoEnum(CodigosErrosEnum.RequisitosNome) }, Code = StatusCodes.Status403Forbidden });
+                return (new UsuarioOutput() { Messages = new string[] { GetDescricaoEnum(CodigosErrosEnum.RequisitosNome) } });
 
             // #2.2 - Verificar e-mail;
             if (!ValidarEmail(input?.Email!))
-                return (new UsuarioOutput() { Messages = new string[] { GetDescricaoEnum(CodigosErrosEnum.EmailInvalido) }, Code = StatusCodes.Status403Forbidden });
+                return (new UsuarioOutput() { Messages = new string[] { GetDescricaoEnum(CodigosErrosEnum.EmailInvalido) } });
 
             // #2.3 - Verificar requisitos de senha;
             var validarSenha = ValidarSenha(input?.Senha!, input?.NomeCompleto!, input?.NomeUsuarioSistema!, input?.Email!);
             if (!validarSenha.Item1)
-                return (new UsuarioOutput() { Messages = new string[] { validarSenha.Item2 }, Code = StatusCodes.Status403Forbidden });
+                return (new UsuarioOutput() { Messages = new string[] { validarSenha.Item2 } });
 
             // #3.1 - Gerar código de verificação para usar no processo de criação e no envio de e-mail;
             string codigoVerificacao = GerarStringAleatoria(6, true);

@@ -4,6 +4,7 @@ using Wards.API.Filters;
 using Wards.Application.UsesCases.Logs.ListarLog;
 using Wards.Application.UsesCases.Logs.Shared.Output;
 using Wards.Domain.Enums;
+using static Wards.Utils.Common;
 
 namespace Wards.API.Controllers
 {
@@ -27,7 +28,7 @@ namespace Wards.API.Controllers
             var resp = await _listarUseCase.Execute(pagina, tamanhoPagina);
 
             if (resp is null)
-                return NotFound();
+                return StatusCode(StatusCodes.Status404NotFound, new LogOutput() { Messages = new string[] { GetDescricaoEnum(CodigosErrosEnum.NaoEncontrado) } });
 
             return Ok(resp);
         }

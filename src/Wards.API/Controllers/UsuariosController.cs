@@ -5,6 +5,7 @@ using Wards.Application.UsesCases.Usuarios.ListarUsuario;
 using Wards.Application.UsesCases.Usuarios.ObterUsuario;
 using Wards.Application.UsesCases.Usuarios.Shared.Output;
 using Wards.Domain.Enums;
+using static Wards.Utils.Common;
 
 namespace Wards.API.Controllers
 {
@@ -32,7 +33,7 @@ namespace Wards.API.Controllers
             var resp = await _listarUseCase.Execute();
 
             if (resp is null)
-                return NotFound();
+                return StatusCode(StatusCodes.Status404NotFound, new UsuarioOutput() { Messages = new string[] { GetDescricaoEnum(CodigosErrosEnum.NaoEncontrado) } });
 
             return Ok(resp);
         }
@@ -46,7 +47,7 @@ namespace Wards.API.Controllers
             var resp = await _obterUseCase.Execute(id);
 
             if (resp is null)
-                return NotFound();
+                return StatusCode(StatusCodes.Status404NotFound, new UsuarioOutput() { Messages = new string[] { GetDescricaoEnum(CodigosErrosEnum.NaoEncontrado) } });
 
             return Ok(resp);
         }

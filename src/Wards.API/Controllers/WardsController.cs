@@ -9,6 +9,7 @@ using Wards.Application.UsesCases.Wards.ObterWard;
 using Wards.Application.UsesCases.Wards.Shared.Input;
 using Wards.Application.UsesCases.Wards.Shared.Output;
 using Wards.Domain.Enums;
+using static Wards.Utils.Common;
 
 namespace Wards.API.Controllers
 {
@@ -46,7 +47,7 @@ namespace Wards.API.Controllers
             var resp = await _atualizarUseCase.Execute(input);
 
             if (resp < 0)
-                return BadRequest();
+                return StatusCode(StatusCodes.Status400BadRequest, new WardOutput() { Messages = new string[] { GetDescricaoEnum(CodigosErrosEnum.BadRequest) } });
 
             return Ok(resp);
         }
@@ -61,7 +62,7 @@ namespace Wards.API.Controllers
             var resp = await _criarUseCase.Execute(input);
 
             if (resp < 0)
-                return BadRequest();
+                return StatusCode(StatusCodes.Status400BadRequest, new WardOutput() { Messages = new string[] { GetDescricaoEnum(CodigosErrosEnum.BadRequest) } });
 
             return Ok(resp);
         }
@@ -83,7 +84,7 @@ namespace Wards.API.Controllers
             var resp = await _listarUseCase.Execute();
 
             if (resp is null)
-                return NotFound();
+                return StatusCode(StatusCodes.Status404NotFound, new WardOutput() { Messages = new string[] { GetDescricaoEnum(CodigosErrosEnum.NaoEncontrado) } });
 
             return Ok(resp);
         }
@@ -96,7 +97,7 @@ namespace Wards.API.Controllers
             var resp = await _obterUseCase.Execute(id);
 
             if (resp is null)
-                return NotFound();
+                return StatusCode(StatusCodes.Status404NotFound, new WardOutput() { Messages = new string[] { GetDescricaoEnum(CodigosErrosEnum.NaoEncontrado) } });
 
             return Ok(resp);
         }

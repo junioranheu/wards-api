@@ -36,12 +36,12 @@ namespace Wards.Application.UsesCases.Auths.RefreshToken
             UsuarioOutput? usuario = await _obterUsuarioUseCase.Execute(email: email);
 
             if (usuario is null)
-                return (new AuthsRefreshTokenOutput() { Messages = new string[] { GetDescricaoEnum(CodigosErrosEnum.NaoEncontrado) }, Code = StatusCodes.Status404NotFound });
+                return (new AuthsRefreshTokenOutput() { Messages = new string[] { GetDescricaoEnum(CodigosErrosEnum.NaoEncontrado) } });
 
             int usuarioId = usuario.UsuarioId;
             var refreshTokenSalvoAnteriormente = await _obterRefreshTokenUseCase.Execute(usuarioId);
             if (refreshTokenSalvoAnteriormente != refreshToken)
-                return (new AuthsRefreshTokenOutput() { Messages = new string[] { GetDescricaoEnum(CodigosErrosEnum.RefreshTokenInvalido) }, Code = StatusCodes.Status401Unauthorized });
+                return (new AuthsRefreshTokenOutput() { Messages = new string[] { GetDescricaoEnum(CodigosErrosEnum.RefreshTokenInvalido) } });
 
             ClaimsPrincipal? principal = _jwtTokenGenerator.GetInfoTokenExpirado(token);
             AuthsRefreshTokenOutput? output = await GerarRefreshToken(principal, usuarioId);

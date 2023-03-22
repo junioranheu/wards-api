@@ -4,6 +4,8 @@ using Wards.API.Filters;
 using Wards.Application.Services.Import.CSV.Shared;
 using Wards.Application.UsesCases.Imports.CriarExemploUsuario;
 using Wards.Domain.Consts;
+using Wards.Domain.Enums;
+using static Wards.Utils.Common;
 
 namespace Wards.API.Controllers
 {
@@ -33,7 +35,7 @@ namespace Wards.API.Controllers
             if (resultados.Item2 || resultados.Item1?.Rows.Count > 0)
             {
                 // await _deletarJustificativaUseCase.ExecuteAsync(justificativaId);
-                return StatusCode(StatusCodes.Status400BadRequest, (resultados.Item1?.Rows.Count > 0 ? JsonConvert.SerializeObject(resultados.Item1) : "Houve um erro interno"));
+                return StatusCode(StatusCodes.Status400BadRequest, (resultados.Item1?.Rows.Count > 0 ? JsonConvert.SerializeObject(resultados.Item1) : GetDescricaoEnum(CodigosErrosEnum.ErroInterno)));
             }
 
             return Ok(string.Empty);

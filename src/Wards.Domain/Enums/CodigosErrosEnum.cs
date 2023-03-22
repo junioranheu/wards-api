@@ -67,6 +67,9 @@ namespace Wards.Domain.Enums
         OK = 200,
 
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=- 400 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        [Description("O servidor não pode ou não irá processar a requisição devido a alguma coisa que foi entendida como um erro do cliente")]
+        BadRequest = 400,
+
         [Description("Não autorizado")]
         NaoAutorizado = 403,
 
@@ -75,5 +78,9 @@ namespace Wards.Domain.Enums
 
         [Description("Refresh token inválido")]
         RefreshTokenInvalido = 411,
+
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=- 500 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        [Description("Houve um erro interno")]
+        ErroInterno = 500,
     }
 }

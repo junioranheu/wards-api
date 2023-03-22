@@ -34,16 +34,16 @@ namespace Wards.Application.UsesCases.Auths.Logar
             string senhaCriptografada = resp.Item2;
 
             if (output is null)
-                return (new UsuarioOutput() { Messages = new string[] { GetDescricaoEnum(CodigosErrosEnum.UsuarioNaoEncontrado) }, Code = StatusCodes.Status403Forbidden });
+                return (new UsuarioOutput() { Messages = new string[] { GetDescricaoEnum(CodigosErrosEnum.UsuarioNaoEncontrado) } });
 
 
             // #2 - Verificar se a senha está correta;
             if (!VerificarCriptografia(senha: input?.Senha ?? string.Empty, senhaCriptografada: senhaCriptografada))
-                return (new UsuarioOutput() { Messages = new string[] { GetDescricaoEnum(CodigosErrosEnum.UsuarioSenhaIncorretos) }, Code = StatusCodes.Status403Forbidden });
+                return (new UsuarioOutput() { Messages = new string[] { GetDescricaoEnum(CodigosErrosEnum.UsuarioSenhaIncorretos) } });
 
             // #3 - Verificar se o usuário está ativo;
             if (!output.IsAtivo)
-                return (new UsuarioOutput() { Messages = new string[] { GetDescricaoEnum(CodigosErrosEnum.ContaDesativada) }, Code = StatusCodes.Status403Forbidden });
+                return (new UsuarioOutput() { Messages = new string[] { GetDescricaoEnum(CodigosErrosEnum.ContaDesativada) } });
 
             // #4 - Criar token JWT;
             output!.Token = _jwtTokenGenerator.GerarToken(nomeCompleto: output.NomeCompleto!, email: output.Email!, listaClaims: null);
