@@ -12,7 +12,6 @@ namespace Wards.API.Filters
             var detalhes = new BadRequestObjectResult(new
             {
                 Code = StatusCodes.Status500InternalServerError,
-                Request_Id = Guid.NewGuid(),
                 Messages = new string[] { $"Ocorreu um erro ao processar sua requisição. Caminho: {context.HttpContext.Request.Path}. {(!string.IsNullOrEmpty(excecao.Message) ? $"Mais informações {excecao.Message}" : string.Empty)}" },
             });
 

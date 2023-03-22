@@ -71,7 +71,6 @@ namespace Wards.API
                         return new BadRequestObjectResult(new
                         {
                             Code = StatusCodes.Status400BadRequest,
-                            Request_Id = Guid.NewGuid(),
                             Messages = actionContext.ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage)
                         });
                     }
