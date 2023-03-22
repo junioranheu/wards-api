@@ -34,7 +34,7 @@ namespace Wards.API.Filters
                 Endpoint = request.Path.Value ?? string.Empty,
                 Parametros = parametros.Contains("Senha") ? string.Empty : parametros,
                 Descricao = string.Empty,
-                StatusResposta = statusResposta > 0 ? (int)statusResposta : 0,
+                StatusResposta = statusResposta > 0 ? (int)statusResposta : StatusCodes.Status500InternalServerError,
                 UsuarioId = usuarioId > 0 ? usuarioId : null
             };
 
