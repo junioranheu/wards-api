@@ -2,10 +2,12 @@
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.ResponseCompression;
+using Microsoft.Extensions.DependencyInjection;
 using System.IO.Compression;
 using Wards.API.Filters;
 using Wards.Application.UsesCases.Auths.Shared.Input;
 using Wards.Application.UsesCases.Usuarios.Shared.Input;
+using Wards.Infrastructure.Data;
 
 namespace Wards.API
 {
@@ -86,7 +88,7 @@ namespace Wards.API
 
         private static void AddHealthCheck(IServiceCollection services)
         {
-            services.AddHealthChecks();
+            services.AddHealthChecks().AddDbContextCheck<WardsContext>(); // Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore
         }
     }
 }

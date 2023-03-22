@@ -1,3 +1,6 @@
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Swashbuckle.AspNetCore.SwaggerUI;
 using Wards.API;
 using Wards.Application;
@@ -35,7 +38,7 @@ WebApplication app = builder.Build();
     }
 
     app.UseCors(builder.Configuration["CORSSettings:Cors"]!);
-    app.UseHealthChecks("/status");
+    AddHealthCheck(app);
     app.UseResponseCompression();
 
     app.UseAuthentication();
@@ -45,6 +48,7 @@ WebApplication app = builder.Build();
     app.Run();
 }
 
+#region metodos_auxiliares
 static async Task DBInitialize(WebApplication app, bool isInitialize)
 {
     if (isInitialize)
@@ -63,3 +67,27 @@ static async Task DBInitialize(WebApplication app, bool isInitialize)
         }
     }
 }
+
+static void AddHealthCheck(WebApplication app)
+{
+    app.UseHealthChecks("/status", new HealthCheckOptions()
+    {
+        ResponseWriter = (httpContext, result) =>
+        {
+            httpContext.Response.ContentType = "application/json";
+
+            #region objeto_json
+            var json = new JObject(
+                new JProperty("status", result.Status.ToString()),
+                new JProperty("results", new JObject(result.Entries.Select(pair =>
+                    new JProperty(pair.Key, new JObject(
+                        new JProperty("status", pair.Value.Status.ToString()),
+                        new JProperty("description", pair.Value.Description),
+                        new JProperty("data", new JObject(pair.Value.Data.Select(p => new JProperty(p.Key, p.Value))))))))));
+            #endregion
+
+            return httpContext.Response.WriteAsync(json.ToString(Formatting.Indented));
+        }
+    });
+}
+#endregion

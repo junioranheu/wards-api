@@ -1,8 +1,5 @@
-﻿using Wards.Application.UsesCases.Usuarios.CriarUsuario;
-using Wards.Application.UsesCases.Usuarios.CriarUsuario.Commands;
-using Wards.Domain.Entities;
+﻿using Wards.Domain.Entities;
 using Wards.Infrastructure.Data;
-using Xunit;
 using static Wards.Utils.Common;
 
 namespace Wards.UnitTests.Tests
