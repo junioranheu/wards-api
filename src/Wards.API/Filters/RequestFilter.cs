@@ -26,12 +26,13 @@ namespace Wards.API.Filters
             int? statusResposta = (filterContextExecuted.Result as ObjectResult)?.StatusCode;
 
             int usuarioId = await ObterUsuarioId(filterContextExecuted);
+            string parametros = ObterParametrosRequisicao(filterContextExecuting);
 
             LogInput log = new()
             {
                 TipoRequisicao = request.Method ?? string.Empty,
                 Endpoint = request.Path.Value ?? string.Empty,
-                Parametros = ObterParametrosRequisicao(filterContextExecuting),
+                Parametros = parametros.Contains("Senha") ? string.Empty : parametros,
                 StatusResposta = statusResposta > 0 ? (int)statusResposta : 0,
                 UsuarioId = usuarioId > 0 ? usuarioId : null
             };

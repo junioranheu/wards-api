@@ -2,7 +2,6 @@
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.ResponseCompression;
-using Microsoft.Extensions.DependencyInjection;
 using System.IO.Compression;
 using Wards.API.Filters;
 using Wards.Application.UsesCases.Auths.Shared.Input;
