@@ -50,7 +50,7 @@ namespace Wards.API
                 o.Filters.Add<RequestFilter>();
                 o.Filters.Add<ErrorFilter>();
             }).
-                AddNewtonsoftJson(o => 
+                AddNewtonsoftJson(o =>
                 {
                     o.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
                     o.SerializerSettings.Formatting = Newtonsoft.Json.Formatting.Indented;
@@ -64,7 +64,7 @@ namespace Wards.API
 
         private static void AddValidators(IServiceCollection services)
         {
-            #region api_behavior
+            #region api_behavior_e_fluent_validation
             services.Configure<ApiBehaviorOptions>(o =>
                 o.InvalidModelStateResponseFactory = actionContext =>
                     {
@@ -75,13 +75,14 @@ namespace Wards.API
                         });
                     }
             );
-            #endregion
 
             services.AddFluentValidationAutoValidation();
             services.AddFluentValidationClientsideAdapters();
+            #endregion
 
             services.AddValidatorsFromAssemblyContaining<UsuarioInputValidator>();
             services.AddValidatorsFromAssemblyContaining<RegistrarInputValidator>();
+            services.AddValidatorsFromAssemblyContaining<LogarInputValidator>();
         }
 
         private static void AddHealthCheck(IServiceCollection services)
