@@ -3,7 +3,6 @@ using Moq;
 using Wards.Application.UsesCases.Usuarios.CriarUsuario;
 using Wards.Application.UsesCases.Usuarios.CriarUsuario.Commands;
 using Wards.Application.UsesCases.Usuarios.Shared.Input;
-using Wards.Application.UsesCases.Usuarios.Shared.Output;
 using Wards.Domain.Entities;
 using Xunit;
 
