@@ -80,16 +80,9 @@ namespace Wards.Application.UsesCases.Auths.Registrar
             output = await GerarRefreshToken(output!, output.UsuarioId);
 
             // #7 - Enviar e-mail de verificação de conta;
-            try
+            if (!string.IsNullOrEmpty(output?.Email) && !string.IsNullOrEmpty(output?.NomeCompleto) && !string.IsNullOrEmpty(codigoVerificacao))
             {
-                if (!string.IsNullOrEmpty(output?.Email) && !string.IsNullOrEmpty(output?.NomeCompleto) && !string.IsNullOrEmpty(codigoVerificacao))
-                {
-                    await EnviarEmailVerificacaoConta(output.Email, output.NomeCompleto, codigoVerificacao);
-                }
-            }
-            catch (Exception)
-            {
-
+                await EnviarEmailVerificacaoConta(output.Email, output.NomeCompleto, codigoVerificacao);
             }
 
             return output;
@@ -113,17 +106,24 @@ namespace Wards.Application.UsesCases.Auths.Registrar
 
         private static async Task<bool> EnviarEmailVerificacaoConta(string emailTo, string nomeUsuario, string codigoVerificacao)
         {
-            string assunto = "Verifique sua conta";
-            string nomeArquivo = GetDescricaoEnum(EmailEnum.VerificarConta);
-
-            List<EmailDadosReplace> listaDadosReplace = new()
+            try
             {
-                new EmailDadosReplace { Key = "Url", Value = $"{CaminhoFront()}/usuario/verificar-conta/{codigoVerificacao}"},
-                new EmailDadosReplace { Key = "NomeUsuario", Value = nomeUsuario }
-            };
+                const string assunto = "Verifique sua conta";
+                string nomeArquivo = GetDescricaoEnum(EmailEnum.VerificarConta);
 
-            bool resposta = await EnviarEmail(emailTo, assunto, nomeArquivo, listaDadosReplace);
-            return resposta;
+                List<EmailDadosReplace> listaDadosReplace = new()
+                {
+                    new EmailDadosReplace { Key = "Url", Value = $"{CaminhoFront()}/usuario/verificar-conta/{codigoVerificacao}"},
+                    new EmailDadosReplace { Key = "NomeUsuario", Value = nomeUsuario }
+                };
+
+                bool resposta = await EnviarEmail(emailTo, assunto, nomeArquivo, listaDadosReplace);
+                return resposta;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
     }
 }
