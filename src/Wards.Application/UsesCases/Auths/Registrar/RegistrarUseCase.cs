@@ -8,6 +8,7 @@ using Wards.Application.UsesCases.Usuarios.Shared.Input;
 using Wards.Application.UsesCases.Usuarios.Shared.Output;
 using Wards.Domain.Enums;
 using Wards.Infrastructure.Auth.Token;
+using Wards.Utils.Entities;
 using static Wards.Utils.Common;
 
 namespace Wards.Application.UsesCases.Auths.Registrar
@@ -81,9 +82,9 @@ namespace Wards.Application.UsesCases.Auths.Registrar
             // #7 - Enviar e-mail de verificação de conta;
             try
             {
-                if (!String.IsNullOrEmpty(output?.Email) && !String.IsNullOrEmpty(output?.NomeCompleto) && !String.IsNullOrEmpty(codigoVerificacao))
+                if (!string.IsNullOrEmpty(output?.Email) && !string.IsNullOrEmpty(output?.NomeCompleto) && !string.IsNullOrEmpty(codigoVerificacao))
                 {
-                    await EnviarEmailVerificacaoConta(output?.Email, output?.NomeCompleto, codigoVerificacao);
+                    await EnviarEmailVerificacaoConta(output.Email, output.NomeCompleto, codigoVerificacao);
                 }
             }
             catch (Exception)
@@ -108,6 +109,21 @@ namespace Wards.Application.UsesCases.Auths.Registrar
             await _criarRefreshTokenUseCase.Execute(novoRefreshToken);
 
             return output;
+        }
+
+        private static async Task<bool> EnviarEmailVerificacaoConta(string emailTo, string nomeUsuario, string codigoVerificacao)
+        {
+            string assunto = "Verifique sua conta";
+            string nomeArquivo = GetDescricaoEnum(EmailEnum.VerificarConta);
+
+            List<EmailDadosReplace> listaDadosReplace = new()
+            {
+                new EmailDadosReplace { Key = "Url", Value = $"{CaminhoFront()}/usuario/verificar-conta/{codigoVerificacao}"},
+                new EmailDadosReplace { Key = "NomeUsuario", Value = nomeUsuario }
+            };
+
+            bool resposta = await EnviarEmail(emailTo, assunto, nomeArquivo, listaDadosReplace);
+            return resposta;
         }
     }
 }

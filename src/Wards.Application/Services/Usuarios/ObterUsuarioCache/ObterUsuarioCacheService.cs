@@ -19,7 +19,7 @@ namespace Wards.Application.Services.Usuarios.ObterUsuarioCache
 
         public async Task<UsuarioOutput?> Execute(string email)
         {
-            if (String.IsNullOrEmpty(email))
+            if (string.IsNullOrEmpty(email))
                 return null;
 
             const string keyCache = "keyObterUsuarioCache";

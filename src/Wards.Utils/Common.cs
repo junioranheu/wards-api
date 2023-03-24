@@ -281,7 +281,7 @@ namespace Wards.Utils
         // SMTP Gmail: https://www.youtube.com/watch?v=FZfneLNyE4o&ab_channel=AWPLife 
         public static async Task<bool> EnviarEmail(string emailTo, string assunto, string nomeArquivo, List<EmailDadosReplace> listaDadosReplace)
         {
-            if (String.IsNullOrEmpty(emailTo) || String.IsNullOrEmpty(assunto) || String.IsNullOrEmpty(nomeArquivo))
+            if (string.IsNullOrEmpty(emailTo) || string.IsNullOrEmpty(assunto) || string.IsNullOrEmpty(nomeArquivo))
             {
                 return false;
             }

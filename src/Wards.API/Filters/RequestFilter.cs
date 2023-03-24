@@ -71,7 +71,7 @@ namespace Wards.API.Filters
 
             try
             {
-                string parametrosSerialiazed = !String.IsNullOrEmpty(parametros.ToString()) ? JsonConvert.SerializeObject(parametros) : string.Empty;
+                string parametrosSerialiazed = !string.IsNullOrEmpty(parametros.ToString()) ? JsonConvert.SerializeObject(parametros) : string.Empty;
                 return parametrosSerialiazed;
             }
             catch (Exception)

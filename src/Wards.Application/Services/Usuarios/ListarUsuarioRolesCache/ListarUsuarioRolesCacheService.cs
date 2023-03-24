@@ -20,7 +20,7 @@ namespace Wards.Application.Services.Usuarios.ListarUsuarioRolesCache
 
         public async Task<IEnumerable<UsuarioRoleOutput>?> Execute(string email)
         {
-            if (String.IsNullOrEmpty(email))
+            if (string.IsNullOrEmpty(email))
                 return null;
 
             const string keyCache = "keyListarUsuarioRolesCache";

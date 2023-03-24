@@ -23,7 +23,7 @@ namespace Wards.Application.UsesCases.Wards.AtualizarWard.Commands
             if (item is null)
                 return 0;
 
-            item.Conteudo = !String.IsNullOrEmpty(input.Conteudo) ? input.Conteudo : item.Conteudo;
+            item.Conteudo = !string.IsNullOrEmpty(input.Conteudo) ? input.Conteudo : item.Conteudo;
             item.UsuarioModId = input.UsuarioModId;
             item.DataMod = HorarioBrasilia();
             item.IsAtivo = input.IsAtivo;
