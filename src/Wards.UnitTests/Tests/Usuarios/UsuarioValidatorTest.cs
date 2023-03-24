@@ -23,7 +23,7 @@ namespace Wards.UnitTests.Tests.Usuarios
             var result = _validator.TestValidate(model);
 
             // Assert;
-            result.ShouldHaveValidationErrorFor(usuario => usuario.NomeCompleto);
+            result.ShouldHaveValidationErrorFor(x => x.NomeCompleto);
         }
 
         [Fact]
@@ -36,7 +36,7 @@ namespace Wards.UnitTests.Tests.Usuarios
             var result = _validator.TestValidate(model);
 
             // Assert;
-            result.ShouldNotHaveValidationErrorFor(usuario => usuario.NomeCompleto);
+            result.ShouldNotHaveValidationErrorFor(x => x.NomeCompleto);
         }
 
         [Fact]
@@ -49,33 +49,33 @@ namespace Wards.UnitTests.Tests.Usuarios
             var result = _validator.TestValidate(model);
 
             // Assert;
-            result.ShouldHaveValidationErrorFor(usuario => usuario.Email);
+            result.ShouldHaveValidationErrorFor(x => x.Email);
         }
 
         [Fact]
         public void DeveRetornarErro_QuandoEmailForaPadrao()
         {
             // Arrange;
-            var model = new UsuarioInput { Email = "teste@teste.com.br" };
+            var model = new UsuarioInput { Email = "teste@teste" };
 
             // Act;
             var result = _validator.TestValidate(model);
 
             // Assert;
-            result.ShouldHaveValidationErrorFor(usuario => usuario.Email);
+            result.ShouldHaveValidationErrorFor(x => x.Email);
         }
 
         [Fact]
         public void DeveRetornarOk_QuandoEmailPadrao()
         {
             // Arrange;
-            var model = new UsuarioInput { Email = "teste@cpfl.com.br" };
+            var model = new UsuarioInput { Email = "teste@gmail.com" };
 
             // Act;
             var result = _validator.TestValidate(model);
 
             // Assert;
-            result.ShouldNotHaveValidationErrorFor(usuario => usuario.Email);
+            result.ShouldNotHaveValidationErrorFor(x => x.Email);
         }
 
         [Fact]
@@ -88,7 +88,7 @@ namespace Wards.UnitTests.Tests.Usuarios
             var result = _validator.TestValidate(model);
 
             // Assert;
-            result.ShouldHaveValidationErrorFor(usuario => usuario.Chamado);
+            result.ShouldHaveValidationErrorFor(x => x.Chamado);
         }
 
         [Fact]
@@ -101,7 +101,7 @@ namespace Wards.UnitTests.Tests.Usuarios
             var result = _validator.TestValidate(model);
 
             // Assert;
-            result.ShouldNotHaveValidationErrorFor(usuario => usuario.Chamado);
+            result.ShouldNotHaveValidationErrorFor(x => x.Chamado);
         }
     }
 }

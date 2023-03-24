@@ -3,6 +3,7 @@ using Moq;
 using Wards.Application.UsesCases.Usuarios.CriarUsuario;
 using Wards.Application.UsesCases.Usuarios.CriarUsuario.Commands;
 using Wards.Application.UsesCases.Usuarios.Shared.Input;
+using Wards.Application.UsesCases.Usuarios.Shared.Output;
 using Wards.Domain.Entities;
 using Xunit;
 
@@ -16,16 +17,17 @@ namespace Wards.UnitTests.Tests.Usuarios
             // Arrange;
             var map = new Mock<IMapper>();
             var command = new Mock<ICriarUsuarioCommand>();
-            command.Setup(c => c.Execute(It.IsAny<Usuario>())).Returns(Task.FromResult(1));
+            Usuario u = new() { UsuarioId = 1 };
+            command.Setup(x => x.Execute(It.IsAny<Usuario>())).Returns(Task.FromResult(u));
 
             var sut = new CriarUsuarioUseCase(map.Object, command.Object);
-            var input = new UsuarioInput() { };
+            var input = new UsuarioInput() { UsuarioId = 1 };
 
             // Act;
             var resp = await sut.Execute(input);
 
             // Assert;
-            Assert.Equal(1, resp);
+            Assert.True(resp.UsuarioId > 0);
         }
 
         [Fact]
@@ -34,16 +36,17 @@ namespace Wards.UnitTests.Tests.Usuarios
             // Arrange;
             var map = new Mock<IMapper>();
             var command = new Mock<ICriarUsuarioCommand>();
-            command.Setup(c => c.Execute(It.IsAny<Usuario>())).Returns(Task.FromResult(0));
+            Usuario u = new() { UsuarioId = 0 };
+            command.Setup(x => x.Execute(It.IsAny<Usuario>())).Returns(Task.FromResult(u));
 
             var sut = new CriarUsuarioUseCase(map.Object, command.Object);
-            var input = new UsuarioInput() { };
+            var input = new UsuarioInput() { UsuarioId = 0 };
 
             // Act;
             var resp = await sut.Execute(input);
 
             // Assert;
-            Assert.Equal(0, resp);
+            Assert.True(resp.UsuarioId < 1);
         }
     }
 }
