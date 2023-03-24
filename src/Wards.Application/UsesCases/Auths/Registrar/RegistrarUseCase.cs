@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Wards.Application.UsesCases.Auths.Shared.Input;
 using Wards.Application.UsesCases.Tokens.CriarRefreshToken;
 using Wards.Application.UsesCases.Tokens.Shared.Input;
@@ -35,7 +34,7 @@ namespace Wards.Application.UsesCases.Auths.Registrar
             _criarRefreshTokenUseCase = criarRefreshTokenUseCase;
         }
 
-        public async Task<UsuarioOutput> Execute(RegistrarInput input)
+        public async Task<UsuarioOutput?> Execute(RegistrarInput input)
         {
             // #1 - Verificar se o usuário já existe com o e-mail ou nome de usuário do sistema informados. Se existir, aborte;
             //var verificarUsuario = await _obterUsuarioCondicaoArbitrariaUseCase.Execute(input?.Email, input?.NomeUsuarioSistema);
@@ -62,6 +61,8 @@ namespace Wards.Application.UsesCases.Auths.Registrar
             string codigoVerificacao = GerarStringAleatoria(6, true);
 
             // #3.2 - Criar usuário;
+            input!.CodigoVerificacao = codigoVerificacao;
+            input!.ValidadeCodigoVerificacao = HorarioBrasilia().AddHours(24);
             input!.Senha = Criptografar(input?.Senha!);
             input!.HistPerfisAtivos = input?.UsuariosRolesId?.Length > 0 ? string.Join(", ", input.UsuariosRolesId) : string.Empty;
             UsuarioOutput output = await _criarUsuarioUseCase.Execute(_map.Map<UsuarioInput>(input));
@@ -78,17 +79,17 @@ namespace Wards.Application.UsesCases.Auths.Registrar
             output = await GerarRefreshToken(output!, output.UsuarioId);
 
             // #7 - Enviar e-mail de verificação de conta;
-            //try
-            //{
-            //    if (!String.IsNullOrEmpty(usuarioDTO?.Email) && !String.IsNullOrEmpty(usuarioDTO?.NomeCompleto) && !String.IsNullOrEmpty(codigoVerificacao))
-            //    {
-            //        usuarioDTO.IsEmailVerificacaoContaEnviado = await EnviarEmailVerificacaoConta(usuarioDTO?.Email, usuarioDTO?.NomeCompleto, codigoVerificacao);
-            //    }
-            //}
-            //catch (Exception)
-            //{
-            //    usuarioDTO.IsEmailVerificacaoContaEnviado = false;
-            //}
+            try
+            {
+                if (!String.IsNullOrEmpty(output?.Email) && !String.IsNullOrEmpty(output?.NomeCompleto) && !String.IsNullOrEmpty(codigoVerificacao))
+                {
+                    await EnviarEmailVerificacaoConta(output?.Email, output?.NomeCompleto, codigoVerificacao);
+                }
+            }
+            catch (Exception)
+            {
+
+            }
 
             return output;
         }

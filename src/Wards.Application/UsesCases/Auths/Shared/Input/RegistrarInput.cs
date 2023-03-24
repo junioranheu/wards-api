@@ -14,6 +14,10 @@ namespace Wards.Application.UsesCases.Auths.Shared.Input
 
         public string? Chamado { get; set; } = string.Empty;
 
+        public string? CodigoVerificacao { get; set; } = null;
+
+        public DateTime ValidadeCodigoVerificacao { get; set; }
+
         [JsonIgnore]
         public string? HistPerfisAtivos { get; set; } = string.Empty;
 

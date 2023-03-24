@@ -18,6 +18,14 @@ namespace Wards.Domain.Entities
 
         public string? Chamado { get; set; } = string.Empty;
 
+        public string? CodigoVerificacao { get; set; } = null;
+
+        public DateTime ValidadeCodigoVerificacao { get; set; }
+
+        public string? HashUrlTrocarSenha { get; set; } = null;
+
+        public DateTime? ValidadeHashUrlTrocarSenha { get; set; }
+
         public string? HistPerfisAtivos { get; set; } = string.Empty;
 
         public bool IsAtivo { get; set; } = true;

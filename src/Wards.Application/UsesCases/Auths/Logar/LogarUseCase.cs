@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Wards.Application.UsesCases.Auths.Shared.Input;
+﻿using Wards.Application.UsesCases.Auths.Shared.Input;
 using Wards.Application.UsesCases.Tokens.CriarRefreshToken;
 using Wards.Application.UsesCases.Tokens.Shared.Input;
 using Wards.Application.UsesCases.Usuarios.ObterUsuarioCondicaoArbitraria;
