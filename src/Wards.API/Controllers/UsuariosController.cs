@@ -52,6 +52,9 @@ namespace Wards.API.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(AutenticarUsuarioOutput))]
         public async Task<ActionResult<AutenticarUsuarioOutput>> Autenticar(AutenticarUsuarioInput input)
         {
+            if (User.Identity!.IsAuthenticated)
+                return StatusCode(StatusCodes.Status403Forbidden, new UsuarioOutput() { Messages = new string[] { GetDescricaoEnum(CodigosErrosEnum.UsuarioJaAutenticado) } });
+
             var resp = await _autenticarUseCase.Execute(input);
 
             if (resp.Messages!.Length > 0)

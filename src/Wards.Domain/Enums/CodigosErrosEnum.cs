@@ -62,6 +62,9 @@ namespace Wards.Domain.Enums
         [Description("Um e-mail de validação de conta já foi enviado para você há pouco tempo. Tente novamente mais tarde")]
         EmailValidacaoJaEnviado = 119,
 
+        [Description("Você já está autenticado, portanto não pode fazer isso agora")]
+        UsuarioJaAutenticado = 120,
+
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=- 200 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         [Description("Processo concluído com sucesso")]
         OK = 200,

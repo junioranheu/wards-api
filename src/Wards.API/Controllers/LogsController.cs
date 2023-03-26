@@ -26,7 +26,7 @@ namespace Wards.API.Controllers
         [AuthorizeFilter(UsuarioRoleEnum.Adm)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(bool))]
         [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(bool))]
-        public async Task<ActionResult<bool>> Registrar(LogInput input)
+        public async Task<ActionResult<bool>> Criar(LogInput input)
         {
             await _criarUseCase.Execute(input);
             return Ok(true);
