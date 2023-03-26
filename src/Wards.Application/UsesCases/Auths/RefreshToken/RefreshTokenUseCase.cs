@@ -31,7 +31,7 @@ namespace Wards.Application.UsesCases.Auths.RefreshToken
             _criarRefreshTokenUseCase = criarRefreshTokenUseCase;
         }
 
-        public async Task<AuthsRefreshTokenOutput> Execute(string token, string refreshToken, string email)
+        public async Task<AuthsRefreshTokenOutput?> Execute(string token, string refreshToken, string email)
         {
             UsuarioOutput? usuario = await _obterUsuarioUseCase.Execute(email: email);
 

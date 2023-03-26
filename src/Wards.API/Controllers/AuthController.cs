@@ -55,7 +55,7 @@ namespace Wards.API.Controllers
         {
             var resp = await _registrarUseCase.Execute(input);
 
-            if (resp.Messages!.Length > 0)
+            if (resp!.Messages!.Length > 0)
                 return StatusCode(StatusCodes.Status403Forbidden, resp);
 
             await _criarUsuarioRoleUseCase.Execute(input.UsuariosRolesId!, resp.UsuarioId);
@@ -71,10 +71,20 @@ namespace Wards.API.Controllers
         {
             var resp = await _refreshTokenUseCase.Execute(input.Token!, input.RefreshToken!, ObterUsuarioEmail());
 
-            if (resp.Messages!.Length > 0)
+            if (resp!.Messages!.Length > 0)
                 return StatusCode(StatusCodes.Status403Forbidden, resp);
 
             return Ok(resp);
+        }
+
+        [HttpPut("verificarConta/{codigoVerificacao}")]
+        [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(bool))]
+        [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(bool))]
+        public async Task<ActionResult<bool>> VerificarConta(string codigoVerificacao)
+        {
+            var resp = await _usuarios.VerificarConta(codigoVerificacao);
+            return resp;
         }
     }
 }
