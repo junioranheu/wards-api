@@ -19,9 +19,4 @@
     <ProjectReference Include="..\Wards.Infrastructure\Wards.Infrastructure.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="UsesCases\Auths\VerificarConta\" />
-    <Folder Include="UsesCases\Usuarios\CriarUsuario\" />
-  </ItemGroup>
-
 </Project>

@@ -2,7 +2,7 @@
 
 namespace Wards.Application.UsesCases.Auths.Shared.Output
 {
-    public sealed class AuthsRefreshTokenOutput : ApiResponse
+    public sealed class CriarRefreshTokenUsuarioOutput : ApiResponse
     {
         public string? Token { get; set; } = null;
 

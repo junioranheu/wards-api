@@ -1,21 +1,21 @@
-﻿using Wards.Application.UsesCases.Auths.Shared.Input;
-using Wards.Application.UsesCases.Tokens.CriarRefreshToken;
+﻿using Wards.Application.UsesCases.Tokens.CriarRefreshToken;
 using Wards.Application.UsesCases.Tokens.Shared.Input;
 using Wards.Application.UsesCases.Usuarios.ObterUsuarioCondicaoArbitraria;
+using Wards.Application.UsesCases.Usuarios.Shared.Input;
 using Wards.Application.UsesCases.Usuarios.Shared.Output;
 using Wards.Domain.Enums;
 using Wards.Infrastructure.Auth.Token;
 using static Wards.Utils.Common;
 
-namespace Wards.Application.UsesCases.Auths.Logar
+namespace Wards.Application.UsesCases.Usuarios.AutenticarUsuario
 {
-    public sealed class LogarUseCase : ILogarUseCase
+    public sealed class AutenticarUsuarioUseCase : IAutenticarUsuarioUseCase
     {
         private readonly IJwtTokenGenerator _jwtTokenGenerator;
         private readonly IObterUsuarioCondicaoArbitrariaUseCase _obterUsuarioCondicaoArbitrariaUseCase;
         private readonly ICriarRefreshTokenUseCase _criarRefreshTokenUseCase;
 
-        public LogarUseCase(
+        public AutenticarUsuarioUseCase(
             IJwtTokenGenerator jwtTokenGenerator,
             IObterUsuarioCondicaoArbitrariaUseCase obterUsuarioCondicaoArbitrariaUseCase,
             ICriarRefreshTokenUseCase criarRefreshTokenUseCase)
@@ -25,7 +25,7 @@ namespace Wards.Application.UsesCases.Auths.Logar
             _criarRefreshTokenUseCase = criarRefreshTokenUseCase;
         }
 
-        public async Task<UsuarioOutput> Execute(LogarInput input)
+        public async Task<UsuarioOutput> Execute(AutenticarUsuarioInput input)
         {
             // #1 - Buscar usuário e sua senha (para não expor no output);
             (UsuarioOutput?, string) resp = await _obterUsuarioCondicaoArbitrariaUseCase.Execute(input?.Login ?? string.Empty);
@@ -34,7 +34,6 @@ namespace Wards.Application.UsesCases.Auths.Logar
 
             if (output is null)
                 return (new UsuarioOutput() { Messages = new string[] { GetDescricaoEnum(CodigosErrosEnum.UsuarioNaoEncontrado) } });
-
 
             // #2 - Verificar se a senha está correta;
             if (!VerificarCriptografia(senha: input?.Senha ?? string.Empty, senhaCriptografada: senhaCriptografada))

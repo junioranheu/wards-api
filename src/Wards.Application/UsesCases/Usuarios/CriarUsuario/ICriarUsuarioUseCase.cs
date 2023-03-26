@@ -5,6 +5,6 @@ namespace Wards.Application.UsesCases.Usuarios.CriarUsuario
 {
     public interface ICriarUsuarioUseCase
     {
-        Task<UsuarioOutput> Execute(UsuarioInput input);
+        Task<UsuarioOutput?> Execute(CriarUsuarioInput input);
     }
 }

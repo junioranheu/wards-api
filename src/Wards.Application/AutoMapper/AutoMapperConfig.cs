@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Wards.Application.UsesCases.Auths.Shared.Input;
 using Wards.Application.UsesCases.Logs.Shared.Input;
 using Wards.Application.UsesCases.Logs.Shared.Output;
 using Wards.Application.UsesCases.Tokens.Shared.Input;
@@ -16,9 +15,8 @@ namespace Wards.Application.AutoMapper
     {
         public AutoMapperConfig()
         {
-            CreateMap<UsuarioInput, Usuario>();
+            CreateMap<CriarUsuarioInput, Usuario>();
             CreateMap<Usuario, UsuarioOutput>();
-            CreateMap<RegistrarInput, UsuarioInput>();
 
             CreateMap<UsuarioRole, UsuarioRoleOutput>();
 

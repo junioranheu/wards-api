@@ -1,4 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Wards.Application.UsesCases.Usuarios.AutenticarUsuario;
+using Wards.Application.UsesCases.Usuarios.CriarRefreshTokenUsuario;
 using Wards.Application.UsesCases.Usuarios.CriarUsuario;
 using Wards.Application.UsesCases.Usuarios.CriarUsuario.Commands;
 using Wards.Application.UsesCases.Usuarios.ListarUsuario;
@@ -14,8 +16,12 @@ namespace Wards.Application.UsesCases.Usuarios
     {
         public static IServiceCollection AddUsuariosApplication(this IServiceCollection services)
         {
+            services.AddScoped<IAutenticarUsuarioUseCase, AutenticarUsuarioUseCase>();
+
             services.AddScoped<ICriarUsuarioUseCase, CriarUsuarioUseCase>();
             services.AddScoped<ICriarUsuarioCommand, CriarUsuarioCommand>();
+
+            services.AddScoped<ICriarRefreshTokenUsuarioUseCase, CriarRefreshTokenUsuarioUseCase>();
 
             services.AddScoped<IListarUsuarioUseCase, ListarUsuarioUseCase>();
             services.AddScoped<IListarUsuarioQuery, ListarUsuarioQuery>();

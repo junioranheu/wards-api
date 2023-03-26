@@ -6,18 +6,18 @@ namespace Wards.UnitTests.Tests.Usuarios
 {
     public sealed class UsuarioValidatorTest
     {
-        private readonly UsuarioInputValidator _validator;
+        private readonly CriarUsuarioInputValidator _validator;
 
         public UsuarioValidatorTest()
         {
-            _validator = new UsuarioInputValidator();
+            _validator = new CriarUsuarioInputValidator();
         }
 
         [Fact]
         public void DeveRetornarErro_QuandoNomeNulo()
         {
             // Arrange;
-            var model = new UsuarioInput { NomeCompleto = null };
+            var model = new CriarUsuarioInput { NomeCompleto = null };
 
             // Act;
             var result = _validator.TestValidate(model);
@@ -30,7 +30,7 @@ namespace Wards.UnitTests.Tests.Usuarios
         public void DeveRetornarOk_QuandoNomeValido()
         {
             // Arrange;
-            var model = new UsuarioInput { NomeCompleto = "nomeTeste" };
+            var model = new CriarUsuarioInput { NomeCompleto = "nomeTeste" };
 
             // Act;
             var result = _validator.TestValidate(model);
@@ -43,7 +43,7 @@ namespace Wards.UnitTests.Tests.Usuarios
         public void DeveRetornarErro_QuandoEmailNulo()
         {
             // Arrange;
-            var model = new UsuarioInput { Email = null };
+            var model = new CriarUsuarioInput { Email = null };
 
             // Act;
             var result = _validator.TestValidate(model);
@@ -56,7 +56,7 @@ namespace Wards.UnitTests.Tests.Usuarios
         public void DeveRetornarErro_QuandoEmailForaPadrao()
         {
             // Arrange;
-            var model = new UsuarioInput { Email = "teste@teste" };
+            var model = new CriarUsuarioInput { Email = "teste@teste" };
 
             // Act;
             var result = _validator.TestValidate(model);
@@ -69,7 +69,7 @@ namespace Wards.UnitTests.Tests.Usuarios
         public void DeveRetornarOk_QuandoEmailPadrao()
         {
             // Arrange;
-            var model = new UsuarioInput { Email = "teste@gmail.com" };
+            var model = new CriarUsuarioInput { Email = "teste@gmail.com" };
 
             // Act;
             var result = _validator.TestValidate(model);
@@ -82,7 +82,7 @@ namespace Wards.UnitTests.Tests.Usuarios
         public void DeveRetornarErro_QuandoChamadoNulo()
         {
             // Arrange;
-            var model = new UsuarioInput { Chamado = null };
+            var model = new CriarUsuarioInput { Chamado = null };
 
             // Act;
             var result = _validator.TestValidate(model);
@@ -95,7 +95,7 @@ namespace Wards.UnitTests.Tests.Usuarios
         public void DeveRetornarOk_QuandoChamadoValido()
         {
             // Arrange;
-            var model = new UsuarioInput { Chamado = "chamadoTeste" };
+            var model = new CriarUsuarioInput { Chamado = "chamadoTeste" };
 
             // Act;
             var result = _validator.TestValidate(model);

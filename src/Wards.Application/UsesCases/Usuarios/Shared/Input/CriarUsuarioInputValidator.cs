@@ -1,10 +1,10 @@
 ﻿using FluentValidation;
 
-namespace Wards.Application.UsesCases.Auths.Shared.Input
+namespace Wards.Application.UsesCases.Usuarios.Shared.Input
 {
-    public sealed class RegistrarInputValidator : AbstractValidator<RegistrarInput>
+    public sealed class CriarUsuarioInputValidator : AbstractValidator<CriarUsuarioInput>
     {
-        public RegistrarInputValidator()
+        public CriarUsuarioInputValidator()
         {
             RuleFor(x => x.NomeCompleto).NotNull().NotEmpty().MinimumLength(3);
             RuleFor(x => x.NomeUsuarioSistema).NotNull().NotEmpty().MinimumLength(3);

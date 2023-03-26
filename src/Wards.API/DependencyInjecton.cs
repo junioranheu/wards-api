@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.ResponseCompression;
 using System.IO.Compression;
 using Wards.API.Filters;
-using Wards.Application.UsesCases.Auths.Shared.Input;
 using Wards.Application.UsesCases.Logs.Shared.Input;
 using Wards.Application.UsesCases.Usuarios.Shared.Input;
 using Wards.Application.UsesCases.Wards.Shared.Input;
@@ -82,10 +81,9 @@ namespace Wards.API
             services.AddFluentValidationClientsideAdapters();
             #endregion
 
-            services.AddValidatorsFromAssemblyContaining<UsuarioInputValidator>();
-            services.AddValidatorsFromAssemblyContaining<RegistrarInputValidator>();
-            services.AddValidatorsFromAssemblyContaining<LogarInputValidator>();
-            services.AddValidatorsFromAssemblyContaining<AuthsRefreshTokenInputValidator>();
+            services.AddValidatorsFromAssemblyContaining<CriarUsuarioInputValidator>();
+            services.AddValidatorsFromAssemblyContaining<AutenticarUsuarioInputValidator>();
+            services.AddValidatorsFromAssemblyContaining<CriarRefreshTokenUsuarioInputValidator>();
             services.AddValidatorsFromAssemblyContaining<LogInputValidator>();
             services.AddValidatorsFromAssemblyContaining<WardInputValidator>();
         }

@@ -1,6 +1,6 @@
-﻿namespace Wards.Application.UsesCases.Auths.Shared.Input
+﻿namespace Wards.Application.UsesCases.Usuarios.Shared.Input
 {
-    public sealed class AuthsRefreshTokenInput
+    public sealed class CriarRefreshTokenUsuarioInput
     {
         public string? Token { get; set; } = null;
 

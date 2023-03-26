@@ -20,7 +20,6 @@ namespace Wards.Application
             AddAutoMapper(services);
 
             // UseCases;
-            services.AddAuthsApplication();
             services.AddImportsApplication();
             services.AddLogsApplication();
             services.AddTokensApplication();

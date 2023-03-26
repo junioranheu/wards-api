@@ -2,11 +2,8 @@
 
 namespace Wards.Application.UsesCases.Usuarios.Shared.Input
 {
-    public sealed class UsuarioInput
+    public sealed class CriarUsuarioInput
     {
-        [JsonIgnore]
-        public int? UsuarioId { get; set; } = 0;
-
         public string? NomeCompleto { get; set; } = string.Empty;
 
         public string? NomeUsuarioSistema { get; set; } = string.Empty;
@@ -18,13 +15,15 @@ namespace Wards.Application.UsesCases.Usuarios.Shared.Input
         public string? Chamado { get; set; } = string.Empty;
 
         [JsonIgnore]
+        public string? CodigoVerificacao { get; set; } = null;
+
+        [JsonIgnore]
+        public DateTime ValidadeCodigoVerificacao { get; set; }
+
+        [JsonIgnore]
         public string? HistPerfisAtivos { get; set; } = string.Empty;
 
         // Extra;
-        public string? Token { get; set; } = null;
-
-        public string? RefreshToken { get; set; } = null;
-
         public int[]? UsuariosRolesId { get; set; } = null;
     }
 }
