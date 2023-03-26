@@ -17,6 +17,8 @@ namespace Wards.Infrastructure.Data
         public DbSet<RefreshToken> RefreshTokens { get; set; }
         public DbSet<Log> Logs { get; set; }
         public DbSet<Ward> Wards { get; set; }
+        public DbSet<Estado> Estados { get; set; }
+        public DbSet<Cidade> Cidades { get; set; }
 
         // Usuários;
         public DbSet<Role> Roles { get; set; }

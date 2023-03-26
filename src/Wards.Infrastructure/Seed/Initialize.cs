@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using GeekSpot.Infrastructure.Data.Seed;
+using Microsoft.EntityFrameworkCore;
 using Wards.Domain.Entities;
 using Wards.Domain.Enums;
 using Wards.Infrastructure.Data;
@@ -43,6 +44,8 @@ namespace Wards.Infrastructure.Seed
 
             #region seed_outros
             await SeedWards.Seed(context);
+            await SeedEstados.Seed(context);
+            await SeedCidades.Seed(context);
             #endregion
 
             await context.SaveChangesAsync();
