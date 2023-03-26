@@ -123,7 +123,7 @@ namespace Wards.API.Controllers
 
         [HttpPut("verificarConta/{codigoVerificacao}")]
         [AllowAnonymous]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UsuarioOutput))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(bool))]
         [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(UsuarioOutput))]
         public async Task<ActionResult<UsuarioOutput>> VerificarConta(string codigoVerificacao)
         {
@@ -135,7 +135,22 @@ namespace Wards.API.Controllers
             if (resp!.Messages!.Length > 0)
                 return StatusCode(StatusCodes.Status403Forbidden, resp);
 
-            return resp;
+            return Ok(true);
+        }
+
+        [HttpPut("solicitarVerificacaoConta")]
+        [AuthorizeFilter]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(bool))]
+        [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(UsuarioOutput))]
+        public async Task<ActionResult<UsuarioOutput>> SolicitarVerificacaoConta()
+        {
+            int usuarioId = await ObterUsuarioId();
+            var resp = await _solicitarVerificacaoContaUseCase.Execute(usuarioId);
+
+            if (resp!.Messages!.Length > 0)
+                return StatusCode(StatusCodes.Status403Forbidden, resp);
+
+            return Ok(true);
         }
     }
 }
