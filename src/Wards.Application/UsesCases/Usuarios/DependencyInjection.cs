@@ -9,6 +9,8 @@ using Wards.Application.UsesCases.Usuarios.ObterUsuario;
 using Wards.Application.UsesCases.Usuarios.ObterUsuario.Queries;
 using Wards.Application.UsesCases.Usuarios.ObterUsuarioCondicaoArbitraria;
 using Wards.Application.UsesCases.Usuarios.ObterUsuarioCondicaoArbitraria.Queries;
+using Wards.Application.UsesCases.Usuarios.VerificarContaUsuario;
+using Wards.Application.UsesCases.Usuarios.VerificarContaUsuario.Commands;
 
 namespace Wards.Application.UsesCases.Usuarios
 {
@@ -31,6 +33,9 @@ namespace Wards.Application.UsesCases.Usuarios
 
             services.AddScoped<IObterUsuarioCondicaoArbitrariaUseCase, ObterUsuarioCondicaoArbitrariaUseCase>();
             services.AddScoped<IObterUsuarioCondicaoArbitrariaQuery, ObterUsuarioCondicaoArbitrariaQuery>();
+
+            services.AddScoped<IVerificarContaUsuarioUseCase, VerificarContaUsuarioUseCase>();
+            services.AddScoped<IVerificarContaUsuarioCommand, VerificarContaUsuarioCommand>();
 
             return services;
         }
