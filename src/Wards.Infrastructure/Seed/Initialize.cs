@@ -29,8 +29,8 @@ namespace Wards.Infrastructure.Seed
 
             if (!await context.Usuarios.AnyAsync())
             {
-                await context.Usuarios.AddAsync(new Usuario() { UsuarioId = 1, NomeCompleto = "Administrador", NomeUsuarioSistema = "adm", Email = "adm@Hotmail.com", Senha = Criptografar("123"), Chamado = "Chamado #1", HistPerfisAtivos = "1, 2", Data = dataAgora, IsAtivo = true });
-                await context.Usuarios.AddAsync(new Usuario() { UsuarioId = 2, NomeCompleto = "Junior Souza", NomeUsuarioSistema = "junioranheu", Email = "junioranheu@gmail.com", Chamado = "Chamado #2", Senha = Criptografar("123"), HistPerfisAtivos = "1", Data = dataAgora, IsAtivo = true });
+                await context.Usuarios.AddAsync(new Usuario() { UsuarioId = 1, NomeCompleto = "Administrador", NomeUsuarioSistema = "adm", Email = "adm@Hotmail.com", Senha = Criptografar("123"), Chamado = "Chamado #1", HistPerfisAtivos = "1, 2" });
+                await context.Usuarios.AddAsync(new Usuario() { UsuarioId = 2, NomeCompleto = "Junior Souza", NomeUsuarioSistema = "junioranheu", Email = "junioranheu@gmail.com", Chamado = "Chamado #2", Senha = Criptografar("123"), HistPerfisAtivos = "1" });
             }
 
             if (!await context.UsuariosRoles.AnyAsync())

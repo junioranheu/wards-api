@@ -9,6 +9,7 @@ using Wards.Application.UsesCases.Usuarios.ListarUsuario;
 using Wards.Application.UsesCases.Usuarios.ObterUsuario;
 using Wards.Application.UsesCases.Usuarios.Shared.Input;
 using Wards.Application.UsesCases.Usuarios.Shared.Output;
+using Wards.Application.UsesCases.Usuarios.VerificarContaUsuario;
 using Wards.Application.UsesCases.UsuariosRoles.CriarUsuarioRole;
 using Wards.Domain.Enums;
 using static Wards.Utils.Common;
@@ -20,26 +21,29 @@ namespace Wards.API.Controllers
     public class UsuariosController : BaseController<UsuariosController>
     {
         private readonly IAutenticarUsuarioUseCase _autenticarUseCase;
+        private readonly ICriarRefreshTokenUsuarioUseCase _criarRefreshTokenUsuarioUseCase;
         private readonly ICriarUsuarioUseCase _criarUseCase;
         private readonly ICriarUsuarioRoleUseCase _criarUsuarioRoleUseCase;
         private readonly IListarUsuarioUseCase _listarUseCase;
-        private readonly ICriarRefreshTokenUsuarioUseCase _criarRefreshTokenUsuarioUseCase;
         private readonly IObterUsuarioUseCase _obterUseCase;
+        private readonly IVerificarContaUsuarioUseCase _verificarContaUsuarioUseCase;
 
         public UsuariosController(
             IAutenticarUsuarioUseCase autenticarUseCase,
             ICriarUsuarioUseCase criarUseCase,
             ICriarUsuarioRoleUseCase criarUsuarioRoleUseCase,
-            IListarUsuarioUseCase listarUseCase,
             ICriarRefreshTokenUsuarioUseCase criarRefreshTokenUsuarioUseCase,
-            IObterUsuarioUseCase obterUseCase)
+            IListarUsuarioUseCase listarUseCase,
+            IObterUsuarioUseCase obterUseCase,
+            IVerificarContaUsuarioUseCase verificarContaUsuarioUseCase)
         {
             _autenticarUseCase = autenticarUseCase;
+            _criarRefreshTokenUsuarioUseCase = criarRefreshTokenUsuarioUseCase;
             _criarUseCase = criarUseCase;
+            _criarUsuarioRoleUseCase = criarUsuarioRoleUseCase;
             _listarUseCase = listarUseCase;
             _obterUseCase = obterUseCase;
-            _criarRefreshTokenUsuarioUseCase = criarRefreshTokenUsuarioUseCase;
-            _criarUsuarioRoleUseCase = criarUsuarioRoleUseCase;
+            _verificarContaUsuarioUseCase = verificarContaUsuarioUseCase;
         }
 
         [HttpPost("autenticar")]
@@ -51,6 +55,20 @@ namespace Wards.API.Controllers
             var resp = await _autenticarUseCase.Execute(input);
 
             if (resp.Messages!.Length > 0)
+                return StatusCode(StatusCodes.Status403Forbidden, resp);
+
+            return Ok(resp);
+        }
+
+        [HttpPost("criarRefreshToken")]
+        [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CriarRefreshTokenUsuarioOutput))]
+        [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(UsuarioOutput))]
+        public async Task<ActionResult<CriarRefreshTokenUsuarioOutput>> CriarRefreshToken(CriarRefreshTokenUsuarioInput input)
+        {
+            var resp = await _criarRefreshTokenUsuarioUseCase.Execute(input.Token!, input.RefreshToken!, ObterUsuarioEmail());
+
+            if (resp!.Messages!.Length > 0)
                 return StatusCode(StatusCodes.Status403Forbidden, resp);
 
             return Ok(resp);
@@ -86,20 +104,6 @@ namespace Wards.API.Controllers
             return Ok(resp);
         }
 
-        [HttpPost("criarRefreshToken")]
-        [AllowAnonymous]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CriarRefreshTokenUsuarioOutput))]
-        [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(UsuarioOutput))]
-        public async Task<ActionResult<CriarRefreshTokenUsuarioOutput>> CriarRefreshToken(CriarRefreshTokenUsuarioInput input)
-        {
-            var resp = await _criarRefreshTokenUsuarioUseCase.Execute(input.Token!, input.RefreshToken!, ObterUsuarioEmail());
-
-            if (resp!.Messages!.Length > 0)
-                return StatusCode(StatusCodes.Status403Forbidden, resp);
-
-            return Ok(resp);
-        }
-
         [HttpGet]
         [AuthorizeFilter]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UsuarioOutput))]
@@ -114,14 +118,21 @@ namespace Wards.API.Controllers
             return Ok(resp);
         }
 
-        //[HttpPut("verificarConta/{codigoVerificacao}")]
-        //[AllowAnonymous]
-        //[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(bool))]
-        //[ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(bool))]
-        //public async Task<ActionResult<bool>> VerificarConta(string codigoVerificacao)
-        //{
-        //    var resp = await _usuarios.VerificarConta(codigoVerificacao);
-        //    return resp;
-        //}
+        [HttpPut("verificarConta/{codigoVerificacao}")]
+        [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UsuarioOutput))]
+        [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(UsuarioOutput))]
+        public async Task<ActionResult<UsuarioOutput>> VerificarConta(string codigoVerificacao)
+        {
+            if (string.IsNullOrEmpty(codigoVerificacao))
+                return StatusCode(StatusCodes.Status403Forbidden, new UsuarioOutput() { Messages = new string[] { GetDescricaoEnum(CodigosErrosEnum.CodigoVerificacaoInvalido) } });
+
+            var resp = await _verificarContaUsuarioUseCase.Execute(codigoVerificacao);
+
+            if (resp!.Messages!.Length > 0)
+                return StatusCode(StatusCodes.Status403Forbidden, resp);
+
+            return resp;
+        }
     }
 }

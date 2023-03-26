@@ -15,10 +15,13 @@ namespace Wards.Application.UsesCases.Usuarios.Shared.Input
         public string? Chamado { get; set; } = string.Empty;
 
         [JsonIgnore]
+        public bool IsVerificado { get; set; } = false;
+
+        [JsonIgnore]
         public string? CodigoVerificacao { get; set; } = null;
 
         [JsonIgnore]
-        public DateTime ValidadeCodigoVerificacao { get; set; }
+        public DateTime? ValidadeCodigoVerificacao { get; set; }
 
         [JsonIgnore]
         public string? HistPerfisAtivos { get; set; } = string.Empty;

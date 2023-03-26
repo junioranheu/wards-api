@@ -18,9 +18,11 @@ namespace Wards.Domain.Entities
 
         public string? Chamado { get; set; } = string.Empty;
 
+        public bool IsVerificado { get; set; } = false;
+
         public string? CodigoVerificacao { get; set; } = null;
 
-        public DateTime ValidadeCodigoVerificacao { get; set; }
+        public DateTime? ValidadeCodigoVerificacao { get; set; }
 
         public string? HashUrlTrocarSenha { get; set; } = null;
 

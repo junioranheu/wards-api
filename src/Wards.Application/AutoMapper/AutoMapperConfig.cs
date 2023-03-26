@@ -11,7 +11,7 @@ using Wards.Domain.Entities;
 
 namespace Wards.Application.AutoMapper
 {
-    public class AutoMapperConfig : Profile
+    public sealed class AutoMapperConfig : Profile
     {
         public AutoMapperConfig()
         {
