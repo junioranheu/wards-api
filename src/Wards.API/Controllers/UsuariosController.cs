@@ -48,9 +48,9 @@ namespace Wards.API.Controllers
 
         [HttpPost("autenticar")]
         [AllowAnonymous]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UsuarioOutput))]
-        [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(UsuarioOutput))]
-        public async Task<ActionResult<UsuarioOutput>> Autenticar(AutenticarUsuarioInput input)
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AutenticarUsuarioOutput))]
+        [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(AutenticarUsuarioOutput))]
+        public async Task<ActionResult<AutenticarUsuarioOutput>> Autenticar(AutenticarUsuarioInput input)
         {
             var resp = await _autenticarUseCase.Execute(input);
 
@@ -76,9 +76,9 @@ namespace Wards.API.Controllers
 
         [HttpPost]
         [AuthorizeFilter(UsuarioRoleEnum.Adm, UsuarioRoleEnum.Suporte)]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UsuarioOutput))]
-        [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(UsuarioOutput))]
-        public async Task<ActionResult<UsuarioOutput>> Criar(CriarUsuarioInput input)
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AutenticarUsuarioOutput))]
+        [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(AutenticarUsuarioOutput))]
+        public async Task<ActionResult<AutenticarUsuarioOutput>> Criar(CriarUsuarioInput input)
         {
             var resp = await _criarUseCase.Execute(input);
 

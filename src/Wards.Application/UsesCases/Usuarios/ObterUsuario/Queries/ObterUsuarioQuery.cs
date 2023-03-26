@@ -17,7 +17,7 @@ namespace Wards.Application.UsesCases.Usuarios.ObterUsuario.Queries
         public async Task<Usuario?> Execute(int id, string email)
         {
             var linq = await _context.Usuarios.
-                             Include(ur => ur.UsuarioRoles).
+                             Include(ur => ur.UsuarioRoles)!.ThenInclude(r => r.Roles).
                              Where(u =>
                                  id > 0 ? u.UsuarioId == id : true
                                  && !string.IsNullOrEmpty(email) ? u.Email == email : true

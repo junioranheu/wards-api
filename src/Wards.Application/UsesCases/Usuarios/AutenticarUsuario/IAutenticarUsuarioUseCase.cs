@@ -5,6 +5,6 @@ namespace Wards.Application.UsesCases.Usuarios.AutenticarUsuario
 {
     public interface IAutenticarUsuarioUseCase
     {
-        Task<UsuarioOutput> Execute(AutenticarUsuarioInput input);
+        Task<AutenticarUsuarioOutput> Execute(AutenticarUsuarioInput input);
     }
 }

@@ -17,6 +17,8 @@ namespace Wards.Application.AutoMapper
         {
             CreateMap<CriarUsuarioInput, Usuario>();
             CreateMap<Usuario, UsuarioOutput>();
+            CreateMap<Usuario, AutenticarUsuarioOutput>();
+            CreateMap<UsuarioOutput, AutenticarUsuarioOutput>();         
 
             CreateMap<UsuarioRole, UsuarioRoleOutput>();
 

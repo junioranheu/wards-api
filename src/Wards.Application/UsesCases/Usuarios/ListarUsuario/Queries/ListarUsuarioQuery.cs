@@ -16,7 +16,7 @@ namespace Wards.Application.UsesCases.Usuarios.ListarUsuario.Queries
         public async Task<IEnumerable<Usuario>?> Execute()
         {
             var linq = await _context.Usuarios.
-                             Include(ur => ur.UsuarioRoles).
+                             Include(ur => ur.UsuarioRoles)!.ThenInclude(r => r.Roles).
                              AsNoTracking().ToListAsync();
 
             return linq;
