@@ -111,24 +111,6 @@ namespace Wards.Utils
         }
 
         /// <summary>
-        /// Converter Base64 para imagem;
-        /// </summary>
-        public static IFormFile Base64ToImage(string base64)
-        {
-            List<IFormFile> formFiles = new();
-
-            string split = ";base64,";
-            string normalizarBase64 = base64.Substring(base64.IndexOf(split) + split.Length);
-            byte[] bytes = Convert.FromBase64String(normalizarBase64);
-            MemoryStream stream = new(bytes);
-
-            IFormFile file = new FormFile(stream, 0, bytes.Length, Guid.NewGuid().ToString(), Guid.NewGuid().ToString());
-            formFiles.Add(file);
-
-            return formFiles[0];
-        }
-
-        /// <summary>
         /// Formatar bytes para B, KB, MB, etc;
         /// </summary>
         public static string FormatarBytes(long bytes)
@@ -287,6 +269,40 @@ namespace Wards.Utils
             formFiles.Add(file);
 
             return formFiles[0];
+        }
+
+        /// <summary>
+        /// Converter Base64 para imagem;
+        /// </summary>
+        public static IFormFile Base64ToImage(string base64)
+        {
+            List<IFormFile> formFiles = new();
+
+            string split = ";base64,";
+            string normalizarBase64 = base64.Substring(base64.IndexOf(split) + split.Length);
+            byte[] bytes = Convert.FromBase64String(normalizarBase64);
+            MemoryStream stream = new(bytes);
+
+            IFormFile file = new FormFile(stream, 0, bytes.Length, Guid.NewGuid().ToString(), Guid.NewGuid().ToString());
+            formFiles.Add(file);
+
+            return formFiles[0];
+        }
+
+        /// <summary>
+        /// Converter caminho de um arquivo para imagem;
+        /// </summary>
+        public static IFormFile PathToFile(string path, string fileName, string contentType)
+        {
+            var fileStream = new FileStream(path, FileMode.Open);
+
+            var formFile = new FormFile(fileStream, 0, fileStream.Length, null, fileName)
+            {
+                Headers = new HeaderDictionary(),
+                ContentType = contentType
+            };
+
+            return formFile;
         }
 
         /// <summary>

@@ -25,7 +25,7 @@ namespace Wards.Application.UsesCases.Usuarios.CriarUsuario.Commands
             await _context.AddAsync(input);
             await _context.SaveChangesAsync();
 
-            IFormFile arquivo = GerarFotoAleatoria();
+            IFormFile? arquivo = ObterFotoAleatoria(_webHostEnvironment);
             await VerificarParametrosDepoisUparFoto(_webHostEnvironment, input.UsuarioId, arquivo);
 
             return input;

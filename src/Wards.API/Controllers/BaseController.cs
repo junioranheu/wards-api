@@ -47,7 +47,7 @@ namespace Wards.API.Controllers
 
             // Procedimento de inicialização para salvar nova imagem;
             string webRootPath = hostingEnvironment.ContentRootPath; // Vai até o wwwwroot;
-            string restoCaminho = $"/Uploads/{nomePasta}/"; // Acesso à pasta referente; 
+            string restoCaminho = $"/{nomePasta}/"; // Acesso à pasta referente; 
 
             // Verificar se o arquivo tem extensão, se não tiver, adicione;
             if (!Path.HasExtension(nomeArquivo))
@@ -56,7 +56,7 @@ namespace Wards.API.Controllers
             // Verificar se já existe uma foto caso exista, delete-a;
             if (!string.IsNullOrEmpty(nomeArquivoAnterior))
             {
-                string caminhoArquivoAtual = webRootPath + restoCaminho + nomeArquivoAnterior;
+                string caminhoArquivoAtual = Path.Combine(webRootPath, restoCaminho, nomeArquivoAnterior);
 
                 // Verificar se o arquivo existe;
                 if (System.IO.File.Exists(caminhoArquivoAtual))
@@ -64,7 +64,7 @@ namespace Wards.API.Controllers
             }
 
             // Salvar aquivo;
-            string caminhoDestino = webRootPath + restoCaminho + nomeArquivo; // Caminho de destino para upar;
+            string caminhoDestino = Path.Combine(webRootPath, restoCaminho, nomeArquivo); // Caminho de destino para upar;
             await arquivo.CopyToAsync(new FileStream(caminhoDestino, FileMode.Create));
 
             return nomeArquivo;

@@ -2,9 +2,9 @@
 
 namespace Wards.Domain.Enums
 {
-    public enum CaminhoUploadEnum
+    public enum CaminhoAssetEnum
     {
-        [Description("Uploads/Usuarios/Perfil/Imagem")]
+        [Description("Assets/Usuarios/Perfil/Imagem")]
         FotoPerfilUsuario = 1
     }
 }

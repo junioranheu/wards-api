@@ -56,13 +56,20 @@ namespace Wards.Application.UsesCases.Usuarios
             }
         }
 
-
-        internal static IFormFile GerarFotoAleatoria()
+        internal static IFormFile? ObterFotoAleatoria(IWebHostEnvironment _webHostEnvironment)
         {
-            return null;
+            string caminho = $"{_webHostEnvironment}/${CaminhoAssetEnum.FotoPerfilUsuario}";
+            string[] arquivos = Directory.GetFiles(caminho, "*.jpg");
+
+            if (arquivos.Length == 0)
+                return null;
+
+            string arquivoAleatorio = arquivos.OrderBy(x => Guid.NewGuid()).FirstOrDefault() ?? string.Empty;
+
+            return PathToFile($"{caminho}/${arquivoAleatorio}", arquivoAleatorio, "image/jpg");
         }
 
-        internal static async Task<bool> VerificarParametrosDepoisUparFoto(IWebHostEnvironment _webHostEnvironment, int usuarioId, IFormFile arquivo)
+        internal static async Task<bool> VerificarParametrosDepoisUparFoto(IWebHostEnvironment _webHostEnvironment, int usuarioId, IFormFile? arquivo)
         {
             try
             {
@@ -70,7 +77,7 @@ namespace Wards.Application.UsesCases.Usuarios
 
                 if (!string.IsNullOrEmpty(nomeFoto) && arquivo is not null)
                 {
-                    string caminhoNovaImagem = await UparImagem(arquivo, nomeFoto, GetDescricaoEnum(CaminhoUploadEnum.FotoPerfilUsuario), string.Empty, _webHostEnvironment);
+                    // string caminhoNovaImagem = await UparImagem(arquivo, nomeFoto, GetDescricaoEnum(CaminhoUploadEnum.FotoPerfilUsuario), string.Empty, _webHostEnvironment);
                 }
 
                 return true;
