@@ -30,7 +30,6 @@ namespace Wards.Application.UsesCases.Usuarios.AutenticarUsuario
 
         public async Task<AutenticarUsuarioOutput> Execute(AutenticarUsuarioInput input)
         {
-            // #1 - Buscar usuário e sua senha (para não expor no output);
             (UsuarioOutput?, string) resp = await _obterUsuarioCondicaoArbitrariaUseCase.Execute(input?.Login ?? string.Empty);
             AutenticarUsuarioOutput? output = _map.Map<AutenticarUsuarioOutput>(resp.Item1);
             string senhaCriptografada = resp.Item2;
@@ -38,18 +37,13 @@ namespace Wards.Application.UsesCases.Usuarios.AutenticarUsuario
             if (output is null)
                 return (new AutenticarUsuarioOutput() { Messages = new string[] { ObterDescricaoEnum(CodigoErroEnum.UsuarioNaoEncontrado) } });
 
-            // #2 - Verificar se a senha está correta;
             if (!VerificarCriptografia(senha: input?.Senha ?? string.Empty, senhaCriptografada: senhaCriptografada))
                 return (new AutenticarUsuarioOutput() { Messages = new string[] { ObterDescricaoEnum(CodigoErroEnum.UsuarioSenhaIncorretos) } });
 
-            // #3 - Verificar se o usuário está ativo;
             if (!output.IsAtivo)
                 return (new AutenticarUsuarioOutput() { Messages = new string[] { ObterDescricaoEnum(CodigoErroEnum.ContaDesativada) } });
 
-            // #4 - Criar token JWT;
             output!.Token = _jwtTokenGenerator.GerarToken(nomeCompleto: output.NomeCompleto!, email: output.Email!, listaClaims: null);
-
-            // #5 - Gerar refresh token;
             output = await GerarRefreshToken(_jwtTokenGenerator, _criarRefreshTokenUseCase, output, output.UsuarioId);
 
             return output;
