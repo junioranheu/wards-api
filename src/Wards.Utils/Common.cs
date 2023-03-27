@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -296,7 +295,7 @@ namespace Wards.Utils
         {
             var fileStream = new FileStream(path, FileMode.Open);
 
-            var formFile = new FormFile(fileStream, 0, fileStream.Length, string.Empty, fileName)
+            var formFile = new FormFile(fileStream, 0, fileStream.Length, fileName, fileName)
             {
                 Headers = new HeaderDictionary(),
                 ContentType = contentType
@@ -438,7 +437,12 @@ namespace Wards.Utils
 
             // Salvar aquivo;
             string caminhoDestino = webRootPath + restoCaminho + nomeArquivo; // Caminho de destino para upar;
-            await arquivo.CopyToAsync(new FileStream(caminhoDestino, FileMode.Create));
+            //await arquivo.CopyToAsync(new FileStream(caminhoDestino, FileMode.Create));
+
+            using (var fs = File.Create(caminhoDestino))
+            {
+                await arquivo.CopyToAsync(fs);
+            }
 
             return nomeArquivo;
         }
