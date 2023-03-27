@@ -9,6 +9,7 @@ using Wards.Application.UsesCases.Usuarios.ListarUsuario;
 using Wards.Application.UsesCases.Usuarios.ObterUsuario;
 using Wards.Application.UsesCases.Usuarios.Shared.Input;
 using Wards.Application.UsesCases.Usuarios.Shared.Output;
+using Wards.Application.UsesCases.Usuarios.SolicitarVerificacaoContaUsuario;
 using Wards.Application.UsesCases.Usuarios.VerificarContaUsuario;
 using Wards.Application.UsesCases.UsuariosRoles.CriarUsuarioRole;
 using Wards.Domain.Enums;
@@ -26,6 +27,7 @@ namespace Wards.API.Controllers
         private readonly ICriarUsuarioRoleUseCase _criarUsuarioRoleUseCase;
         private readonly IListarUsuarioUseCase _listarUseCase;
         private readonly IObterUsuarioUseCase _obterUseCase;
+        private readonly ISolicitarVerificacaoContaUsuarioUseCase _solicitarVerificacaoContaUsuarioUseCase;
         private readonly IVerificarContaUsuarioUseCase _verificarContaUsuarioUseCase;
 
         public UsuariosController(
@@ -35,6 +37,7 @@ namespace Wards.API.Controllers
             ICriarRefreshTokenUsuarioUseCase criarRefreshTokenUsuarioUseCase,
             IListarUsuarioUseCase listarUseCase,
             IObterUsuarioUseCase obterUseCase,
+            ISolicitarVerificacaoContaUsuarioUseCase solicitarVerificacaoContaUsuarioUseCase,
             IVerificarContaUsuarioUseCase verificarContaUsuarioUseCase)
         {
             _autenticarUseCase = autenticarUseCase;
@@ -43,6 +46,7 @@ namespace Wards.API.Controllers
             _criarUsuarioRoleUseCase = criarUsuarioRoleUseCase;
             _listarUseCase = listarUseCase;
             _obterUseCase = obterUseCase;
+            _solicitarVerificacaoContaUsuarioUseCase = solicitarVerificacaoContaUsuarioUseCase;
             _verificarContaUsuarioUseCase = verificarContaUsuarioUseCase;
         }
 
@@ -121,6 +125,21 @@ namespace Wards.API.Controllers
             return Ok(resp);
         }
 
+        [HttpPost("solicitarVerificacaoConta")]
+        [AuthorizeFilter]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(bool))]
+        [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(UsuarioOutput))]
+        public async Task<ActionResult<UsuarioOutput>> SolicitarVerificacaoConta()
+        {
+            int usuarioId = await ObterUsuarioId();
+            var resp = await _solicitarVerificacaoContaUsuarioUseCase.Execute(usuarioId);
+
+            if (resp!.Messages!.Length > 0)
+                return StatusCode(StatusCodes.Status403Forbidden, resp);
+
+            return Ok(true);
+        }
+
         [HttpPut("verificarConta/{codigoVerificacao}")]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(bool))]
@@ -131,21 +150,6 @@ namespace Wards.API.Controllers
                 return StatusCode(StatusCodes.Status403Forbidden, new UsuarioOutput() { Messages = new string[] { GetDescricaoEnum(CodigosErrosEnum.CodigoVerificacaoInvalido) } });
 
             var resp = await _verificarContaUsuarioUseCase.Execute(codigoVerificacao);
-
-            if (resp!.Messages!.Length > 0)
-                return StatusCode(StatusCodes.Status403Forbidden, resp);
-
-            return Ok(true);
-        }
-
-        [HttpPut("solicitarVerificacaoConta")]
-        [AuthorizeFilter]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(bool))]
-        [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(UsuarioOutput))]
-        public async Task<ActionResult<UsuarioOutput>> SolicitarVerificacaoConta()
-        {
-            int usuarioId = await ObterUsuarioId();
-            var resp = await _solicitarVerificacaoContaUseCase.Execute(usuarioId);
 
             if (resp!.Messages!.Length > 0)
                 return StatusCode(StatusCodes.Status403Forbidden, resp);

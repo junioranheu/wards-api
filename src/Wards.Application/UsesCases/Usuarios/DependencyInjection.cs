@@ -9,6 +9,8 @@ using Wards.Application.UsesCases.Usuarios.ObterUsuario;
 using Wards.Application.UsesCases.Usuarios.ObterUsuario.Queries;
 using Wards.Application.UsesCases.Usuarios.ObterUsuarioCondicaoArbitraria;
 using Wards.Application.UsesCases.Usuarios.ObterUsuarioCondicaoArbitraria.Queries;
+using Wards.Application.UsesCases.Usuarios.SolicitarVerificacaoContaUsuario;
+using Wards.Application.UsesCases.Usuarios.SolicitarVerificacaoContaUsuario.Commands;
 using Wards.Application.UsesCases.Usuarios.VerificarContaUsuario;
 using Wards.Application.UsesCases.Usuarios.VerificarContaUsuario.Commands;
 
@@ -37,6 +39,9 @@ namespace Wards.Application.UsesCases.Usuarios
             services.AddScoped<IVerificarContaUsuarioUseCase, VerificarContaUsuarioUseCase>();
             services.AddScoped<IVerificarContaUsuarioCommand, VerificarContaUsuarioCommand>();
 
+            services.AddScoped<ISolicitarVerificacaoContaUsuarioUseCase, SolicitarVerificacaoContaUsuarioUseCase>();
+            services.AddScoped<ISolicitarVerificacaoContaUsuarioCommand, SolicitarVerificacaoContaUsuarioCommand>();
+        
             return services;
         }
     }
