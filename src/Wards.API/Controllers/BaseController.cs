@@ -35,7 +35,7 @@ namespace Wards.API.Controllers
 
         /// <summary>
         /// arquivo = o arquivo em si, a variável IFormFile;
-        /// nomeArquivo = o nome do novo objeto em questão. Por exemplo, ao mudar a foto de perfil de um usuário, envie o id dele;
+        /// nomeArquivo = o nome do novo objeto em questão;
         /// nomePasta = nome do caminho do arquivo, da pasta. Por exemplo: /Uploads/Usuarios/. "Usuarios" é o caminho;
         /// nomeArquivoAnterior = o nome do arquivo que constava anterior, caso exista;
         /// hostingEnvironment = o caminho até o wwwroot. Ele deve ser passado por parâmetro, já que não funcionaria aqui diretamente no BaseController;

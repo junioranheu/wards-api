@@ -12,21 +12,13 @@ namespace Wards.Application.UsesCases.Usuarios
 {
     public class BaseUsuario
     {
-        private readonly IWebHostEnvironment _webHostEnvironment;
-        private readonly IJwtTokenGenerator _jwtTokenGenerator;
-        private readonly ICriarRefreshTokenUseCase _criarRefreshTokenUseCase;
+        public BaseUsuario() { }
 
-        public BaseUsuario(
-            IWebHostEnvironment webHostEnvironment,
-            IJwtTokenGenerator jwtTokenGenerator,
-            ICriarRefreshTokenUseCase criarRefreshTokenUseCase)
-        {
-            _webHostEnvironment = webHostEnvironment;
-            _jwtTokenGenerator = jwtTokenGenerator;
-            _criarRefreshTokenUseCase = criarRefreshTokenUseCase;
-        }
-
-        internal async Task<AutenticarUsuarioOutput> GerarRefreshToken(AutenticarUsuarioOutput output, int usuarioId)
+        internal static async Task<AutenticarUsuarioOutput> GerarRefreshToken(
+            IJwtTokenGenerator _jwtTokenGenerator,
+            ICriarRefreshTokenUseCase _criarRefreshTokenUseCase,
+            AutenticarUsuarioOutput output,
+            int usuarioId)
         {
             var refreshToken = _jwtTokenGenerator.GerarRefreshToken();
             output.RefreshToken = refreshToken;
@@ -65,12 +57,12 @@ namespace Wards.Application.UsesCases.Usuarios
         }
 
 
-        internal IFormFile GerarFotoAleatoria()
+        internal static IFormFile GerarFotoAleatoria()
         {
             return null;
         }
 
-        internal async bool VerificarEUparFoto(int usuarioId, IFormFile arquivo)
+        internal static async Task<bool> VerificarParametrosDepoisUparFoto(IWebHostEnvironment _webHostEnvironment, int usuarioId, IFormFile arquivo)
         {
             try
             {
