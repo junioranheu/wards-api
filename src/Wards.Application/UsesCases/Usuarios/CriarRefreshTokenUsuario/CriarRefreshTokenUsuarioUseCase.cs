@@ -35,12 +35,12 @@ namespace Wards.Application.UsesCases.Usuarios.CriarRefreshTokenUsuario
             UsuarioOutput? usuario = await _obterUsuarioUseCase.Execute(email: email);
 
             if (usuario is null)
-                return (new CriarRefreshTokenUsuarioOutput() { Messages = new string[] { GetDescricaoEnum(CodigoErroEnum.NaoEncontrado) } });
+                return (new CriarRefreshTokenUsuarioOutput() { Messages = new string[] { ObterDescricaoEnum(CodigoErroEnum.NaoEncontrado) } });
 
             int usuarioId = usuario.UsuarioId;
             var refreshTokenSalvoAnteriormente = await _obterRefreshTokenUseCase.Execute(usuarioId);
             if (refreshTokenSalvoAnteriormente != refreshToken)
-                return (new CriarRefreshTokenUsuarioOutput() { Messages = new string[] { GetDescricaoEnum(CodigoErroEnum.RefreshTokenInvalido) } });
+                return (new CriarRefreshTokenUsuarioOutput() { Messages = new string[] { ObterDescricaoEnum(CodigoErroEnum.RefreshTokenInvalido) } });
 
             ClaimsPrincipal? principal = _jwtTokenGenerator.GetInfoTokenExpirado(token);
             CriarRefreshTokenUsuarioOutput? output = await GerarRefreshToken(principal, usuarioId);

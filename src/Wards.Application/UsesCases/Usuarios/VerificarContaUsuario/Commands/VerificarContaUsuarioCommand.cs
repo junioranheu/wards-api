@@ -21,13 +21,13 @@ namespace Wards.Application.UsesCases.Usuarios.VerificarContaUsuario.Commands
                              AsNoTracking().FirstOrDefaultAsync();
 
             if (linq is null)
-                return GetDescricaoEnum(CodigoErroEnum.CodigoVerificacaoInvalido);
+                return ObterDescricaoEnum(CodigoErroEnum.CodigoVerificacaoInvalido);
 
             if (HorarioBrasilia() > linq.ValidadeCodigoVerificacao)
-                return GetDescricaoEnum(CodigoErroEnum.CodigoExpirado);
+                return ObterDescricaoEnum(CodigoErroEnum.CodigoExpirado);
 
             if (linq.IsVerificado)
-                return GetDescricaoEnum(CodigoErroEnum.ContaJaVerificada);
+                return ObterDescricaoEnum(CodigoErroEnum.ContaJaVerificada);
 
             linq.IsVerificado = true;
             _context.Update(linq);

@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.Extensions.Configuration;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -102,7 +101,7 @@ namespace Wards.Utils
         /// Pegar a descrição de um enum;
         /// https://stackoverflow.com/questions/50433909/get-string-name-from-enum-in-c-sharp;
         /// </summary>
-        public static string GetDescricaoEnum(Enum enumVal)
+        public static string ObterDescricaoEnum(Enum enumVal)
         {
             MemberInfo[] memInfo = enumVal.GetType().GetMember(enumVal.ToString());
             DescriptionAttribute? attribute = CustomAttributeExtensions.GetCustomAttribute<DescriptionAttribute>(memInfo[0]);
@@ -296,7 +295,7 @@ namespace Wards.Utils
         {
             var fileStream = new FileStream(path, FileMode.Open);
 
-            var formFile = new FormFile(fileStream, 0, fileStream.Length, null, fileName)
+            var formFile = new FormFile(fileStream, 0, fileStream.Length, string.Empty, fileName)
             {
                 Headers = new HeaderDictionary(),
                 ContentType = contentType

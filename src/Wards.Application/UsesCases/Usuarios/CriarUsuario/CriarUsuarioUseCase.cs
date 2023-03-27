@@ -47,16 +47,16 @@ namespace Wards.Application.UsesCases.Usuarios.CriarUsuario
 
             //if (verificarUsuario is not null)
             //{
-            //    return (new AutenticarUsuarioOutput(), GetDescricaoEnum(CodigosErrosEnum.UsuarioExistente));
+            //    return (new AutenticarUsuarioOutput(), ObterDescricaoEnum(CodigosErrosEnum.UsuarioExistente));
             //}
 
             // #2.1 - Verificar requisitos gerais;
             if (input?.NomeCompleto?.Length < 3 || input?.NomeUsuarioSistema?.Length < 3)
-                return (new AutenticarUsuarioOutput() { Messages = new string[] { GetDescricaoEnum(CodigoErroEnum.RequisitosNome) } });
+                return (new AutenticarUsuarioOutput() { Messages = new string[] { ObterDescricaoEnum(CodigoErroEnum.RequisitosNome) } });
 
             // #2.2 - Verificar e-mail;
             if (!ValidarEmail(input?.Email!))
-                return (new AutenticarUsuarioOutput() { Messages = new string[] { GetDescricaoEnum(CodigoErroEnum.EmailInvalido) } });
+                return (new AutenticarUsuarioOutput() { Messages = new string[] { ObterDescricaoEnum(CodigoErroEnum.EmailInvalido) } });
 
             // #2.3 - Verificar requisitos de senha;
             var validarSenha = ValidarSenha(input?.Senha!, input?.NomeCompleto!, input?.NomeUsuarioSistema!, input?.Email!);

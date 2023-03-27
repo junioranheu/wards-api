@@ -39,7 +39,7 @@ namespace Wards.Application.UsesCases.Usuarios
             try
             {
                 const string assunto = "Verifique sua conta";
-                string nomeArquivo = GetDescricaoEnum(EmailEnum.VerificarConta);
+                string nomeArquivo = ObterDescricaoEnum(EmailEnum.VerificarConta);
 
                 List<EmailDadosReplace> listaDadosReplace = new()
                 {
@@ -58,7 +58,7 @@ namespace Wards.Application.UsesCases.Usuarios
 
         internal static IFormFile? ObterFotoAleatoria(IWebHostEnvironment _webHostEnvironment)
         {
-            string caminho = $"{_webHostEnvironment}/${CaminhoAssetEnum.FotoPerfilUsuario}";
+            string caminho = $"{_webHostEnvironment.ContentRootPath}/{ObterDescricaoEnum(CaminhoAssetEnum.FotoPerfilUsuario)}";
             string[] arquivos = Directory.GetFiles(caminho, "*.jpg");
 
             if (arquivos.Length == 0)
@@ -66,7 +66,10 @@ namespace Wards.Application.UsesCases.Usuarios
 
             string arquivoAleatorio = arquivos.OrderBy(x => Guid.NewGuid()).FirstOrDefault() ?? string.Empty;
 
-            return PathToFile($"{caminho}/${arquivoAleatorio}", arquivoAleatorio, "image/jpg");
+            if (string.IsNullOrEmpty(arquivoAleatorio))
+                return null;
+
+            return PathToFile(arquivoAleatorio, Path.GetFileName(arquivoAleatorio), "image/jpg");
         }
 
         internal static async Task<bool> VerificarParametrosDepoisUparFoto(IWebHostEnvironment _webHostEnvironment, int usuarioId, IFormFile? arquivo)
@@ -77,7 +80,7 @@ namespace Wards.Application.UsesCases.Usuarios
 
                 if (!string.IsNullOrEmpty(nomeFoto) && arquivo is not null)
                 {
-                    // string caminhoNovaImagem = await UparImagem(arquivo, nomeFoto, GetDescricaoEnum(CaminhoUploadEnum.FotoPerfilUsuario), string.Empty, _webHostEnvironment);
+                    // string caminhoNovaImagem = await UparImagem(arquivo, nomeFoto, ObterDescricaoEnum(CaminhoUploadEnum.FotoPerfilUsuario), string.Empty, _webHostEnvironment);
                 }
 
                 return true;
