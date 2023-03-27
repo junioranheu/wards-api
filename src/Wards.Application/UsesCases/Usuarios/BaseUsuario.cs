@@ -78,11 +78,10 @@ namespace Wards.Application.UsesCases.Usuarios
             {
                 string nomeFoto = GerarNomeFoto(usuarioId);
 
-                if (!string.IsNullOrEmpty(nomeFoto) && arquivo is not null)
-                {
-                    // string caminhoNovaImagem = await UparImagem(arquivo, nomeFoto, ObterDescricaoEnum(CaminhoUploadEnum.FotoPerfilUsuario), string.Empty, _webHostEnvironment);
-                }
+                if (string.IsNullOrEmpty(nomeFoto) || arquivo is null)
+                    return false;
 
+                string caminhoNovaImagem = await UparImagem(arquivo, nomeFoto, ObterDescricaoEnum(CaminhoUploadEnum.FotoPerfilUsuario), string.Empty, _webHostEnvironment);
                 return true;
             }
             catch (Exception)
