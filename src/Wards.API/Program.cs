@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.Extensions.FileProviders;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Swashbuckle.AspNetCore.SwaggerUI;
@@ -38,12 +39,14 @@ WebApplication app = builder.Build();
     }
 
     app.UseCors(builder.Configuration["CORSSettings:Cors"]!);
-    AddHealthCheck(app);
     app.UseResponseCompression();
 
     app.UseAuthentication();
     app.UseAuthorization();
     app.MapControllers();
+
+    AddHealthCheck(app);
+    AddStaticFiles(app);
 
     app.Run();
 }
@@ -87,6 +90,23 @@ static void AddHealthCheck(WebApplication app)
             #endregion
 
             return httpContext.Response.WriteAsync(json.ToString(Formatting.Indented));
+        }
+    });
+}
+
+static void AddStaticFiles(WebApplication app)
+{
+    IWebHostEnvironment env = app.Environment;
+
+    app.UseStaticFiles(new StaticFileOptions
+    {
+        FileProvider = new PhysicalFileProvider(Path.Combine(env.ContentRootPath, "Uploads")),
+        RequestPath = "/Uploads",
+
+        OnPrepareResponse = ctx =>
+        {
+            ctx.Context.Response.Headers.Append("Access-Control-Allow-Origin", "*");
+            ctx.Context.Response.Headers.Append("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
         }
     });
 }
