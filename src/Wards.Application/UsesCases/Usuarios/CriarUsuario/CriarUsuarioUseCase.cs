@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Wards.Application.UsesCases.Tokens.CriarRefreshToken;
-using Wards.Application.UsesCases.Tokens.Shared.Input;
 using Wards.Application.UsesCases.Usuarios.CriarUsuario.Commands;
 using Wards.Application.UsesCases.Usuarios.ObterUsuarioCondicaoArbitraria;
 using Wards.Application.UsesCases.Usuarios.Shared.Input;
@@ -76,29 +75,13 @@ namespace Wards.Application.UsesCases.Usuarios.CriarUsuario
             output.Token = _jwtTokenGenerator.GerarToken(nomeCompleto: input?.NomeCompleto!, email: input?.Email!, listaClaims: null);
 
             // #6 - Gerar refresh token;
-            output = await GerarRefreshToken(output!, output.UsuarioId);
+            output = await GerarRefreshToken(_jwtTokenGenerator, _criarRefreshTokenUseCase, output!, output.UsuarioId);
 
             // #7 - Enviar e-mail de verificação de conta;
             if (!string.IsNullOrEmpty(output?.Email) && !string.IsNullOrEmpty(output?.NomeCompleto) && !string.IsNullOrEmpty(codigoVerificacao))
             {
                 await EnviarEmailVerificacaoConta(output.Email, output.NomeCompleto, codigoVerificacao);
             }
-
-            return output;
-        }
-
-        private async Task<AutenticarUsuarioOutput> GerarRefreshToken(AutenticarUsuarioOutput output, int usuarioId)
-        {
-            var refreshToken = _jwtTokenGenerator.GerarRefreshToken();
-            output.RefreshToken = refreshToken;
-
-            RefreshTokenInput novoRefreshToken = new()
-            {
-                RefToken = refreshToken,
-                UsuarioId = usuarioId
-            };
-
-            await _criarRefreshTokenUseCase.Execute(novoRefreshToken);
 
             return output;
         }

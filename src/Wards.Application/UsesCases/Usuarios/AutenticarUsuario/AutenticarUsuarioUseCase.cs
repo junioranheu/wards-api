@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Wards.Application.UsesCases.Tokens.CriarRefreshToken;
-using Wards.Application.UsesCases.Tokens.Shared.Input;
 using Wards.Application.UsesCases.Usuarios.ObterUsuarioCondicaoArbitraria;
 using Wards.Application.UsesCases.Usuarios.Shared.Input;
 using Wards.Application.UsesCases.Usuarios.Shared.Output;
@@ -10,7 +9,7 @@ using static Wards.Utils.Common;
 
 namespace Wards.Application.UsesCases.Usuarios.AutenticarUsuario
 {
-    public sealed class AutenticarUsuarioUseCase : IAutenticarUsuarioUseCase
+    public sealed class AutenticarUsuarioUseCase : BaseUsuario, IAutenticarUsuarioUseCase
     {
         private readonly IMapper _map;
         private readonly IJwtTokenGenerator _jwtTokenGenerator;
@@ -51,23 +50,7 @@ namespace Wards.Application.UsesCases.Usuarios.AutenticarUsuario
             output!.Token = _jwtTokenGenerator.GerarToken(nomeCompleto: output.NomeCompleto!, email: output.Email!, listaClaims: null);
 
             // #5 - Gerar refresh token;
-            output = await GerarRefreshToken(output, output.UsuarioId);
-
-            return output;
-        }
-
-        private async Task<AutenticarUsuarioOutput> GerarRefreshToken(AutenticarUsuarioOutput output, int usuarioId)
-        {
-            var refreshToken = _jwtTokenGenerator.GerarRefreshToken();
-            output.RefreshToken = refreshToken;
-
-            RefreshTokenInput novoRefreshToken = new()
-            {
-                RefToken = refreshToken,
-                UsuarioId = usuarioId
-            };
-
-            await _criarRefreshTokenUseCase.Execute(novoRefreshToken);
+            output = await GerarRefreshToken(_jwtTokenGenerator, _criarRefreshTokenUseCase, output, output.UsuarioId);
 
             return output;
         }
