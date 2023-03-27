@@ -42,53 +42,32 @@ namespace Wards.API.Controllers
         /// </summary>
         protected async Task<string> UparImagem(IFormFile arquivo, string nomeArquivo, string nomePasta, string? nomeArquivoAnterior, IWebHostEnvironment hostingEnvironment)
         {
-            return await Task.Run(() =>
+            if (arquivo.Length <= 0)
+                return string.Empty;
+
+            // Procedimento de inicialização para salvar nova imagem;
+            string webRootPath = hostingEnvironment.ContentRootPath; // Vai até o wwwwroot;
+            string restoCaminho = $"/Uploads/{nomePasta}/"; // Acesso à pasta referente; 
+
+            // Verificar se o arquivo tem extensão, se não tiver, adicione;
+            if (!Path.HasExtension(nomeArquivo))
+                nomeArquivo = $"{nomeArquivo}.jpg";
+
+            // Verificar se já existe uma foto caso exista, delete-a;
+            if (!string.IsNullOrEmpty(nomeArquivoAnterior))
             {
-                // Procedimento de inicialização para salvar nova imagem;
-                string webRootPath = hostingEnvironment.ContentRootPath; // Vai até o wwwwroot;
-                string restoCaminho = $"/Uploads/{nomePasta}/"; // Acesso à pasta referente; 
+                string caminhoArquivoAtual = webRootPath + restoCaminho + nomeArquivoAnterior;
 
-                // Verificar se o arquivo tem extensão, se não tiver, adicione;
-                if (!Path.HasExtension(nomeArquivo))
-                {
-                    nomeArquivo = $"{nomeArquivo}.webp";
-                }
+                // Verificar se o arquivo existe;
+                if (System.IO.File.Exists(caminhoArquivoAtual))
+                    System.IO.File.Delete(caminhoArquivoAtual); // Se existe, apague-o; 
+            }
 
-                string caminhoDestino = webRootPath + restoCaminho + nomeArquivo; // Caminho de destino para upar;
+            // Salvar aquivo;
+            string caminhoDestino = webRootPath + restoCaminho + nomeArquivo; // Caminho de destino para upar;
+            await arquivo.CopyToAsync(new FileStream(caminhoDestino, FileMode.Create));
 
-                // Copiar o novo arquivo para o local de destino;
-                if (arquivo.Length > 0)
-                {
-                    // Verificar se já existe uma foto caso exista, delete-a;
-                    if (!String.IsNullOrEmpty(nomeArquivoAnterior))
-                    {
-                        string caminhoArquivoAtual = webRootPath + restoCaminho + nomeArquivoAnterior;
-
-                        // Verificar se o arquivo existe;
-                        if (System.IO.File.Exists(caminhoArquivoAtual))
-                        {
-                            // Se existe, apague-o; 
-                            System.IO.File.Delete(caminhoArquivoAtual);
-                        }
-                    }
-
-                    // Então salve a imagem no servidor no formato WebP - https://blog.elmah.io/convert-images-to-webp-with-asp-net-core-better-than-png-jpg-files/;
-                    using (var webPFileStream = new FileStream(caminhoDestino, FileMode.Create))
-                    {
-                        ImageFactory imageFactory = new(preserveExifData: false);
-                        imageFactory.Load(arquivo.OpenReadStream())
-                                    .Format(new WebPFormat())
-                                    .Quality(10)
-                                    .Save(webPFileStream);
-                    }
-
-                    return nomeArquivo;
-                }
-                else
-                {
-                    return "";
-                }
-            });
+            return nomeArquivo;
         }
     }
 }
