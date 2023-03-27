@@ -6,16 +6,19 @@ using Wards.Application.UsesCases.Usuarios.CriarUsuario;
 using Wards.Application.UsesCases.Usuarios.CriarUsuario.Commands;
 using Wards.Application.UsesCases.Usuarios.ObterUsuarioCondicaoArbitraria;
 using Wards.Application.UsesCases.Usuarios.Shared.Input;
-using Wards.Domain.Entities;
 using Wards.Infrastructure.Auth.Token;
+using Wards.Infrastructure.Data;
 using Xunit;
 
 namespace Wards.UnitTests.Tests.Usuarios
 {
     public sealed class UsuarioTest
     {
-        [Fact]
-        public async Task CriarUsuarioUseCase_DeveRetornar1_QuandoParametrosValidosEBanco()
+        [Theory]
+        [InlineData("Junior de Souza", "junioranheu", "junioranheu@gmail.com", "Juninho26@", "#1")]
+        //[InlineData("Otávio Villas Boas", "otavioGOD", "otavio@gmail.com", "Otavinho26@", "#2")]
+        //[InlineData("Mariana Scalzaretto", "elfamscal", "elfa@gmail.com", "Marianinha26@", "#3")]
+        public async Task CriarUsuarioUseCase_DeveRetornar1_QuandoParametrosValidosEBanco(string nomeCompleto, string nomeUsuarioSistema, string email, string senha, string chamado)
         {
             // Arrange;
             var webHostEnvironment = new Mock<IWebHostEnvironment>();
@@ -24,18 +27,23 @@ namespace Wards.UnitTests.Tests.Usuarios
             var criarUsuarioCommand = new Mock<ICriarUsuarioCommand>();
             var criarUsuarioCondicaoArbitrariaUseCase = new Mock<IObterUsuarioCondicaoArbitrariaUseCase>();
             var criarRefreshTokenUseCase = new Mock<ICriarRefreshTokenUseCase>();
-
-            Usuario u = new() { NomeCompleto = "Junior" };
-            criarUsuarioCommand.Setup(x => x.Execute(It.IsAny<Usuario>())).Returns(Task.FromResult(u));
      
-            var sut = new CriarUsuarioUseCase(webHostEnvironment.Object, mapper.Object, jwtTokenGenerator.Object, criarUsuarioCommand.Object, criarUsuarioCondicaoArbitrariaUseCase.Object, criarRefreshTokenUseCase.Object);
-            var input = new CriarUsuarioInput() { Email = "x@gmail.com" };
+            var useCase = new CriarUsuarioUseCase(webHostEnvironment.Object, mapper.Object, jwtTokenGenerator.Object, criarUsuarioCommand.Object, criarUsuarioCondicaoArbitrariaUseCase.Object, criarRefreshTokenUseCase.Object);
+            
+            var input = new CriarUsuarioInput() {
+                NomeCompleto = nomeCompleto,
+                NomeUsuarioSistema = nomeUsuarioSistema,
+                Email = email,
+                Senha = senha,
+                Chamado = chamado
+            };
 
             // Act;
-            var resp = await sut.Execute(input);
+            var resp = await useCase.Execute(input);
 
             // Assert;
             Assert.True(resp.UsuarioId > 0);
+            //Assert.Equal(resultadoEsperado, response.StatusCode);
         }
 
         [Fact]

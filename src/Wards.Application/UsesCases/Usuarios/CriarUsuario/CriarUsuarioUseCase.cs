@@ -65,6 +65,9 @@ namespace Wards.Application.UsesCases.Usuarios.CriarUsuario
             string codigoVerificacao = GerarStringAleatoria(6, true);
             AutenticarUsuarioOutput output = await CriarUsuario(input!, codigoVerificacao);
 
+            if (output is null)
+                return output;
+
             IFormFile? arquivo = ObterFotoAleatoria(_webHostEnvironment);
             output.Foto = await VerificarParametrosDepoisUparFoto(_webHostEnvironment, output.UsuarioId, arquivo);
 

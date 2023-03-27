@@ -30,7 +30,7 @@ namespace Wards.UnitTests.Tests.Usuarios
         public void DeveRetornarOk_QuandoNomeValido()
         {
             // Arrange;
-            var model = new CriarUsuarioInput { NomeCompleto = "nomeTeste" };
+            var model = new CriarUsuarioInput { NomeCompleto = "Junior" };
 
             // Act;
             var result = _validator.TestValidate(model);
@@ -56,7 +56,7 @@ namespace Wards.UnitTests.Tests.Usuarios
         public void DeveRetornarErro_QuandoEmailForaPadrao()
         {
             // Arrange;
-            var model = new CriarUsuarioInput { Email = "teste@teste" };
+            var model = new CriarUsuarioInput { Email = "teste@" };
 
             // Act;
             var result = _validator.TestValidate(model);
@@ -95,7 +95,7 @@ namespace Wards.UnitTests.Tests.Usuarios
         public void DeveRetornarOk_QuandoChamadoValido()
         {
             // Arrange;
-            var model = new CriarUsuarioInput { Chamado = "chamadoTeste" };
+            var model = new CriarUsuarioInput { Chamado = "#1" };
 
             // Act;
             var result = _validator.TestValidate(model);
