@@ -81,8 +81,9 @@ namespace Wards.Application.UsesCases.Usuarios
                 if (string.IsNullOrEmpty(nomeFoto) || arquivo is null)
                     return false;
 
-                string caminhoNovaImagem = await UparImagem(arquivo, nomeFoto, ObterDescricaoEnum(CaminhoUploadEnum.FotoPerfilUsuario), string.Empty, _webHostEnvironment);
-                return true;
+                string? caminhoUpload = await UparImagem(arquivo, nomeFoto, ObterDescricaoEnum(CaminhoUploadEnum.FotoPerfilUsuario), string.Empty, _webHostEnvironment);
+
+                return caminhoUpload?.Length > 0;
             }
             catch (Exception)
             {
