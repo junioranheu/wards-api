@@ -33,6 +33,13 @@ namespace Wards.Application.UsesCases.Usuarios.CriarUsuario
             _criarRefreshTokenUseCase = criarRefreshTokenUseCase;
         }
 
+        /// <summary>
+        /// A primeira verificação se o usuário existe não faz sentido em sistemas de gestão onde o ADM cria as contas;
+        /// Porque, primeiro: o administrador cria as contas;
+        /// Segundo: existe a lógica do isLatest e "replacement" dos dados;
+        /// Portanto esse trecho do código está comentado;
+        /// Mas caso o sistema permita que o usuário final crie sua conta, esse trecho deve ser descomentado;
+        /// </summary>
         public async Task<AutenticarUsuarioOutput?> Execute(CriarUsuarioInput input)
         {
             // #1 - Verificar se o usuário já existe com o e-mail ou nome de usuário do sistema informados. Se existir, aborte;
