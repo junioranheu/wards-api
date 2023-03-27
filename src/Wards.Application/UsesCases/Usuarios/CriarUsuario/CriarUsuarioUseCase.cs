@@ -73,22 +73,15 @@ namespace Wards.Application.UsesCases.Usuarios.CriarUsuario
             input!.HistPerfisAtivos = input?.UsuariosRolesId?.Length > 0 ? string.Join(", ", input.UsuariosRolesId) : string.Empty;
             AutenticarUsuarioOutput output = _map.Map<AutenticarUsuarioOutput>(await _criarCommand.Execute(_map.Map<Usuario>(input)));
 
-            // #4 - Automaticamente atualizar o valor da Foto com um valor padrão após criar o novo usuário e adicionar ao ovjeto novoUsuario;
-            string foto = $"{output.UsuarioId}{GerarStringAleatoria(5, true)}.jpg";
-            await _usuarioRepository.AtualizarFoto(output.UsuarioId, foto);
-            output.Foto = foto;
-
-            // #5 - Criar token JWT;
+            // #4 - Criar token JWT;
             output.Token = _jwtTokenGenerator.GerarToken(nomeCompleto: input?.NomeCompleto!, email: input?.Email!, listaClaims: null);
 
-            // #6 - Gerar refresh token;
+            // #5 - Gerar refresh token;
             output = await GerarRefreshToken(_jwtTokenGenerator, _criarRefreshTokenUseCase, output!, output.UsuarioId);
 
-            // #7 - Enviar e-mail de verificação de conta;
+            // #6 - Enviar e-mail de verificação de conta;
             if (!string.IsNullOrEmpty(output?.Email) && !string.IsNullOrEmpty(output?.NomeCompleto) && !string.IsNullOrEmpty(codigoVerificacao))
-            {
                 await EnviarEmailVerificacaoConta(output.Email, output.NomeCompleto, codigoVerificacao);
-            }
 
             return output;
         }

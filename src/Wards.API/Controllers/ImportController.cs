@@ -37,7 +37,7 @@ namespace Wards.API.Controllers
             if (resultados.Item2 || resultados.Item1?.Rows.Count > 0)
             {
                 // await _deletarJustificativaUseCase.Execute(justificativaId);
-                return StatusCode(StatusCodes.Status400BadRequest, (resultados.Item1?.Rows.Count > 0 ? JsonConvert.SerializeObject(resultados.Item1) : GetDescricaoEnum(CodigosErrosEnum.ErroInterno)));
+                return StatusCode(StatusCodes.Status400BadRequest, (resultados.Item1?.Rows.Count > 0 ? JsonConvert.SerializeObject(resultados.Item1) : GetDescricaoEnum(CodigoErroEnum.ErroInterno)));
             }
 
             return Ok(string.Empty);

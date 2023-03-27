@@ -57,7 +57,7 @@ namespace Wards.API.Controllers
         public async Task<ActionResult<AutenticarUsuarioOutput>> Autenticar(AutenticarUsuarioInput input)
         {
             if (User.Identity!.IsAuthenticated)
-                return StatusCode(StatusCodes.Status403Forbidden, new UsuarioOutput() { Messages = new string[] { GetDescricaoEnum(CodigosErrosEnum.UsuarioJaAutenticado) } });
+                return StatusCode(StatusCodes.Status403Forbidden, new UsuarioOutput() { Messages = new string[] { GetDescricaoEnum(CodigoErroEnum.UsuarioJaAutenticado) } });
 
             var resp = await _autenticarUseCase.Execute(input);
 
@@ -106,7 +106,7 @@ namespace Wards.API.Controllers
             var resp = await _listarUseCase.Execute();
 
             if (resp is null)
-                return StatusCode(StatusCodes.Status404NotFound, new UsuarioOutput() { Messages = new string[] { GetDescricaoEnum(CodigosErrosEnum.NaoEncontrado) } });
+                return StatusCode(StatusCodes.Status404NotFound, new UsuarioOutput() { Messages = new string[] { GetDescricaoEnum(CodigoErroEnum.NaoEncontrado) } });
 
             return Ok(resp);
         }
@@ -120,7 +120,7 @@ namespace Wards.API.Controllers
             var resp = await _obterUseCase.Execute(id);
 
             if (resp is null)
-                return StatusCode(StatusCodes.Status404NotFound, new UsuarioOutput() { Messages = new string[] { GetDescricaoEnum(CodigosErrosEnum.NaoEncontrado) } });
+                return StatusCode(StatusCodes.Status404NotFound, new UsuarioOutput() { Messages = new string[] { GetDescricaoEnum(CodigoErroEnum.NaoEncontrado) } });
 
             return Ok(resp);
         }
@@ -147,7 +147,7 @@ namespace Wards.API.Controllers
         public async Task<ActionResult<UsuarioOutput>> VerificarConta(string codigoVerificacao)
         {
             if (string.IsNullOrEmpty(codigoVerificacao))
-                return StatusCode(StatusCodes.Status403Forbidden, new UsuarioOutput() { Messages = new string[] { GetDescricaoEnum(CodigosErrosEnum.CodigoVerificacaoInvalido) } });
+                return StatusCode(StatusCodes.Status403Forbidden, new UsuarioOutput() { Messages = new string[] { GetDescricaoEnum(CodigoErroEnum.CodigoVerificacaoInvalido) } });
 
             var resp = await _verificarContaUsuarioUseCase.Execute(codigoVerificacao);
 

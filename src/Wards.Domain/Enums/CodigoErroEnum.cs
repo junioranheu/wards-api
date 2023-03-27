@@ -2,7 +2,7 @@
 
 namespace Wards.Domain.Enums
 {
-    public enum CodigosErrosEnum
+    public enum CodigoErroEnum
     {
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=- 100 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         [Description("Já existe outro usuário cadastrado com este e-mail ou nome de usuário")]
@@ -84,6 +84,6 @@ namespace Wards.Domain.Enums
 
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=- 500 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         [Description("Houve um erro interno")]
-        ErroInterno = 500,
+        ErroInterno = 500
     }
 }

@@ -35,7 +35,7 @@ namespace Wards.Application.UsesCases.Usuarios.SolicitarVerificacaoContaUsuario
             }
             catch (Exception)
             {
-                return (new UsuarioOutput() { Messages = new string[] { GetDescricaoEnum(CodigosErrosEnum.ContaNaoVerificadaComFalhaNoEnvioNovoEmailVerificacao) } });
+                return (new UsuarioOutput() { Messages = new string[] { GetDescricaoEnum(CodigoErroEnum.ContaNaoVerificadaComFalhaNoEnvioNovoEmailVerificacao) } });
             }
 
             return new UsuarioOutput();

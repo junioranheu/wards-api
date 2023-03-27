@@ -36,15 +36,15 @@ namespace Wards.Application.UsesCases.Usuarios.AutenticarUsuario
             string senhaCriptografada = resp.Item2;
 
             if (output is null)
-                return (new AutenticarUsuarioOutput() { Messages = new string[] { GetDescricaoEnum(CodigosErrosEnum.UsuarioNaoEncontrado) } });
+                return (new AutenticarUsuarioOutput() { Messages = new string[] { GetDescricaoEnum(CodigoErroEnum.UsuarioNaoEncontrado) } });
 
             // #2 - Verificar se a senha está correta;
             if (!VerificarCriptografia(senha: input?.Senha ?? string.Empty, senhaCriptografada: senhaCriptografada))
-                return (new AutenticarUsuarioOutput() { Messages = new string[] { GetDescricaoEnum(CodigosErrosEnum.UsuarioSenhaIncorretos) } });
+                return (new AutenticarUsuarioOutput() { Messages = new string[] { GetDescricaoEnum(CodigoErroEnum.UsuarioSenhaIncorretos) } });
 
             // #3 - Verificar se o usuário está ativo;
             if (!output.IsAtivo)
-                return (new AutenticarUsuarioOutput() { Messages = new string[] { GetDescricaoEnum(CodigosErrosEnum.ContaDesativada) } });
+                return (new AutenticarUsuarioOutput() { Messages = new string[] { GetDescricaoEnum(CodigoErroEnum.ContaDesativada) } });
 
             // #4 - Criar token JWT;
             output!.Token = _jwtTokenGenerator.GerarToken(nomeCompleto: output.NomeCompleto!, email: output.Email!, listaClaims: null);

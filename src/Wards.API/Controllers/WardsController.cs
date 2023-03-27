@@ -47,7 +47,7 @@ namespace Wards.API.Controllers
             var resp = await _atualizarUseCase.Execute(input);
 
             if (resp < 1)
-                return StatusCode(StatusCodes.Status400BadRequest, new WardOutput() { Messages = new string[] { GetDescricaoEnum(CodigosErrosEnum.BadRequest) } });
+                return StatusCode(StatusCodes.Status400BadRequest, new WardOutput() { Messages = new string[] { GetDescricaoEnum(CodigoErroEnum.BadRequest) } });
 
             return Ok(resp);
         }
@@ -62,7 +62,7 @@ namespace Wards.API.Controllers
             var resp = await _criarUseCase.Execute(input);
 
             if (resp < 1)
-                return StatusCode(StatusCodes.Status400BadRequest, new WardOutput() { Messages = new string[] { GetDescricaoEnum(CodigosErrosEnum.BadRequest) } });
+                return StatusCode(StatusCodes.Status400BadRequest, new WardOutput() { Messages = new string[] { GetDescricaoEnum(CodigoErroEnum.BadRequest) } });
 
             return Ok(resp);
         }
@@ -84,7 +84,7 @@ namespace Wards.API.Controllers
             var resp = await _listarUseCase.Execute();
 
             if (resp is null)
-                return StatusCode(StatusCodes.Status404NotFound, new WardOutput() { Messages = new string[] { GetDescricaoEnum(CodigosErrosEnum.NaoEncontrado) } });
+                return StatusCode(StatusCodes.Status404NotFound, new WardOutput() { Messages = new string[] { GetDescricaoEnum(CodigoErroEnum.NaoEncontrado) } });
 
             return Ok(resp);
         }
@@ -97,7 +97,7 @@ namespace Wards.API.Controllers
             var resp = await _obterUseCase.Execute(id);
 
             if (resp is null)
-                return StatusCode(StatusCodes.Status404NotFound, new WardOutput() { Messages = new string[] { GetDescricaoEnum(CodigosErrosEnum.NaoEncontrado) } });
+                return StatusCode(StatusCodes.Status404NotFound, new WardOutput() { Messages = new string[] { GetDescricaoEnum(CodigoErroEnum.NaoEncontrado) } });
 
             return Ok(resp);
         }
