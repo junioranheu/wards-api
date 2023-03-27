@@ -34,11 +34,11 @@ namespace Wards.Application.UsesCases.Usuarios.CriarUsuario
         }
 
         /// <summary>
-        /// A primeira verificação se o usuário existe não faz sentido em sistemas de gestão onde o ADM cria as contas;
+        /// A primeira verificação (#1) se o usuário existe não faz sentido em sistemas de gestão onde o ADM cria as contas;
         /// Porque, primeiro: o administrador cria as contas;
         /// Segundo: existe a lógica do isLatest e "replacement" dos dados;
         /// Portanto esse trecho do código está comentado;
-        /// Mas caso o sistema permita que o usuário final crie sua conta, esse trecho deve ser descomentado;
+        /// Mas... caso o sistema permita que o usuário final crie sua conta, esse trecho deve ser descomentado.
         /// </summary>
         public async Task<AutenticarUsuarioOutput?> Execute(CriarUsuarioInput input)
         {
@@ -74,9 +74,9 @@ namespace Wards.Application.UsesCases.Usuarios.CriarUsuario
             AutenticarUsuarioOutput output = _map.Map<AutenticarUsuarioOutput>(await _criarCommand.Execute(_map.Map<Usuario>(input)));
 
             // #4 - Automaticamente atualizar o valor da Foto com um valor padrão após criar o novo usuário e adicionar ao ovjeto novoUsuario;
-            //string nomeNovaFoto = $"{usuarioId}{GerarStringAleatoria(5, true)}.webp";
-            //await _usuarioRepository.AtualizarFoto(usuarioId, nomeNovaFoto);
-            //novoUsuario.Foto = nomeNovaFoto;
+            string foto = $"{output.UsuarioId}{GerarStringAleatoria(5, true)}.jpg";
+            await _usuarioRepository.AtualizarFoto(output.UsuarioId, foto);
+            output.Foto = foto;
 
             // #5 - Criar token JWT;
             output.Token = _jwtTokenGenerator.GerarToken(nomeCompleto: input?.NomeCompleto!, email: input?.Email!, listaClaims: null);

@@ -14,6 +14,8 @@ namespace Wards.Application.UsesCases.Usuarios.Shared.Input
 
         public string? Chamado { get; set; } = string.Empty;
 
+        public string? Foto { get; set; } = string.Empty;
+
         [JsonIgnore]
         public bool IsVerificado { get; set; } = false;
 
