@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Wards.Application.UsesCases.Tokens.CriarRefreshToken;
 using Wards.Application.UsesCases.Usuarios.CriarUsuario.Commands;
 using Wards.Application.UsesCases.Usuarios.ObterUsuarioCondicaoArbitraria;
@@ -13,6 +15,7 @@ namespace Wards.Application.UsesCases.Usuarios.CriarUsuario
 {
     public sealed class CriarUsuarioUseCase : BaseUsuario, ICriarUsuarioUseCase
     {
+        private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly IMapper _map;
         private readonly IJwtTokenGenerator _jwtTokenGenerator;
         private readonly ICriarUsuarioCommand _criarCommand;
@@ -20,12 +23,14 @@ namespace Wards.Application.UsesCases.Usuarios.CriarUsuario
         private readonly ICriarRefreshTokenUseCase _criarRefreshTokenUseCase;
 
         public CriarUsuarioUseCase(
+            IWebHostEnvironment webHostEnvironment,
             IMapper map,
             IJwtTokenGenerator jwtTokenGenerator,
             ICriarUsuarioCommand criarCommand,
             IObterUsuarioCondicaoArbitrariaUseCase obterUsuarioCondicaoArbitrariaUseCase,
             ICriarRefreshTokenUseCase criarRefreshTokenUseCase)
         {
+            _webHostEnvironment = webHostEnvironment;
             _map = map;
             _jwtTokenGenerator = jwtTokenGenerator;
             _criarCommand = criarCommand;
@@ -73,13 +78,17 @@ namespace Wards.Application.UsesCases.Usuarios.CriarUsuario
             input!.HistPerfisAtivos = input?.UsuariosRolesId?.Length > 0 ? string.Join(", ", input.UsuariosRolesId) : string.Empty;
             AutenticarUsuarioOutput output = _map.Map<AutenticarUsuarioOutput>(await _criarCommand.Execute(_map.Map<Usuario>(input)));
 
-            // #4 - Criar token JWT;
+            // #4 - Upload imagem;
+            IFormFile? arquivo = ObterFotoAleatoria(_webHostEnvironment);
+            await VerificarParametrosDepoisUparFoto(_webHostEnvironment, output.UsuarioId, arquivo);
+
+            // #5 - Criar token JWT;
             output.Token = _jwtTokenGenerator.GerarToken(nomeCompleto: input?.NomeCompleto!, email: input?.Email!, listaClaims: null);
 
-            // #5 - Gerar refresh token;
+            // #6 - Gerar refresh token;
             output = await GerarRefreshToken(_jwtTokenGenerator, _criarRefreshTokenUseCase, output!, output.UsuarioId);
 
-            // #6 - Enviar e-mail de verificação de conta;
+            // #7 - Enviar e-mail de verificação de conta;
             if (!string.IsNullOrEmpty(output?.Email) && !string.IsNullOrEmpty(output?.NomeCompleto) && !string.IsNullOrEmpty(codigoVerificacao))
                 await EnviarEmailVerificacaoConta(output.Email, output.NomeCompleto, codigoVerificacao);
 

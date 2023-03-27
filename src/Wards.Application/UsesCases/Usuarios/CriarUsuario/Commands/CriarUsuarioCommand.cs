@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using System.Data;
 using Wards.Domain.Entities;
 using Wards.Infrastructure.Data;
@@ -9,12 +7,10 @@ namespace Wards.Application.UsesCases.Usuarios.CriarUsuario.Commands
 {
     public sealed class CriarUsuarioCommand : BaseUsuario, ICriarUsuarioCommand
     {
-        private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly WardsContext _context;
 
-        public CriarUsuarioCommand(IWebHostEnvironment webHostEnvironment, WardsContext context)
+        public CriarUsuarioCommand(WardsContext context)
         {
-            _webHostEnvironment = webHostEnvironment;
             _context = context;
         }
 
@@ -24,9 +20,6 @@ namespace Wards.Application.UsesCases.Usuarios.CriarUsuario.Commands
 
             await _context.AddAsync(input);
             await _context.SaveChangesAsync();
-
-            IFormFile? arquivo = ObterFotoAleatoria(_webHostEnvironment);
-            await VerificarParametrosDepoisUparFoto(_webHostEnvironment, input.UsuarioId, arquivo);
 
             return input;
         }
