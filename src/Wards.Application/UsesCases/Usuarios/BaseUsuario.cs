@@ -72,22 +72,20 @@ namespace Wards.Application.UsesCases.Usuarios
             return PathToFile(arquivoAleatorio, Path.GetFileName(arquivoAleatorio), "image/jpg");
         }
 
-        internal static async Task<bool> VerificarParametrosDepoisUparFoto(IWebHostEnvironment _webHostEnvironment, int usuarioId, IFormFile? arquivo)
+        internal static async Task<string?> VerificarParametrosDepoisUparFoto(IWebHostEnvironment _webHostEnvironment, int usuarioId, IFormFile? arquivo)
         {
             try
             {
                 string nomeFoto = GerarNomeFoto(usuarioId);
 
                 if (string.IsNullOrEmpty(nomeFoto) || arquivo is null)
-                    return false;
+                    return string.Empty;
 
-                string? caminhoUpload = await UparImagem(arquivo, nomeFoto, ObterDescricaoEnum(CaminhoUploadEnum.FotoPerfilUsuario), string.Empty, _webHostEnvironment.ContentRootPath);
-
-                return caminhoUpload?.Length > 0;
+                return await UparImagem(arquivo, nomeFoto, ObterDescricaoEnum(CaminhoUploadEnum.FotoPerfilUsuario), string.Empty, _webHostEnvironment.ContentRootPath); ;
             }
             catch (Exception)
             {
-                return false;
+                return string.Empty;
             }
 
             static string GerarNomeFoto(int usuarioId)

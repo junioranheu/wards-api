@@ -13,6 +13,8 @@ namespace Wards.Application.UsesCases.Usuarios.Shared.Output
 
         public string? Email { get; set; } = string.Empty;
 
+        public string? Foto { get; set; } = string.Empty;
+
         public bool IsAtivo { get; set; } = true;
 
         public DateTime Data { get; set; }

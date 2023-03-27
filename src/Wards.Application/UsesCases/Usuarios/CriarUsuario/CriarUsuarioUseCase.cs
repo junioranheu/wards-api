@@ -80,7 +80,7 @@ namespace Wards.Application.UsesCases.Usuarios.CriarUsuario
 
             // #4 - Upload imagem;
             IFormFile? arquivo = ObterFotoAleatoria(_webHostEnvironment);
-            await VerificarParametrosDepoisUparFoto(_webHostEnvironment, output.UsuarioId, arquivo);
+            output.Foto = await VerificarParametrosDepoisUparFoto(_webHostEnvironment, output.UsuarioId, arquivo);
 
             // #5 - Criar token JWT;
             output.Token = _jwtTokenGenerator.GerarToken(nomeCompleto: input?.NomeCompleto!, email: input?.Email!, listaClaims: null);
