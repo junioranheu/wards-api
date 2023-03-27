@@ -81,7 +81,7 @@ namespace Wards.Application.UsesCases.Usuarios
                 if (string.IsNullOrEmpty(nomeFoto) || arquivo is null)
                     return false;
 
-                string? caminhoUpload = await UparImagem(arquivo, nomeFoto, ObterDescricaoEnum(CaminhoUploadEnum.FotoPerfilUsuario), string.Empty, _webHostEnvironment);
+                string? caminhoUpload = await UparImagem(arquivo, nomeFoto, ObterDescricaoEnum(CaminhoUploadEnum.FotoPerfilUsuario), string.Empty, _webHostEnvironment.ContentRootPath);
 
                 return caminhoUpload?.Length > 0;
             }
@@ -94,43 +94,6 @@ namespace Wards.Application.UsesCases.Usuarios
             {
                 return $"{usuarioId}{GerarStringAleatoria(5, true)}.jpg";
             }
-        }
-
-        /// <summary>
-        /// arquivo = o arquivo em si, a variável IFormFile;
-        /// nomeArquivo = o nome do novo objeto em questão;
-        /// nomePasta = nome do caminho do arquivo, da pasta. Por exemplo: /Uploads/Usuarios/. "Usuarios" é o caminho;
-        /// nomeArquivoAnterior = o nome do arquivo que constava anterior, caso exista;
-        /// hostingEnvironment = o caminho até o wwwroot. Ele deve ser passado por parâmetro, já que não funcionaria aqui diretamente no BaseController;
-        /// </summary>
-        internal static async Task<string?> UparImagem(IFormFile arquivo, string nomeArquivo, string nomePasta, string? nomeArquivoAnterior, IWebHostEnvironment hostingEnvironment)
-        {
-            if (arquivo.Length <= 0)
-                return string.Empty;
-
-            // Procedimento de inicialização para salvar nova imagem;
-            string webRootPath = hostingEnvironment.ContentRootPath; // Vai até o wwwwroot;
-            string restoCaminho = $"/{nomePasta}/"; // Acesso à pasta referente; 
-
-            // Verificar se o arquivo tem extensão, se não tiver, adicione;
-            if (!Path.HasExtension(nomeArquivo))
-                nomeArquivo = $"{nomeArquivo}.jpg";
-
-            // Verificar se já existe uma foto caso exista, delete-a;
-            if (!string.IsNullOrEmpty(nomeArquivoAnterior))
-            {
-                string caminhoArquivoAtual = webRootPath + restoCaminho + nomeArquivoAnterior;
-
-                // Verificar se o arquivo existe;
-                if (System.IO.File.Exists(caminhoArquivoAtual))
-                    System.IO.File.Delete(caminhoArquivoAtual); // Se existe, apague-o; 
-            }
-
-            // Salvar aquivo;
-            string caminhoDestino = webRootPath +  restoCaminho + nomeArquivo; // Caminho de destino para upar;
-            await arquivo.CopyToAsync(new FileStream(caminhoDestino, FileMode.Create));
-
-            return nomeArquivo;
         }
     }
 }
