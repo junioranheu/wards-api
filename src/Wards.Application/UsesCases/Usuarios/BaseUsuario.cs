@@ -119,7 +119,7 @@ namespace Wards.Application.UsesCases.Usuarios
             // Verificar se já existe uma foto caso exista, delete-a;
             if (!string.IsNullOrEmpty(nomeArquivoAnterior))
             {
-                string caminhoArquivoAtual = Path.Combine(webRootPath, restoCaminho, nomeArquivoAnterior);
+                string caminhoArquivoAtual = webRootPath + restoCaminho + nomeArquivoAnterior;
 
                 // Verificar se o arquivo existe;
                 if (System.IO.File.Exists(caminhoArquivoAtual))
@@ -127,7 +127,7 @@ namespace Wards.Application.UsesCases.Usuarios
             }
 
             // Salvar aquivo;
-            string caminhoDestino = Path.Combine(webRootPath, restoCaminho, nomeArquivo); // Caminho de destino para upar;
+            string caminhoDestino = webRootPath +  restoCaminho + nomeArquivo; // Caminho de destino para upar;
             await arquivo.CopyToAsync(new FileStream(caminhoDestino, FileMode.Create));
 
             return nomeArquivo;
