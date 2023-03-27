@@ -437,9 +437,7 @@ namespace Wards.Utils
 
             // Salvar aquivo;
             string caminhoDestino = webRootPath + restoCaminho + nomeArquivo; // Caminho de destino para upar;
-            //await arquivo.CopyToAsync(new FileStream(caminhoDestino, FileMode.Create));
-
-            using (var fs = File.Create(caminhoDestino))
+            using (FileStream fs = File.Create(caminhoDestino))
             {
                 await arquivo.CopyToAsync(fs);
             }
