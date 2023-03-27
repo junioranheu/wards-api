@@ -52,11 +52,11 @@ namespace Wards.Application.UsesCases.Usuarios.CriarUsuario
 
             // #2.1 - Verificar requisitos gerais;
             if (input?.NomeCompleto?.Length < 3 || input?.NomeUsuarioSistema?.Length < 3)
-                return (new AutenticarUsuarioOutput() { Messages = new string[] { GetDescricaoEnum(CodigosErrosEnum.RequisitosNome) } });
+                return (new AutenticarUsuarioOutput() { Messages = new string[] { GetDescricaoEnum(CodigoErroEnum.RequisitosNome) } });
 
             // #2.2 - Verificar e-mail;
             if (!ValidarEmail(input?.Email!))
-                return (new AutenticarUsuarioOutput() { Messages = new string[] { GetDescricaoEnum(CodigosErrosEnum.EmailInvalido) } });
+                return (new AutenticarUsuarioOutput() { Messages = new string[] { GetDescricaoEnum(CodigoErroEnum.EmailInvalido) } });
 
             // #2.3 - Verificar requisitos de senha;
             var validarSenha = ValidarSenha(input?.Senha!, input?.NomeCompleto!, input?.NomeUsuarioSistema!, input?.Email!);

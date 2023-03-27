@@ -1,22 +1,18 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
 using Wards.Domain.Entities;
-using Wards.Domain.Enums;
 using Wards.Infrastructure.Data;
-using static Wards.Utils.Common;
 
 namespace Wards.Application.UsesCases.Usuarios.CriarUsuario.Commands
 {
-    public sealed class CriarUsuarioCommand : ICriarUsuarioCommand
+    public sealed class CriarUsuarioCommand : BaseUsuario, ICriarUsuarioCommand
     {
         private readonly WardsContext _context;
-        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public CriarUsuarioCommand(WardsContext context, IWebHostEnvironment webHostEnvironment)
+        public CriarUsuarioCommand(WardsContext context)
         {
             _context = context;
-            _webHostEnvironment = webHostEnvironment;
         }
 
         public async Task<Usuario> Execute(Usuario input)
@@ -26,12 +22,8 @@ namespace Wards.Application.UsesCases.Usuarios.CriarUsuario.Commands
             await _context.AddAsync(input);
             await _context.SaveChangesAsync();
 
-            input.Foto = GerarNomeFoto(input);
-
-            if (!string.IsNullOrEmpty(input.Foto))
-            {
-                string caminhoNovaImagem = await UparImagem(file, input.Foto, GetDescricaoEnum(CaminhoUploadEnum.FotoPerfilUsuario), string.Empty, _webHostEnvironment);
-            }
+            IFormFile arquivo = GerarFotoAleatoria();
+            await VerificarEUparFoto(input.UsuarioId, arquivo);
 
             return input;
         }
@@ -52,11 +44,6 @@ namespace Wards.Application.UsesCases.Usuarios.CriarUsuario.Commands
 
                 _context.UpdateRange(linq);
             }
-        }
-
-        private static string GerarNomeFoto(Usuario input)
-        {
-            return $"{input.UsuarioId}{GerarStringAleatoria(5, true)}.jpg";
         }
 
         // EXEMPLO DAPPER;

@@ -15,7 +15,10 @@ namespace Wards.Utils
 {
     public static class Common
     {
-        // Pegar informações do appsettings: https://stackoverflow.com/a/58432834 (Necessário instalar o pacote "Microsoft.Extensions.Configuration.Json");
+        /// <summary>
+        /// Pegar informações do appsettings;
+        /// https://stackoverflow.com/a/58432834 (Necessário instalar o pacote "Microsoft.Extensions.Configuration.Json");
+        /// </summary>
         static readonly string _emailDominio = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build().GetSection("EmailSettings")["Domain"] ?? string.Empty;
         static readonly string _emailPorta = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build().GetSection("EmailSettings")["Port"] ?? string.Empty;
         static readonly string _emailEmail = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build().GetSection("EmailSettings")["Email"] ?? string.Empty;
@@ -25,14 +28,20 @@ namespace Wards.Utils
         static readonly string _urlFrontDev = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build().GetSection("URLSettings")["FrontDev"] ?? string.Empty;
         static readonly string _urlFrontProd = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build().GetSection("URLSettings")["FrontProd"] ?? string.Empty;
 
-        // Converter para o horário de Brasilia: https://blog.yowko.com/timezoneinfo-time-zone-id-not-found/;
+        /// <summary>
+        /// Converter para o horário de Brasilia;
+        /// https://blog.yowko.com/timezoneinfo-time-zone-id-not-found/;
+        /// </summary>
         public static DateTime HorarioBrasilia()
         {
             TimeZoneInfo timeZone = TZConvert.GetTimeZoneInfo("E. South America Standard Time");
             return TimeZoneInfo.ConvertTime(DateTime.UtcNow, timeZone);
         }
 
-        // Gerar Lorem Ipsum: https://stackoverflow.com/questions/4286487/is-there-any-lorem-ipsum-generator-in-c;
+        /// <summary>
+        /// Gerar Lorem Ipsum;
+        /// https://stackoverflow.com/questions/4286487/is-there-any-lorem-ipsum-generator-in-c;
+        /// </summary>
         public static string LoremIpsum(int minWords, int maxWords, int minSentences, int maxSentences, int numParagraphs, bool isAdicionarTagP)
         {
 
@@ -70,13 +79,17 @@ namespace Wards.Utils
             return result.ToString();
         }
 
-        // Criptografar senha (Nuget BCrypt.Net-Next);
+        /// <summary>
+        /// Criptografar senha (Nuget BCrypt.Net-Next);
+        /// </summary>
         public static string Criptografar(string senha)
         {
             return BCrypt.Net.BCrypt.HashPassword(senha);
         }
 
-        // Verificar senha (Nuget BCrypt.Net-Next);
+        /// <summary>
+        /// Verificar senha (Nuget BCrypt.Net-Next);
+        /// </summary>
         public static bool VerificarCriptografia(string senha, string senhaCriptografada)
         {
             if (!BCrypt.Net.BCrypt.Verify(senha, senhaCriptografada))
@@ -85,7 +98,10 @@ namespace Wards.Utils
             return true;
         }
 
-        // Pegar a descrição de um enum: https://stackoverflow.com/questions/50433909/get-string-name-from-enum-in-c-sharp;
+        /// <summary>
+        /// Pegar a descrição de um enum;
+        /// https://stackoverflow.com/questions/50433909/get-string-name-from-enum-in-c-sharp;
+        /// </summary>
         public static string GetDescricaoEnum(Enum enumVal)
         {
             MemberInfo[] memInfo = enumVal.GetType().GetMember(enumVal.ToString());
@@ -94,7 +110,9 @@ namespace Wards.Utils
             return attribute!.Description;
         }
 
-        // Converter Base64 para imagem;
+        /// <summary>
+        /// Converter Base64 para imagem;
+        /// </summary>
         public static IFormFile Base64ToImage(string base64)
         {
             List<IFormFile> formFiles = new();
@@ -110,7 +128,9 @@ namespace Wards.Utils
             return formFiles[0];
         }
 
-        // Formatar bytes para B, KB, MB, etc...;
+        /// <summary>
+        /// Formatar bytes para B, KB, MB, etc;
+        /// </summary>
         public static string FormatarBytes(long bytes)
         {
             string[] Suffix = { "B", "KB", "MB", "GB", "TB" };
@@ -125,18 +145,22 @@ namespace Wards.Utils
             return string.Format("{0:0.##} {1}", dblSByte, Suffix[i]);
         }
 
-        // Validar se o e-mail do usuário;
+        /// <summary>
+        /// Validar se o e-mail do usuário;
+        /// </summary>
         public static bool ValidarEmail(string email)
         {
             EmailAddressAttribute e = new();
             return e.IsValid(email);
         }
 
-        // Validar se a senha do usuário é forte o suficiente verificando requisitos de senha:
-        // #1 - Tem número;
-        // #2 - Tem letra maiúscula;
-        // #3 - Tem pelo menos X caracteres;
-        // #4 - A senha não contém o nome completo, nome de usuário ou e-mail;
+        /// <summary>
+        /// Validar se a senha do usuário é forte o suficiente verificando requisitos de senha:
+        /// #1 - Tem número;
+        /// #2 - Tem letra maiúscula;
+        /// #3 - Tem pelo menos X caracteres;
+        /// #4 - A senha não contém o nome completo, nome de usuário ou e-mail;
+        /// </summary>
         public static Tuple<bool, string> ValidarSenha(string senha, string nomeCompleto, string nomeUsuario, string email)
         {
             bool isValido = true;
@@ -196,7 +220,9 @@ namespace Wards.Utils
             return Tuple.Create(isValido, msgErro);
         }
 
-        // Gerar um número aleatório com base na em um valor mínimo e máximo;
+        /// <summary>
+        /// Gerar um número aleatório com base na em um valor mínimo e máximo;
+        /// </summary>
         public static int GerarNumeroAleatorio(int min, int max)
         {
             Random random = new();
@@ -205,7 +231,9 @@ namespace Wards.Utils
             return numeroAleatorio;
         }
 
-        // Gerar uma string aleatória com base na quantidade de caracteres desejados;
+        /// <summary>
+        /// Gerar uma string aleatória com base na quantidade de caracteres desejados;
+        /// </summary>
         public static string GerarStringAleatoria(int qtdCaracteres, bool isApenasMaiusculas)
         {
             Random random = new();
@@ -215,7 +243,9 @@ namespace Wards.Utils
             return stringAleatoria;
         }
 
-        // Gerar um código hash para o usuário com base no usuarioId + string aleatória;
+        /// <summary>
+        /// Gerar um código hash para o usuário com base no usuarioId + string aleatória;
+        /// </summary>
         public static string GerarHashUsuario(int usuarioId)
         {
             string palavraAleatoria = $"{usuarioId}_{GerarStringAleatoria(GerarNumeroAleatorio(10, 15), false)}";
@@ -224,7 +254,10 @@ namespace Wards.Utils
             return hash;
         }
 
-        // Converter IFormFile para bytes[]: https://stackoverflow.com/questions/36432028/how-to-convert-a-file-into-byte-array-in-memory;
+        /// <summary>
+        /// Converter IFormFile para bytes[];
+        /// https://stackoverflow.com/questions/36432028/how-to-convert-a-file-into-byte-array-in-memory;
+        /// </summary>
         public static async Task<byte[]> IFormFileParaBytes(IFormFile formFile)
         {
             await using var memoryStream = new MemoryStream();
@@ -233,7 +266,9 @@ namespace Wards.Utils
             return memoryStream.ToArray();
         }
 
-        // Converter Base64 para arquivo;
+        /// <summary>
+        /// Converter Base64 para arquivo;
+        /// </summary>
         public static IFormFile Base64ToFile(string base64)
         {
             List<IFormFile> formFiles = new();
@@ -254,7 +289,9 @@ namespace Wards.Utils
             return formFiles[0];
         }
 
-        // Verificar se a aplicação está sendo executada em localhost ou publicada;
+        /// <summary>
+        /// Verificar se a aplicação está sendo executada em localhost ou publicada;
+        /// </summary>
         public static bool IsDebug()
         {
             // https://stackoverflow.com/questions/12135854/best-way-to-tell-if-in-production-or-development-environment-in-net
@@ -265,7 +302,9 @@ namespace Wards.Utils
 #endif
         }
 
-        // Verificar se o front-end está sendo executado em localhost ou publicado;
+        /// <summary>
+        /// Verificar se o front-end está sendo executado em localhost ou publicado;
+        /// </summary>
         public static string CaminhoFront()
         {
             string urlApi = _urlFrontProd;
@@ -278,7 +317,10 @@ namespace Wards.Utils
             return urlApi;
         }
 
-        // SMTP Gmail: https://www.youtube.com/watch?v=FZfneLNyE4o&ab_channel=AWPLife 
+        /// <summary>
+        /// SMTP Gmail;
+        /// https://www.youtube.com/watch?v=FZfneLNyE4o&ab_channel=AWPLife 
+        /// </summary>
         public static async Task<bool> EnviarEmail(string emailTo, string assunto, string nomeArquivo, List<EmailDadosReplace> listaDadosReplace)
         {
             if (string.IsNullOrEmpty(emailTo) || string.IsNullOrEmpty(assunto) || string.IsNullOrEmpty(nomeArquivo))
@@ -319,7 +361,9 @@ namespace Wards.Utils
             return true;
         }
 
-        // Ajustar HTML do e-mail;
+        /// <summary>
+        /// Ajustar HTML de um e-mail;
+        /// </summary>
         private static string AjustarConteudoEmailHTML(string caminhoFinalArquivoHTML, List<EmailDadosReplace>? listaDadosReplace)
         {
             string conteudoEmailHtml = string.Empty;

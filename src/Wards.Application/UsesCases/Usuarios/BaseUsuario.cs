@@ -1,4 +1,6 @@
-﻿using Wards.Application.UsesCases.Tokens.CriarRefreshToken;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Wards.Application.UsesCases.Tokens.CriarRefreshToken;
 using Wards.Application.UsesCases.Tokens.Shared.Input;
 using Wards.Application.UsesCases.Usuarios.Shared.Output;
 using Wards.Domain.Enums;
@@ -10,11 +12,21 @@ namespace Wards.Application.UsesCases.Usuarios
 {
     public class BaseUsuario
     {
-        internal static async Task<AutenticarUsuarioOutput> GerarRefreshToken(
-            IJwtTokenGenerator _jwtTokenGenerator,
-            ICriarRefreshTokenUseCase _criarRefreshTokenUseCase,
-            AutenticarUsuarioOutput output, 
-            int usuarioId)
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly IJwtTokenGenerator _jwtTokenGenerator;
+        private readonly ICriarRefreshTokenUseCase _criarRefreshTokenUseCase;
+
+        public BaseUsuario(
+            IWebHostEnvironment webHostEnvironment,
+            IJwtTokenGenerator jwtTokenGenerator,
+            ICriarRefreshTokenUseCase criarRefreshTokenUseCase)
+        {
+            _webHostEnvironment = webHostEnvironment;
+            _jwtTokenGenerator = jwtTokenGenerator;
+            _criarRefreshTokenUseCase = criarRefreshTokenUseCase;
+        }
+
+        internal async Task<AutenticarUsuarioOutput> GerarRefreshToken(AutenticarUsuarioOutput output, int usuarioId)
         {
             var refreshToken = _jwtTokenGenerator.GerarRefreshToken();
             output.RefreshToken = refreshToken;
@@ -49,6 +61,36 @@ namespace Wards.Application.UsesCases.Usuarios
             catch (Exception)
             {
                 return false;
+            }
+        }
+
+
+        internal IFormFile GerarFotoAleatoria()
+        {
+            return null;
+        }
+
+        internal async bool VerificarEUparFoto(int usuarioId, IFormFile arquivo)
+        {
+            try
+            {
+                string nomeFoto = GerarNomeFoto(usuarioId);
+
+                if (!string.IsNullOrEmpty(nomeFoto) && arquivo is not null)
+                {
+                    string caminhoNovaImagem = await UparImagem(arquivo, nomeFoto, GetDescricaoEnum(CaminhoUploadEnum.FotoPerfilUsuario), string.Empty, _webHostEnvironment);
+                }
+
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
+            static string GerarNomeFoto(int usuarioId)
+            {
+                return $"{usuarioId}{GerarStringAleatoria(5, true)}.jpg";
             }
         }
     }
