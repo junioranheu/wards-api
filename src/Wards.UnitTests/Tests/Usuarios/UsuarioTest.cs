@@ -27,7 +27,7 @@ namespace Wards.UnitTests.Tests.Usuarios
 
             Usuario u = new() { NomeCompleto = "Junior" };
             criarUsuarioCommand.Setup(x => x.Execute(It.IsAny<Usuario>())).Returns(Task.FromResult(u));
-            ;
+     
             var sut = new CriarUsuarioUseCase(webHostEnvironment.Object, mapper.Object, jwtTokenGenerator.Object, criarUsuarioCommand.Object, criarUsuarioCondicaoArbitrariaUseCase.Object, criarRefreshTokenUseCase.Object);
             var input = new CriarUsuarioInput() { Email = "x@gmail.com" };
 
