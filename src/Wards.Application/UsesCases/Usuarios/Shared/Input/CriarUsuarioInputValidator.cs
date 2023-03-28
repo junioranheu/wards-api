@@ -30,8 +30,12 @@ namespace Wards.Application.UsesCases.Usuarios.Shared.Input
             RuleFor(x => x.UsuariosRolesId).Must((rootObj, obj) =>
             {
                 if (rootObj.UsuariosRolesId is not null)
+                {
                     if (rootObj.UsuariosRolesId.Contains(0))
+                    {
                         return false;
+                    }
+                }
 
                 return true;
             }).WithMessage("Role inexistente");

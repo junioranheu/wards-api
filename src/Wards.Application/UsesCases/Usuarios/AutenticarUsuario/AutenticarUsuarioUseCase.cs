@@ -35,13 +35,19 @@ namespace Wards.Application.UsesCases.Usuarios.AutenticarUsuario
             string senhaCriptografada = resp.Item2;
 
             if (output is null)
+            {
                 return (new AutenticarUsuarioOutput() { Messages = new string[] { ObterDescricaoEnum(CodigoErroEnum.UsuarioNaoEncontrado) } });
+            }
 
             if (!VerificarCriptografia(senha: input?.Senha ?? string.Empty, senhaCriptografada: senhaCriptografada))
+            {
                 return (new AutenticarUsuarioOutput() { Messages = new string[] { ObterDescricaoEnum(CodigoErroEnum.UsuarioSenhaIncorretos) } });
+            }
 
             if (!output.IsAtivo)
+            {
                 return (new AutenticarUsuarioOutput() { Messages = new string[] { ObterDescricaoEnum(CodigoErroEnum.ContaDesativada) } });
+            }
 
             output!.Token = _jwtTokenGenerator.GerarToken(nomeCompleto: output.NomeCompleto!, email: output.Email!, listaClaims: null);
             output = await GerarRefreshToken(_jwtTokenGenerator, _criarRefreshTokenUseCase, output, output.UsuarioId);

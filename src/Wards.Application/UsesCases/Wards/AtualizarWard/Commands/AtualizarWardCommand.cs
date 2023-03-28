@@ -21,7 +21,9 @@ namespace Wards.Application.UsesCases.Wards.AtualizarWard.Commands
             var item = await _obterQuery.Execute(input.WardId);
 
             if (item is null)
+            {
                 return 0;
+            }
 
             item.Conteudo = !string.IsNullOrEmpty(input.Conteudo) ? input.Conteudo : item.Conteudo;
             item.UsuarioModId = input.UsuarioModId;

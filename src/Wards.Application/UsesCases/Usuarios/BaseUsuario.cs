@@ -62,12 +62,16 @@ namespace Wards.Application.UsesCases.Usuarios
             string[] arquivos = Directory.GetFiles(caminho, "*.jpg");
 
             if (arquivos.Length == 0)
+            {
                 return null;
+            }
 
             string arquivoAleatorio = arquivos.OrderBy(x => Guid.NewGuid()).FirstOrDefault() ?? string.Empty;
 
             if (string.IsNullOrEmpty(arquivoAleatorio))
+            {
                 return null;
+            }
 
             return PathToFile(arquivoAleatorio, Path.GetFileName(arquivoAleatorio), "image/jpg");
         }
@@ -79,7 +83,9 @@ namespace Wards.Application.UsesCases.Usuarios
                 string nomeFoto = GerarNomeFoto(usuarioId);
 
                 if (string.IsNullOrEmpty(nomeFoto) || arquivo is null)
+                {
                     return string.Empty;
+                }
 
                 return await UparImagem(arquivo, nomeFoto, ObterDescricaoEnum(CaminhoUploadEnum.FotoPerfilUsuario), string.Empty, _webHostEnvironment.ContentRootPath); ;
             }

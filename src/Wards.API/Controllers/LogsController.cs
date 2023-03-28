@@ -41,7 +41,9 @@ namespace Wards.API.Controllers
             var resp = await _listarUseCase.Execute(pagina, tamanhoPagina);
 
             if (resp is null)
+            {
                 return StatusCode(StatusCodes.Status404NotFound, new LogOutput() { Messages = new string[] { ObterDescricaoEnum(CodigoErroEnum.NaoEncontrado) } });
+            }
 
             return Ok(resp);
         }

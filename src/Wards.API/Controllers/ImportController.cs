@@ -28,7 +28,9 @@ namespace Wards.API.Controllers
         public async Task<ActionResult<string>?> CriarExemploUsuario([FromForm] ImportInput importInput)
         {
             if (!importInput.FormFile!.FileName.EndsWith(".csv"))
+            {
                 return BadRequest();
+            }
 
             // int justificativaId = await _criarJustificativaUseCase.Execute(importInput.Descricao!, await ObterUsuarioId());
             int justificativaId = 1;

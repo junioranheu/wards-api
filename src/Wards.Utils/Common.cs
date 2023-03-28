@@ -42,7 +42,6 @@ namespace Wards.Utils
         /// </summary>
         public static string LoremIpsum(int minWords, int maxWords, int minSentences, int maxSentences, int numParagraphs, bool isAdicionarTagP)
         {
-
             var words = new[] { "lorem", "ipsum", "dolor", "sit", "amet", "consectetuer", "adipiscing", "elit", "sed", "diam", "nonummy", "nibh", "euismod", "tincidunt", "ut", "laoreet", "dolore", "magna", "aliquam", "erat" };
 
             var rand = new Random();
@@ -61,7 +60,11 @@ namespace Wards.Utils
                 {
                     for (int w = 0; w < numWords; w++)
                     {
-                        if (w > 0) { result.Append(" "); }
+                        if (w > 0)
+                        {
+                            result.Append(' ');
+                        }
+
                         result.Append(words[rand.Next(words.Length)]);
                     }
 
@@ -91,7 +94,9 @@ namespace Wards.Utils
         public static bool VerificarCriptografia(string senha, string senhaCriptografada)
         {
             if (!BCrypt.Net.BCrypt.Verify(senha, senhaCriptografada))
+            {
                 return false;
+            }
 
             return true;
         }
@@ -131,7 +136,9 @@ namespace Wards.Utils
         public static bool ValidarEmail(string? email)
         {
             if (string.IsNullOrEmpty(email))
+            {
                 return false;
+            }
 
             return Regex.IsMatch(email, @"^([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$");
         }
@@ -146,34 +153,48 @@ namespace Wards.Utils
         public static Tuple<bool, string> ValidarSenha(string senha, string nomeCompleto, string nomeUsuario, string email)
         {
             if (string.IsNullOrEmpty(senha))
+            {
                 return Tuple.Create(false, "A senha não pode estar vazia");
+            }
 
             var temNumero = new Regex(@"[0-9]+");
             if (!temNumero.IsMatch(senha))
+            {
                 return Tuple.Create(false, "A senha deve conter ao menos um número");
+            }
 
             var temMaiusculo = new Regex(@"[A-Z]+");
             if (!temMaiusculo.IsMatch(senha))
+            {
                 return Tuple.Create(false, "A senha deve conter ao menos uma letra maiúscula");
+            }
 
             int minCaracteres = 6;
             var temXCaracteres = new Regex(@".{" + minCaracteres + ",}");
             if (!temXCaracteres.IsMatch(senha))
+            {
                 return Tuple.Create(false, $"A senha deve conter ao menos {minCaracteres} caracteres");
+            }
 
             string nomeCompletoPrimeiraParte = nomeCompleto.Split(' ')[0].ToLowerInvariant();
             bool isRepeteNomeCompleto = senha.ToLowerInvariant().Contains(nomeCompletoPrimeiraParte);
             if (isRepeteNomeCompleto)
+            {
                 return Tuple.Create(false, "A senha não pode conter o seu primeiro nome");
+            }
 
             bool isRepeteNomeUsuario = senha.ToLowerInvariant().Contains(nomeUsuario.ToLowerInvariant());
             if (isRepeteNomeUsuario)
+            {
                 return Tuple.Create(false, "A senha não pode conter o seu nome de usuário");
+            }
 
             string emailAntesDoArroba = email.Split('@')[0].ToLowerInvariant();
             bool isRepeteEmail = senha.ToLowerInvariant().Contains(emailAntesDoArroba.ToLowerInvariant());
             if (isRepeteEmail)
+            {
                 return Tuple.Create(false, "A senha não pode conter o seu e-mail");
+            }
 
             return Tuple.Create(true, string.Empty);
         }
@@ -299,14 +320,12 @@ namespace Wards.Utils
         /// </summary>
         public static string CaminhoFront()
         {
-            string urlApi = _urlFrontProd;
-
             if (IsDebug())
             {
-                urlApi = _urlFrontDev;
+                return _urlFrontDev;
             }
 
-            return urlApi;
+            return _urlFrontProd;
         }
 
         /// <summary>
@@ -393,14 +412,18 @@ namespace Wards.Utils
         public static async Task<string?> UparImagem(IFormFile arquivo, string nomeArquivo, string nomePasta, string? nomeArquivoAnterior, string webRootPath)
         {
             if (arquivo.Length <= 0)
+            {
                 return string.Empty;
+            }
 
             // Procedimento de inicialização para salvar nova imagem;
             string restoCaminho = $"/{nomePasta}/"; // Acesso à pasta referente; 
 
             // Verificar se o arquivo tem extensão, se não tiver, adicione;
             if (!Path.HasExtension(nomeArquivo))
+            {
                 nomeArquivo = $"{nomeArquivo}.jpg";
+            }
 
             // Verificar se já existe uma foto caso exista, delete-a;
             if (!string.IsNullOrEmpty(nomeArquivoAnterior))
@@ -409,7 +432,9 @@ namespace Wards.Utils
 
                 // Verificar se o arquivo existe;
                 if (System.IO.File.Exists(caminhoArquivoAtual))
+                {
                     System.IO.File.Delete(caminhoArquivoAtual); // Se existe, apague-o; 
+                }
             }
 
             // Salvar aquivo;

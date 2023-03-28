@@ -49,24 +49,33 @@ namespace Wards.Application.UsesCases.Usuarios.CriarUsuario
         {
             //var verificarUsuario = await _obterUsuarioCondicaoArbitrariaUseCase.Execute(input?.Email, input?.NomeUsuarioSistema);
 
-            //if (verificarUsuario is not null)
+            //if (verificarUsuario is not null) {
             //  return (new AutenticarUsuarioOutput(), ObterDescricaoEnum(CodigosErrosEnum.UsuarioExistente));
+            //}
 
             if (input?.NomeCompleto?.Length < 3 || input?.NomeUsuarioSistema?.Length < 3)
+            {
                 return (new AutenticarUsuarioOutput() { Messages = new string[] { ObterDescricaoEnum(CodigoErroEnum.RequisitosNome) } });
+            }
 
             if (!ValidarEmail(input?.Email!))
+            {
                 return (new AutenticarUsuarioOutput() { Messages = new string[] { ObterDescricaoEnum(CodigoErroEnum.EmailInvalido) } });
+            }
 
             var validarSenha = ValidarSenha(input?.Senha!, input?.NomeCompleto!, input?.NomeUsuarioSistema!, input?.Email!);
             if (!validarSenha.Item1)
+            {
                 return (new AutenticarUsuarioOutput() { Messages = new string[] { validarSenha.Item2 } });
+            }
 
             string codigoVerificacao = GerarStringAleatoria(6, true);
             AutenticarUsuarioOutput output = await CriarUsuario(input!, codigoVerificacao);
 
             if (output is null)
+            {
                 return output;
+            }
 
             IFormFile? arquivo = ObterFotoAleatoria(_webHostEnvironment);
             output.Foto = await VerificarParametrosDepoisUparFoto(_webHostEnvironment, output.UsuarioId, arquivo);
@@ -75,7 +84,9 @@ namespace Wards.Application.UsesCases.Usuarios.CriarUsuario
             output = await GerarRefreshToken(_jwtTokenGenerator, _criarRefreshTokenUseCase, output!, output.UsuarioId);
 
             if (!string.IsNullOrEmpty(output?.Email) && !string.IsNullOrEmpty(output?.NomeCompleto) && !string.IsNullOrEmpty(codigoVerificacao))
+            {
                 await EnviarEmailVerificacaoConta(output.Email, output.NomeCompleto, codigoVerificacao);
+            }
 
             return output;
         }

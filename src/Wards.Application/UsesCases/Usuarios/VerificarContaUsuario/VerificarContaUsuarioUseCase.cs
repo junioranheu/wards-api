@@ -20,7 +20,9 @@ namespace Wards.Application.UsesCases.Usuarios.VerificarContaUsuario
             string resp = await _verificarContaUsuarioCommand.Execute(codigoVerificacao);
 
             if (!string.IsNullOrEmpty(resp))
+            {
                 return (new UsuarioOutput() { Messages = new string[] { resp } });
+            }
 
             return new UsuarioOutput();
         }

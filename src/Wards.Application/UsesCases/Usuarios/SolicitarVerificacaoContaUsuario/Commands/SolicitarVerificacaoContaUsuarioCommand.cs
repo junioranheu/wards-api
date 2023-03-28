@@ -18,15 +18,21 @@ namespace Wards.Application.UsesCases.Usuarios.SolicitarVerificacaoContaUsuario.
             var linq = await _context.Usuarios.FindAsync(usuarioId);
 
             if (linq is null)
+            {
                 return (ObterDescricaoEnum(CodigoErroEnum.NaoEncontrado), string.Empty, string.Empty, string.Empty);
+            }
 
             // #1 - Verificar se conta já estava ativa;
             if (linq.IsVerificado)
+            {
                 return (ObterDescricaoEnum(CodigoErroEnum.ContaJaVerificada), string.Empty, string.Empty, string.Empty);
+            }
 
             // #2 - Se o código estiver válido, não envie outro e-mail;
             if (linq?.ValidadeCodigoVerificacao >= HorarioBrasilia())
+            {
                 return (ObterDescricaoEnum(CodigoErroEnum.EmailValidacaoJaEnviado), string.Empty, string.Empty, string.Empty);
+            }
 
             // #3 - Gerar código de verificação e atualizar;
             string codigoVerificacao = GerarStringAleatoria(6, true);

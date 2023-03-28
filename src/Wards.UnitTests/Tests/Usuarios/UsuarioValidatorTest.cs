@@ -29,9 +29,13 @@ namespace Wards.UnitTests.Tests.Usuarios
 
             // Assert;
             if (esperado)
+            {
                 result.ShouldNotHaveValidationErrorFor(x => x.NomeCompleto);
+            }
             else
+            {
                 result.ShouldHaveValidationErrorFor(x => x.NomeCompleto);
+            }
         }
 
         [Theory]
@@ -53,9 +57,13 @@ namespace Wards.UnitTests.Tests.Usuarios
 
             // Assert;
             if (esperado)
+            {
                 result.ShouldNotHaveValidationErrorFor(x => x.Email);
+            }
             else
+            {
                 result.ShouldHaveValidationErrorFor(x => x.Email);
+            }
         }
 
         [Theory]
@@ -78,9 +86,13 @@ namespace Wards.UnitTests.Tests.Usuarios
 
             // Assert;
             if (esperado)
+            {
                 result.ShouldNotHaveValidationErrorFor(x => x.Senha);
+            }
             else
+            {
                 result.ShouldHaveValidationErrorFor(x => x.Senha);
+            }
         }
 
         [Theory]
@@ -98,9 +110,13 @@ namespace Wards.UnitTests.Tests.Usuarios
 
             // Assert;
             if (esperado)
+            {
                 result.ShouldNotHaveValidationErrorFor(x => x.Chamado);
+            }
             else
+            {
                 result.ShouldHaveValidationErrorFor(x => x.Chamado);
+            }
         }
     }
 }

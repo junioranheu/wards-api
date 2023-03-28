@@ -20,7 +20,9 @@ namespace Wards.Application.UsesCases.Usuarios.SolicitarVerificacaoContaUsuario
             string erros = resp.Item1;
 
             if (!string.IsNullOrEmpty(erros))
+            {
                 return (new UsuarioOutput() { Messages = new string[] { erros } });
+            }
 
             string email = resp.Item2;
             string nomeCompleto = resp.Item3;

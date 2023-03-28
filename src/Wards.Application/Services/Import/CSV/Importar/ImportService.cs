@@ -73,7 +73,9 @@ namespace Wards.Application.Services.Import.CSV.Importar
                     int numeroColuna = 0;
 
                     if (qtdColunas == 0)
+                    {
                         qtdColunas = linhaCsv.ToCharArray().Count(c => c == ';');
+                    }
 
                     foreach (string fileRec in linhaCsv.Split(';'))
                     {
@@ -104,16 +106,22 @@ namespace Wards.Application.Services.Import.CSV.Importar
                 bool isLinhaValida = false;
 
                 if (isVerificarData)
+                {
                     isLinhaValida = ValidarDataHora(data: row["Data"].ToString()!, hora: row["Hora"].ToString()!);
+                }
 
                 if (isLinhaValida && nomesEquipamentos?.Count > 0)
+                {
                     isLinhaValida = ValidarNome(row["Nome"].ToString()!, nomesEquipamentos);
+                }
 
                 // ============>>>>> É NECESSÁRIO REMOVER ESSE "isLinhaValida = true" PARA FUNCIONAR AS VALIDAÇÕES <<<<<============
                 isLinhaValida = true;
 
                 if (!isLinhaValida)
+                {
                     tabelaErros.Rows.Add(row.ItemArray);
+                }
             }
 
             try
