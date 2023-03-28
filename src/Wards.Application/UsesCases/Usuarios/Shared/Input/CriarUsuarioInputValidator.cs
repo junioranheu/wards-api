@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using static Wards.Utils.Common;
 
 namespace Wards.Application.UsesCases.Usuarios.Shared.Input
 {
@@ -8,7 +9,7 @@ namespace Wards.Application.UsesCases.Usuarios.Shared.Input
         {
             RuleFor(x => x.NomeCompleto).NotNull().NotEmpty().MinimumLength(3);
             RuleFor(x => x.NomeUsuarioSistema).NotNull().NotEmpty().MinimumLength(3);
-            RuleFor(x => x.Email).NotNull().NotEmpty().EmailAddress();
+            RuleFor(x => x.Email).Must((x, email) => { return ValidarEmail(email: email); });
 
             RuleFor(x => x.Senha).NotEmpty().WithMessage("Sua senha não pode ser vazia").
                 MinimumLength(6).WithMessage("Sua senha não pode ter menos de 6 caracteres").

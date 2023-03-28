@@ -7,7 +7,6 @@ using Wards.Application.UsesCases.Usuarios.CriarUsuario.Commands;
 using Wards.Application.UsesCases.Usuarios.ObterUsuarioCondicaoArbitraria;
 using Wards.Application.UsesCases.Usuarios.Shared.Input;
 using Wards.Infrastructure.Auth.Token;
-using Wards.Infrastructure.Data;
 using Xunit;
 
 namespace Wards.UnitTests.Tests.Usuarios

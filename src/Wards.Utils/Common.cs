@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
 using System.Net;
 using System.Net.Mail;
 using System.Reflection;
@@ -129,10 +128,12 @@ namespace Wards.Utils
         /// <summary>
         /// Validar se o e-mail do usuário;
         /// </summary>
-        public static bool ValidarEmail(string email)
+        public static bool ValidarEmail(string? email)
         {
-            EmailAddressAttribute e = new();
-            return e.IsValid(email);
+            if (string.IsNullOrEmpty(email))
+                return false;
+
+            return Regex.IsMatch(email, @"^([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$");
         }
 
         /// <summary>

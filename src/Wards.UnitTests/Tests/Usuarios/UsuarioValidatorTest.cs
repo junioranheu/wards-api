@@ -14,7 +14,7 @@ namespace Wards.UnitTests.Tests.Usuarios
         }
 
         [Fact]
-        public void DeveRetornarErro_QuandoNomeNulo()
+        public void DeveRetornarErro_QuandoNomeInvalido()
         {
             // Arrange;
             var model = new CriarUsuarioInput { NomeCompleto = null };
@@ -39,11 +39,16 @@ namespace Wards.UnitTests.Tests.Usuarios
             result.ShouldNotHaveValidationErrorFor(x => x.NomeCompleto);
         }
 
-        [Fact]
-        public void DeveRetornarErro_QuandoEmailNulo()
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData("junior")]
+        [InlineData("junior@")]
+        [InlineData("junior@gmail")]
+        public void DeveRetornarErro_QuandoEmailInvalido(string email)
         {
             // Arrange;
-            var model = new CriarUsuarioInput { Email = null };
+            var model = new CriarUsuarioInput { Email = email };
 
             // Act;
             var result = _validator.TestValidate(model);
@@ -52,24 +57,14 @@ namespace Wards.UnitTests.Tests.Usuarios
             result.ShouldHaveValidationErrorFor(x => x.Email);
         }
 
-        [Fact]
-        public void DeveRetornarErro_QuandoEmailForaPadrao()
+        [Theory]
+        [InlineData("junior@gmail.com")]
+        [InlineData("mariana@hotmail.com")]
+        [InlineData("otavio@bol.com.br")]
+        public void DeveRetornarOk_QuandoEmailValido(string email)
         {
             // Arrange;
-            var model = new CriarUsuarioInput { Email = "teste@" };
-
-            // Act;
-            var result = _validator.TestValidate(model);
-
-            // Assert;
-            result.ShouldHaveValidationErrorFor(x => x.Email);
-        }
-
-        [Fact]
-        public void DeveRetornarOk_QuandoEmailPadrao()
-        {
-            // Arrange;
-            var model = new CriarUsuarioInput { Email = "teste@gmail.com" };
+            var model = new CriarUsuarioInput { Email = email };
 
             // Act;
             var result = _validator.TestValidate(model);
@@ -79,7 +74,7 @@ namespace Wards.UnitTests.Tests.Usuarios
         }
 
         [Fact]
-        public void DeveRetornarErro_QuandoChamadoNulo()
+        public void DeveRetornarErro_QuandoChamadoInvalido()
         {
             // Arrange;
             var model = new CriarUsuarioInput { Chamado = null };
@@ -92,7 +87,7 @@ namespace Wards.UnitTests.Tests.Usuarios
         }
 
         [Fact]
-        public void DeveRetornarOk_QuandoChamadoValido()
+        public void DeveRetornarOk_QuandoChamadoInvalido()
         {
             // Arrange;
             var model = new CriarUsuarioInput { Chamado = "#1" };
