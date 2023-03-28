@@ -83,30 +83,24 @@ namespace Wards.UnitTests.Tests.Usuarios
                 result.ShouldHaveValidationErrorFor(x => x.Senha);
         }
 
-        [Fact]
-        public void DeveRetornarOk_QuandoChamadoValido()
+        [Theory]
+        [InlineData(null, false)]
+        [InlineData("", false)]
+        [InlineData("#1", true)]
+        [InlineData("Chamado #22", true)]
+        public void Validar_Chamado(string chamado, bool esperado)
         {
             // Arrange;
-            var model = new CriarUsuarioInput { Chamado = "#1" };
+            var model = new CriarUsuarioInput { Chamado = chamado };
 
             // Act;
             var result = _validator.TestValidate(model);
 
             // Assert;
-            result.ShouldNotHaveValidationErrorFor(x => x.Chamado);
-        }
-
-        [Fact]
-        public void DeveRetornarErro_QuandoChamadoInvalido()
-        {
-            // Arrange;
-            var model = new CriarUsuarioInput { Chamado = null };
-
-            // Act;
-            var result = _validator.TestValidate(model);
-
-            // Assert;
-            result.ShouldHaveValidationErrorFor(x => x.Chamado);
+            if (esperado)
+                result.ShouldNotHaveValidationErrorFor(x => x.Chamado);
+            else
+                result.ShouldHaveValidationErrorFor(x => x.Chamado);
         }
     }
 }
