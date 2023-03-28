@@ -14,7 +14,7 @@ namespace Wards.UnitTests.Tests.Usuarios
         }
 
         [Fact]
-        public void DeveRetornarErro_QuandoNomeInvalido()
+        public void DeveRetornarErro_QuandoNomeCompletoInvalido()
         {
             // Arrange;
             var model = new CriarUsuarioInput { NomeCompleto = null };
@@ -27,7 +27,7 @@ namespace Wards.UnitTests.Tests.Usuarios
         }
 
         [Fact]
-        public void DeveRetornarOk_QuandoNomeValido()
+        public void DeveRetornarOk_QuandoNomeCompletoValido()
         {
             // Arrange;
             var model = new CriarUsuarioInput { NomeCompleto = "Junior" };
@@ -60,7 +60,7 @@ namespace Wards.UnitTests.Tests.Usuarios
         [Theory]
         [InlineData("junior@gmail.com")]
         [InlineData("mariana@hotmail.com")]
-        [InlineData("otavio@bol.com.br")]
+        [InlineData("pota@bol.com.br")]
         public void DeveRetornarOk_QuandoEmailValido(string email)
         {
             // Arrange;
@@ -71,6 +71,24 @@ namespace Wards.UnitTests.Tests.Usuarios
 
             // Assert;
             result.ShouldNotHaveValidationErrorFor(x => x.Email);
+        }
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData("junior")]
+        [InlineData("junior30")]
+        [InlineData("Junior30")]
+        public void DeveRetornarErro_QuandoSenhaInvalida(string senha)
+        {
+            // Arrange;
+            var model = new CriarUsuarioInput { Senha = senha };
+
+            // Act;
+            var result = _validator.TestValidate(model);
+
+            // Assert;
+            result.ShouldHaveValidationErrorFor(x => x.Senha);
         }
 
         [Fact]

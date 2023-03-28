@@ -50,6 +50,23 @@ namespace Wards.API.Controllers
             _verificarContaUsuarioUseCase = verificarContaUsuarioUseCase;
         }
 
+        [HttpPost("autenticarParaPreguicosos")]
+        [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
+        [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(AutenticarUsuarioOutput))]
+        public async Task<ActionResult<AutenticarUsuarioOutput>> AutenticarParaPreguicosos()
+        {
+            if (User.Identity!.IsAuthenticated)
+                return StatusCode(StatusCodes.Status403Forbidden, new UsuarioOutput() { Messages = new string[] { ObterDescricaoEnum(CodigoErroEnum.UsuarioJaAutenticado) } });
+
+            var resp = await _autenticarUseCase.Execute(new AutenticarUsuarioInput() { Login = "adm", Senha = "123" });
+
+            if (resp.Messages!.Length > 0)
+                return StatusCode(StatusCodes.Status403Forbidden, resp);
+
+            return Ok(resp.Token);
+        }
+
         [HttpPost("autenticar")]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AutenticarUsuarioOutput))]

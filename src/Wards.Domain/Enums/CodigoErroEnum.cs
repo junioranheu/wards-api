@@ -65,6 +65,9 @@ namespace Wards.Domain.Enums
         [Description("Você já está autenticado, portanto não pode fazer isso agora")]
         UsuarioJaAutenticado = 120,
 
+        [Description("Permissão não encontrada")]
+        TipoRoleNaoEncontrado = 121,
+
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=- 200 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         [Description("Processo concluído com sucesso")]
         OK = 200,
