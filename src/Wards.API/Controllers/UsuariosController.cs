@@ -50,11 +50,11 @@ namespace Wards.API.Controllers
             _verificarContaUsuarioUseCase = verificarContaUsuarioUseCase;
         }
 
-        [HttpPost("autenticarParaPreguicosos")]
+        [HttpPost("autenticarLazy")]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
         [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(AutenticarUsuarioOutput))]
-        public async Task<ActionResult<AutenticarUsuarioOutput>> AutenticarParaPreguicosos()
+        public async Task<ActionResult<AutenticarUsuarioOutput>> AutenticarLazy()
         {
             if (User.Identity!.IsAuthenticated)
             {
