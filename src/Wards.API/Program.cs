@@ -26,7 +26,8 @@ WebApplication app = builder.Build();
         app.UseSwaggerUI(c =>
         {
             c.SwaggerEndpoint("/swagger/v1/swagger.json", "Wards.API");
-            // c.RoutePrefix = "";
+            // Por algum motivo desconhecido, alguns projetos têm certos problemas em exibir o swagger, portanto se faz necessário o uso do RoutePrefix com uma string vazia;
+            // c.RoutePrefix = ""; 
             c.DocExpansion(DocExpansion.None);
         });
 

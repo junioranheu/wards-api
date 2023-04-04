@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using Wards.Application.UsesCases.Auxiliares.ListarEstado.Shared.Output;
+using Wards.Application.UsesCases.Feriados.Shared.Models.Input;
+using Wards.Application.UsesCases.Feriados.Shared.Models.Output;
 using Wards.Application.UsesCases.Logs.Shared.Input;
 using Wards.Application.UsesCases.Logs.Shared.Output;
 using Wards.Application.UsesCases.Tokens.Shared.Input;
@@ -30,6 +32,9 @@ namespace Wards.Application.AutoMapper
 
             CreateMap<WardInput, Ward>();
             CreateMap<Ward, WardOutput>();
+
+            CreateMap<FeriadoInput, Feriado>();
+            CreateMap<Feriado, FeriadoOutput>();
 
             // Auxiliares;
             CreateMap<Estado, EstadoOutput>();

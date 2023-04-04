@@ -3,7 +3,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Wards.Application.AutoMapper;
 using Wards.Application.Services.Import.CSV;
 using Wards.Application.Services.Usuarios;
-using Wards.Application.UsesCases.Auths;
+using Wards.Application.UseCases.Feriados;
+using Wards.Application.UseCases.FeriadosDatas;
+using Wards.Application.UseCases.FeriadosEstados;
 using Wards.Application.UsesCases.Auxiliares;
 using Wards.Application.UsesCases.Imports;
 using Wards.Application.UsesCases.Logs;
@@ -28,6 +30,9 @@ namespace Wards.Application
             services.AddUsuariosRolesApplication();
             services.AddWardsApplication();
             services.AddAuxiliaresApplication();
+            services.AddFeriadosApplication();
+            services.AddFeriadosDatasApplication();
+            services.AddFeriadosEstadosApplication();
 
             // Services;
             services.AddCsvImportService();
