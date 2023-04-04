@@ -46,6 +46,35 @@ namespace Wards.Infrastructure.Seed
             await SeedWards.Seed(context);
             await SeedEstados.Seed(context);
             await SeedCidades.Seed(context);
+
+            if (!await context.Feriados.AnyAsync())
+            {
+                await context.Feriados.AddAsync(new Feriado() { FeriadoId = 1, Tipo = TipoFeriadoEnum.Nacional, Nome = "Natal", IsMovel = false, UsuarioId = 1 });
+                await context.Feriados.AddAsync(new Feriado() { FeriadoId = 2, Tipo = TipoFeriadoEnum.Nacional, Nome = "Carnaval", IsMovel = true, UsuarioId = 1 });
+                await context.Feriados.AddAsync(new Feriado() { FeriadoId = 3, Tipo = TipoFeriadoEnum.Estadual, Nome = "Feriado do Junior", IsMovel = false, UsuarioId = 1 });
+            }
+
+            if (!await context.FeriadosDatas.AnyAsync())
+            {
+                await context.FeriadosDatas.AddAsync(new FeriadoData() { FeriadoDataId = 1, Data = new DateTime(0001, 12, 25), FeriadoId = 1 });
+                await context.FeriadosDatas.AddAsync(new FeriadoData() { FeriadoDataId = 2, Data = new DateTime(2024, 03, 22), FeriadoId = 2 });
+                await context.FeriadosDatas.AddAsync(new FeriadoData() { FeriadoDataId = 3, Data = new DateTime(2023, 02, 21), FeriadoId = 2 });
+                await context.FeriadosDatas.AddAsync(new FeriadoData() { FeriadoDataId = 4, Data = new DateTime(0001, 03, 25), FeriadoId = 3 });
+            }
+
+            if (!await context.FeriadosEstados.AnyAsync())
+            {
+                await context.FeriadosEstados.AddAsync(new FeriadoEstado() { FeriadoEstadoId = 1, EstadoId = 24, FeriadoId = 1 });
+                await context.FeriadosEstados.AddAsync(new FeriadoEstado() { FeriadoEstadoId = 2, EstadoId = 18, FeriadoId = 1 });
+
+                await context.FeriadosEstados.AddAsync(new FeriadoEstado() { FeriadoEstadoId = 3, EstadoId = 24, FeriadoId = 2 });
+                await context.FeriadosEstados.AddAsync(new FeriadoEstado() { FeriadoEstadoId = 4, EstadoId = 18, FeriadoId = 2 });
+                await context.FeriadosEstados.AddAsync(new FeriadoEstado() { FeriadoEstadoId = 5, EstadoId = 24, FeriadoId = 2 });
+                await context.FeriadosEstados.AddAsync(new FeriadoEstado() { FeriadoEstadoId = 6, EstadoId = 18, FeriadoId = 2 });
+                await context.FeriadosEstados.AddAsync(new FeriadoEstado() { FeriadoEstadoId = 7, EstadoId = 18, FeriadoId = 2 });
+
+                await context.FeriadosEstados.AddAsync(new FeriadoEstado() { FeriadoEstadoId = 8, EstadoId = 18, FeriadoId = 3 });
+            }
             #endregion
 
             await context.SaveChangesAsync();

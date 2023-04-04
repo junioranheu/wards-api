@@ -19,6 +19,9 @@ namespace Wards.Infrastructure.Data
         public DbSet<Ward> Wards { get; set; }
         public DbSet<Estado> Estados { get; set; }
         public DbSet<Cidade> Cidades { get; set; }
+        public DbSet<Feriado> Feriados { get; set; }
+        public DbSet<FeriadoData> FeriadosDatas { get; set; }
+        public DbSet<FeriadoEstado> FeriadosEstados { get; set; }
 
         // Usuários;
         public DbSet<Role> Roles { get; set; }
