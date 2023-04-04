@@ -7,7 +7,7 @@ namespace Wards.Application.UsesCases.Feriados.Shared.Models.Input
         public FeriadoInputValidator()
         {
             RuleFor(f => f.Tipo).NotNull().NotEmpty();
-            RuleFor(f => f.Nome).NotNull().NotEmpty();
+            RuleFor(f => f.Nome).NotNull().NotEmpty().MinimumLength(3);
 
             RuleFor(f => f.Data).NotNull().NotEmpty();
             RuleFor(f => f.DistribuidoraId).NotNull().NotEmpty();
