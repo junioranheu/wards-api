@@ -109,7 +109,7 @@ namespace Wards.API.Controllers
         }
 
         [HttpPost]
-        [AuthorizeFilter(UsuarioRoleEnum.Adm, UsuarioRoleEnum.Suporte)]
+        [AuthorizeFilter(UsuarioRoleEnum.Administrador, UsuarioRoleEnum.Suporte)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AutenticarUsuarioOutput))]
         [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(AutenticarUsuarioOutput))]
         public async Task<ActionResult<AutenticarUsuarioOutput>> Criar(CriarUsuarioInput input)
@@ -127,7 +127,7 @@ namespace Wards.API.Controllers
         }
 
         [HttpGet("listar")]
-        [AuthorizeFilter(UsuarioRoleEnum.Adm)]
+        [AuthorizeFilter(UsuarioRoleEnum.Administrador)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<UsuarioOutput>))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(UsuarioOutput))]
         public async Task<ActionResult<IEnumerable<UsuarioOutput>>> Listar()

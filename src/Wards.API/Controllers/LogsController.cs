@@ -23,9 +23,9 @@ namespace Wards.API.Controllers
         }
 
         [HttpPost]
-        [AuthorizeFilter(UsuarioRoleEnum.Adm)]
+        [AuthorizeFilter(UsuarioRoleEnum.Administrador)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(bool))]
-        [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(bool))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(bool))]
         public async Task<ActionResult<bool>> Criar(LogInput input)
         {
             await _criarUseCase.Execute(input);
@@ -33,7 +33,7 @@ namespace Wards.API.Controllers
         }
 
         [HttpGet("listar")]
-        [AuthorizeFilter(UsuarioRoleEnum.Adm)]
+        [AuthorizeFilter(UsuarioRoleEnum.Administrador)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<LogOutput>))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(LogOutput))]
         public async Task<ActionResult<IEnumerable<LogOutput>>> Listar(int pagina = 0, int tamanhoPagina = 10)

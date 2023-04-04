@@ -1,9 +1,10 @@
-﻿using Wards.Domain.Entities;
+﻿using Wards.Application.UsesCases.Shared.Models;
+using Wards.Domain.Entities;
 using Wards.Domain.Enums;
 
 namespace Wards.Application.UsesCases.Feriados.Shared.Models.Output
 {
-    public sealed class FeriadoOutput
+    public sealed class FeriadoOutput : ApiResponse
     {
         public int FeriadoId { get; set; }
 

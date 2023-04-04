@@ -38,7 +38,7 @@ namespace Wards.API.Controllers
         }
 
         [HttpPut]
-        [AuthorizeFilter(UsuarioRoleEnum.Adm)]
+        [AuthorizeFilter(UsuarioRoleEnum.Administrador)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(WardOutput))]
         public async Task<ActionResult<int>> Atualizar(WardInput input)
@@ -55,7 +55,7 @@ namespace Wards.API.Controllers
         }
 
         [HttpPost]
-        [AuthorizeFilter(UsuarioRoleEnum.Adm)]
+        [AuthorizeFilter(UsuarioRoleEnum.Administrador)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(WardOutput))]
         public async Task<ActionResult<int>> Criar(WardInput input)
@@ -72,7 +72,7 @@ namespace Wards.API.Controllers
         }
 
         [HttpDelete]
-        [AuthorizeFilter(UsuarioRoleEnum.Adm)]
+        [AuthorizeFilter(UsuarioRoleEnum.Administrador)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(bool))]
         public async Task<ActionResult<bool>> Deletar(int id)
         {

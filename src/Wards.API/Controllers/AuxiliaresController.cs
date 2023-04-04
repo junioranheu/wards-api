@@ -2,6 +2,8 @@
 using Wards.API.Filters;
 using Wards.Application.UsesCases.Auxiliares.ListarEstado;
 using Wards.Application.UsesCases.Auxiliares.ListarEstado.Shared.Output;
+using Wards.Domain.Enums;
+using static Wards.Utils.Common;
 
 namespace Wards.API.Controllers
 {
@@ -18,12 +20,16 @@ namespace Wards.API.Controllers
 
         [HttpGet("listarEstado")]
         [AuthorizeFilter]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<EstadoOutput>))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(EstadoOutput))]
         public async Task<ActionResult<IEnumerable<EstadoOutput>>> ListarEstado()
         {
             var lista = await _listarEstadoUseCase.ExecuteAsync();
 
             if (lista is null)
-                return NotFound();
+            {
+                return StatusCode(StatusCodes.Status404NotFound, new EstadoOutput() { Messages = new string[] { ObterDescricaoEnum(CodigoErroEnum.NaoEncontrado) } });
+            }
 
             return Ok(lista);
         }
