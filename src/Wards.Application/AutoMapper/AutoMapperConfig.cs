@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Wards.Application.UsesCases.Auxiliares.ListarEstado.Shared.Output;
 using Wards.Application.UsesCases.Logs.Shared.Input;
 using Wards.Application.UsesCases.Logs.Shared.Output;
 using Wards.Application.UsesCases.Tokens.Shared.Input;
@@ -18,7 +19,7 @@ namespace Wards.Application.AutoMapper
             CreateMap<CriarUsuarioInput, Usuario>();
             CreateMap<Usuario, UsuarioOutput>();
             CreateMap<Usuario, AutenticarUsuarioOutput>();
-            CreateMap<UsuarioOutput, AutenticarUsuarioOutput>();         
+            CreateMap<UsuarioOutput, AutenticarUsuarioOutput>();
 
             CreateMap<UsuarioRole, UsuarioRoleOutput>();
 
@@ -29,6 +30,9 @@ namespace Wards.Application.AutoMapper
 
             CreateMap<WardInput, Ward>();
             CreateMap<Ward, WardOutput>();
+
+            // Auxiliares;
+            CreateMap<Estado, EstadoOutput>();
         }
     }
 }

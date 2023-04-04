@@ -4,6 +4,7 @@ using Wards.Application.AutoMapper;
 using Wards.Application.Services.Import.CSV;
 using Wards.Application.Services.Usuarios;
 using Wards.Application.UsesCases.Auths;
+using Wards.Application.UsesCases.Auxiliares;
 using Wards.Application.UsesCases.Imports;
 using Wards.Application.UsesCases.Logs;
 using Wards.Application.UsesCases.Tokens;
@@ -26,6 +27,7 @@ namespace Wards.Application
             services.AddUsuariosApplication();
             services.AddUsuariosRolesApplication();
             services.AddWardsApplication();
+            services.AddAuxiliaresApplication();
 
             // Services;
             services.AddCsvImportService();
