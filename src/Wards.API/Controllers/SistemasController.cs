@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
 using Wards.Application.Services.Sistemas.ResetarBancoDados;
 using Wards.Domain.Entities;
 using static Wards.Utils.Common;
@@ -19,56 +18,55 @@ namespace Wards.API.Controllers
         }
 
         /// <summary>
-        /// Exemplos de LINQs avançados, filtrando dados por listas de datas;
+        /// Exemplos de LINQs avançados, filtrando dados de sub-listas por uma string;
         /// </summary>
-        [HttpGet("testarLINQAvancadoFiltroListaStrings")]
+        [HttpGet("LINQAvancadoFiltrarDadosDeSubListaPorString")]
         [AllowAnonymous]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<Usuario>))]
-        public ActionResult<List<Usuario>> TestarLINQAvancadoFiltroListaStrings()
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<Feriado>))]
+        public ActionResult<List<Feriado>> LINQAvancadoFiltrarDadosDeSubListaPorString(string estadoExclusao)
         {
-            List<Usuario> listaPrincipal = new()
+            if (string.IsNullOrEmpty(estadoExclusao))
             {
-                new Usuario() { Data = new DateTime(2023, 12, 25) },
-                new Usuario() { Data = new DateTime(2022, 12, 23) },
-                new Usuario() { Data = new DateTime(1997, 03, 25) },
-                new Usuario() { Data = new DateTime(2015, 12, 20) }
+                return new List<Feriado>();
+            }
+
+            List<Feriado> listaPrincipal = new()
+            {
+                new Feriado() {
+                    Nome = "Feriado do Junior",
+
+                    FeriadosEstados = new List<FeriadoEstado>()
+                    {
+                        new FeriadoEstado() { Estados = new Estado() { Nome = "São Paulo" } },
+                        new FeriadoEstado() { Estados = new Estado() { Nome = "Rio de Janeiro" } }
+                    }
+                },
+
+                new Feriado() {
+                    Nome = "Feriado da Mariana",
+
+                    FeriadosEstados = new List<FeriadoEstado>()
+                    {
+                        new FeriadoEstado() { Estados = new Estado() { Nome = "Minas Gerais" } },
+                        new FeriadoEstado() { Estados = new Estado() { Nome = "São Paulo" } }
+                    }
+                },
             };
 
-            List<FeriadoData> listaDatasQueServiraoDeBaseParaFiltragemPosterior = new()
-            {
-                new FeriadoData() { Data = new DateTime(2022, 12, 22) },
-                new FeriadoData() { Data = new DateTime(1975, 01, 17) },
-            };
-
-            List<FeriadoData> listaQueSeraFiltrada = new()
-            {
-                new FeriadoData() { Data = new DateTime(2023, 12, 25) },
-                new FeriadoData() { Data = new DateTime(2022, 12, 23) },
-                new FeriadoData() { Data = new DateTime(1997, 03, 25) },
-                new FeriadoData() { Data = new DateTime(2015, 12, 20) }
-            };
-
-            // Lista de datas que se repetem com base nas duas listas em referência...
-            // Que, por sua vez, serão utilizadas para filtrar os dados da lista principal posteriormente;
-            var listaDatasQueSeRepetem = listaDatasQueServiraoDeBaseParaFiltragemPosterior!.
-                                         Select(x => new { x.Data.Month, x.Data.Year }).ToList().
-                                         Intersect(listaQueSeraFiltrada.Select(y => new { y.Data.Month, y.Data.Year })).ToList();
-
-            // Remover da "listaPrincipal" os itens que se repetem;
             listaPrincipal = listaPrincipal.
-                             Where(lp => (listaDatasQueSeRepetem!.Count > 0 ? !listaDatasQueSeRepetem.Any(x => x.Month == lp.Data.Month && x.Year == lp.Data.Year) : true)).
+                             Where(lp => !lp.FeriadosEstados!.Any(x => x.Estados!.Nome == estadoExclusao)).
                              ToList();
 
             return Ok(listaPrincipal);
         }
 
         /// <summary>
-        /// Exemplos de LINQs avançados, filtrando dados por listas de datas;
+        /// Exemplos de LINQs avançados, filtrando dados de sub-listas por outras listas de datas;
         /// </summary>
-        [HttpGet("testarLINQAvancadoFiltroListaDatas")]
+        [HttpGet("LINQAvancadoFiltrarDadosDeSubListaPorOutrasListasDeDatas")]
         [AllowAnonymous]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<Usuario>))]
-        public ActionResult<List<Usuario>> TestarLINQAvancadoFiltroListaDatas()
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<DateTime>))]
+        public ActionResult<List<Usuario>> LINQAvancadoFiltrarDadosDeSubListaPorOutrasListasDeDatas()
         {
             #region exemplo_codigo_real
             /// <example>
@@ -116,11 +114,12 @@ namespace Wards.API.Controllers
                                          Intersect(listaQueSeraFiltrada.Select(y => new { y.Data.Month, y.Data.Year })).ToList();
 
             // Remover da "listaPrincipal" os itens que se repetem;
-            listaPrincipal = listaPrincipal.
-                             Where(lp => (listaDatasQueSeRepetem!.Count > 0 ? !listaDatasQueSeRepetem.Any(x => x.Month == lp.Data.Month && x.Year == lp.Data.Year) : true)).
-                             ToList();
+            IEnumerable<DateTime> listaPrincipalFinal = listaPrincipal.
+                                                        Where(lp => (listaDatasQueSeRepetem!.Count > 0 ? !listaDatasQueSeRepetem.Any(x => x.Month == lp.Data.Month && x.Year == lp.Data.Year) : true)).
+                                                        ToList().
+                                                        Select(lp => lp.Data);
 
-            return Ok(listaPrincipal);
+            return Ok(listaPrincipalFinal);
         }
 
         /// <summary>
