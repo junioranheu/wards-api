@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
 using Wards.Application.AutoMapper;
-using Wards.Application.Services.Import.CSV;
+using Wards.Application.Services.Import;
+using Wards.Application.Services.Sistemas;
 using Wards.Application.Services.Usuarios;
 using Wards.Application.UseCases.Feriados;
 using Wards.Application.UseCases.FeriadosDatas;
@@ -37,6 +38,7 @@ namespace Wards.Application
             // Services;
             services.AddCsvImportService();
             services.AddUsuariosService();
+            services.AddResetarBancoDadosService();
 
             return services;
         }
