@@ -3,7 +3,7 @@ using Quartz;
 using Quartz.Impl;
 using Wards.Application.UsesCases.Logs.CriarLog;
 using Wards.Application.UsesCases.Logs.Shared.Input;
-using Wards.WorkersServices.Workers.Temperatura.Jobs;
+using Wards.WorkersServices.Workers.Temperatura.Jobs.Hello;
 
 namespace Wards.WorkersServices.Workers.Temperatura
 {
@@ -18,6 +18,7 @@ namespace Wards.WorkersServices.Workers.Temperatura
 
         public async Task Worker()
         {
+            LogInput log = new();
             StdSchedulerFactory factory = new();
             IScheduler scheduler = await factory.GetScheduler();
 
@@ -38,21 +39,16 @@ namespace Wards.WorkersServices.Workers.Temperatura
                 //                   Build();
 
                 await scheduler.ScheduleJob(job, trigger);
+                log = new() { Descricao = $"Sucesso {typeof(TemperaturaWorker)}", StatusResposta = StatusCodes.Status200OK };
             }
             catch (Exception ex)
             {
-                LogInput log = new()
-                {
-                    TipoRequisicao = null,
-                    Endpoint = null,
-                    Parametros = null,
-                    Descricao = $"Houve um erro no Worker {typeof(TemperaturaWorker)}: {ex.Message}",
-                    StatusResposta = StatusCodes.Status500InternalServerError,
-                    UsuarioId = null
-                };
-
-                await _criarLogUseCase.Execute(log);
                 await scheduler.Shutdown();
+                log = new() { Descricao = $"Houve um erro no Worker {typeof(TemperaturaWorker)}: {ex.Message}", StatusResposta = StatusCodes.Status500InternalServerError };
+            }
+            finally
+            {
+                await _criarLogUseCase.Execute(log);
             }
         }
     }
