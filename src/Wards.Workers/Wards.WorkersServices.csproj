@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net7.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Folder Include="Workers\Temperatura\Models\" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Quartz" Version="3.6.2" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Wards.Application\Wards.Application.csproj" />
+		<ProjectReference Include="..\Wards.Utils\Wards.Utils.csproj" />
+	</ItemGroup>
+
+</Project>

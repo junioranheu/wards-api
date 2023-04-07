@@ -8,26 +8,33 @@ using Wards.Application;
 using Wards.Infrastructure;
 using Wards.Infrastructure.Data;
 using Wards.Infrastructure.Seed;
-using Wards.Workers.TemperaturaWorker;
+using Wards.WorkersServices;
+using Wards.WorkersServices.Workers.Temperatura;
 
+#region builder
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 {
     builder.Services.AddDependencyInjectionAPI(builder);
     builder.Services.AddDependencyInjectionApplication();
     builder.Services.AddDependencyInjectionInfrastructure(builder);
+    builder.Services.AddDependencyInjectionWorkersServices();
 }
+#endregion
 
+#region app
 WebApplication app = builder.Build();
 {
+    using IServiceScope scope = app.Services.CreateScope();
+    IServiceProvider services = scope.ServiceProvider;
+
     if (app.Environment.IsDevelopment())
     {
-        await DBInitialize(app, isInitialize: false);
+        await DBInitialize(services, isInitialize: false);
 
         app.UseSwagger();
         app.UseSwaggerUI(c =>
         {
             c.SwaggerEndpoint("/swagger/v1/swagger.json", "Wards.API");
-            // Por algum motivo desconhecido, alguns projetos têm certos problemas em exibir o swagger, portanto se faz necessário o uso do RoutePrefix com uma string vazia;
             // c.RoutePrefix = ""; 
             c.DocExpansion(DocExpansion.None);
         });
@@ -49,27 +56,25 @@ WebApplication app = builder.Build();
 
     AddHealthCheck(app);
     AddStaticFiles(app);
-    await AddWorkers();
+    await AddWorkers(services);
 
     app.Run();
 }
+#endregion
 
 #region metodos_auxiliares
-static async Task DBInitialize(WebApplication app, bool isInitialize)
+static async Task DBInitialize(IServiceProvider services, bool isInitialize)
 {
     if (isInitialize)
     {
-        using IServiceScope scope = app.Services.CreateScope();
-        IServiceProvider services = scope.ServiceProvider;
-
         try
         {
             WardsContext context = services.GetRequiredService<WardsContext>();
             await DbInitializer.Initialize(context);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            string erroBD = ex.Message.ToString();
+           
         }
     }
 }
@@ -114,11 +119,12 @@ static void AddStaticFiles(WebApplication app)
     });
 }
 
-static async Task AddWorkers()
+static async Task AddWorkers(IServiceProvider services)
 {
     try
     {
-        await TemperaturaWorker.Worker();
+        TemperaturaWorker temperaturaWorker = services.GetRequiredService<TemperaturaWorker>();
+        await temperaturaWorker.Worker();
     }
     catch (Exception)
     {

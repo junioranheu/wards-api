@@ -19,7 +19,7 @@
 		<ProjectReference Include="..\Wards.Application\Wards.Application.csproj" />
 		<ProjectReference Include="..\Wards.Domain\Wards.Domain.csproj" />
 		<ProjectReference Include="..\Wards.Infrastructure\Wards.Infrastructure.csproj" />
-		<ProjectReference Include="..\Wards.Workers\Wards.Workers.csproj" />
+		<ProjectReference Include="..\Wards.Workers\Wards.WorkersServices.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
