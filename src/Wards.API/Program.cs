@@ -8,6 +8,7 @@ using Wards.Application;
 using Wards.Infrastructure;
 using Wards.Infrastructure.Data;
 using Wards.Infrastructure.Seed;
+using Wards.Workers.TemperaturaWorker;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 {
@@ -48,6 +49,7 @@ WebApplication app = builder.Build();
 
     AddHealthCheck(app);
     AddStaticFiles(app);
+    await AddWorkers();
 
     app.Run();
 }
@@ -110,5 +112,17 @@ static void AddStaticFiles(WebApplication app)
             ctx.Context.Response.Headers.Append("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
         }
     });
+}
+
+static async Task AddWorkers()
+{
+    try
+    {
+        await TemperaturaWorker.Worker();
+    }
+    catch (Exception)
+    {
+
+    }
 }
 #endregion
