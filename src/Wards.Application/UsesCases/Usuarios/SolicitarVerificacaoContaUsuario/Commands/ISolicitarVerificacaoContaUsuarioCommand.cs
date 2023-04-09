@@ -2,6 +2,6 @@
 {
     public interface ISolicitarVerificacaoContaUsuarioCommand
     {
-        Task<(string, string, string, string)> Execute(int usuarioId);
+        Task<(string mensagemErro, string email, string nomeCompleto, string codigoVerificacao)> Execute(int usuarioId);
     }
 }

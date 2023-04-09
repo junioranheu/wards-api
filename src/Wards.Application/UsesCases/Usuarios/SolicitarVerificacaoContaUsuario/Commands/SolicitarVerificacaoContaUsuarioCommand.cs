@@ -13,7 +13,7 @@ namespace Wards.Application.UsesCases.Usuarios.SolicitarVerificacaoContaUsuario.
             _context = context;
         }
 
-        public async Task<(string, string, string, string)> Execute(int usuarioId)
+        public async Task<(string mensagemErro, string email, string nomeCompleto, string codigoVerificacao)> Execute(int usuarioId)
         {
             var linq = await _context.Usuarios.FindAsync(usuarioId);
 
