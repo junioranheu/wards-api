@@ -19,6 +19,7 @@ namespace Wards.WorkersServices.Workers.Temperatura
         public async Task Worker()
         {
             LogInput log = new();
+
             StdSchedulerFactory factory = new();
             IScheduler scheduler = await factory.GetScheduler();
 
