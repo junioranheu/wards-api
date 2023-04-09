@@ -27,6 +27,7 @@ namespace Wards.WorkersServices.Workers.Temperatura
                 await scheduler.Start();
 
                 IJobDetail job = JobBuilder.Create<ObterTemperaturaJob>().
+                                 UsingJobData("jobData1", "Isso é um teste").
                                  Build();
 
                 ITrigger trigger = TriggerBuilder.Create().

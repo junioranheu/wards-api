@@ -10,21 +10,18 @@ namespace Wards.WorkersServices.Workers.Temperatura.Jobs.ObterTemperatura
         private readonly IMapper _map;
         private readonly IListarUsuarioQuery _listarQuery;
 
-        //public HelloJob(IMapper map, IListarUsuarioQuery listarQuery)
+        //public ObterTemperaturaJob(IMapper map, IListarUsuarioQuery listarQuery)
         //{
         //    _map = map;
         //    _listarQuery = listarQuery;
         //}
 
-        public ObterTemperaturaJob()
-        {
-
-        }
-
         public async Task Execute(IJobExecutionContext context)
         {
+            var jobData1 = context.JobDetail.JobDataMap.GetString("jobData1");
+
             Console.Clear();
-            await Console.Out.WriteLineAsync($"Olá! {HorarioBrasilia()}");
+            await Console.Out.WriteLineAsync($"{jobData1} - {HorarioBrasilia()}");
         }
     }
 }
