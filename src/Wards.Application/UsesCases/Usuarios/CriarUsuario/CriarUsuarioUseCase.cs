@@ -63,10 +63,10 @@ namespace Wards.Application.UsesCases.Usuarios.CriarUsuario
                 return (new AutenticarUsuarioOutput() { Messages = new string[] { ObterDescricaoEnum(CodigoErroEnum.EmailInvalido) } });
             }
 
-            var validarSenha = ValidarSenha(input?.Senha!, input?.NomeCompleto!, input?.NomeUsuarioSistema!, input?.Email!);
-            if (!validarSenha.isValido)
+            var (isValido, mensagemErro) = ValidarSenha(input?.Senha!, input?.NomeCompleto!, input?.NomeUsuarioSistema!, input?.Email!);
+            if (!isValido)
             {
-                return (new AutenticarUsuarioOutput() { Messages = new string[] { validarSenha.mensagemErro } });
+                return (new AutenticarUsuarioOutput() { Messages = new string[] { mensagemErro } });
             }
 
             string codigoVerificacao = GerarStringAleatoria(6, true);

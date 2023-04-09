@@ -30,9 +30,9 @@ namespace Wards.Application.UsesCases.Usuarios.AutenticarUsuario
 
         public async Task<AutenticarUsuarioOutput> Execute(AutenticarUsuarioInput input)
         {
-            (UsuarioOutput?, string) resp = await _obterUsuarioCondicaoArbitrariaUseCase.Execute(input?.Login ?? string.Empty);
-            AutenticarUsuarioOutput? output = _map.Map<AutenticarUsuarioOutput>(resp.Item1);
-            string senhaCriptografada = resp.Item2;
+            var (usuario, senha) = await _obterUsuarioCondicaoArbitrariaUseCase.Execute(input?.Login ?? string.Empty);
+            AutenticarUsuarioOutput? output = _map.Map<AutenticarUsuarioOutput>(usuario);
+            string senhaCriptografada = senha;
 
             if (output is null)
             {

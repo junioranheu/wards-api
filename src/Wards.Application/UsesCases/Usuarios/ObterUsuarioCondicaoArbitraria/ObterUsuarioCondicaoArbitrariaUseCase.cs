@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Wards.Application.UsesCases.Usuarios.ObterUsuarioCondicaoArbitraria.Queries;
 using Wards.Application.UsesCases.Usuarios.Shared.Output;
-using Wards.Domain.Entities;
 
 namespace Wards.Application.UsesCases.Usuarios.ObterUsuarioCondicaoArbitraria
 {
@@ -16,10 +15,10 @@ namespace Wards.Application.UsesCases.Usuarios.ObterUsuarioCondicaoArbitraria
             _obterQuery = obterQuery;
         }
 
-        public async Task<(UsuarioOutput?, string)> Execute(string login)
+        public async Task<(UsuarioOutput? usuario, string senha)> Execute(string login)
         {
-            (Usuario?, string) resp = await _obterQuery.Execute(login);
-            return (_map.Map<UsuarioOutput>(resp.Item1), resp.Item2);
+            var (usuario, senha) = await _obterQuery.Execute(login);
+            return (_map.Map<UsuarioOutput>(usuario), senha);
         }
     }
 }

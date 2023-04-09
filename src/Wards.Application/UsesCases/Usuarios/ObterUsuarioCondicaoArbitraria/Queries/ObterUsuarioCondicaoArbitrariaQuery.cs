@@ -13,7 +13,7 @@ namespace Wards.Application.UsesCases.Usuarios.ObterUsuarioCondicaoArbitraria.Qu
             _context = context;
         }
 
-        public async Task<(Usuario?, string)> Execute(string login)
+        public async Task<(Usuario? usuario, string senha)> Execute(string login)
         {
             var byEmail = await _context.Usuarios.
                           Where(e => e.Email == login).
