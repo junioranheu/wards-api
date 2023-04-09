@@ -5,6 +5,6 @@ namespace Wards.Application.UsesCases.Imports.CriarExemploUsuario
 {
     public interface ICriarExemploUsuarioUseCase
     {
-        Task<(DataTable?, bool)> Execute(IFormFile formFile, int justificativaId);
+        Task<(DataTable? tabelaErros, bool isErroBanco)> Execute(IFormFile formFile, int justificativaId);
     }
 }

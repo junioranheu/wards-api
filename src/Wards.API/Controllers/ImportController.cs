@@ -34,12 +34,12 @@ namespace Wards.API.Controllers
 
             // int justificativaId = await _criarJustificativaUseCase.Execute(importInput.Descricao!, await ObterUsuarioId());
             int justificativaId = 1;
-            var resultados = await _criarExemploUsuarioUseCase.Execute(importInput.FormFile!, justificativaId);
+            var (tabelaErros, isErroBanco) = await _criarExemploUsuarioUseCase.Execute(importInput.FormFile!, justificativaId);
 
-            if (resultados.Item2 || resultados.Item1?.Rows.Count > 0)
+            if (isErroBanco || tabelaErros?.Rows.Count > 0)
             {
                 // await _deletarJustificativaUseCase.Execute(justificativaId);
-                return StatusCode(StatusCodes.Status400BadRequest, (resultados.Item1?.Rows.Count > 0 ? JsonConvert.SerializeObject(resultados.Item1) : ObterDescricaoEnum(CodigoErroEnum.ErroInterno)));
+                return StatusCode(StatusCodes.Status400BadRequest, (tabelaErros?.Rows.Count > 0 ? JsonConvert.SerializeObject(tabelaErros) : ObterDescricaoEnum(CodigoErroEnum.ErroInterno)));
             }
 
             return Ok(string.Empty);

@@ -5,6 +5,6 @@ namespace Wards.Application.Services.Import.CSV.Importar
 {
     public interface IImportService
     {
-        Task<(DataTable?, bool)> InserirCsv(string nomeDaTabela, object objectType, IFormFile formFile, int justificativaId, bool isVerificarData, List<string>? nomesEquipamentos = null);
+        Task<(DataTable? tabelaErros, bool isErroBanco)> InserirCsv(string nomeDaTabela, object objectType, IFormFile formFile, int justificativaId, bool isVerificarData, List<string>? nomesEquipamentos = null);
     }
 }

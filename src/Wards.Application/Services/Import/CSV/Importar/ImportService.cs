@@ -16,7 +16,7 @@ namespace Wards.Application.Services.Import.CSV.Importar
             _connectionFactory = connectionFactory;
         }
 
-        public async Task<(DataTable?, bool)> InserirCsv(string nomeDaTabela, object objectType, IFormFile formFile, int justificativaId, bool isVerificarData, List<string>? nomesEquipamentos = default)
+        public async Task<(DataTable? tabelaErros, bool isErroBanco)> InserirCsv(string nomeDaTabela, object objectType, IFormFile formFile, int justificativaId, bool isVerificarData, List<string>? nomesEquipamentos = default)
         {
             DataTable tabelaInsert = new();
             CriarColunas(objectType, tabelaInsert);
