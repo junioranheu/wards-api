@@ -5,6 +5,7 @@ using static Wards.Utils.Common;
 
 namespace Wards.WorkersServices.Workers.Temperatura.Jobs.ObterTemperatura
 {
+    [DisallowConcurrentExecution]
     public sealed class ObterTemperaturaJob : IJob, IObterTemperaturaJob
     {
         private readonly IMapper _map;
