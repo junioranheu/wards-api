@@ -7,7 +7,7 @@ namespace Wards.WorkersServices
     {
         public static IServiceCollection AddDependencyInjectionWorkersServices(this IServiceCollection services)
         {
-            services.AddTemperaturaWorkerWS();
+            services.AddScoped<TemperaturaWorker>();
 
             return services;
         }

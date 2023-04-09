@@ -3,11 +3,11 @@ using Quartz;
 using Quartz.Impl;
 using Wards.Application.UsesCases.Logs.CriarLog;
 using Wards.Application.UsesCases.Logs.Shared.Input;
-using Wards.WorkersServices.Workers.Temperatura.Jobs.Hello;
+using Wards.WorkersServices.Workers.Temperatura.Jobs.ObterTemperatura;
 
 namespace Wards.WorkersServices.Workers.Temperatura
 {
-    public sealed class TemperaturaWorker : ITemperaturaWorker
+    public sealed class TemperaturaWorker
     {
         private readonly ICriarLogUseCase _criarLogUseCase;
 
@@ -26,7 +26,7 @@ namespace Wards.WorkersServices.Workers.Temperatura
             {
                 await scheduler.Start();
 
-                IJobDetail job = JobBuilder.Create<HelloJob>().
+                IJobDetail job = JobBuilder.Create<ObterTemperaturaJob>().
                                  Build();
 
                 ITrigger trigger = TriggerBuilder.Create().
