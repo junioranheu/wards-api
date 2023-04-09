@@ -150,53 +150,53 @@ namespace Wards.Utils
         /// #3 - Tem pelo menos X caracteres;
         /// #4 - A senha não contém o nome completo, nome de usuário ou e-mail;
         /// </summary>
-        public static Tuple<bool, string> ValidarSenha(string senha, string nomeCompleto, string nomeUsuario, string email)
+        public static (bool isValido, string mensagemErro) ValidarSenha(string senha, string nomeCompleto, string nomeUsuario, string email)
         {
             if (string.IsNullOrEmpty(senha))
             {
-                return Tuple.Create(false, "A senha não pode estar vazia");
+                return (false, "A senha não pode estar vazia");
             }
 
             var temNumero = new Regex(@"[0-9]+");
             if (!temNumero.IsMatch(senha))
             {
-                return Tuple.Create(false, "A senha deve conter ao menos um número");
+                return (false, "A senha deve conter ao menos um número");
             }
 
             var temMaiusculo = new Regex(@"[A-Z]+");
             if (!temMaiusculo.IsMatch(senha))
             {
-                return Tuple.Create(false, "A senha deve conter ao menos uma letra maiúscula");
+                return (false, "A senha deve conter ao menos uma letra maiúscula");
             }
 
             int minCaracteres = 6;
             var temXCaracteres = new Regex(@".{" + minCaracteres + ",}");
             if (!temXCaracteres.IsMatch(senha))
             {
-                return Tuple.Create(false, $"A senha deve conter ao menos {minCaracteres} caracteres");
+                return (false, $"A senha deve conter ao menos {minCaracteres} caracteres");
             }
 
             string nomeCompletoPrimeiraParte = nomeCompleto.Split(' ')[0].ToLowerInvariant();
             bool isRepeteNomeCompleto = senha.ToLowerInvariant().Contains(nomeCompletoPrimeiraParte);
             if (isRepeteNomeCompleto)
             {
-                return Tuple.Create(false, "A senha não pode conter o seu primeiro nome");
+                return (false, "A senha não pode conter o seu primeiro nome");
             }
 
             bool isRepeteNomeUsuario = senha.ToLowerInvariant().Contains(nomeUsuario.ToLowerInvariant());
             if (isRepeteNomeUsuario)
             {
-                return Tuple.Create(false, "A senha não pode conter o seu nome de usuário");
+                return (false, "A senha não pode conter o seu nome de usuário");
             }
 
             string emailAntesDoArroba = email.Split('@')[0].ToLowerInvariant();
             bool isRepeteEmail = senha.ToLowerInvariant().Contains(emailAntesDoArroba.ToLowerInvariant());
             if (isRepeteEmail)
             {
-                return Tuple.Create(false, "A senha não pode conter o seu e-mail");
+                return (false, "A senha não pode conter o seu e-mail");
             }
 
-            return Tuple.Create(true, string.Empty);
+            return (true, string.Empty);
         }
 
         /// <summary>

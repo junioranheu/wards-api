@@ -14,8 +14,8 @@ namespace Wards.Application.UsesCases.Usuarios.Shared.Input
             RuleFor(x => x.Senha).NotNull().NotEmpty().Must((rootObj, obj, context) =>
             {
                 var validarSenha = ValidarSenha(senha: rootObj.Senha!, nomeCompleto: rootObj.NomeCompleto!, nomeUsuario: rootObj.NomeUsuarioSistema!, email: rootObj.Email!);
-                context.MessageFormatter.AppendArgument("_avisoValidarSenha", validarSenha.Item2);
-                return validarSenha.Item1;
+                context.MessageFormatter.AppendArgument("_avisoValidarSenha", validarSenha.mensagemErro);
+                return validarSenha.isValido;
             }).WithMessage("{_avisoValidarSenha}");
 
             //RuleFor(x => x.Senha).NotNull().NotEmpty().WithMessage("Sua senha não pode ser vazia").

@@ -64,9 +64,9 @@ namespace Wards.Application.UsesCases.Usuarios.CriarUsuario
             }
 
             var validarSenha = ValidarSenha(input?.Senha!, input?.NomeCompleto!, input?.NomeUsuarioSistema!, input?.Email!);
-            if (!validarSenha.Item1)
+            if (!validarSenha.isValido)
             {
-                return (new AutenticarUsuarioOutput() { Messages = new string[] { validarSenha.Item2 } });
+                return (new AutenticarUsuarioOutput() { Messages = new string[] { validarSenha.mensagemErro } });
             }
 
             string codigoVerificacao = GerarStringAleatoria(6, true);
