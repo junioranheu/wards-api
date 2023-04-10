@@ -12,7 +12,7 @@ namespace Wards.Application.Services.Sistemas.ResetarBancoDados.Commands
             _context = context;
         }
 
-        public async Task<bool> ExecuteAsync()
+        public async Task<bool> Execute()
         {
             try
             {

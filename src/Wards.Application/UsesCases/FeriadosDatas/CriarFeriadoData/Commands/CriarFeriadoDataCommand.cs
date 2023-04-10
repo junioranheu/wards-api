@@ -13,7 +13,7 @@ namespace Wards.Application.UseCases.FeriadosDatas.CriarFeriadoData.Commands
             _context = context;
         }
 
-        public async Task ExecuteAsync(string[] data, int feriadoId)
+        public async Task Execute(string[] data, int feriadoId)
         {
             List<FeriadoData> listFd = new();
 

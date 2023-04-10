@@ -24,7 +24,7 @@ namespace Wards.API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(EstadoOutput))]
         public async Task<ActionResult<IEnumerable<EstadoOutput>>> ListarEstado()
         {
-            var lista = await _listarEstadoUseCase.ExecuteAsync();
+            var lista = await _listarEstadoUseCase.Execute();
 
             if (lista is null)
             {

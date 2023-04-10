@@ -11,9 +11,9 @@ namespace Wards.Application.Services.Sistemas.ResetarBancoDados
             _resetarBancoDadosCommand = resetarBancoDadosCommand;
         }
 
-        public async Task<bool> ExecuteAsync()
+        public async Task<bool> Execute()
         {
-            return await _resetarBancoDadosCommand.ExecuteAsync();
+            return await _resetarBancoDadosCommand.Execute();
         }
     }
 }

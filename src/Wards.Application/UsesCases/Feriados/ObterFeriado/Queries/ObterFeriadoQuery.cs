@@ -13,7 +13,7 @@ namespace Wards.Application.UseCases.Feriados.ObterFeriado.Queries
             _context = context;
         }
 
-        public async Task<Feriado?> ExecuteAsync(int id)
+        public async Task<Feriado?> Execute(int id)
         {
             var linq = await _context.Feriados.
                              Include(u => u.Usuarios).

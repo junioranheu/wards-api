@@ -2,6 +2,6 @@
 {
     public interface IDeletarFeriadoDataCommand
     {
-        Task ExecuteAsync(int feriadoId);
+        Task Execute(int feriadoId);
     }
 }

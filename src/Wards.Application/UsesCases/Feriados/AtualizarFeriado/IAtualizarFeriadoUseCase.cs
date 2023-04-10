@@ -4,6 +4,6 @@ namespace Wards.Application.UseCases.CriarFeriados.AtualizarFeriado
 {
     public interface IAtualizarFeriadoUseCase
     {
-        Task<int> ExecuteAsync(FeriadoInput input);
+        Task<int> Execute(FeriadoInput input);
     }
 }

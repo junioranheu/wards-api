@@ -9,7 +9,6 @@ using Wards.Infrastructure;
 using Wards.Infrastructure.Data;
 using Wards.Infrastructure.Seed;
 using Wards.WorkersServices;
-using Wards.WorkersServices.Workers.Temperatura;
 
 #region builder
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
@@ -17,7 +16,7 @@ WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
     builder.Services.AddDependencyInjectionAPI(builder);
     builder.Services.AddDependencyInjectionApplication();
     builder.Services.AddDependencyInjectionInfrastructure(builder);
-    builder.Services.AddDependencyInjectionWorkersServices();
+    builder.Services.AddDependencyInjectionWorkersServices(builder);
 }
 #endregion
 
@@ -56,7 +55,6 @@ WebApplication app = builder.Build();
 
     AddHealthCheck(app);
     AddStaticFiles(app);
-    await AddWorkers(services);
 
     app.Run();
 }
@@ -117,18 +115,5 @@ static void AddStaticFiles(WebApplication app)
             ctx.Context.Response.Headers.Append("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
         }
     });
-}
-
-static async Task AddWorkers(IServiceProvider services)
-{
-    try
-    {
-        TemperaturaWorker temperaturaWorker = services.GetRequiredService<TemperaturaWorker>();
-        await temperaturaWorker.Worker();
-    }
-    catch (Exception)
-    {
-
-    }
 }
 #endregion

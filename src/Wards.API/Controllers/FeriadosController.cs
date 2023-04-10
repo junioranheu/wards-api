@@ -56,18 +56,18 @@ namespace Wards.API.Controllers
         public async Task<ActionResult<int>> AtualizarFeriado(FeriadoInput input)
         {
             input.UsuarioIdMod = await ObterUsuarioId();
-            int id = await _atualizarFeriadoUseCase.ExecuteAsync(input);
+            int id = await _atualizarFeriadoUseCase.Execute(input);
 
             if (id < 1)
             {
                 return BadRequest();
             }
 
-            await _deletarFeriadoDataUseCase.ExecuteAsync(id);
-            await _criarFeriadoDataUseCase.ExecuteAsync(input.Data!, id);
+            await _deletarFeriadoDataUseCase.Execute(id);
+            await _criarFeriadoDataUseCase.Execute(input.Data!, id);
 
-            await _deletarFeriadoEstadoUseCase.ExecuteAsync(id);
-            await _criarFeriadoEstadoUseCase.ExecuteAsync(input.EstadoId!, id);
+            await _deletarFeriadoEstadoUseCase.Execute(id);
+            await _criarFeriadoEstadoUseCase.Execute(input.EstadoId!, id);
 
             return Ok(id);
         }
@@ -79,15 +79,15 @@ namespace Wards.API.Controllers
         public async Task<ActionResult<int>> CriarFeriado(FeriadoInput input)
         {
             input.UsuarioId = await ObterUsuarioId();
-            int id = await _criarFeriadoUseCase.ExecuteAsync(input);
+            int id = await _criarFeriadoUseCase.Execute(input);
 
             if (id < 1)
             {
                 return BadRequest();
             }
 
-            await _criarFeriadoDataUseCase.ExecuteAsync(input.Data!, id);
-            await _criarFeriadoEstadoUseCase.ExecuteAsync(input.EstadoId!, id);
+            await _criarFeriadoDataUseCase.Execute(input.Data!, id);
+            await _criarFeriadoEstadoUseCase.Execute(input.EstadoId!, id);
 
             return Ok(id);
         }
@@ -98,7 +98,7 @@ namespace Wards.API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(LogOutput))]
         public async Task<ActionResult<IEnumerable<FeriadoOutput>>> ListarFeriado()
         {
-            var lista = await _listarFeriadoUseCase.ExecuteAsync();
+            var lista = await _listarFeriadoUseCase.Execute();
 
             if (lista is null)
             {
@@ -114,7 +114,7 @@ namespace Wards.API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(FeriadoOutput))]
         public async Task<ActionResult<FeriadoOutput>> ObterFeriado(int id)
         {
-            var item = await _obterFeriadoUseCase.ExecuteAsync(id);
+            var item = await _obterFeriadoUseCase.Execute(id);
 
             if (item is null)
             {

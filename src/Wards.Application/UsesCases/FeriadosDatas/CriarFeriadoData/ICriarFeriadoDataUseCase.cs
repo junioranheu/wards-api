@@ -2,6 +2,6 @@
 {
     public interface ICriarFeriadoDataUseCase
     {
-        Task ExecuteAsync(string[] data, int feriadoId);
+        Task Execute(string[] data, int feriadoId);
     }
 }

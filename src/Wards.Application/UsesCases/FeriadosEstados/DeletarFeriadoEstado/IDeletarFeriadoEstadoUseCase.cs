@@ -2,6 +2,6 @@
 {
     public interface IDeletarFeriadoEstadoUseCase
     {
-        Task ExecuteAsync(int feriadoId);
+        Task Execute(int feriadoId);
     }
 }

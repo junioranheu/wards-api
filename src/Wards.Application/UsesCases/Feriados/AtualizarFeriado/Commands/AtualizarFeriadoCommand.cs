@@ -16,9 +16,9 @@ namespace Wards.Application.UseCases.Feriados.AtualizarFeriado.Commands
             _obterFeriadoQuery = obterFeriadoQuery;
         }
 
-        public async Task<int> ExecuteAsync(Feriado input)
+        public async Task<int> Execute(Feriado input)
         {
-            var item = await _obterFeriadoQuery.ExecuteAsync(input.FeriadoId);
+            var item = await _obterFeriadoQuery.Execute(input.FeriadoId);
 
             if (item is null)
                 return 0;

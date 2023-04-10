@@ -13,9 +13,10 @@ namespace Wards.Application.UsesCases.Auxiliares.ListarEstado.Queries
             _context = context;
         }
 
-        public async Task<IEnumerable<Estado>> ExecuteAsync()
+        public async Task<IEnumerable<Estado>> Execute()
         {
             var linq = await _context.Estados.
+                       Where(e => e.IsAtivo == true).
                        AsNoTracking().ToListAsync();
 
             return linq;

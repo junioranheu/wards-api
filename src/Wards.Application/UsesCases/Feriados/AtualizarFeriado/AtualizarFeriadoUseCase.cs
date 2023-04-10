@@ -17,9 +17,9 @@ namespace Wards.Application.UseCases.Feriados.AtualizarFeriado
             _atualizarFeriadoCommand = atualizarFeriadoCommand;
         }
 
-        public async Task<int> ExecuteAsync(FeriadoInput input)
+        public async Task<int> Execute(FeriadoInput input)
         {
-            return await _atualizarFeriadoCommand.ExecuteAsync(_map.Map<Feriado>(input));
+            return await _atualizarFeriadoCommand.Execute(_map.Map<Feriado>(input));
         }
     }
 }

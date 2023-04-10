@@ -11,9 +11,9 @@ namespace Wards.Application.UseCases.FeriadosDatas.CriarFeriadoData
             _criarFeriadoDataCommand = criarFeriadoDataCommand;
         }
 
-        public async Task ExecuteAsync(string[] data, int feriadoId)
+        public async Task Execute(string[] data, int feriadoId)
         {
-            await _criarFeriadoDataCommand.ExecuteAsync(data, feriadoId);
+            await _criarFeriadoDataCommand.Execute(data, feriadoId);
         }
     }
 }

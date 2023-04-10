@@ -11,9 +11,9 @@ namespace Wards.Application.UseCases.FeriadosDatas.DeletarFeriadoData
             _deletarFeriadoDataCommand = deletarFeriadoDataCommand;
         }
 
-        public async Task ExecuteAsync(int feriadoId)
+        public async Task Execute(int feriadoId)
         {
-            await _deletarFeriadoDataCommand.ExecuteAsync(feriadoId);
+            await _deletarFeriadoDataCommand.Execute(feriadoId);
         }
     }
 }

@@ -12,7 +12,7 @@ namespace Wards.Application.UseCases.FeriadosEstados.DeletarFeriadoEstado.Comman
             _context = context;
         }
 
-        public async Task ExecuteAsync(int feriadoId)
+        public async Task Execute(int feriadoId)
         {
             var fe = await _context.FeriadosEstados.
                            Where(fe => fe.FeriadoId == feriadoId).ToListAsync();

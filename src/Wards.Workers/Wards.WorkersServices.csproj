@@ -7,11 +7,9 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<Folder Include="Workers\Temperatura\Models\" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<PackageReference Include="Quartz" Version="3.6.2" />
+		<PackageReference Include="Quartz.Extensions.DependencyInjection" Version="3.6.2" />
+		<PackageReference Include="Quartz.Extensions.Hosting" Version="3.6.2" />
 	</ItemGroup>
 
 	<ItemGroup>

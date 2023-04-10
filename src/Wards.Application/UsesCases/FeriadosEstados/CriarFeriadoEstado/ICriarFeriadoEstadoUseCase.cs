@@ -2,6 +2,6 @@
 {
     public interface ICriarFeriadoEstadoUseCase
     {
-        Task ExecuteAsync(int[] estadoId, int feriadoId);
+        Task Execute(int[] estadoId, int feriadoId);
     }
 }

@@ -1,30 +1,30 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Quartz;
+using Wards.Application.UsesCases.Auxiliares.ListarEstado.Queries;
 using Wards.Application.UsesCases.Logs.CriarLog.Commands;
-using Wards.Application.UsesCases.Usuarios.ListarUsuario.Queries;
 using Wards.Domain.Entities;
-using static Wards.Utils.Common;
+using Wards.WorkersServices.Workers.Temperatura.Jobs.ObterTemperatura;
 
-namespace Wards.WorkersServices.Workers.Temperatura.Jobs.ObterTemperatura
+namespace Wards.WorkersServices.Workers.Estado.Jobs.ListarEstado
 {
     [DisallowConcurrentExecution]
-    public sealed class ObterTemperaturaJob : IJob, IObterTemperaturaJob
+    public sealed class ListarEstadoJob : IJob, IListarEstadoJob
     {
         private readonly ICriarLogCommand _criarLogCommand;
-        private readonly IListarUsuarioQuery _listarUsuarioQuery;
+        private readonly IListarEstadoQuery _listarEstadoQuery;
 
-        public ObterTemperaturaJob(ICriarLogCommand criarLogCommand, IListarUsuarioQuery listarUsuarioQuery)
+        public ListarEstadoJob(ICriarLogCommand criarLogCommand, IListarEstadoQuery listarEstadoQuery)
         {
             _criarLogCommand = criarLogCommand;
-            _listarUsuarioQuery = listarUsuarioQuery;
+            _listarEstadoQuery = listarEstadoQuery;
         }
 
         public async Task Execute(IJobExecutionContext context)
         {
             try
             {
-                // Console.Clear();
-                await Console.Out.WriteLineAsync($"Olá, agora são {HorarioBrasilia()}");
+                IEnumerable<Domain.Entities.Estado> listaEstados = await _listarEstadoQuery.Execute();
+                await Console.Out.WriteLineAsync($"Foram encontrados {listaEstados.Count()} estados");
 
                 Log log = new() { Descricao = $"Sucesso no Worker {typeof(ObterTemperaturaJob)}", StatusResposta = StatusCodes.Status200OK };
                 await _criarLogCommand.Execute(log);

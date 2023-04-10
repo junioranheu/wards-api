@@ -4,6 +4,6 @@ namespace Wards.Application.UsesCases.Auxiliares.ListarEstado
 {
     public interface IListarEstadoUseCase
     {
-        Task<IEnumerable<EstadoOutput>> ExecuteAsync();
+        Task<IEnumerable<EstadoOutput>> Execute();
     }
 }

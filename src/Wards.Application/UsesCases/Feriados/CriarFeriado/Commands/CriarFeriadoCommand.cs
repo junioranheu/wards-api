@@ -12,7 +12,7 @@ namespace Wards.Application.UseCases.Feriados.CriarFeriado.Commands
             _context = context;
         }
 
-        public async Task<int> ExecuteAsync(Feriado input)
+        public async Task<int> Execute(Feriado input)
         {
             await _context.AddAsync(input);
             await _context.SaveChangesAsync();

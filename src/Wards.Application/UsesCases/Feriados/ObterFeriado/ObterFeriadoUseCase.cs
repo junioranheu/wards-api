@@ -15,9 +15,9 @@ namespace Wards.Application.UseCases.Feriados.ObterFeriado
             _obterCurvaTipicaQuery = obterCurvaTipicaQuery;
         }
 
-        public async Task<FeriadoOutput> ExecuteAsync(int id)
+        public async Task<FeriadoOutput> Execute(int id)
         {
-            return _map.Map<FeriadoOutput>(await _obterCurvaTipicaQuery.ExecuteAsync(id));
+            return _map.Map<FeriadoOutput>(await _obterCurvaTipicaQuery.Execute(id));
         }
     }
 }

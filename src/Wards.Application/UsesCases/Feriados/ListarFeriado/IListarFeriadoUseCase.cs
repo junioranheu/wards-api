@@ -4,6 +4,6 @@ namespace Wards.Application.UseCases.Feriados.ListarFeriado
 {
     public interface IListarFeriadoUseCase
     {
-        Task<IEnumerable<FeriadoOutput>> ExecuteAsync();
+        Task<IEnumerable<FeriadoOutput>> Execute();
     }
 }

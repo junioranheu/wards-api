@@ -1,15 +1,54 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Wards.WorkersServices.Workers.Temperatura;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Quartz;
+using Wards.WorkersServices.Workers.Estado.Jobs.ListarEstado;
 
 namespace Wards.WorkersServices
 {
     public static class DependencyInjection
     {
-        public static IServiceCollection AddDependencyInjectionWorkersServices(this IServiceCollection services)
+        public static IServiceCollection AddDependencyInjectionWorkersServices(this IServiceCollection services, WebApplicationBuilder builder)
         {
-            services.AddScoped<TemperaturaWorker>();
+            services.AddQuartz(q =>
+            {
+                q.UseMicrosoftDependencyInjectionJobFactory();
+
+                AddJobs(q, builder);
+            });
+
+            builder.Services.AddQuartzHostedService(o => o.WaitForJobsToComplete = true);
 
             return services;
+        }
+
+        private static void AddJobs(IServiceCollectionQuartzConfigurator q, WebApplicationBuilder builder)
+        {
+            //q.AddJobAndTrigger<ObterTemperaturaJob>(builder.Configuration);
+            q.AddJobAndTrigger<ListarEstadoJob>(builder.Configuration);
+        }
+    }
+
+    public static class ServiceCollectionQuartzConfiguratorExtensions
+    {
+        public static void AddJobAndTrigger<T>(this IServiceCollectionQuartzConfigurator quartz, IConfiguration configuration) where T : IJob
+        {
+            // Usar o nome do IJob como está na key do appsettings.json;
+            string jobName = typeof(T).Name;
+
+            // Tentar carregar o schedule;
+            string? configKey = $"Quartz:{jobName}";
+            string? cronSchedule = configuration[configKey];
+
+            if (string.IsNullOrEmpty(cronSchedule))
+            {
+                throw new Exception($"Nenhuma configuração de intervalo foi configurada em appsettings.json para o job {jobName}");
+            }
+
+            // Registrar o job;
+            var jobKey = new JobKey(jobName);
+            quartz.AddJob<T>(o => o.WithIdentity(jobKey));
+            quartz.AddTrigger(o => o.ForJob(jobKey).WithIdentity($"{jobName}-trigger").WithCronSchedule(cronSchedule));
         }
     }
 }

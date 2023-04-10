@@ -2,6 +2,6 @@
 {
     public interface IResetarBancoDadosService
     {
-        Task<bool> ExecuteAsync();
+        Task<bool> Execute();
     }
 }

@@ -15,9 +15,9 @@ namespace Wards.Application.UseCases.Feriados.ListarFeriado
             _listarFeriadoQuery = listarFeriadoQuery;
         }
 
-        public async Task<IEnumerable<FeriadoOutput>> ExecuteAsync()
+        public async Task<IEnumerable<FeriadoOutput>> Execute()
         {
-            return _map.Map<IEnumerable<FeriadoOutput>>(await _listarFeriadoQuery.ExecuteAsync());
+            return _map.Map<IEnumerable<FeriadoOutput>>(await _listarFeriadoQuery.Execute());
         }
     }
 }

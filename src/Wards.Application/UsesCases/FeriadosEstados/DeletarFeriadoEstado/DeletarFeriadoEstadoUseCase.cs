@@ -11,9 +11,9 @@ namespace Wards.Application.UseCases.FeriadosEstados.DeletarFeriadoEstado
             _deletarFeriadoEstadoCommand = deletarFeriadoEstadoCommand;
         }
 
-        public async Task ExecuteAsync(int feriadoId)
+        public async Task Execute(int feriadoId)
         {
-            await _deletarFeriadoEstadoCommand.ExecuteAsync(feriadoId);
+            await _deletarFeriadoEstadoCommand.Execute(feriadoId);
         }
     }
 }

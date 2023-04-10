@@ -4,6 +4,6 @@ namespace Wards.Application.UsesCases.Auxiliares.ListarEstado.Queries
 {
     public interface IListarEstadoQuery
     {
-        Task<IEnumerable<Estado>> ExecuteAsync();
+        Task<IEnumerable<Estado>> Execute();
     }
 }

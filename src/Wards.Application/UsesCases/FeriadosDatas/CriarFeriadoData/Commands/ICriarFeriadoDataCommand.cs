@@ -2,6 +2,6 @@
 {
     public interface ICriarFeriadoDataCommand
     {
-        Task ExecuteAsync(string[] data, int feriadoId);
+        Task Execute(string[] data, int feriadoId);
     }
 }

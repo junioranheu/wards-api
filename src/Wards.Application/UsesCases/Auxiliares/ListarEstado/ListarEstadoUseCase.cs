@@ -15,9 +15,9 @@ namespace Wards.Application.UsesCases.Auxiliares.ListarEstado
             _listarEstadoQuery = listarEstadoQuery;
         }
 
-        public async Task<IEnumerable<EstadoOutput>> ExecuteAsync()
+        public async Task<IEnumerable<EstadoOutput>> Execute()
         {
-            return _map.Map<IEnumerable<EstadoOutput>>(await _listarEstadoQuery.ExecuteAsync());
+            return _map.Map<IEnumerable<EstadoOutput>>(await _listarEstadoQuery.Execute());
         }
     }
 }

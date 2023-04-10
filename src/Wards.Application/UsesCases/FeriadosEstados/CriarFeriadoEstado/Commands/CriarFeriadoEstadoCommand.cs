@@ -12,7 +12,7 @@ namespace Wards.Application.UseCases.FeriadosEstados.CriarFeriadoEstado.Commands
             _context = context;
         }
 
-        public async Task ExecuteAsync(int[] estadoId, int feriadoId)
+        public async Task Execute(int[] estadoId, int feriadoId)
         {
             List<FeriadoEstado> listFe = new();
 

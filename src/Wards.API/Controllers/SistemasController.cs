@@ -142,7 +142,7 @@ namespace Wards.API.Controllers
             if (HorarioBrasilia().Minute != minuto)
                 return StatusCode(StatusCodes.Status403Forbidden, false);
 
-            bool resp = await _resetarBancoDadosService.ExecuteAsync();
+            bool resp = await _resetarBancoDadosService.Execute();
 
             if (!resp)
                 return StatusCode(StatusCodes.Status403Forbidden, resp);
