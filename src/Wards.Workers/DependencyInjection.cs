@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Quartz;
 using Wards.WorkersServices.Workers.Estado.Jobs.ListarEstado;
+using Wards.WorkersServices.Workers.Temperatura.Jobs.ObterTemperatura;
 
 namespace Wards.WorkersServices
 {
@@ -24,8 +25,8 @@ namespace Wards.WorkersServices
 
         private static void AddJobs(IServiceCollectionQuartzConfigurator q, WebApplicationBuilder builder)
         {
-            //q.AddJobAndTrigger<ObterTemperaturaJob>(builder.Configuration);
             q.AddJobAndTrigger<ListarEstadoJob>(builder.Configuration);
+            q.AddJobAndTrigger<ObterTemperaturaJob>(builder.Configuration);
         }
     }
 

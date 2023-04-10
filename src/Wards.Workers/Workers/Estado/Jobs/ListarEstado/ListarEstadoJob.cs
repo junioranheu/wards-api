@@ -3,7 +3,6 @@ using Quartz;
 using Wards.Application.UsesCases.Auxiliares.ListarEstado.Queries;
 using Wards.Application.UsesCases.Logs.CriarLog.Commands;
 using Wards.Domain.Entities;
-using Wards.WorkersServices.Workers.Temperatura.Jobs.ObterTemperatura;
 
 namespace Wards.WorkersServices.Workers.Estado.Jobs.ListarEstado
 {
@@ -26,12 +25,12 @@ namespace Wards.WorkersServices.Workers.Estado.Jobs.ListarEstado
                 IEnumerable<Domain.Entities.Estado> listaEstados = await _listarEstadoQuery.Execute();
                 await Console.Out.WriteLineAsync($"Foram encontrados {listaEstados.Count()} estados");
 
-                Log log = new() { Descricao = $"Sucesso no Worker {typeof(ObterTemperaturaJob)}", StatusResposta = StatusCodes.Status200OK };
+                Log log = new() { Descricao = $"Sucesso no Worker {typeof(ListarEstadoJob)}", StatusResposta = StatusCodes.Status200OK };
                 await _criarLogCommand.Execute(log);
             }
             catch (Exception ex)
             {
-                Log log = new() { Descricao = $"Houve um erro no Worker {typeof(ObterTemperaturaJob)}: {ex.Message}", StatusResposta = StatusCodes.Status500InternalServerError };
+                Log log = new() { Descricao = $"Houve um erro no Worker {typeof(ListarEstadoJob)}: {ex.Message}", StatusResposta = StatusCodes.Status500InternalServerError };
                 await _criarLogCommand.Execute(log);
             }
         }
