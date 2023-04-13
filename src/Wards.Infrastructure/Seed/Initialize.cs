@@ -12,6 +12,7 @@ namespace Wards.Infrastructure.Seed
     {
         public static async Task Initialize(WardsContext context)
         {
+            context.Database.SetCommandTimeout(600);
             await context.Database.EnsureDeletedAsync();
             string script = context.Database.GenerateCreateScript();
             await context.Database.EnsureCreatedAsync();
