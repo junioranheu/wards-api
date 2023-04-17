@@ -24,18 +24,19 @@ namespace Wards.UnitTests.Tests.Usuarios
                 x.AddProfile(new AutoMapperConfig());
             });
 
-             _map = mockMapper.CreateMapper();
+            _map = mockMapper.CreateMapper();
         }
 
         [Theory]
-        [InlineData("Junior de Souza", "junioranheu", "junioranheu@gmail.com", "Juninho26@", "#1")]
-        //[InlineData("Otávio Villas Boas", "otavioGOD", "otavio@gmail.com", "Otavinho26@", "#2")]
-        //[InlineData("Mariana Scalzaretto", "elfamscal", "elfa@gmail.com", "Marianinha26@", "#3")]
-        public async Task CriarUsuarioUseCase_DeveRetornar1_QuandoParametrosValidosEBanco(string nomeCompleto, string nomeUsuarioSistema, string email, string senha, string chamado)
+        [InlineData("Junior de Souza", "junioranheu", "junioranheu@gmail.com", "Juninho26@", "#1", true)]
+        [InlineData("Otávio Villas Boas", "otavioGOD", "otavio@gmail.com", "Otavinho26@", "#2", true)]
+        [InlineData("Mariana Scalzaretto", "elfamscal", "elfa@gmail.com", "Marianinha26@", "#3", true)]
+        [InlineData("Ju", "aea", "aea@gmail.com", "aea@", "#4", false)]
+        [InlineData("Junior de S.", "junioranheu", "junioranheu@gmail.com", "senhainvalida", "#5", false)]
+        public async Task CriarUsuarioUseCase_Assert_QuandoParametrosValidosEBanco(string nomeCompleto, string nomeUsuarioSistema, string email, string senha, string chamado, bool isAssert)
         {
             // Arrange;
             var webHostEnvironment = new Mock<IWebHostEnvironment>();
-            //var mapper = new Mock<IMapper>();
             var jwtTokenGenerator = new Mock<IJwtTokenGenerator>();
             var criarUsuarioCommand = new Mock<ICriarUsuarioCommand>();
             var criarUsuarioCondicaoArbitrariaUseCase = new Mock<IObterUsuarioCondicaoArbitrariaUseCase>();
@@ -58,27 +59,7 @@ namespace Wards.UnitTests.Tests.Usuarios
             var resp = await useCase.Execute(input);
 
             // Assert;
-            Assert.True(resp.UsuarioId > 0);
-            //Assert.Equal(resultadoEsperado, response.StatusCode);
-        }
-
-        [Fact]
-        public async Task CriarUsuarioUseCase_DeveRetornar0_QuandoFalhaNoBanco()
-        {
-            //// Arrange;
-            //var map = new Mock<IMapper>();
-            //var command = new Mock<ICriarUsuarioCommand>();
-            //Usuario u = new() { UsuarioId = 0 };
-            //command.Setup(x => x.Execute(It.IsAny<Usuario>())).Returns(Task.FromResult(u));
-
-            //var sut = new CriarUsuarioUseCase(map.Object, command.Object);
-            //var input = new CriarUsuarioInput() { Email = string.Empty };
-
-            //// Act;
-            //var resp = await sut.Execute(input);
-
-            //// Assert;
-            //Assert.True(resp.UsuarioId < 1);
+            Assert.Equal(resp?.UsuarioId > 0, isAssert);
         }
     }
 }

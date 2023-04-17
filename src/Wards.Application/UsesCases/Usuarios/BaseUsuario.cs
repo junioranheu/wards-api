@@ -58,7 +58,14 @@ namespace Wards.Application.UsesCases.Usuarios
 
         internal static IFormFile? ObterFotoAleatoria(IWebHostEnvironment _webHostEnvironment)
         {
-            string caminho = $"{_webHostEnvironment.ContentRootPath}/{ObterDescricaoEnum(CaminhoAssetEnum.FotoPerfilUsuario)}";
+            string path = _webHostEnvironment.ContentRootPath;
+
+            if (string.IsNullOrEmpty(path))
+            {
+                return null;
+            }
+
+            string caminho = $"{path}/{ObterDescricaoEnum(CaminhoAssetEnum.FotoPerfilUsuario)}";
             string[] arquivos = Directory.GetFiles(caminho, "*.jpg");
 
             if (arquivos.Length == 0)
