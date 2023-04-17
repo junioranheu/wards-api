@@ -31,7 +31,7 @@ namespace Wards.Application.UsesCases.Wards.ListarWard.Queries
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, HorarioBrasilia().ToString());
+                _logger.LogError(ex, "{detalhes}", DetalhesException(ex.Source));
                 throw;
             }
         }

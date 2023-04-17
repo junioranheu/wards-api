@@ -446,5 +446,14 @@ namespace Wards.Utils
 
             return nomeArquivo;
         }
+
+        /// <summary>
+        /// Detalha em texto a data e hora atual;
+        /// </summary>
+        public static string DetalhesException(string? source)
+        {
+            DateTime horarioBrasilia = HorarioBrasilia();
+            return $"{(!string.IsNullOrEmpty(source) ? $"Erro em {source}, " : "")}{horarioBrasilia:dd/MM/yyyy} às {horarioBrasilia:HH:mm:ss}";
+        }
     }
 }

@@ -32,7 +32,7 @@ namespace Wards.Application.UsesCases.Tokens.ObterRefreshToken.Queries
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, HorarioBrasilia().ToString());
+                _logger.LogError(ex, "{detalhes}", DetalhesException(ex.Source));
                 throw;
             }
         }

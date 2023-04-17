@@ -48,7 +48,7 @@ namespace Wards.Application.Services.Import.CSV.Importar
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, HorarioBrasilia().ToString());
+                _logger.LogError(ex, "{detalhes}", DetalhesException(ex.Source));
                 throw;
             }
         }

@@ -33,7 +33,7 @@ namespace Wards.API.Controllers
         }
 
         [HttpGet("listar")]
-        [AuthorizeFilter(UsuarioRoleEnum.Administrador)]
+        //[AuthorizeFilter(UsuarioRoleEnum.Administrador)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<LogOutput>))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(LogOutput))]
         public async Task<ActionResult<IEnumerable<LogOutput>>> Listar(int pagina = 0, int tamanhoPagina = 10)

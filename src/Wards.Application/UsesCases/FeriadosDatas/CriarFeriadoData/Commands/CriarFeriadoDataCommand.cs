@@ -42,7 +42,7 @@ namespace Wards.Application.UseCases.FeriadosDatas.CriarFeriadoData.Commands
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, HorarioBrasilia().ToString());
+                _logger.LogError(ex, "{detalhes}", DetalhesException(ex.Source));
                 throw;
             }
         }

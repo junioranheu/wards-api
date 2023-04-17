@@ -49,7 +49,7 @@ namespace Wards.Application.UsesCases.Usuarios.VerificarContaUsuario.Commands
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, HorarioBrasilia().ToString());
+                _logger.LogError(ex, "{detalhes}", DetalhesException(ex.Source));
                 throw;
             }
         }
