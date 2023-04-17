@@ -6,7 +6,7 @@ using Wards.Domain.Enums;
 
 namespace Wards.Application.UsesCases.Feriados.Shared.Models.Output
 {
-    public sealed class FeriadoOutput : ApiResponse
+    public sealed class FeriadoOutput : ApiOutput
     {
         public int FeriadoId { get; set; }
 

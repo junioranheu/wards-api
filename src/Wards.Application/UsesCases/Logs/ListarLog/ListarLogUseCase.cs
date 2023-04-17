@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Wards.Application.UsesCases.Logs.ListarLog.Queries;
 using Wards.Application.UsesCases.Logs.Shared.Output;
+using Wards.Application.UsesCases.Shared.Models;
 
 namespace Wards.Application.UsesCases.Logs.ListarLog
 {
@@ -15,9 +16,9 @@ namespace Wards.Application.UsesCases.Logs.ListarLog
             _listarQuery = listarQuery;
         }
 
-        public async Task<IEnumerable<LogOutput>?> Execute(int pagina, int tamanhoPagina)
+        public async Task<IEnumerable<LogOutput>?> Execute(PaginacaoInput input)
         {
-            return _map.Map<IEnumerable<LogOutput>>(await _listarQuery.Execute(pagina, tamanhoPagina));
+            return _map.Map<IEnumerable<LogOutput>>(await _listarQuery.Execute(input));
         }
     }
 }

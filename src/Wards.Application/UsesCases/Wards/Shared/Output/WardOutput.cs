@@ -4,7 +4,7 @@ using static Wards.Utils.Common;
 
 namespace Wards.Application.UsesCases.Wards.Shared.Output
 {
-    public sealed class WardOutput : ApiResponse
+    public sealed class WardOutput : ApiOutput
     {
         public int WardId { get; set; }
 

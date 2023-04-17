@@ -3,7 +3,7 @@ using Wards.Application.UsesCases.UsuariosRoles.Shared.Output;
 
 namespace Wards.Application.UsesCases.Usuarios.Shared.Output
 {
-    public sealed class AutenticarUsuarioOutput : ApiResponse
+    public sealed class AutenticarUsuarioOutput : ApiOutput
     {
         public int UsuarioId { get; set; }
 

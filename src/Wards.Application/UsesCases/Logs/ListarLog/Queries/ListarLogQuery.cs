@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using System.Linq;
 using Wards.Application.UsesCases.Auxiliares.ListarEstado.Queries;
+using Wards.Application.UsesCases.Shared.Models;
 using Wards.Domain.Entities;
 using Wards.Infrastructure.Data;
 using static Wards.Utils.Common;
@@ -18,13 +20,14 @@ namespace Wards.Application.UsesCases.Logs.ListarLog.Queries
             _logger = logger;
         }
 
-        public async Task<IEnumerable<Log>> Execute(int pagina, int tamanhoPagina)
+        public async Task<IEnumerable<Log>> Execute(PaginacaoInput input)
         {
             try
             {
                 var linq = await _context.Logs.
                                  Include(u => u.Usuarios).
-                                 Skip(pagina * tamanhoPagina).Take(tamanhoPagina).
+                                 Skip((input.IsGetAll ? 0 : input.Pagina * input.QtdItens)).
+                                 Take((input.IsGetAll ? int.MaxValue : input.QtdItens)).
                                  OrderByDescending(l => l.LogId).
                                  AsNoTracking().ToListAsync();
 
