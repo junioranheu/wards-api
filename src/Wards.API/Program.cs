@@ -14,7 +14,7 @@ using Wards.WorkersServices;
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 {
     builder.Services.AddDependencyInjectionAPI(builder);
-    builder.Services.AddDependencyInjectionApplication();
+    builder.Services.AddDependencyInjectionApplication(builder);
     builder.Services.AddDependencyInjectionInfrastructure(builder);
     builder.Services.AddDependencyInjectionWorkersServices(builder);
 }

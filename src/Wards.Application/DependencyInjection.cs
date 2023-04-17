@@ -1,5 +1,8 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Wards.Application.AutoMapper;
 using Wards.Application.Services.Import;
 using Wards.Application.Services.Sistemas;
@@ -19,9 +22,10 @@ namespace Wards.Application
 {
     public static class DependencyInjection
     {
-        public static IServiceCollection AddDependencyInjectionApplication(this IServiceCollection services)
+        public static IServiceCollection AddDependencyInjectionApplication(this IServiceCollection services, WebApplicationBuilder builder)
         {
             AddAutoMapper(services);
+            AddLogger(builder);
 
             // UseCases;
             services.AddImportsApplication();
@@ -45,13 +49,19 @@ namespace Wards.Application
 
         private static void AddAutoMapper(IServiceCollection services)
         {
-            var mapperConfig = new MapperConfiguration(mc =>
+            var mapperConfig = new MapperConfiguration(x =>
             {
-                mc.AddProfile(new AutoMapperConfig());
+                x.AddProfile(new AutoMapperConfig());
             });
 
             IMapper mapper = mapperConfig.CreateMapper();
             services.AddSingleton(mapper);
+        }
+
+        private static void AddLogger(WebApplicationBuilder builder)
+        {
+            builder.Logging.ClearProviders();
+            builder.Logging.AddConsole();
         }
     }
 }
