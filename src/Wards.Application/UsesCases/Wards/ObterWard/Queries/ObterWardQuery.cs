@@ -1,27 +1,40 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using Wards.Application.UsesCases.Auxiliares.ListarEstado.Queries;
 using Wards.Domain.Entities;
 using Wards.Infrastructure.Data;
+using static Wards.Utils.Common;
 
 namespace Wards.Application.UsesCases.Wards.ObterWard.Queries
 {
     public sealed class ObterWardQuery : IObterWardQuery
     {
         private readonly WardsContext _context;
+        private readonly ILogger _logger;
 
-        public ObterWardQuery(WardsContext context)
+        public ObterWardQuery(WardsContext context, ILogger<ListarEstadoQuery> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         public async Task<Ward?> Execute(int id)
         {
-            var linq = await _context.Wards.
-                             Include(u => u.Usuarios).
-                             Include(u => u.UsuariosMods).
-                             Where(w => w.WardId == id).
-                             AsNoTracking().FirstOrDefaultAsync();
+            try
+            {
+                var linq = await _context.Wards.
+                                 Include(u => u.Usuarios).
+                                 Include(u => u.UsuariosMods).
+                                 Where(w => w.WardId == id).
+                                 AsNoTracking().FirstOrDefaultAsync();
 
-            return linq;
+                return linq;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, HorarioBrasilia().ToString());
+                throw;
+            }
         }
     }
 }
