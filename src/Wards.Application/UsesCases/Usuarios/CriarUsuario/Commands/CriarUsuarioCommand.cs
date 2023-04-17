@@ -1,27 +1,40 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System.Data;
+using Wards.Application.UsesCases.Auxiliares.ListarEstado.Queries;
 using Wards.Domain.Entities;
 using Wards.Infrastructure.Data;
+using static Wards.Utils.Common;
 
 namespace Wards.Application.UsesCases.Usuarios.CriarUsuario.Commands
 {
     public sealed class CriarUsuarioCommand : BaseUsuario, ICriarUsuarioCommand
     {
         private readonly WardsContext _context;
+        private readonly ILogger _logger;
 
-        public CriarUsuarioCommand(WardsContext context)
+        public CriarUsuarioCommand(WardsContext context, ILogger<ListarEstadoQuery> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         public async Task<Usuario> Execute(Usuario input)
         {
-            await AtualizarFlags(input);
+            try
+            {
+                await AtualizarFlags(input);
 
-            await _context.AddAsync(input);
-            await _context.SaveChangesAsync();
+                await _context.AddAsync(input);
+                await _context.SaveChangesAsync();
 
-            return input;
+                return input;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, HorarioBrasilia().ToString());
+                throw;
+            }
         }
 
         private async Task AtualizarFlags(Usuario input)

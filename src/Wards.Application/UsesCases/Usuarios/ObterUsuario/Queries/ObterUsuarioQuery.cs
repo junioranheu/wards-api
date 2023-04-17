@@ -1,30 +1,43 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System.Data;
+using Wards.Application.UsesCases.Auxiliares.ListarEstado.Queries;
 using Wards.Domain.Entities;
 using Wards.Infrastructure.Data;
+using static Wards.Utils.Common;
 
 namespace Wards.Application.UsesCases.Usuarios.ObterUsuario.Queries
 {
     public sealed class ObterUsuarioQuery : IObterUsuarioQuery
     {
         private readonly WardsContext _context;
+        private readonly ILogger _logger;
 
-        public ObterUsuarioQuery(WardsContext context)
+        public ObterUsuarioQuery(WardsContext context, ILogger<ListarEstadoQuery> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         public async Task<Usuario?> Execute(int id, string email)
         {
-            var linq = await _context.Usuarios.
-                             Include(ur => ur.UsuarioRoles)!.ThenInclude(r => r.Roles).
-                             Where(u =>
-                                 id > 0 ? u.UsuarioId == id : true
-                                 && !string.IsNullOrEmpty(email) ? u.Email == email : true
-                                 && u.IsLatest == true // É necessário ser o último para referenciar o "UsuarioPerfis" atual; 
-                             ).AsNoTracking().FirstOrDefaultAsync();
+            try
+            {
+                var linq = await _context.Usuarios.
+                                 Include(ur => ur.UsuarioRoles)!.ThenInclude(r => r.Roles).
+                                 Where(u =>
+                                     id > 0 ? u.UsuarioId == id : true
+                                     && !string.IsNullOrEmpty(email) ? u.Email == email : true
+                                     && u.IsLatest == true // É necessário ser o último para referenciar o "UsuarioPerfis" atual; 
+                                 ).AsNoTracking().FirstOrDefaultAsync();
 
-            return linq;
+                return linq;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, HorarioBrasilia().ToString());
+                throw;
+            }
         }
 
         // EXEMPLO DAPPER;
