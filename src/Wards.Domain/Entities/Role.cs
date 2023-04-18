@@ -11,7 +11,7 @@ namespace Wards.Domain.Entities
 
         public string? Tipo { get; set; } = null;
 
-        public string? Descricao { get; set; } = null;
+        public string? Descricao { get; set; } = string.Empty;
 
         public bool IsAtivo { get; set; } = true;
 

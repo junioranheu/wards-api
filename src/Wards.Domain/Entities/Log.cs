@@ -9,13 +9,13 @@ namespace Wards.Domain.Entities
         [Key]
         public int LogId { get; set; }
 
-        public string? TipoRequisicao { get; set; }
+        public string? TipoRequisicao { get; set; } = string.Empty;
 
-        public string? Endpoint { get; set; }
+        public string? Endpoint { get; set; } = string.Empty;
 
-        public string? Parametros { get; set; }
+        public string? Parametros { get; set; } = string.Empty;
 
-        public string? Descricao { get; set; }
+        public string? Descricao { get; set; } = string.Empty;
 
         public int StatusResposta { get; set; }
 

@@ -24,11 +24,11 @@ namespace Wards.UnitTests.Tests.Wards
         }
 
         [Theory]
-        // [InlineData("a", "Para criar uma API você deverá bla bla bla", 1, false)]
-        // [InlineData("Como criar uma API", "a", 2, false)]
-        // [InlineData("", "", 0, false)]
-        // [InlineData("Como criar uma API", "Para criar uma API você deverá bla bla bla", 0, false)]
-        // [InlineData("Como criar uma API", "Para criar uma API você deverá bla bla bla", null, false)]
+        [InlineData("a", "Para criar uma API você deverá bla bla bla", 1, false)]
+        [InlineData("Como criar uma API", "a", 2, false)]
+        [InlineData("", "", 0, false)]
+        [InlineData("Como criar uma API", "Para criar uma API você deverá bla bla bla", 0, false)]
+        [InlineData("Como criar uma API", "Para criar uma API você deverá bla bla bla", null, false)]
         [InlineData("Como criar uma API", "Para criar uma API você deverá bla bla bla", 10, true)]
         public async Task CriarWardCommand_ChecarResultadoEsperado(string titulo, string conteudo, int? usuarioId, bool esperado)
         {
