@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Logging;
-using Wards.Application.UsesCases.Auxiliares.ListarEstado.Queries;
 using Wards.Domain.Entities;
 using Wards.Domain.Enums;
 using Wards.Infrastructure.Data;
@@ -12,7 +11,7 @@ namespace Wards.Application.UsesCases.UsuariosRoles.CriarUsuarioRole.Commands
         private readonly WardsContext _context;
         private readonly ILogger _logger;
 
-        public CriarUsuarioRoleCommand(WardsContext context, ILogger<ListarEstadoQuery> logger)
+        public CriarUsuarioRoleCommand(WardsContext context, ILogger<CriarUsuarioRoleCommand> logger)
         {
             _context = context;
             _logger = logger;

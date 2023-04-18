@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Logging;
-using Wards.Application.UsesCases.Auxiliares.ListarEstado.Queries;
 using Wards.Domain.Entities;
 using Wards.Infrastructure.Data;
 using static Wards.Utils.Common;
@@ -11,7 +10,7 @@ namespace Wards.Application.UsesCases.Tokens.CriarRefreshToken.Commands
         private readonly WardsContext _context;
         private readonly ILogger _logger;
 
-        public CriarRefreshTokenCommand(WardsContext context, ILogger<ListarEstadoQuery> logger)
+        public CriarRefreshTokenCommand(WardsContext context, ILogger<CriarRefreshTokenCommand> logger)
         {
             _context = context;
             _logger = logger;

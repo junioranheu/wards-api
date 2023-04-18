@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Logging;
-using Wards.Application.UsesCases.Auxiliares.ListarEstado.Queries;
 using Wards.Infrastructure.Data;
 using Wards.Infrastructure.Seed;
 using static Wards.Utils.Common;
@@ -11,7 +10,7 @@ namespace Wards.Application.Services.Sistemas.ResetarBancoDados.Commands
         private readonly WardsContext _context;
         private readonly ILogger _logger;
 
-        public ResetarBancoDadosCommand(WardsContext context, ILogger<ListarEstadoQuery> logger)
+        public ResetarBancoDadosCommand(WardsContext context, ILogger<ResetarBancoDadosCommand> logger)
         {
             _context = context;
             _logger = logger;

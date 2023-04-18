@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Data;
-using Wards.Application.UsesCases.Auxiliares.ListarEstado.Queries;
 using Wards.Domain.Entities;
 using Wards.Infrastructure.Data;
 using static Wards.Utils.Common;
@@ -13,7 +12,7 @@ namespace Wards.Application.UsesCases.Usuarios.ObterUsuario.Queries
         private readonly WardsContext _context;
         private readonly ILogger _logger;
 
-        public ObterUsuarioQuery(WardsContext context, ILogger<ListarEstadoQuery> logger)
+        public ObterUsuarioQuery(WardsContext context, ILogger<ObterUsuarioQuery> logger)
         {
             _context = context;
             _logger = logger;

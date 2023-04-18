@@ -13,11 +13,11 @@ using Xunit;
 
 namespace Wards.UnitTests.Tests.Usuarios
 {
-    public sealed class UsuarioTest
+    public sealed class UsuarioUseCaseTest
     {
         private readonly IMapper _map;
 
-        public UsuarioTest()
+        public UsuarioUseCaseTest()
         {
             var mockMapper = new MapperConfiguration(x =>
             {
@@ -33,7 +33,7 @@ namespace Wards.UnitTests.Tests.Usuarios
         [InlineData("Mariana Scalzaretto", "elfamscal", "elfa@gmail.com", "Marianinha26@", "#3", true)]
         [InlineData("Ju", "aea", "aea@gmail.com", "aea@", "#4", false)]
         [InlineData("Junior de S.", "junioranheu", "junioranheu@gmail.com", "senhainvalida", "#5", false)]
-        public async Task CriarUsuarioUseCase_Assert_QuandoParametrosValidosEBanco(string nomeCompleto, string nomeUsuarioSistema, string email, string senha, string chamado, bool esperado)
+        public async Task CriarUsuarioUseCase_ChecarResultadoEsperado(string nomeCompleto, string nomeUsuarioSistema, string email, string senha, string chamado, bool esperado)
         {
             // Arrange;
             var webHostEnvironment = new Mock<IWebHostEnvironment>();

@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Logging;
-using Wards.Application.UsesCases.Auxiliares.ListarEstado.Queries;
 using Wards.Application.UsesCases.Wards.ObterWard.Queries;
 using Wards.Domain.Entities;
 using Wards.Infrastructure.Data;
@@ -15,7 +14,7 @@ namespace Wards.Application.UsesCases.Wards.AtualizarWard.Commands
 
         public AtualizarWardCommand(
             WardsContext context, 
-            ILogger<ListarEstadoQuery> logger,
+            ILogger<AtualizarWardCommand> logger,
             IObterWardQuery obterQuery)
         {
             _context = context;

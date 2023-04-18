@@ -4,7 +4,6 @@ using MySqlConnector;
 using System.Data;
 using System.Globalization;
 using System.Text.RegularExpressions;
-using Wards.Application.UsesCases.Auxiliares.ListarEstado.Queries;
 using Wards.Infrastructure.Factory;
 using static Wards.Utils.Common;
 
@@ -15,7 +14,7 @@ namespace Wards.Application.Services.Import.CSV.Importar
         private readonly IConnectionFactory _connectionFactory;
         private readonly ILogger _logger;
 
-        public ImportService(IConnectionFactory connectionFactory, ILogger<ListarEstadoQuery> logger)
+        public ImportService(IConnectionFactory connectionFactory, ILogger<ImportService> logger)
         {
             _connectionFactory = connectionFactory;
             _logger = logger;

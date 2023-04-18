@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
 using Wards.Application.UseCases.Feriados.ObterFeriado.Queries;
-using Wards.Application.UsesCases.Auxiliares.ListarEstado.Queries;
 using Wards.Domain.Entities;
 using Wards.Infrastructure.Data;
 using static Wards.Utils.Common;
@@ -15,7 +14,7 @@ namespace Wards.Application.UseCases.Feriados.AtualizarFeriado.Commands
 
         public AtualizarFeriadoCommand(
             WardsContext context,
-            ILogger<ListarEstadoQuery> logger,
+            ILogger<AtualizarFeriadoCommand> logger,
             IObterFeriadoQuery obterFeriadoQuery)
         {
             _context = context;

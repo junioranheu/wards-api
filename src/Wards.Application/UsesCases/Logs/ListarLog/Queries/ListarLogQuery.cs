@@ -1,7 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using System.Linq;
-using Wards.Application.UsesCases.Auxiliares.ListarEstado.Queries;
 using Wards.Application.UsesCases.Shared.Models;
 using Wards.Domain.Entities;
 using Wards.Infrastructure.Data;
@@ -14,7 +12,7 @@ namespace Wards.Application.UsesCases.Logs.ListarLog.Queries
         private readonly WardsContext _context;
         private readonly ILogger _logger;
 
-        public ListarLogQuery(WardsContext context, ILogger<ListarEstadoQuery> logger)
+        public ListarLogQuery(WardsContext context, ILogger<ListarLogQuery> logger)
         {
             _context = context;
             _logger = logger;

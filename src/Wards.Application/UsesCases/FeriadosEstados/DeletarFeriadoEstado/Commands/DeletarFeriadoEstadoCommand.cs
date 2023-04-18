@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Wards.Application.UsesCases.Auxiliares.ListarEstado.Queries;
 using Wards.Infrastructure.Data;
 using static Wards.Utils.Common;
 
@@ -11,7 +10,7 @@ namespace Wards.Application.UseCases.FeriadosEstados.DeletarFeriadoEstado.Comman
         private readonly WardsContext _context;
         private readonly ILogger _logger;
 
-        public DeletarFeriadoEstadoCommand(WardsContext context, ILogger<ListarEstadoQuery> logger)
+        public DeletarFeriadoEstadoCommand(WardsContext context, ILogger<DeletarFeriadoEstadoCommand> logger)
         {
             _context = context;
             _logger = logger;

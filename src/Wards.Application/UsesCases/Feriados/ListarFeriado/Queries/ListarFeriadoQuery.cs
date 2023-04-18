@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Wards.Application.UsesCases.Auxiliares.ListarEstado.Queries;
 using Wards.Application.UsesCases.Shared.Models;
 using Wards.Domain.Entities;
 using Wards.Infrastructure.Data;
@@ -13,7 +12,7 @@ namespace Wards.Application.UseCases.Feriados.ListarFeriado.Queries
         private readonly WardsContext _context;
         private readonly ILogger _logger;
 
-        public ListarFeriadoQuery(WardsContext context, ILogger<ListarEstadoQuery> logger)
+        public ListarFeriadoQuery(WardsContext context, ILogger<ListarFeriadoQuery> logger)
         {
             _context = context;
             _logger = logger;
