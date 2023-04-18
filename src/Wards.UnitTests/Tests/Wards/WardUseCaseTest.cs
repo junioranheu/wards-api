@@ -4,7 +4,8 @@ using Wards.Application.UsesCases.Wards.CriarWard;
 using Wards.Application.UsesCases.Wards.CriarWard.Commands;
 using Wards.Application.UsesCases.Wards.Shared.Input;
 using Wards.Domain.Entities;
-using Wards.UnitTests.Utils;
+using Wards.UnitTests.Fixtures;
+using Wards.UnitTests.Fixtures.Mocks;
 using Xunit;
 
 namespace Wards.UnitTests.Tests.Wards
@@ -15,8 +16,7 @@ namespace Wards.UnitTests.Tests.Wards
 
         public WardUseCaseTest()
         {
-            Factory f = new();
-            _map = f.CriarMapper();
+            _map = Fixture.CriarMapper();
         }
 
         [Theory]
@@ -29,12 +29,7 @@ namespace Wards.UnitTests.Tests.Wards
 
             var useCase = new CriarWardUseCase(_map, criarWardCommand.Object);
 
-            var input = new WardInput()
-            {
-                Titulo = titulo,
-                Conteudo = conteudo,
-                UsuarioId = usuarioId
-            };
+            WardInput input = WardMock.CriarWardInput(titulo, conteudo, usuarioId);
 
             // Act;
             var resp = await useCase.Execute(input);

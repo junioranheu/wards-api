@@ -8,7 +8,8 @@ using Wards.Application.UsesCases.Usuarios.ObterUsuarioCondicaoArbitraria;
 using Wards.Application.UsesCases.Usuarios.Shared.Input;
 using Wards.Domain.Entities;
 using Wards.Infrastructure.Auth.Token;
-using Wards.UnitTests.Utils;
+using Wards.UnitTests.Fixtures;
+using Wards.UnitTests.Fixtures.Mocks;
 using Xunit;
 
 namespace Wards.UnitTests.Tests.Usuarios
@@ -19,8 +20,7 @@ namespace Wards.UnitTests.Tests.Usuarios
 
         public UsuarioUseCaseTest()
         {
-            Factory f = new();
-            _map = f.CriarMapper();
+            _map = Fixture.CriarMapper();
         }
 
         [Theory]
@@ -33,7 +33,7 @@ namespace Wards.UnitTests.Tests.Usuarios
         {
             // Arrange;
             var webHostEnvironment = new Mock<IWebHostEnvironment>();
-            var jwtTokenGenerator = new Mock<IJwtTokenGenerator>();    
+            var jwtTokenGenerator = new Mock<IJwtTokenGenerator>();
             var criarUsuarioCondicaoArbitrariaUseCase = new Mock<IObterUsuarioCondicaoArbitrariaUseCase>();
             var criarRefreshTokenUseCase = new Mock<ICriarRefreshTokenUseCase>();
 
@@ -42,14 +42,7 @@ namespace Wards.UnitTests.Tests.Usuarios
 
             var useCase = new CriarUsuarioUseCase(webHostEnvironment.Object, _map, jwtTokenGenerator.Object, criarUsuarioCommand.Object, criarUsuarioCondicaoArbitrariaUseCase.Object, criarRefreshTokenUseCase.Object);
 
-            var input = new CriarUsuarioInput()
-            {
-                NomeCompleto = nomeCompleto,
-                NomeUsuarioSistema = nomeUsuarioSistema,
-                Email = email,
-                Senha = senha,
-                Chamado = chamado
-            };
+            CriarUsuarioInput input = UsuarioMock.CriarUsuarioInput(nomeCompleto, nomeUsuarioSistema, email, senha, chamado);
 
             // Act;
             var resp = await useCase.Execute(input);

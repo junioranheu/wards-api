@@ -5,7 +5,8 @@ using Wards.Application.UsesCases.Wards.CriarWard.Commands;
 using Wards.Application.UsesCases.Wards.Shared.Input;
 using Wards.Domain.Entities;
 using Wards.Infrastructure.Data;
-using Wards.UnitTests.Utils;
+using Wards.UnitTests.Fixtures;
+using Wards.UnitTests.Fixtures.Mocks;
 using Xunit;
 
 namespace Wards.UnitTests.Tests.Wards
@@ -17,10 +18,8 @@ namespace Wards.UnitTests.Tests.Wards
 
         public WardCommandTest()
         {
-            Factory f = new();
-
-            _context = f.CriarContext();
-            _map = f.CriarMapper();
+            _context = Fixture.CriarContext();
+            _map = Fixture.CriarMapper();
         }
 
         [Theory]
@@ -37,15 +36,11 @@ namespace Wards.UnitTests.Tests.Wards
 
             var command = new CriarWardCommand(_context, logger.Object);
 
-            var input = new WardInput()
-            {
-                Titulo = titulo,
-                Conteudo = conteudo,
-                UsuarioId = usuarioId
-            };
+            WardInput input = WardMock.CriarWardInput(titulo, conteudo, usuarioId);
 
             // Act;
             var resp = await command.Execute(_map.Map<Ward>(input));
+            //DBBBBBBBBB
 
             // Assert;
             Assert.Equal(resp > 0, esperado);
