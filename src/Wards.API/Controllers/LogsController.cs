@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Wards.API.Filters;
 using Wards.Application.UsesCases.Logs.CriarLog;
 using Wards.Application.UsesCases.Logs.ListarLog;

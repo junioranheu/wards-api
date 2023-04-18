@@ -26,8 +26,8 @@ namespace Wards.Application.UsesCases.Logs.ListarLog.Queries
             {
                 var linq = await _context.Logs.
                                  Include(u => u.Usuarios).
-                                 Skip((input.IsGetAll ? 0 : input.Pagina * input.QtdItens)).
-                                 Take((input.IsGetAll ? int.MaxValue : input.QtdItens)).
+                                 Skip((input.IsSelectAll ? 0 : input.Pagina * input.Limit)).
+                                 Take((input.IsSelectAll ? int.MaxValue : input.Limit)).
                                  OrderByDescending(l => l.LogId).
                                  AsNoTracking().ToListAsync();
 

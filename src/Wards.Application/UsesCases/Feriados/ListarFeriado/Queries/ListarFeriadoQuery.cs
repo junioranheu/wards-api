@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Wards.Application.UsesCases.Auxiliares.ListarEstado.Queries;
+using Wards.Application.UsesCases.Shared.Models;
 using Wards.Domain.Entities;
 using Wards.Infrastructure.Data;
 using static Wards.Utils.Common;
@@ -18,7 +19,7 @@ namespace Wards.Application.UseCases.Feriados.ListarFeriado.Queries
             _logger = logger;
         }
 
-        public async Task<IEnumerable<Feriado>> Execute()
+        public async Task<IEnumerable<Feriado>> Execute(PaginacaoInput input)
         {
             try
             {
@@ -27,6 +28,8 @@ namespace Wards.Application.UseCases.Feriados.ListarFeriado.Queries
                                   Include(um => um.UsuariosMods).
                                   Include(fd => fd.FeriadosDatas).
                                   Include(fe => fe.FeriadosEstados)!.ThenInclude(e => e.Estados).
+                                  Skip((input.IsSelectAll ? 0 : input.Pagina * input.Limit)).
+                                  Take((input.IsSelectAll ? int.MaxValue : input.Limit)).
                                   ToListAsync();
 
                 return linq;

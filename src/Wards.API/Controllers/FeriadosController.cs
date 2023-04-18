@@ -11,6 +11,7 @@ using Wards.Application.UseCases.FeriadosEstados.DeletarFeriadoEstado;
 using Wards.Application.UsesCases.Feriados.Shared.Models.Input;
 using Wards.Application.UsesCases.Feriados.Shared.Models.Output;
 using Wards.Application.UsesCases.Logs.Shared.Output;
+using Wards.Application.UsesCases.Shared.Models;
 using Wards.Domain.Enums;
 using static Wards.Utils.Common;
 
@@ -96,9 +97,9 @@ namespace Wards.API.Controllers
         [AuthorizeFilter]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<LogOutput>))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(LogOutput))]
-        public async Task<ActionResult<IEnumerable<FeriadoOutput>>> ListarFeriado()
+        public async Task<ActionResult<IEnumerable<FeriadoOutput>>> ListarFeriado([FromQuery] PaginacaoInput input)
         {
-            var lista = await _listarFeriadoUseCase.Execute();
+            var lista = await _listarFeriadoUseCase.Execute(input);
 
             if (lista is null)
             {

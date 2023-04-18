@@ -2,10 +2,13 @@
 {
     public sealed class PaginacaoInput
     {
-        public int Pagina { get; set; } = 0;
+        const int primeiraPagina = 0;
+        const int quantidadeRegistros = 10;
 
-        public int QtdItens { get; set; } = 10;
+        public int Pagina { get; set; } = primeiraPagina;
 
-        public bool IsGetAll { get; set; } = false;
+        public int Limit { get; set; } = quantidadeRegistros;
+
+        public bool IsSelectAll { get; set; } = false;
     }
 }

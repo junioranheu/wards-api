@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Wards.API.Filters;
 using Wards.Application.UsesCases.Auths.Shared.Output;
+using Wards.Application.UsesCases.Shared.Models;
 using Wards.Application.UsesCases.Usuarios.AutenticarUsuario;
 using Wards.Application.UsesCases.Usuarios.CriarRefreshTokenUsuario;
 using Wards.Application.UsesCases.Usuarios.CriarUsuario;
@@ -130,9 +131,9 @@ namespace Wards.API.Controllers
         [AuthorizeFilter(UsuarioRoleEnum.Administrador)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<UsuarioOutput>))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(UsuarioOutput))]
-        public async Task<ActionResult<IEnumerable<UsuarioOutput>>> Listar()
+        public async Task<ActionResult<IEnumerable<UsuarioOutput>>> Listar([FromQuery] PaginacaoInput input)
         {
-            var resp = await _listarUseCase.Execute();
+            var resp = await _listarUseCase.Execute(input);
 
             if (resp is null)
             {

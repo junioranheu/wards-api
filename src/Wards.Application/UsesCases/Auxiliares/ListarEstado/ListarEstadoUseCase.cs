@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Wards.Application.UsesCases.Auxiliares.ListarEstado.Queries;
 using Wards.Application.UsesCases.Auxiliares.ListarEstado.Shared.Output;
+using Wards.Application.UsesCases.Shared.Models;
 
 namespace Wards.Application.UsesCases.Auxiliares.ListarEstado
 {
@@ -15,9 +16,9 @@ namespace Wards.Application.UsesCases.Auxiliares.ListarEstado
             _listarEstadoQuery = listarEstadoQuery;
         }
 
-        public async Task<IEnumerable<EstadoOutput>> Execute()
+        public async Task<IEnumerable<EstadoOutput>> Execute(PaginacaoInput input)
         {
-            return _map.Map<IEnumerable<EstadoOutput>>(await _listarEstadoQuery.Execute());
+            return _map.Map<IEnumerable<EstadoOutput>>(await _listarEstadoQuery.Execute(input));
         }
     }
 }

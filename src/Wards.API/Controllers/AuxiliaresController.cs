@@ -2,6 +2,7 @@
 using Wards.API.Filters;
 using Wards.Application.UsesCases.Auxiliares.ListarEstado;
 using Wards.Application.UsesCases.Auxiliares.ListarEstado.Shared.Output;
+using Wards.Application.UsesCases.Shared.Models;
 using Wards.Domain.Enums;
 using static Wards.Utils.Common;
 
@@ -22,9 +23,9 @@ namespace Wards.API.Controllers
         [AuthorizeFilter]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<EstadoOutput>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(EstadoOutput))]
-        public async Task<ActionResult<IEnumerable<EstadoOutput>>> ListarEstado()
+        public async Task<ActionResult<IEnumerable<EstadoOutput>>> ListarEstado([FromQuery] PaginacaoInput input)
         {
-            var lista = await _listarEstadoUseCase.Execute();
+            var lista = await _listarEstadoUseCase.Execute(input);
 
             if (lista is null)
             {

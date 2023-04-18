@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Wards.Application.UsesCases.Shared.Models;
 using Wards.Application.UsesCases.Wards.ListarWard.Queries;
 using Wards.Application.UsesCases.Wards.Shared.Output;
 
@@ -15,9 +16,9 @@ namespace Wards.Application.UsesCases.Wards.ListarWard
             _listarQuery = listarQuery;
         }
 
-        public async Task<IEnumerable<WardOutput>?> Execute()
+        public async Task<IEnumerable<WardOutput>?> Execute(PaginacaoInput input)
         {
-            return _map.Map<IEnumerable<WardOutput>>(await _listarQuery.Execute());
+            return _map.Map<IEnumerable<WardOutput>>(await _listarQuery.Execute(input));
         }
     }
 }
