@@ -16,7 +16,7 @@ namespace Wards.Domain.Entities
 
         public bool IsMovel { get; set; } = false;
 
-        public bool Status { get; set; } = true;
+        public bool IsAtivo { get; set; } = true;
 
         public DateTime DataCriacao { get; set; } = HorarioBrasilia();
 

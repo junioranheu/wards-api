@@ -27,7 +27,7 @@ namespace Wards.Application.UseCases.Feriados.ObterFeriado.Queries
                  Include(um => um.UsuariosMods).
                  Include(fd => fd.FeriadosDatas).
                  Include(fe => fe.FeriadosEstados)!.ThenInclude(e => e.Estados).
-                 Where(ct => ct.FeriadoId == id).
+                 Where(f => f.FeriadoId == id && f.IsAtivo == true).
                  FirstOrDefaultAsync();
 
                 return linq;

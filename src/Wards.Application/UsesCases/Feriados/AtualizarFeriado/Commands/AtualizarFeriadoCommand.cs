@@ -35,7 +35,7 @@ namespace Wards.Application.UseCases.Feriados.AtualizarFeriado.Commands
                 item.Tipo = input.Tipo != null ? input.Tipo : item.Tipo;
                 item.Nome = !string.IsNullOrEmpty(input.Nome) ? input.Nome : item.Nome;
                 item.IsMovel = input.IsMovel;
-                item.Status = input.Status;
+                item.IsAtivo = input.IsAtivo;
                 item.DataAtualizacao = HorarioBrasilia();
                 item.UsuarioIdMod = input.UsuarioIdMod;
 

@@ -13,7 +13,7 @@ namespace Wards.Application.UsesCases.Feriados.Shared.Models.Input
 
         public bool IsMovel { get; set; }
 
-        public bool Status { get; set; }
+        public bool IsAtivo { get; set; }
 
         [JsonIgnore]
         public int? UsuarioId { get; set; }

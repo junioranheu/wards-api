@@ -28,6 +28,7 @@ namespace Wards.Application.UseCases.Feriados.ListarFeriado.Queries
                                   Include(um => um.UsuariosMods).
                                   Include(fd => fd.FeriadosDatas).
                                   Include(fe => fe.FeriadosEstados)!.ThenInclude(e => e.Estados).
+                                  Where(f => f.IsAtivo == true).
                                   Skip((input.IsSelectAll ? 0 : input.Index * input.Limit)).
                                   Take((input.IsSelectAll ? int.MaxValue : input.Limit)).
                                   ToListAsync();

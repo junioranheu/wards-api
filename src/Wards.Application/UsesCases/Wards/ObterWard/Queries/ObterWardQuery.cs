@@ -25,7 +25,7 @@ namespace Wards.Application.UsesCases.Wards.ObterWard.Queries
                 var linq = await _context.Wards.
                                  Include(u => u.Usuarios).
                                  Include(u => u.UsuariosMods).
-                                 Where(w => w.WardId == id).
+                                 Where(w => w.WardId == id && w.IsAtivo == true).
                                  AsNoTracking().FirstOrDefaultAsync();
 
                 return linq;

@@ -16,7 +16,7 @@ namespace Wards.Application.UsesCases.Feriados.Shared.Models.Output
 
         public bool IsMovel { get; set; }
 
-        public bool Status { get; set; }
+        public bool IsAtivo { get; set; }
 
         public DateTime DataCriacao { get; set; }
 
