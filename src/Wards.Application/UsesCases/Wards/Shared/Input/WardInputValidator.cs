@@ -8,6 +8,7 @@ namespace Wards.Application.UsesCases.Wards.Shared.Input
         {
             RuleFor(x => x.Titulo).NotNull().NotEmpty().MinimumLength(3);
             RuleFor(x => x.Conteudo).NotNull().NotEmpty().MinimumLength(10);
+            RuleFor(x => x.UsuarioId).NotNull().GreaterThan(0);
         }
     }
 }

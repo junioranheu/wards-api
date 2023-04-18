@@ -41,7 +41,7 @@ namespace Wards.UnitTests.Tests.Wards
         [InlineData(null, false)]
         [InlineData("", false)]
         [InlineData("Fazueli", false)]
-        [InlineData("Para criar uma API, você deverá bla bla bla", true)]
+        [InlineData("Para criar uma API você deverá bla bla bla", true)]
         public void Validar_Conteudo(string conteudo, bool esperado)
         {
             // Arrange;
@@ -58,6 +58,29 @@ namespace Wards.UnitTests.Tests.Wards
             else
             {
                 result.ShouldHaveValidationErrorFor(x => x.Conteudo);
+            }
+        }
+
+        [Theory]
+        [InlineData(null, false)]
+        [InlineData(0, false)]
+        [InlineData(22, true)]
+        public void Validar_UsuarioId(int? usuarioId, bool esperado)
+        {
+            // Arrange;
+            var model = new WardInput { UsuarioId = usuarioId };
+
+            // Act;
+            var result = _validator.TestValidate(model);
+
+            // Assert;
+            if (esperado)
+            {
+                result.ShouldNotHaveValidationErrorFor(x => x.UsuarioId);
+            }
+            else
+            {
+                result.ShouldHaveValidationErrorFor(x => x.UsuarioId);
             }
         }
     }
