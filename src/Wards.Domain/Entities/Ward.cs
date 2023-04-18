@@ -9,6 +9,8 @@ namespace Wards.Domain.Entities
         [Key]
         public int WardId { get; set; }
 
+        public string? Titulo { get; set; }
+
         public string? Conteudo { get; set; }
 
         public int? UsuarioId { get; set; }

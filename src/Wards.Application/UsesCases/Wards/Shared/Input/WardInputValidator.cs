@@ -6,7 +6,8 @@ namespace Wards.Application.UsesCases.Wards.Shared.Input
     {
         public WardInputValidator()
         {
-            RuleFor(x => x.Conteudo).NotNull().NotEmpty();
+            RuleFor(x => x.Titulo).NotNull().NotEmpty().MinimumLength(3);
+            RuleFor(x => x.Conteudo).NotNull().NotEmpty().MinimumLength(10);
         }
     }
 }
