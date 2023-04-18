@@ -1,8 +1,10 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using AutoMapper;
+using Microsoft.Extensions.Logging;
 using Moq;
-using Wards.Application.UsesCases.Wards.CriarWard;
+using Wards.Application.AutoMapper;
 using Wards.Application.UsesCases.Wards.CriarWard.Commands;
 using Wards.Application.UsesCases.Wards.Shared.Input;
+using Wards.Domain.Entities;
 using Wards.Infrastructure.Data;
 using Xunit;
 
@@ -10,6 +12,18 @@ namespace Wards.UnitTests.Tests.Wards
 {
     public sealed class WardCommandTest
     {
+        private readonly IMapper _map;
+
+        public WardCommandTest()
+        {
+            var mockMapper = new MapperConfiguration(x =>
+            {
+                x.AddProfile(new AutoMapperConfig());
+            });
+
+            _map = mockMapper.CreateMapper();
+        }
+
         [Theory]
         // [InlineData("a", "Para criar uma API você deverá bla bla bla", 1, false)]
         // [InlineData("Como criar uma API", "a", 2, false)]
@@ -23,9 +37,7 @@ namespace Wards.UnitTests.Tests.Wards
             var context = new Mock<WardsContext>();
             var logger = new Mock<ILogger<CriarWardCommand>>();
 
-            criarWardCommand.Setup(x => x.Execute(It.IsAny<Ward>())).Returns(Task.FromResult(1));
-
-            var useCase = new CriarWardCommand(context.Object, logger.Object);
+            var command = new CriarWardCommand(context.Object, logger.Object);
 
             var input = new WardInput()
             {
@@ -35,7 +47,7 @@ namespace Wards.UnitTests.Tests.Wards
             };
 
             // Act;
-            var resp = await useCase.Execute(input);
+            var resp = await command.Execute(_map.Map<Ward>(input));
 
             // Assert;
             Assert.Equal(resp > 0, esperado);
