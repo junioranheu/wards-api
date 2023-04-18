@@ -36,5 +36,29 @@ namespace Wards.UnitTests.Tests.Wards
                 result.ShouldHaveValidationErrorFor(x => x.Titulo);
             }
         }
+
+        [Theory]
+        [InlineData(null, false)]
+        [InlineData("", false)]
+        [InlineData("Fazueli", false)]
+        [InlineData("Para criar uma API, você deverá bla bla bla", true)]
+        public void Validar_Conteudo(string conteudo, bool esperado)
+        {
+            // Arrange;
+            var model = new WardInput { Conteudo = conteudo };
+
+            // Act;
+            var result = _validator.TestValidate(model);
+
+            // Assert;
+            if (esperado)
+            {
+                result.ShouldNotHaveValidationErrorFor(x => x.Conteudo);
+            }
+            else
+            {
+                result.ShouldHaveValidationErrorFor(x => x.Conteudo);
+            }
+        }
     }
 }
