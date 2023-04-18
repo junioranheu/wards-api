@@ -2,6 +2,7 @@
 using Quartz;
 using Wards.Application.UsesCases.Auxiliares.ListarEstado.Queries;
 using Wards.Application.UsesCases.Logs.CriarLog.Commands;
+using Wards.Application.UsesCases.Shared.Models;
 using Wards.Domain.Entities;
 
 namespace Wards.WorkersServices.Workers.Estado.Jobs.ListarEstado
@@ -22,7 +23,8 @@ namespace Wards.WorkersServices.Workers.Estado.Jobs.ListarEstado
         {
             try
             {
-                IEnumerable<Domain.Entities.Estado> listaEstados = await _listarEstadoQuery.Execute();
+                PaginacaoInput pag = new() { IsSelectAll = true };
+                IEnumerable<Domain.Entities.Estado> listaEstados = await _listarEstadoQuery.Execute(pag);
                 await Console.Out.WriteLineAsync($"Foram encontrados {listaEstados.Count()} estados");
 
                 Log log = new() { Descricao = $"Sucesso no Worker {typeof(ListarEstadoJob)}", StatusResposta = StatusCodes.Status200OK };

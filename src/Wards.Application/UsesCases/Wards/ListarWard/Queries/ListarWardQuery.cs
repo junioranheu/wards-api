@@ -26,7 +26,7 @@ namespace Wards.Application.UsesCases.Wards.ListarWard.Queries
                 var linq = await _context.Wards.
                                  Include(u => u.Usuarios).
                                  Include(u => u.UsuariosMods).
-                                 Skip((input.IsSelectAll ? 0 : input.Pagina * input.Limit)).
+                                 Skip((input.IsSelectAll ? 0 : input.Index * input.Limit)).
                                  Take((input.IsSelectAll ? int.MaxValue : input.Limit)).
                                  AsNoTracking().ToListAsync();
 
