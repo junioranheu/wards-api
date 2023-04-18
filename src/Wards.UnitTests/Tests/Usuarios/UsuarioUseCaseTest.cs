@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Hosting;
 using Moq;
-using Wards.Application.AutoMapper;
 using Wards.Application.UsesCases.Tokens.CriarRefreshToken;
 using Wards.Application.UsesCases.Usuarios.CriarUsuario;
 using Wards.Application.UsesCases.Usuarios.CriarUsuario.Commands;
@@ -9,6 +8,7 @@ using Wards.Application.UsesCases.Usuarios.ObterUsuarioCondicaoArbitraria;
 using Wards.Application.UsesCases.Usuarios.Shared.Input;
 using Wards.Domain.Entities;
 using Wards.Infrastructure.Auth.Token;
+using Wards.UnitTests.Utils;
 using Xunit;
 
 namespace Wards.UnitTests.Tests.Usuarios
@@ -19,12 +19,8 @@ namespace Wards.UnitTests.Tests.Usuarios
 
         public UsuarioUseCaseTest()
         {
-            var mockMapper = new MapperConfiguration(x =>
-            {
-                x.AddProfile(new AutoMapperConfig());
-            });
-
-            _map = mockMapper.CreateMapper();
+            Factory f = new();
+            _map = f.CriarMapper();
         }
 
         [Theory]

@@ -1,27 +1,26 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.Logging;
 using Moq;
-using Wards.Application.AutoMapper;
 using Wards.Application.UsesCases.Wards.CriarWard.Commands;
 using Wards.Application.UsesCases.Wards.Shared.Input;
 using Wards.Domain.Entities;
 using Wards.Infrastructure.Data;
+using Wards.UnitTests.Utils;
 using Xunit;
 
 namespace Wards.UnitTests.Tests.Wards
 {
     public sealed class WardCommandTest
     {
+        private readonly WardsContext _context;
         private readonly IMapper _map;
 
         public WardCommandTest()
         {
-            var mockMapper = new MapperConfiguration(x =>
-            {
-                x.AddProfile(new AutoMapperConfig());
-            });
+            Factory f = new();
 
-            _map = mockMapper.CreateMapper();
+            _context = f.CriarContext();
+            _map = f.CriarMapper();
         }
 
         [Theory]
@@ -34,10 +33,9 @@ namespace Wards.UnitTests.Tests.Wards
         public async Task CriarWardCommand_ChecarResultadoEsperado(string titulo, string conteudo, int? usuarioId, bool esperado)
         {
             // Arrange;
-            var context = new Mock<WardsContext>();
             var logger = new Mock<ILogger<CriarWardCommand>>();
 
-            var command = new CriarWardCommand(context.Object, logger.Object);
+            var command = new CriarWardCommand(_context, logger.Object);
 
             var input = new WardInput()
             {

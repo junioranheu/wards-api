@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
 using Moq;
-using Wards.Application.AutoMapper;
 using Wards.Application.UsesCases.Wards.CriarWard;
 using Wards.Application.UsesCases.Wards.CriarWard.Commands;
 using Wards.Application.UsesCases.Wards.Shared.Input;
 using Wards.Domain.Entities;
+using Wards.UnitTests.Utils;
 using Xunit;
 
 namespace Wards.UnitTests.Tests.Wards
@@ -15,12 +15,8 @@ namespace Wards.UnitTests.Tests.Wards
 
         public WardUseCaseTest()
         {
-            var mockMapper = new MapperConfiguration(x =>
-            {
-                x.AddProfile(new AutoMapperConfig());
-            });
-
-            _map = mockMapper.CreateMapper();
+            Factory f = new();
+            _map = f.CriarMapper();
         }
 
         [Theory]
