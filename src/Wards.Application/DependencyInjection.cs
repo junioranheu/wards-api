@@ -10,13 +10,13 @@ using Wards.Application.Services.Usuarios;
 using Wards.Application.UseCases.Feriados;
 using Wards.Application.UseCases.FeriadosDatas;
 using Wards.Application.UseCases.FeriadosEstados;
-using Wards.Application.UsesCases.Auxiliares;
-using Wards.Application.UsesCases.Imports;
-using Wards.Application.UsesCases.Logs;
-using Wards.Application.UsesCases.Tokens;
-using Wards.Application.UsesCases.Usuarios;
-using Wards.Application.UsesCases.UsuariosRoles;
-using Wards.Application.UsesCases.Wards;
+using Wards.Application.UseCases.Auxiliares;
+using Wards.Application.UseCases.Imports;
+using Wards.Application.UseCases.Logs;
+using Wards.Application.UseCases.Tokens;
+using Wards.Application.UseCases.Usuarios;
+using Wards.Application.UseCases.UsuariosRoles;
+using Wards.Application.UseCases.Wards;
 
 namespace Wards.Application
 {

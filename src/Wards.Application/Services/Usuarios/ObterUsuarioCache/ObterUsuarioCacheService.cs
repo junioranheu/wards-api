@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
-using Wards.Application.UsesCases.Usuarios.ObterUsuario;
-using Wards.Application.UsesCases.Usuarios.Shared.Output;
+using Wards.Application.UseCases.Usuarios.ObterUsuario;
+using Wards.Application.UseCases.Usuarios.Shared.Output;
 
 namespace Wards.Application.Services.Usuarios.ObterUsuarioCache
 {

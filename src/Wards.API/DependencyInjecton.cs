@@ -4,9 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.ResponseCompression;
 using System.IO.Compression;
 using Wards.API.Filters;
-using Wards.Application.UsesCases.Logs.Shared.Input;
-using Wards.Application.UsesCases.Usuarios.Shared.Input;
-using Wards.Application.UsesCases.Wards.Shared.Input;
+using Wards.Application.UseCases.Logs.Shared.Input;
+using Wards.Application.UseCases.Usuarios.Shared.Input;
+using Wards.Application.UseCases.Wards.Shared.Input;
 using Wards.Infrastructure.Data;
 
 namespace Wards.API

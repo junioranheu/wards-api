@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
-using Wards.Application.UsesCases.UsuariosRoles.ObterUsuarioRole;
-using Wards.Application.UsesCases.UsuariosRoles.Shared.Output;
+using Wards.Application.UseCases.UsuariosRoles.ObterUsuarioRole;
+using Wards.Application.UseCases.UsuariosRoles.Shared.Output;
 using Wards.Domain.Entities;
 
 namespace Wards.Application.Services.Usuarios.ListarUsuarioRolesCache

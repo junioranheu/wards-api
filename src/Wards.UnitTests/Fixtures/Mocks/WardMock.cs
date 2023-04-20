@@ -1,4 +1,4 @@
-﻿using Wards.Application.UsesCases.Wards.Shared.Input;
+﻿using Wards.Application.UseCases.Wards.Shared.Input;
 using static Wards.Utils.Common;
 
 namespace Wards.UnitTests.Fixtures.Mocks

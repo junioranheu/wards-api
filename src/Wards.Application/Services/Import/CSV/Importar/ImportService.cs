@@ -1,55 +1,43 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
 using MySqlConnector;
 using System.Data;
 using System.Globalization;
 using System.Text.RegularExpressions;
 using Wards.Infrastructure.Factory;
-using static Wards.Utils.Common;
 
 namespace Wards.Application.Services.Import.CSV.Importar
 {
     public sealed class ImportService : IImportService
     {
         private readonly IConnectionFactory _connectionFactory;
-        private readonly ILogger _logger;
 
-        public ImportService(IConnectionFactory connectionFactory, ILogger<ImportService> logger)
+        public ImportService(IConnectionFactory connectionFactory)
         {
             _connectionFactory = connectionFactory;
-            _logger = logger;
         }
 
         public async Task<(DataTable? tabelaErros, bool isErroBanco)> InserirCsv(string nomeDaTabela, object objectType, IFormFile formFile, int justificativaId, bool isVerificarData, List<string>? nomesEquipamentos = default)
         {
-            try
+            DataTable tabelaInsert = new();
+            CriarColunas(objectType, tabelaInsert);
+
+            DataTable tabelaErros = new();
+            CriarColunas(objectType, tabelaErros);
+
+            string csvAsString = await LerCsv(formFile);
+            int numeroLinha = 0, qtdColunas = 0;
+            bool isErroBanco = false;
+
+            PopularDataTable(justificativaId, tabelaInsert, csvAsString, ref numeroLinha, ref qtdColunas);
+
+            ValidarColunas(tabelaInsert, tabelaErros, isVerificarData, nomesEquipamentos);
+
+            if (tabelaErros.Rows.Count == 0)
             {
-                DataTable tabelaInsert = new();
-                CriarColunas(objectType, tabelaInsert);
-
-                DataTable tabelaErros = new();
-                CriarColunas(objectType, tabelaErros);
-
-                string csvAsString = await LerCsv(formFile);
-                int numeroLinha = 0, qtdColunas = 0;
-                bool isErroBanco = false;
-
-                PopularDataTable(justificativaId, tabelaInsert, csvAsString, ref numeroLinha, ref qtdColunas);
-
-                ValidarColunas(tabelaInsert, tabelaErros, isVerificarData, nomesEquipamentos);
-
-                if (tabelaErros.Rows.Count == 0)
-                {
-                    isErroBanco = await CsvToSql(tabelaInsert, nomeDaTabela, objectType);
-                }
-
-                return (tabelaErros, isErroBanco);
+                isErroBanco = await CsvToSql(tabelaInsert, nomeDaTabela, objectType);
             }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "{detalhes}", DetalhesException(ex.Source));
-                throw;
-            }
+
+            return (tabelaErros, isErroBanco);
         }
 
         private static void CriarColunas(object objectType, DataTable tabela)

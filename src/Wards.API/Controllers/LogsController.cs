@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Wards.API.Filters;
-using Wards.Application.UsesCases.Logs.CriarLog;
-using Wards.Application.UsesCases.Logs.ListarLog;
-using Wards.Application.UsesCases.Logs.Shared.Input;
-using Wards.Application.UsesCases.Logs.Shared.Output;
-using Wards.Application.UsesCases.Shared.Models;
+using Wards.Application.UseCases.Logs.CriarLog;
+using Wards.Application.UseCases.Logs.ListarLog;
+using Wards.Application.UseCases.Logs.Shared.Input;
+using Wards.Application.UseCases.Logs.Shared.Output;
+using Wards.Application.UseCases.Shared.Models;
 using Wards.Domain.Enums;
 using static Wards.Utils.Common;
 

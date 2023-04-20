@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Wards.API.Filters;
-using Wards.Application.UsesCases.Auxiliares.ListarEstado;
-using Wards.Application.UsesCases.Auxiliares.ListarEstado.Shared.Output;
-using Wards.Application.UsesCases.Shared.Models;
+using Wards.Application.UseCases.Auxiliares.ListarEstado;
+using Wards.Application.UseCases.Auxiliares.ListarEstado.Shared.Output;
+using Wards.Application.UseCases.Shared.Models;
 using Wards.Domain.Enums;
 using static Wards.Utils.Common;
 
@@ -20,7 +21,7 @@ namespace Wards.API.Controllers
         }
 
         [HttpGet("listarEstado")]
-        [AuthorizeFilter]
+        [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<EstadoOutput>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(EstadoOutput))]
         public async Task<ActionResult<IEnumerable<EstadoOutput>>> ListarEstado([FromQuery] PaginacaoInput input)

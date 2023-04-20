@@ -1,5 +1,5 @@
 ﻿using FluentValidation.TestHelper;
-using Wards.Application.UsesCases.Wards.Shared.Input;
+using Wards.Application.UseCases.Wards.Shared.Input;
 using Xunit;
 
 namespace Wards.UnitTests.Tests.Wards

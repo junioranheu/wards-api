@@ -1,4 +1,4 @@
-﻿using Wards.Application.UsesCases.Usuarios.Shared.Output;
+﻿using Wards.Application.UseCases.Usuarios.Shared.Output;
 
 namespace Wards.Application.Services.Usuarios.ObterUsuarioCache
 {

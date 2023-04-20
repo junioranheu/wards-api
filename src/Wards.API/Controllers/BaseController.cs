@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using Wards.Application.Services.Usuarios.ObterUsuarioCache;
-using Wards.Application.UsesCases.Usuarios.Shared.Output;
+using Wards.Application.UseCases.Usuarios.Shared.Output;
 
 namespace Wards.API.Controllers
 {

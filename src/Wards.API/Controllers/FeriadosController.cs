@@ -8,10 +8,10 @@ using Wards.Application.UseCases.FeriadosDatas.CriarFeriadoData;
 using Wards.Application.UseCases.FeriadosDatas.DeletarFeriadoData;
 using Wards.Application.UseCases.FeriadosEstados.CriarFeriadoEstado;
 using Wards.Application.UseCases.FeriadosEstados.DeletarFeriadoEstado;
-using Wards.Application.UsesCases.Feriados.Shared.Models.Input;
-using Wards.Application.UsesCases.Feriados.Shared.Models.Output;
-using Wards.Application.UsesCases.Logs.Shared.Output;
-using Wards.Application.UsesCases.Shared.Models;
+using Wards.Application.UseCases.Feriados.Shared.Models.Input;
+using Wards.Application.UseCases.Feriados.Shared.Models.Output;
+using Wards.Application.UseCases.Logs.Shared.Output;
+using Wards.Application.UseCases.Shared.Models;
 using Wards.Domain.Enums;
 using static Wards.Utils.Common;
 

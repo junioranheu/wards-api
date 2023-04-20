@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Quartz;
-using Wards.Application.UsesCases.Auxiliares.ListarEstado.Queries;
-using Wards.Application.UsesCases.Logs.CriarLog.Commands;
-using Wards.Application.UsesCases.Shared.Models;
+using Wards.Application.UseCases.Auxiliares.ListarEstado.Queries;
+using Wards.Application.UseCases.Logs.CriarLog.Commands;
+using Wards.Application.UseCases.Shared.Models;
 using Wards.Domain.Entities;
 
 namespace Wards.WorkersServices.Workers.Estado.Jobs.ListarEstado

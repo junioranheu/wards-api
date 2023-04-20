@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Quartz;
 using System.Text.Json;
-using Wards.Application.UsesCases.Logs.CriarLog.Commands;
+using Wards.Application.UseCases.Logs.CriarLog.Commands;
 using Wards.Domain.Entities;
 using Wards.WorkersServices.Workers.Temperatura.Models;
 using static Wards.Utils.Common;

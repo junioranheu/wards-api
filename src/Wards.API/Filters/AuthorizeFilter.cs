@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using System.Net;
 using System.Security.Claims;
 using Wards.Application.Services.Usuarios.ListarUsuarioRolesCache;
-using Wards.Application.UsesCases.UsuariosRoles.Shared.Output;
+using Wards.Application.UseCases.UsuariosRoles.Shared.Output;
 using Wards.Domain.Entities;
 using Wards.Domain.Enums;
 

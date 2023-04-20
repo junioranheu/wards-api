@@ -1,4 +1,4 @@
-﻿using Wards.Application.UsesCases.UsuariosRoles.Shared.Output;
+﻿using Wards.Application.UseCases.UsuariosRoles.Shared.Output;
 
 namespace Wards.Application.Services.Usuarios.ListarUsuarioRolesCache
 {

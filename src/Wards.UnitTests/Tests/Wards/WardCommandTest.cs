@@ -2,10 +2,10 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Moq;
-using Wards.Application.UsesCases.Shared.Models;
-using Wards.Application.UsesCases.Wards.CriarWard.Commands;
-using Wards.Application.UsesCases.Wards.ListarWard.Queries;
-using Wards.Application.UsesCases.Wards.Shared.Input;
+using Wards.Application.UseCases.Shared.Models;
+using Wards.Application.UseCases.Wards.CriarWard.Commands;
+using Wards.Application.UseCases.Wards.ListarWard.Queries;
+using Wards.Application.UseCases.Wards.Shared.Input;
 using Wards.Domain.Entities;
 using Wards.Infrastructure.Data;
 using Wards.UnitTests.Fixtures;
@@ -36,8 +36,7 @@ namespace Wards.UnitTests.Tests.Wards
         public async Task CriarWardCommand_ChecarResultadoEsperado(string titulo, string conteudo, int? usuarioId, bool esperado)
         {
             // Arrange;
-            var logger = new Mock<ILogger<CriarWardCommand>>();
-            var command = new CriarWardCommand(_context, logger.Object);
+            var command = new CriarWardCommand(_context);
             WardInput input = WardMock.CriarWardInput(titulo, conteudo, usuarioId);
 
             // Act;
@@ -52,14 +51,13 @@ namespace Wards.UnitTests.Tests.Wards
         public async Task ListarWardQuery_ChecarResultadoEsperado()
         {
             // Arrange;
-            var logger = new Mock<ILogger<ListarWardQuery>>();
             var paginacao = new Mock<PaginacaoInput>();
 
             List<WardInput> listaInput = WardMock.CriarListaWardInput();
             await _context.Wards.AddRangeAsync(_map.Map<List<Ward>>(listaInput));
             await _context.SaveChangesAsync();
 
-            var query = new ListarWardQuery(_context, logger.Object);
+            var query = new ListarWardQuery(_context);
 
             // Act;
             var resp = await query.Execute(paginacao.Object);

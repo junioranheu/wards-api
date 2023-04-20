@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Wards.Application.UsesCases.Usuarios.Shared.Input;
+using Wards.Application.UseCases.Usuarios.Shared.Input;
 using Wards.Domain.Entities;
 using Wards.Infrastructure.Data;
 using static Wards.Utils.Common;

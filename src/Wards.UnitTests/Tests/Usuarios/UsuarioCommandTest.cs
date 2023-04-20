@@ -2,10 +2,10 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Moq;
-using Wards.Application.UsesCases.Shared.Models;
-using Wards.Application.UsesCases.Usuarios.CriarUsuario.Commands;
-using Wards.Application.UsesCases.Usuarios.ListarUsuario.Queries;
-using Wards.Application.UsesCases.Usuarios.Shared.Input;
+using Wards.Application.UseCases.Shared.Models;
+using Wards.Application.UseCases.Usuarios.CriarUsuario.Commands;
+using Wards.Application.UseCases.Usuarios.ListarUsuario.Queries;
+using Wards.Application.UseCases.Usuarios.Shared.Input;
 using Wards.Domain.Entities;
 using Wards.Infrastructure.Data;
 using Wards.UnitTests.Fixtures;
@@ -35,8 +35,7 @@ namespace Wards.UnitTests.Tests.Usuarios
         public async Task CriarUsuarioCommand_ChecarResultadoEsperado(string nomeCompleto, string nomeUsuarioSistema, string email, string senha, string chamado, bool esperado)
         {
             // Arrange;
-            var logger = new Mock<ILogger<CriarUsuarioCommand>>();
-            var command = new CriarUsuarioCommand(_context, logger.Object);
+            var command = new CriarUsuarioCommand(_context);
             CriarUsuarioInput input = UsuarioMock.CriarUsuarioInput(nomeCompleto, nomeUsuarioSistema, email, senha, chamado);
 
             // Act;
@@ -51,14 +50,13 @@ namespace Wards.UnitTests.Tests.Usuarios
         public async Task ListarUsuarioQuery_ChecarResultadoEsperado()
         {
             // Arrange;
-            var logger = new Mock<ILogger<ListarUsuarioQuery>>();
             var paginacao = new Mock<PaginacaoInput>();
 
             List<CriarUsuarioInput> listaInput = UsuarioMock.CriarListaUsuarioInput();
             await _context.Usuarios.AddRangeAsync(_map.Map<List<Usuario>>(listaInput));
             await _context.SaveChangesAsync();
 
-            var query = new ListarUsuarioQuery(_context, logger.Object);
+            var query = new ListarUsuarioQuery(_context);
 
             // Act;
             var resp = await query.Execute(paginacao.Object);

@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using Wards.API.Filters;
 using Wards.Application.Services.Import.CSV.Shared;
-using Wards.Application.UsesCases.Imports.CriarExemploUsuario;
+using Wards.Application.UseCases.Imports.CriarExemploUsuario;
 using Wards.Domain.Consts;
 using Wards.Domain.Enums;
 using static Wards.Utils.Common;

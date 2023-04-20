@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Newtonsoft.Json;
 using System.Security.Claims;
 using Wards.Application.Services.Usuarios.ObterUsuarioCache;
-using Wards.Application.UsesCases.Logs.CriarLog;
-using Wards.Application.UsesCases.Logs.Shared.Input;
-using Wards.Application.UsesCases.Usuarios.Shared.Output;
+using Wards.Application.UseCases.Logs.CriarLog;
+using Wards.Application.UseCases.Logs.Shared.Input;
+using Wards.Application.UseCases.Usuarios.Shared.Output;
 
 namespace Wards.API.Filters
 {

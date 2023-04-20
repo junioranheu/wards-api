@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using Moq;
-using Wards.Application.UsesCases.Wards.CriarWard;
-using Wards.Application.UsesCases.Wards.CriarWard.Commands;
-using Wards.Application.UsesCases.Wards.Shared.Input;
+using Wards.Application.UseCases.Wards.CriarWard;
+using Wards.Application.UseCases.Wards.CriarWard.Commands;
+using Wards.Application.UseCases.Wards.Shared.Input;
 using Wards.Domain.Entities;
 using Wards.UnitTests.Fixtures;
 using Wards.UnitTests.Fixtures.Mocks;

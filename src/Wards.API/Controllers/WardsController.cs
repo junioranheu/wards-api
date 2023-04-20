@@ -1,14 +1,14 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Wards.API.Filters;
-using Wards.Application.UsesCases.Shared.Models;
-using Wards.Application.UsesCases.Wards.AtualizarWard;
-using Wards.Application.UsesCases.Wards.CriarWard;
-using Wards.Application.UsesCases.Wards.DeletarWard;
-using Wards.Application.UsesCases.Wards.ListarWard;
-using Wards.Application.UsesCases.Wards.ObterWard;
-using Wards.Application.UsesCases.Wards.Shared.Input;
-using Wards.Application.UsesCases.Wards.Shared.Output;
+using Wards.Application.UseCases.Shared.Models;
+using Wards.Application.UseCases.Wards.AtualizarWard;
+using Wards.Application.UseCases.Wards.CriarWard;
+using Wards.Application.UseCases.Wards.DeletarWard;
+using Wards.Application.UseCases.Wards.ListarWard;
+using Wards.Application.UseCases.Wards.ObterWard;
+using Wards.Application.UseCases.Wards.Shared.Input;
+using Wards.Application.UseCases.Wards.Shared.Output;
 using Wards.Domain.Enums;
 using static Wards.Utils.Common;
 
