@@ -9,8 +9,8 @@ namespace Wards.UnitTests.Fixtures.Mocks
         {
             WardInput ward = new()
             {
-                Titulo = !string.IsNullOrEmpty(titulo) ? titulo : Guid.NewGuid().ToString(),
-                Conteudo = !string.IsNullOrEmpty(conteudo) ? conteudo : Guid.NewGuid().ToString(),
+                Titulo = !string.IsNullOrEmpty(titulo) ? titulo : GerarStringAleatoria(5, false),
+                Conteudo = !string.IsNullOrEmpty(conteudo) ? conteudo : GerarStringAleatoria(5, false),
                 UsuarioId = usuarioId > 0 ? usuarioId : GerarNumeroAleatorio(int.MinValue, int.MaxValue)
             };
 

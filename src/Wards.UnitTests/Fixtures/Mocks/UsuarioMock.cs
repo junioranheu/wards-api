@@ -22,6 +22,17 @@ namespace Wards.UnitTests.Fixtures.Mocks
             return usuario;
         }
 
+        public static List<CriarUsuarioInput> CriarListaUsuarioInput()
+        {
+            List<CriarUsuarioInput> lista = new()
+            {
+                CriarUsuarioInput(GerarStringAleatoria(5, false), GerarStringAleatoria(5, false), GerarStringAleatoria(5, false), GerarStringAleatoria(5, false), GerarStringAleatoria(5, false)),
+                CriarUsuarioInput(GerarStringAleatoria(5, false), GerarStringAleatoria(5, false), GerarStringAleatoria(5, false), GerarStringAleatoria(5, false), GerarStringAleatoria(5, false))
+            };
+
+            return lista;
+        }
+
         public static async Task CriarUsuarioBanco(WardsContext context, IMapper map)
         {
             var usuarioMock = CriarUsuarioInput(GerarStringAleatoria(5, false), GerarStringAleatoria(5, false), GerarStringAleatoria(5, false), GerarStringAleatoria(5, false), GerarStringAleatoria(5, false));
