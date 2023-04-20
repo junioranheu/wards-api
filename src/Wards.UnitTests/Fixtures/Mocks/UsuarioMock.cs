@@ -1,4 +1,8 @@
-﻿using Wards.Application.UsesCases.Usuarios.Shared.Input;
+﻿using AutoMapper;
+using Wards.Application.UsesCases.Usuarios.Shared.Input;
+using Wards.Domain.Entities;
+using Wards.Infrastructure.Data;
+using static Wards.Utils.Common;
 
 namespace Wards.UnitTests.Fixtures.Mocks
 {
@@ -8,14 +12,21 @@ namespace Wards.UnitTests.Fixtures.Mocks
         {
             CriarUsuarioInput usuario = new()
             {
-                NomeCompleto = !string.IsNullOrEmpty(nomeCompleto) ? nomeCompleto : Guid.NewGuid().ToString(),
-                NomeUsuarioSistema = !string.IsNullOrEmpty(nomeUsuarioSistema) ? nomeUsuarioSistema : Guid.NewGuid().ToString(),
-                Email = !string.IsNullOrEmpty(email) ? email : Guid.NewGuid().ToString(),
-                Senha = !string.IsNullOrEmpty(senha) ? senha : Guid.NewGuid().ToString(),
-                Chamado = !string.IsNullOrEmpty(chamado) ? chamado : Guid.NewGuid().ToString()
+                NomeCompleto = !string.IsNullOrEmpty(nomeCompleto) ? nomeCompleto : GerarStringAleatoria(5, false),
+                NomeUsuarioSistema = !string.IsNullOrEmpty(nomeUsuarioSistema) ? nomeUsuarioSistema : GerarStringAleatoria(5, false),
+                Email = !string.IsNullOrEmpty(email) ? email : GerarStringAleatoria(5, false),
+                Senha = !string.IsNullOrEmpty(senha) ? senha : GerarStringAleatoria(5, false),
+                Chamado = !string.IsNullOrEmpty(chamado) ? chamado : GerarStringAleatoria(5, false)
             };
 
             return usuario;
+        }
+
+        public static async Task CriarUsuarioBanco(WardsContext context, IMapper map)
+        {
+            var usuarioMock = CriarUsuarioInput(GerarStringAleatoria(5, false), GerarStringAleatoria(5, false), GerarStringAleatoria(5, false), GerarStringAleatoria(5, false), GerarStringAleatoria(5, false));
+            await context.Usuarios.AddAsync(map.Map<Usuario>(usuarioMock));
+            await context.SaveChangesAsync();
         }
     }
 }

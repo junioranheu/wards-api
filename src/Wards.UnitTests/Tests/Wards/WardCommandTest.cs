@@ -2,7 +2,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Moq;
+using Wards.Application.UsesCases.Shared.Models;
 using Wards.Application.UsesCases.Wards.CriarWard.Commands;
+using Wards.Application.UsesCases.Wards.ListarWard.Queries;
 using Wards.Application.UsesCases.Wards.Shared.Input;
 using Wards.Domain.Entities;
 using Wards.Infrastructure.Data;
@@ -35,17 +37,35 @@ namespace Wards.UnitTests.Tests.Wards
         {
             // Arrange;
             var logger = new Mock<ILogger<CriarWardCommand>>();
-
             var command = new CriarWardCommand(_context, logger.Object);
-
             WardInput input = WardMock.CriarWardInput(titulo, conteudo, usuarioId);
 
             // Act;
-            var resp = await command.Execute(_map.Map<Ward>(input));
+             await command.Execute(_map.Map<Ward>(input));
             var db = await _context.Wards.FirstOrDefaultAsync(x => x.Titulo == titulo);
 
             // Assert;
             Assert.Equal(db is not null, esperado);
+        }
+
+        [Fact]
+        public async Task ListarWardQuery_ChecarResultadoEsperado()
+        {
+            // Arrange;
+            var logger = new Mock<ILogger<ListarWardQuery>>();
+            var paginacao = new Mock<PaginacaoInput>();
+
+            List<WardInput> listaInput = WardMock.CriarListaWardInput();
+            await _context.Wards.AddRangeAsync(_map.Map<List<Ward>>(listaInput));
+            await _context.SaveChangesAsync();
+
+            var query = new ListarWardQuery(_context, logger.Object);
+
+            // Act;
+            var resp = await query.Execute(paginacao.Object);
+
+            // Assert;
+            Assert.True(resp is not null);
         }
     }
 }

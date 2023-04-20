@@ -16,5 +16,16 @@ namespace Wards.UnitTests.Fixtures.Mocks
 
             return ward;
         }
+
+        public static List<WardInput> CriarListaWardInput()
+        {
+            List<WardInput> lista = new()
+            {
+                CriarWardInput(GerarStringAleatoria(5, false), GerarStringAleatoria(5, false), 1),
+                CriarWardInput(GerarStringAleatoria(5, false), GerarStringAleatoria(5, false), 1)
+            };
+
+            return lista;
+        }
     }
 }

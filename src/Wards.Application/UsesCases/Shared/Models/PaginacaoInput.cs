@@ -1,6 +1,6 @@
 ﻿namespace Wards.Application.UsesCases.Shared.Models
 {
-    public sealed class PaginacaoInput
+    public class PaginacaoInput
     {
         const int primeiraPagina = 0;
         const int quantidadeRegistros = 10;
