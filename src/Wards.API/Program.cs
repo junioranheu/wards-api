@@ -28,7 +28,7 @@ WebApplication app = builder.Build();
 
     if (app.Environment.IsDevelopment())
     {
-        await DBInitialize(services, isInitialize: false);
+        await DBInitialize(app, services, isInitialize: false);
 
         app.UseSwagger();
         app.UseSwaggerUI(c =>
@@ -61,19 +61,21 @@ WebApplication app = builder.Build();
 #endregion
 
 #region metodos_auxiliares
-static async Task DBInitialize(IServiceProvider services, bool isInitialize)
+static async Task DBInitialize(WebApplication app, IServiceProvider services, bool isInitialize)
 {
-    if (isInitialize)
+    if (!isInitialize)
     {
-        try
-        {
-            WardsContext context = services.GetRequiredService<WardsContext>();
-            await DbInitializer.Initialize(context);
-        }
-        catch (Exception)
-        {
-           
-        }
+        return;
+    }
+
+    try
+    {
+        WardsContext context = services.GetRequiredService<WardsContext>();
+        await DbInitializer.Initialize(context);
+    }
+    catch (Exception ex)
+    {
+        app.Logger.LogError(ex, "{detalhes}", "Houve um problema ao resetar a base de dados");
     }
 }
 
