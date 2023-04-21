@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Wards.API.Filters;
 using Wards.Application.UseCases.Auxiliares.ListarEstado;
 using Wards.Application.UseCases.Auxiliares.ListarEstado.Shared.Output;
 using Wards.Application.UseCases.Shared.Models;
