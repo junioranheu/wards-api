@@ -4,8 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.ResponseCompression;
 using System.IO.Compression;
 using Wards.API.Filters;
-using Wards.Application.UseCases.Logs.Shared.Input;
-using Wards.Application.UseCases.Usuarios.Shared.Input;
 using Wards.Application.UseCases.Wards.Shared.Input;
 using Wards.Infrastructure.Data;
 
@@ -65,7 +63,7 @@ namespace Wards.API
 
         private static void AddValidators(IServiceCollection services)
         {
-            #region api_behavior_e_fluent_validation
+            #region api_behavior_validator
             services.Configure<ApiBehaviorOptions>(o =>
                 o.InvalidModelStateResponseFactory = actionContext =>
                     {
@@ -76,16 +74,13 @@ namespace Wards.API
                         });
                     }
             );
+            #endregion
 
             services.AddFluentValidationAutoValidation();
             services.AddFluentValidationClientsideAdapters();
-            #endregion
 
-            services.AddValidatorsFromAssemblyContaining<CriarUsuarioInputValidator>();
-            services.AddValidatorsFromAssemblyContaining<AutenticarUsuarioInputValidator>();
-            services.AddValidatorsFromAssemblyContaining<CriarRefreshTokenUsuarioInputValidator>();
-            services.AddValidatorsFromAssemblyContaining<LogInputValidator>();
-            services.AddValidatorsFromAssemblyContaining<WardInputValidator>();
+            AssemblyScanner? validators = AssemblyScanner.FindValidatorsInAssemblyContaining<WardInputValidator>();
+            validators.ForEach(x => services.AddValidatorsFromAssemblyContaining(x.ValidatorType));
         }
 
         private static void AddHealthCheck(IServiceCollection services)
