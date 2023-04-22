@@ -24,35 +24,35 @@ namespace Wards.API
 
         private static void AddCompression(WebApplicationBuilder builder)
         {
-            builder.Services.AddResponseCompression(o =>
+            builder.Services.AddResponseCompression(x =>
             {
-                o.EnableForHttps = true;
-                o.Providers.Add<BrotliCompressionProvider>();
-                o.Providers.Add<GzipCompressionProvider>();
+                x.EnableForHttps = true;
+                x.Providers.Add<BrotliCompressionProvider>();
+                x.Providers.Add<GzipCompressionProvider>();
             });
 
-            builder.Services.Configure<BrotliCompressionProviderOptions>(o =>
+            builder.Services.Configure<BrotliCompressionProviderOptions>(x =>
             {
-                o.Level = CompressionLevel.Optimal;
+                x.Level = CompressionLevel.Optimal;
             });
 
-            builder.Services.Configure<GzipCompressionProviderOptions>(o =>
+            builder.Services.Configure<GzipCompressionProviderOptions>(x =>
             {
-                o.Level = CompressionLevel.Optimal;
+                x.Level = CompressionLevel.Optimal;
             });
         }
 
         private static void AddControllers(WebApplicationBuilder builder)
         {
-            builder.Services.AddControllers(o =>
+            builder.Services.AddControllers(x =>
             {
-                o.Filters.Add<RequestFilter>();
-                o.Filters.Add<ErrorFilter>();
+                x.Filters.Add<RequestFilter>();
+                x.Filters.Add<ErrorFilter>();
             }).
-                AddNewtonsoftJson(o =>
+                AddNewtonsoftJson(x =>
                 {
-                    o.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
-                    o.SerializerSettings.Formatting = Newtonsoft.Json.Formatting.Indented;
+                    x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+                    x.SerializerSettings.Formatting = Newtonsoft.Json.Formatting.Indented;
                 });
         }
 
@@ -64,8 +64,8 @@ namespace Wards.API
         private static void AddValidators(IServiceCollection services)
         {
             #region api_behavior_validator
-            services.Configure<ApiBehaviorOptions>(o =>
-                o.InvalidModelStateResponseFactory = actionContext =>
+            services.Configure<ApiBehaviorOptions>(x =>
+                x.InvalidModelStateResponseFactory = actionContext =>
                     {
                         return new BadRequestObjectResult(new
                         {

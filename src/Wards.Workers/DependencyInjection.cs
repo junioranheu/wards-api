@@ -11,14 +11,14 @@ namespace Wards.WorkersServices
     {
         public static IServiceCollection AddDependencyInjectionWorkersServices(this IServiceCollection services, WebApplicationBuilder builder)
         {
-            services.AddQuartz(q =>
+            services.AddQuartz(x =>
             {
-                q.UseMicrosoftDependencyInjectionJobFactory();
+                x.UseMicrosoftDependencyInjectionJobFactory();
 
-                AddJobs(q, builder);
+                AddJobs(x, builder);
             });
 
-            builder.Services.AddQuartzHostedService(o => o.WaitForJobsToComplete = true);
+            builder.Services.AddQuartzHostedService(x => x.WaitForJobsToComplete = true);
 
             return services;
         }
@@ -48,8 +48,8 @@ namespace Wards.WorkersServices
 
             // Registrar o job;
             var jobKey = new JobKey(jobName);
-            quartz.AddJob<T>(o => o.WithIdentity(jobKey));
-            quartz.AddTrigger(o => o.ForJob(jobKey).WithIdentity($"{jobName}-trigger").WithCronSchedule(cronSchedule));
+            quartz.AddJob<T>(x => x.WithIdentity(jobKey));
+            quartz.AddTrigger(x => x.ForJob(jobKey).WithIdentity($"{jobName}-trigger").WithCronSchedule(cronSchedule));
         }
     }
 }

@@ -64,11 +64,11 @@ namespace Wards.Infrastructure
         private static void AddAuthAzure(IServiceCollection services, WebApplicationBuilder builder)
         {
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                    .AddJwtBearer(o =>
+                    .AddJwtBearer(x =>
                     {
-                        o.Audience = builder.Configuration["AzureSettings:CliendId"] ?? string.Empty;
-                        o.Authority = builder.Configuration["AzureSettings:Authority"] ?? string.Empty;
-                        o.TokenValidationParameters = new TokenValidationParameters
+                        x.Audience = builder.Configuration["AzureSettings:CliendId"] ?? string.Empty;
+                        x.Authority = builder.Configuration["AzureSettings:Authority"] ?? string.Empty;
+                        x.TokenValidationParameters = new TokenValidationParameters
                         {
                             ValidateIssuer = false
                         };
@@ -85,7 +85,7 @@ namespace Wards.Infrastructure
             string con = new ConnectionFactory(builder.Configuration).CreateDbStringConnection();
 
             // Entity Framework;
-            builder.Services.AddDbContext<WardsContext>(o => o.UseMySql(con, ServerVersion.AutoDetect(con)));
+            builder.Services.AddDbContext<WardsContext>(x => x.UseMySql(con, ServerVersion.AutoDetect(con)));
 
             // Dapper;
             builder.Services.AddScoped<IDbConnection>((sp) => new MySqlConnection(con));
@@ -124,8 +124,8 @@ namespace Wards.Infrastructure
 
         private static void AddCors(WebApplicationBuilder builder)
         {
-            builder.Services.AddCors(o =>
-                o.AddPolicy(name: builder.Configuration["CORSSettings:Cors"] ?? string.Empty, builder =>
+            builder.Services.AddCors(x =>
+                x.AddPolicy(name: builder.Configuration["CORSSettings:Cors"] ?? string.Empty, builder =>
                 {
                     builder.AllowAnyHeader()
                         .AllowAnyMethod()
