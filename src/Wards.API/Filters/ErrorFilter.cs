@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc.Filters;
 using System.Security.Claims;
 using Wards.Application.Services.Usuarios.ObterUsuarioCache;
-using Wards.Application.UseCases.Auxiliares.ListarEstado.Queries;
 using Wards.Application.UseCases.Logs.CriarLog;
 using Wards.Application.UseCases.Logs.Shared.Input;
 using Wards.Application.UseCases.Usuarios.Shared.Output;
@@ -15,7 +14,7 @@ namespace Wards.API.Filters
         private readonly ILogger _logger;
         private readonly ICriarLogUseCase _criarLogUseCase;
 
-        public ErrorFilter(ILogger<ListarEstadoQuery> logger, ICriarLogUseCase criarLogUseCase)
+        public ErrorFilter(ILogger<ErrorFilter> logger, ICriarLogUseCase criarLogUseCase)
         {
             _logger = logger;
             _criarLogUseCase = criarLogUseCase;
