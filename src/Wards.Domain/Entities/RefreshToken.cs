@@ -7,7 +7,8 @@ namespace Wards.Domain.Entities
     {
         [Key]
         public int RefreshTokenId { get; set; }
-        public string? RefToken { get; set; } = null;
+
+        public string? RefToken { get; set; } = string.Empty;
 
         public int UsuarioId { get; set; }
         public Usuario? Usuarios { get; set; }

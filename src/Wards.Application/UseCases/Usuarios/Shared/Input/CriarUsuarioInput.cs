@@ -4,15 +4,15 @@ namespace Wards.Application.UseCases.Usuarios.Shared.Input
 {
     public sealed class CriarUsuarioInput
     {
-        public string? NomeCompleto { get; set; } = string.Empty;
+        public string NomeCompleto { get; set; } = string.Empty;
 
-        public string? NomeUsuarioSistema { get; set; } = string.Empty;
+        public string NomeUsuarioSistema { get; set; } = string.Empty;
 
-        public string? Email { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
 
-        public string? Senha { get; set; } = string.Empty;
+        public string Senha { get; set; } = string.Empty;
 
-        public string? Chamado { get; set; } = string.Empty;
+        public string Chamado { get; set; } = string.Empty;
 
         [JsonIgnore]
         public string? Foto { get; set; } = string.Empty;
@@ -21,7 +21,7 @@ namespace Wards.Application.UseCases.Usuarios.Shared.Input
         public bool IsVerificado { get; set; } = false;
 
         [JsonIgnore]
-        public string? CodigoVerificacao { get; set; } = null;
+        public string? CodigoVerificacao { get; set; } = string.Empty;
 
         [JsonIgnore]
         public DateTime? ValidadeCodigoVerificacao { get; set; }

@@ -8,21 +8,21 @@ namespace Wards.Domain.Entities
         [Key]
         public int UsuarioId { get; set; }
 
-        public string? NomeCompleto { get; set; } = string.Empty;
+        public string NomeCompleto { get; set; } = string.Empty;
 
-        public string? NomeUsuarioSistema { get; set; } = string.Empty;
+        public string NomeUsuarioSistema { get; set; } = string.Empty;
 
-        public string? Email { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
 
-        public string? Senha { get; set; } = string.Empty;
+        public string Senha { get; set; } = string.Empty;
 
-        public string? Chamado { get; set; } = string.Empty;
+        public string Chamado { get; set; } = string.Empty;
 
-        public string? Foto { get; set; } = string.Empty;
+        public string Foto { get; set; } = string.Empty;
 
         public bool IsVerificado { get; set; } = false;
 
-        public string? CodigoVerificacao { get; set; } = null;
+        public string? CodigoVerificacao { get; set; } = string.Empty;
 
         public DateTime? ValidadeCodigoVerificacao { get; set; }
 

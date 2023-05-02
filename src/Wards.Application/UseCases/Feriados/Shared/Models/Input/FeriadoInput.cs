@@ -9,7 +9,7 @@ namespace Wards.Application.UseCases.Feriados.Shared.Models.Input
 
         public TipoFeriadoEnum? Tipo { get; set; }
 
-        public string? Nome { get; set; }
+        public string Nome { get; set; } = string.Empty;
 
         public bool IsMovel { get; set; }
 

@@ -12,7 +12,7 @@ namespace Wards.Domain.Entities
 
         public TipoFeriadoEnum? Tipo { get; set; }
 
-        public string? Nome { get; set; } = string.Empty;
+        public string Nome { get; set; } = string.Empty;
 
         public bool IsMovel { get; set; } = false;
 

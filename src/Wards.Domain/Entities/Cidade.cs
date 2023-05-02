@@ -7,7 +7,7 @@ namespace Wards.Domain.Entities
         [Key]
         public int CidadeId { get; set; }
 
-        public string? Nome { get; set; } = string.Empty;
+        public string Nome { get; set; } = string.Empty;
 
         public int EstadoId { get; set; }
         public Estado? Estados { get; set; }
