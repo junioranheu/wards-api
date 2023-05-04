@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Wards.Application.Services.Sistemas.ResetarBancoDados;
+using Wards.Application.UseCases.Shared.Models;
+using Wards.Application.UseCases.Usuarios.ListarUsuario;
+using Wards.Application.UseCases.Usuarios.Shared.Output;
 using Wards.Domain.Entities;
 using static Wards.Utils.Common;
 
@@ -10,11 +13,57 @@ namespace Wards.API.Controllers
     [ApiController]
     public class SistemasController : Controller
     {
+        private readonly IListarUsuarioUseCase _listarUsuarioUseCase;
         private readonly IResetarBancoDadosService _resetarBancoDadosService;
 
-        public SistemasController(IResetarBancoDadosService resetarBancoDadosService)
+        public SistemasController(IListarUsuarioUseCase listarUsuarioUseCase, IResetarBancoDadosService resetarBancoDadosService)
         {
+            _listarUsuarioUseCase = listarUsuarioUseCase;
             _resetarBancoDadosService = resetarBancoDadosService;
+        }
+
+        /// <summary>
+        /// Exemplo de LINQ avançado, fazendo select em uma propriedade dinâmica;
+        /// </summary>
+        [HttpGet("LINQAvancadoComSelectDinamico")]
+        [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Usuario))]
+        [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(string))]
+        public async Task<ActionResult<string>> LINQAvancadoComSelectDinamico(string nomePropriedade)
+        {
+            // Ward: caso seja necessário passar como parâmetro "nomePropriedade" uma classe...
+            // Na chamada do end-point/método, pode ser utilizado o "nameof(xxx)";
+
+            if (string.IsNullOrEmpty(nomePropriedade))
+            {
+                return StatusCode(StatusCodes.Status403Forbidden, string.Empty);
+            }
+
+            IEnumerable<UsuarioOutput>? listaUsuarios = await _listarUsuarioUseCase.Execute(new PaginacaoInput() { IsSelectAll = true });
+
+            object? objeto;
+
+            try
+            {
+                objeto = listaUsuarios!.
+                         Where(x => x.NomeCompleto!.Contains("Junior")).
+                         Select(x => x.GetType().GetProperty(nomePropriedade)!.GetValue(x)).
+                         FirstOrDefault();
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status403Forbidden, $"A propriedade {nomePropriedade} não existe");
+            }
+
+            if (objeto is null)
+            {
+                return StatusCode(StatusCodes.Status403Forbidden, string.Empty);
+            }
+
+            // double valor = objeto is IConvertible ? ((IConvertible)objeto).ToDouble(null) : 0d; // Caso seja necessário converter resultado para double;
+            string valor = objeto is IConvertible ? ((IConvertible)objeto).ToString(null) : "";
+
+            return valor;
         }
 
         /// <summary>
