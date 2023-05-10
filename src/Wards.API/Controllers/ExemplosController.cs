@@ -2,38 +2,62 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Reflection;
 using Wards.Application.Services.Sistemas.ResetarBancoDados;
+using Wards.Application.UseCases.Logs.ListarLog;
+using Wards.Application.UseCases.Logs.Shared.Output;
 using Wards.Application.UseCases.Shared.Models;
 using Wards.Application.UseCases.Usuarios.ListarUsuario;
 using Wards.Application.UseCases.Usuarios.Shared.Output;
 using Wards.Domain.Entities;
+using Wards.Domain.Enums;
 using static Wards.Utils.Common;
 
 namespace Wards.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class SistemasController : Controller
+    public class ExemplosController : Controller
     {
+        private readonly IListarLogUseCase _listarLogUseCase;
         private readonly IListarUsuarioUseCase _listarUsuarioUseCase;
         private readonly IResetarBancoDadosService _resetarBancoDadosService;
 
         /// <summary>
         /// Controller para testes e exemplos;
         /// </summary>
-        public SistemasController(IListarUsuarioUseCase listarUsuarioUseCase, IResetarBancoDadosService resetarBancoDadosService)
+        public ExemplosController(
+            IListarLogUseCase listarLogUseCase,
+            IListarUsuarioUseCase listarUsuarioUseCase,
+            IResetarBancoDadosService resetarBancoDadosService)
         {
+            _listarLogUseCase = listarLogUseCase;
             _listarUsuarioUseCase = listarUsuarioUseCase;
             _resetarBancoDadosService = resetarBancoDadosService;
+        }
+
+        [HttpGet("exemploLINQGroupBy")]
+        [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(LogOutput))]
+        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(LogOutput))]
+        public async Task<ActionResult<IEnumerable<LogOutput>?>> ExemploLINQGroupBy()
+        {
+            var resp = await _listarLogUseCase.Execute(new PaginacaoInput() { IsSelectAll = true });
+
+            if (!resp!.Any())
+            {
+                return StatusCode(StatusCodes.Status404NotFound, new LogOutput() { Messages = new string[] { ObterDescricaoEnum(CodigoErroEnum.NaoEncontrado) } });
+            }
+
+            return Ok(resp);
         }
 
         /// <summary>
         /// Exemplo de LINQ avançado, fazendo select em uma propriedade dinâmica;
         /// </summary>
-        [HttpGet("LINQAvancadoComSelectDinamico")]
+        [HttpGet("exemploLINQComSelectDinamico")]
         [AllowAnonymous]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Usuario))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
         [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(string))]
-        public async Task<ActionResult<string>> LINQAvancadoComSelectDinamico(string nomePropriedade)
+        public async Task<ActionResult<string>> ExemploLINQComSelectDinamico(string nomePropriedade)
         {
             // Ward: caso seja necessário passar como parâmetro "nomePropriedade" uma classe...
             // Na chamada do end-point/método, pode ser utilizado o "nameof(xxx)";
@@ -42,13 +66,13 @@ namespace Wards.API.Controllers
                 return StatusCode(StatusCodes.Status403Forbidden, string.Empty);
             }
 
-            IEnumerable<UsuarioOutput>? listaUsuarios = await _listarUsuarioUseCase.Execute(new PaginacaoInput() { IsSelectAll = true });
+            IEnumerable<UsuarioOutput>? resp = await _listarUsuarioUseCase.Execute(new PaginacaoInput() { IsSelectAll = true });
 
             object? objeto;
 
             try
             {
-                objeto = listaUsuarios!.
+                objeto = resp!.
                          Where(x => x.NomeCompleto!.Contains("Junior")).
                          Select(x => x.GetType().GetProperty(nomePropriedade)!.GetValue(x)).
                          FirstOrDefault();
@@ -67,7 +91,7 @@ namespace Wards.API.Controllers
             string valor = objeto is IConvertible ? ((IConvertible)objeto).ToString(null) : "";
 
             // >>>>>>>>>>>>>>>>>>>>>>>>>>>>> Segunda forma de obter valor dinamicamente (com reflection);
-            UsuarioOutput exemplo = listaUsuarios!.FirstOrDefault()!;
+            UsuarioOutput exemplo = resp!.FirstOrDefault()!;
             PropertyInfo? reflection = exemplo!.GetType().GetProperty(nomePropriedade);
             object? valor_forma_2 = reflection!.GetValue(exemplo, null);
 
@@ -77,10 +101,10 @@ namespace Wards.API.Controllers
         /// <summary>
         /// Exemplos de LINQs avançados, filtrando dados de sub-listas por uma string;
         /// </summary>
-        [HttpGet("LINQAvancadoFiltrarDadosDeSubListaPorString")]
+        [HttpGet("exemploLINQFiltrarDadosDeSubListaPorString")]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<Feriado>))]
-        public ActionResult<List<Feriado>> LINQAvancadoFiltrarDadosDeSubListaPorString(string estadoExclusao)
+        public ActionResult<List<Feriado>> ExemploLINQFiltrarDadosDeSubListaPorString(string estadoExclusao)
         {
             if (string.IsNullOrEmpty(estadoExclusao))
             {
@@ -120,10 +144,10 @@ namespace Wards.API.Controllers
         /// <summary>
         /// Exemplos de LINQs avançados, filtrando dados de sub-listas por outras listas de datas;
         /// </summary>
-        [HttpGet("LINQAvancadoFiltrarDadosDeSubListaPorOutrasListasDeDatas")]
+        [HttpGet("exemploLINQFiltrarDadosDeSubListaPorOutrasListasDeDatas")]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<DateTime>))]
-        public ActionResult<List<Usuario>> LINQAvancadoFiltrarDadosDeSubListaPorOutrasListasDeDatas()
+        public ActionResult<List<Usuario>> ExemploLINQFiltrarDadosDeSubListaPorOutrasListasDeDatas()
         {
             #region exemplo_codigo_real
             /// <example>
