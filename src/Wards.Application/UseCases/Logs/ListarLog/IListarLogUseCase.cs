@@ -5,6 +5,6 @@ namespace Wards.Application.UseCases.Logs.ListarLog
 {
     public interface IListarLogUseCase
     {
-        Task<IEnumerable<LogOutput>?> Execute(PaginacaoInput input);
+        Task<IEnumerable<LogOutput>> Execute(PaginacaoInput input);
     }
 }

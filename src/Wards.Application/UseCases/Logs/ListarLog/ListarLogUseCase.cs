@@ -16,7 +16,7 @@ namespace Wards.Application.UseCases.Logs.ListarLog
             _listarQuery = listarQuery;
         }
 
-        public async Task<IEnumerable<LogOutput>?> Execute(PaginacaoInput input)
+        public async Task<IEnumerable<LogOutput>> Execute(PaginacaoInput input)
         {
             return _map.Map<IEnumerable<LogOutput>>(await _listarQuery.Execute(input));
         }

@@ -101,7 +101,7 @@ namespace Wards.API.Controllers
         {
             var lista = await _listarFeriadoUseCase.Execute(input);
 
-            if (lista is null)
+            if (!lista.Any())
             {
                 return StatusCode(StatusCodes.Status404NotFound, new FeriadoOutput() { Messages = new string[] { ObterDescricaoEnum(CodigoErroEnum.NaoEncontrado) } });
             }

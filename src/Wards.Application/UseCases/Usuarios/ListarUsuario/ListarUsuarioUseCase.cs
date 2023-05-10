@@ -16,7 +16,7 @@ namespace Wards.Application.UseCases.Usuarios.ListarUsuario
             _listarQuery = listarQuery;
         }
 
-        public async Task<IEnumerable<UsuarioOutput>?> Execute(PaginacaoInput input)
+        public async Task<IEnumerable<UsuarioOutput>> Execute(PaginacaoInput input)
         {
             return _map.Map<IEnumerable<UsuarioOutput>>(await _listarQuery.Execute(input));
         }

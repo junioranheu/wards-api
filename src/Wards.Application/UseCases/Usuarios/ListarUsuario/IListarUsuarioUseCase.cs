@@ -5,6 +5,6 @@ namespace Wards.Application.UseCases.Usuarios.ListarUsuario
 {
     public interface IListarUsuarioUseCase
     {
-        Task<IEnumerable<UsuarioOutput>?> Execute(PaginacaoInput input);
+        Task<IEnumerable<UsuarioOutput>> Execute(PaginacaoInput input);
     }
 }

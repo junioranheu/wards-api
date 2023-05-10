@@ -22,7 +22,9 @@ namespace Wards.Application.UseCases.Feriados.AtualizarFeriado.Commands
             var item = await _obterFeriadoQuery.Execute(input.FeriadoId);
 
             if (item is null)
+            {
                 return 0;
+            }
 
             item.Tipo = input.Tipo != null ? input.Tipo : item.Tipo;
             item.Nome = !string.IsNullOrEmpty(input.Nome) ? input.Nome : item.Nome;

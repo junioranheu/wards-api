@@ -40,14 +40,14 @@ namespace Wards.API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(LogOutput))]
         public async Task<ActionResult<IEnumerable<LogOutput>?>> ExemploLINQGroupBy()
         {
-            var resp = await _listarLogUseCase.Execute(new PaginacaoInput() { IsSelectAll = true });
+            var listar = await _listarLogUseCase.Execute(new PaginacaoInput() { IsSelectAll = true });
 
-            if (!resp!.Any())
+            if (!listar.Any())
             {
                 return StatusCode(StatusCodes.Status404NotFound, new LogOutput() { Messages = new string[] { ObterDescricaoEnum(CodigoErroEnum.NaoEncontrado) } });
             }
 
-            return Ok(resp);
+            return Ok(listar);
         }
 
         /// <summary>
@@ -66,13 +66,13 @@ namespace Wards.API.Controllers
                 return StatusCode(StatusCodes.Status403Forbidden, string.Empty);
             }
 
-            IEnumerable<UsuarioOutput>? resp = await _listarUsuarioUseCase.Execute(new PaginacaoInput() { IsSelectAll = true });
+            IEnumerable<UsuarioOutput>? lista = await _listarUsuarioUseCase.Execute(new PaginacaoInput() { IsSelectAll = true });
 
             object? objeto;
 
             try
             {
-                objeto = resp!.
+                objeto = lista!.
                          Where(x => x.NomeCompleto!.Contains("Junior")).
                          Select(x => x.GetType().GetProperty(nomePropriedade)!.GetValue(x)).
                          FirstOrDefault();
@@ -91,7 +91,7 @@ namespace Wards.API.Controllers
             string valor = objeto is IConvertible ? ((IConvertible)objeto).ToString(null) : "";
 
             // >>>>>>>>>>>>>>>>>>>>>>>>>>>>> Segunda forma de obter valor dinamicamente (com reflection);
-            UsuarioOutput exemplo = resp!.FirstOrDefault()!;
+            UsuarioOutput exemplo = lista!.FirstOrDefault()!;
             PropertyInfo? reflection = exemplo!.GetType().GetProperty(nomePropriedade);
             object? valor_forma_2 = reflection!.GetValue(exemplo, null);
 
@@ -223,12 +223,12 @@ namespace Wards.API.Controllers
             if (HorarioBrasilia().Minute != minuto)
                 return StatusCode(StatusCodes.Status403Forbidden, false);
 
-            bool resp = await _resetarBancoDadosService.Execute();
+            bool isOk = await _resetarBancoDadosService.Execute();
 
-            if (!resp)
-                return StatusCode(StatusCodes.Status403Forbidden, resp);
+            if (!isOk)
+                return StatusCode(StatusCodes.Status403Forbidden, isOk);
 
-            return Ok(resp);
+            return Ok(isOk);
         }
     }
 }

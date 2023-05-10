@@ -16,17 +16,13 @@ namespace Wards.Application.UseCases.Usuarios.SolicitarVerificacaoContaUsuario
 
         public async Task<UsuarioOutput?> Execute(int usuarioId)
         {
-            (string mensagemErro, string email, string nomeCompleto, string codigoVerificacao) resp = await _solicitarVerificacaoContaUsuarioCommand.Execute(usuarioId);
-            string erros = resp.mensagemErro;
+            (string mensagemErro, string email, string nomeCompleto, string codigoVerificacao) = await _solicitarVerificacaoContaUsuarioCommand.Execute(usuarioId);
+            string erros =mensagemErro;
 
             if (!string.IsNullOrEmpty(erros))
             {
                 return (new UsuarioOutput() { Messages = new string[] { erros } });
             }
-
-            string email = resp.email;
-            string nomeCompleto = resp.nomeCompleto;
-            string codigoVerificacao = resp.codigoVerificacao;
 
             try
             {

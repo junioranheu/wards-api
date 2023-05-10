@@ -6,12 +6,10 @@ namespace Wards.Application.UseCases.Usuarios.VerificarContaUsuario
 {
     public sealed class VerificarContaUsuarioUseCase : IVerificarContaUsuarioUseCase
     {
-        private readonly IMapper _map;
         private readonly IVerificarContaUsuarioCommand _verificarContaUsuarioCommand;
 
-        public VerificarContaUsuarioUseCase(IMapper map, IVerificarContaUsuarioCommand verificarContaUsuarioCommand)
+        public VerificarContaUsuarioUseCase(IVerificarContaUsuarioCommand verificarContaUsuarioCommand)
         {
-            _map = map;
             _verificarContaUsuarioCommand = verificarContaUsuarioCommand;
         }
 

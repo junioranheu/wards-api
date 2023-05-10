@@ -14,7 +14,7 @@ namespace Wards.Application.UseCases.Usuarios.ListarUsuario.Queries
             _context = context;
         }
 
-        public async Task<IEnumerable<Usuario>?> Execute(PaginacaoInput input)
+        public async Task<IEnumerable<Usuario>> Execute(PaginacaoInput input)
         {
             var linq = await _context.Usuarios.
                              Include(ur => ur.UsuarioRoles)!.ThenInclude(r => r.Roles).

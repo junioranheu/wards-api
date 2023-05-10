@@ -27,7 +27,7 @@ namespace Wards.API.Controllers
         {
             var lista = await _listarEstadoUseCase.Execute(input);
 
-            if (lista is null)
+            if (!lista.Any())
             {
                 return StatusCode(StatusCodes.Status404NotFound, new EstadoOutput() { Messages = new string[] { ObterDescricaoEnum(CodigoErroEnum.NaoEncontrado) } });
             }

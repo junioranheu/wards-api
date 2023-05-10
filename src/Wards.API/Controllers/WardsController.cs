@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Wards.API.Filters;
 using Wards.Application.UseCases.Shared.Models;
 using Wards.Application.UseCases.Wards.AtualizarWard;
@@ -86,14 +85,14 @@ namespace Wards.API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(WardOutput))]
         public async Task<ActionResult<IEnumerable<WardOutput>>> Listar([FromQuery] PaginacaoInput input)
         {
-            var resp = await _listarUseCase.Execute(input);
+            var lista = await _listarUseCase.Execute(input);
 
-            if (resp is null)
+            if (!lista.Any())
             {
                 return StatusCode(StatusCodes.Status404NotFound, new WardOutput() { Messages = new string[] { ObterDescricaoEnum(CodigoErroEnum.NaoEncontrado) } });
             }
 
-            return Ok(resp);
+            return Ok(lista);
         }
 
         [HttpGet]
@@ -101,14 +100,14 @@ namespace Wards.API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(WardOutput))]
         public async Task<ActionResult<WardOutput>> Obter(int id)
         {
-            var resp = await _obterUseCase.Execute(id);
+            var item = await _obterUseCase.Execute(id);
 
-            if (resp is null)
+            if (item is null)
             {
                 return StatusCode(StatusCodes.Status404NotFound, new WardOutput() { Messages = new string[] { ObterDescricaoEnum(CodigoErroEnum.NaoEncontrado) } });
             }
 
-            return Ok(resp);
+            return Ok(item);
         }
     }
 }

@@ -133,14 +133,14 @@ namespace Wards.API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(UsuarioOutput))]
         public async Task<ActionResult<IEnumerable<UsuarioOutput>>> Listar([FromQuery] PaginacaoInput input)
         {
-            var resp = await _listarUseCase.Execute(input);
+            var lista = await _listarUseCase.Execute(input);
 
-            if (resp is null)
+            if (!lista.Any())
             {
                 return StatusCode(StatusCodes.Status404NotFound, new UsuarioOutput() { Messages = new string[] { ObterDescricaoEnum(CodigoErroEnum.NaoEncontrado) } });
             }
 
-            return Ok(resp);
+            return Ok(lista);
         }
 
         [HttpGet]
@@ -149,14 +149,14 @@ namespace Wards.API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(UsuarioOutput))]
         public async Task<ActionResult<UsuarioOutput>> Obter(int id)
         {
-            var resp = await _obterUseCase.Execute(id);
+            var item = await _obterUseCase.Execute(id);
 
-            if (resp is null)
+            if (item is null)
             {
                 return StatusCode(StatusCodes.Status404NotFound, new UsuarioOutput() { Messages = new string[] { ObterDescricaoEnum(CodigoErroEnum.NaoEncontrado) } });
             }
 
-            return Ok(resp);
+            return Ok(item);
         }
 
         [HttpPost("solicitarVerificacaoConta")]

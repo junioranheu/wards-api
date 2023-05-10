@@ -46,14 +46,14 @@ namespace Wards.API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(LogOutput))]
         public async Task<ActionResult<IEnumerable<LogOutput>>> Listar([FromQuery] PaginacaoInput input)
         {
-            var resp = await _listarUseCase.Execute(input);
+            var lista = await _listarUseCase.Execute(input);
 
-            if (resp is null)
+            if (!lista.Any())
             {
                 return StatusCode(StatusCodes.Status404NotFound, new LogOutput() { Messages = new string[] { ObterDescricaoEnum(CodigoErroEnum.NaoEncontrado) } });
             }
 
-            return Ok(resp);
+            return Ok(lista);
         }
 
         [HttpGet("exportar")]
