@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Globalization;
 using System.Reflection;
 using Wards.Application.Services.Sistemas.ResetarBancoDados;
 using Wards.Application.UseCases.Logs.ListarLog;
@@ -36,18 +37,41 @@ namespace Wards.API.Controllers
 
         [HttpGet("exemploLINQGroupBy")]
         [AllowAnonymous]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(LogOutput))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<LogAgrupadoOutput>))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(LogOutput))]
-        public async Task<ActionResult<IEnumerable<LogOutput>?>> ExemploLINQGroupBy()
+        public async Task<ActionResult<List<LogAgrupadoOutput>>> ExemploLINQGroupBy()
         {
-            var listar = await _listarLogUseCase.Execute(new PaginacaoInput() { IsSelectAll = true });
+            var lista = await _listarLogUseCase.Execute(new PaginacaoInput() { IsSelectAll = true });
 
-            if (!listar.Any())
+            if (!lista.Any())
             {
                 return StatusCode(StatusCodes.Status404NotFound, new LogOutput() { Messages = new string[] { ObterDescricaoEnum(CodigoErroEnum.NaoEncontrado) } });
             }
 
-            return Ok(listar);
+            List<LogAgrupadoOutput> linq = lista.
+                                           // Include(x => x.XXX).
+                                           GroupBy(x => new
+                                           {
+                                               x.Data.Year,
+                                               x.Data.Month,
+                                               x.Data.Day,
+                                               x.UsuarioId
+                                           }).
+                                           Select(x => new LogAgrupadoOutput
+                                           {
+                                               Data = x.Select(x => x.Data).FirstOrDefault(),
+                                               DataStr = $"Dia {x.Select(x => x.Data.Day).FirstOrDefault()} de {DateTimeFormatInfo.CurrentInfo.GetAbbreviatedMonthName(x.Select(x => x.Data.Month).FirstOrDefault())} de {x.Select(x => x.Data.Year).FirstOrDefault()}",
+                                               QtdLogs = x.Select(x => x.LogId).Count(),
+                                               UsuarioId = x.Select(x => x.UsuarioId).FirstOrDefault(),
+                                               UsuarioNome = x.Select(x => x.Usuarios?.NomeCompleto).FirstOrDefault() ?? "-",
+                                               ListaStatusResposta = x.Select(x => x.StatusResposta).ToArray()
+                                           }).
+                                           // Skip((input.IsSelectAll ? 0 : input.Index * input.Limit)).
+                                           // Take((input.IsSelectAll ? int.MaxValue : input.Limit)).
+                                           // AsNoTracking().ToListAsync();
+                                           ToList();
+
+            return Ok(linq);
         }
 
         /// <summary>
