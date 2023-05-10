@@ -1,16 +1,16 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Wards.Application.AutoMapper;
+using Wards.Application.Services.Export;
 using Wards.Application.Services.Import;
 using Wards.Application.Services.Sistemas;
 using Wards.Application.Services.Usuarios;
+using Wards.Application.UseCases.Auxiliares;
 using Wards.Application.UseCases.Feriados;
 using Wards.Application.UseCases.FeriadosDatas;
 using Wards.Application.UseCases.FeriadosEstados;
-using Wards.Application.UseCases.Auxiliares;
 using Wards.Application.UseCases.Imports;
 using Wards.Application.UseCases.Logs;
 using Wards.Application.UseCases.Tokens;
@@ -41,6 +41,7 @@ namespace Wards.Application
 
             // Services;
             services.AddCsvImportService();
+            services.AddXlsxExportService();
             services.AddUsuariosService();
             services.AddResetarBancoDadosService();
 

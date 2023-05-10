@@ -455,5 +455,15 @@ namespace Wards.Utils
             DateTime horarioBrasilia = HorarioBrasilia();
             return $"{horarioBrasilia:dd/MM/yyyy} às {horarioBrasilia:HH:mm:ss}";
         }
+
+        /// <summary>
+        /// Concatena uma data que já é DateTime para o formato dd/MM/yyyy hh;
+        /// PS: Esse método é algo muito específico de um projeto em questão...
+        /// E muito dificilmente vai ter utilidade em outro local;
+        /// </summary>
+        public static string FormatarDataExport(DateTime data)
+        {
+            return data.ToString("dd/MM/yyyy hh");
+        }
     }
 }
