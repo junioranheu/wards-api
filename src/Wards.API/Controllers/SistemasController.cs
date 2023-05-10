@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Reflection;
 using Wards.Application.Services.Sistemas.ResetarBancoDados;
 using Wards.Application.UseCases.Shared.Models;
 using Wards.Application.UseCases.Usuarios.ListarUsuario;
@@ -16,6 +17,9 @@ namespace Wards.API.Controllers
         private readonly IListarUsuarioUseCase _listarUsuarioUseCase;
         private readonly IResetarBancoDadosService _resetarBancoDadosService;
 
+        /// <summary>
+        /// Controller para testes e exemplos;
+        /// </summary>
         public SistemasController(IListarUsuarioUseCase listarUsuarioUseCase, IResetarBancoDadosService resetarBancoDadosService)
         {
             _listarUsuarioUseCase = listarUsuarioUseCase;
@@ -33,7 +37,6 @@ namespace Wards.API.Controllers
         {
             // Ward: caso seja necessário passar como parâmetro "nomePropriedade" uma classe...
             // Na chamada do end-point/método, pode ser utilizado o "nameof(xxx)";
-
             if (string.IsNullOrEmpty(nomePropriedade))
             {
                 return StatusCode(StatusCodes.Status403Forbidden, string.Empty);
@@ -62,6 +65,11 @@ namespace Wards.API.Controllers
 
             // double valor = objeto is IConvertible ? ((IConvertible)objeto).ToDouble(null) : 0d; // Caso seja necessário converter resultado para double;
             string valor = objeto is IConvertible ? ((IConvertible)objeto).ToString(null) : "";
+
+            // >>>>>>>>>>>>>>>>>>>>>>>>>>>>> Segunda forma de obter valor dinamicamente (com reflection);
+            UsuarioOutput exemplo = listaUsuarios!.FirstOrDefault()!;
+            PropertyInfo? reflection = exemplo!.GetType().GetProperty(nomePropriedade);
+            object? valor_forma_2 = reflection!.GetValue(exemplo, null);
 
             return valor;
         }
