@@ -1,8 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using static Wards.Utils.Common;
 
 namespace Wards.Domain.Entities
 {
+    [Index(nameof(Email))]
+    [Index(nameof(NomeUsuarioSistema))]
     public sealed class Usuario
     {
         [Key]
