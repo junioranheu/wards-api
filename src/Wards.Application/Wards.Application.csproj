@@ -21,8 +21,4 @@
     <ProjectReference Include="..\Wards.Infrastructure\Wards.Infrastructure.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="UseCases\Wards\BulkCopyCriarWard\" />
-  </ItemGroup>
-
 </Project>

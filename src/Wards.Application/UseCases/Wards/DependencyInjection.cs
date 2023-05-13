@@ -1,6 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Wards.Application.UseCases.Wards.AtualizarWard;
 using Wards.Application.UseCases.Wards.AtualizarWard.Commands;
+using Wards.Application.UseCases.Wards.BulkCopyCriarWard;
+using Wards.Application.UseCases.Wards.BulkCopyCriarWard.Commands;
 using Wards.Application.UseCases.Wards.CriarWard;
 using Wards.Application.UseCases.Wards.CriarWard.Commands;
 using Wards.Application.UseCases.Wards.DeletarWard;

@@ -1,5 +1,4 @@
-﻿using DocumentFormat.OpenXml.InkML;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Globalization;
 using System.Reflection;
@@ -9,9 +8,10 @@ using Wards.Application.UseCases.Logs.Shared.Output;
 using Wards.Application.UseCases.Shared.Models;
 using Wards.Application.UseCases.Usuarios.ListarUsuario;
 using Wards.Application.UseCases.Usuarios.Shared.Output;
+using Wards.Application.UseCases.Wards.BulkCopyCriarWard;
+using Wards.Application.UseCases.Wards.Shared.Input;
 using Wards.Domain.Entities;
 using Wards.Domain.Enums;
-using Wards.Infrastructure.Data;
 using static Wards.Utils.Common;
 
 namespace Wards.API.Controllers
@@ -45,11 +45,11 @@ namespace Wards.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<Ward>))]
         public async Task<ActionResult<List<Ward>>> ExemploBulkCopy()
         {
-            List<Ward> listaWards = new();
+            List<WardInput> listaWards = new();
 
-            for (int i = 0; i < 1000; i++)
+            for (int i = 0; i < GerarNumeroAleatorio(1000, 2000); i++)
             {
-                Ward ward = new()
+                WardInput ward = new()
                 {
                     Titulo = GerarStringAleatoria(5, true),
                     Conteudo = GerarStringAleatoria(20, false),
