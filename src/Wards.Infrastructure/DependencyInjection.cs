@@ -85,7 +85,12 @@ namespace Wards.Infrastructure
             string con = new ConnectionFactory(builder.Configuration).CreateDbStringConnection();
 
             // Entity Framework;
-            builder.Services.AddDbContext<WardsContext>(x => x.UseMySql(con, ServerVersion.AutoDetect(con)));
+            builder.Services.AddDbContext<CargaVerificadaContext>(x =>
+            {
+                // x.UseSqlServer(con);
+                x.UseMySql(con, ServerVersion.AutoDetect(con));
+                x.EnableSensitiveDataLogging();
+            });
 
             // Dapper;
             builder.Services.AddScoped<IDbConnection>((sp) => new MySqlConnection(con));
