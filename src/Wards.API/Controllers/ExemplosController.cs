@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using DocumentFormat.OpenXml.InkML;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Globalization;
 using System.Reflection;
@@ -10,6 +11,7 @@ using Wards.Application.UseCases.Usuarios.ListarUsuario;
 using Wards.Application.UseCases.Usuarios.Shared.Output;
 using Wards.Domain.Entities;
 using Wards.Domain.Enums;
+using Wards.Infrastructure.Data;
 using static Wards.Utils.Common;
 
 namespace Wards.API.Controllers
@@ -21,18 +23,45 @@ namespace Wards.API.Controllers
         private readonly IListarLogUseCase _listarLogUseCase;
         private readonly IListarUsuarioUseCase _listarUsuarioUseCase;
         private readonly IResetarBancoDadosService _resetarBancoDadosService;
+        private readonly IBulkCopyCriarWardUseCase _bulkCopyCriarWardUseCase;
 
         /// <summary>
-        /// Controller para testes e exemplos;
+        /// Controller para testes e exemplos aleatórios e possivelmente úteis;
         /// </summary>
         public ExemplosController(
             IListarLogUseCase listarLogUseCase,
             IListarUsuarioUseCase listarUsuarioUseCase,
-            IResetarBancoDadosService resetarBancoDadosService)
+            IResetarBancoDadosService resetarBancoDadosService,
+            IBulkCopyCriarWardUseCase bulkCopyCriarWardUseCase)
         {
             _listarLogUseCase = listarLogUseCase;
             _listarUsuarioUseCase = listarUsuarioUseCase;
             _resetarBancoDadosService = resetarBancoDadosService;
+            _bulkCopyCriarWardUseCase = bulkCopyCriarWardUseCase;
+        }
+
+        [HttpGet("exemploBulkCopy")]
+        [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<Ward>))]
+        public async Task<ActionResult<List<Ward>>> ExemploBulkCopy()
+        {
+            List<Ward> listaWards = new();
+
+            for (int i = 0; i < 1000; i++)
+            {
+                Ward ward = new()
+                {
+                    Titulo = GerarStringAleatoria(5, true),
+                    Conteudo = GerarStringAleatoria(20, false),
+                    UsuarioId = 1
+                };
+
+                listaWards.Add(ward);
+            }
+
+            await _bulkCopyCriarWardUseCase.Execute(listaWards);
+
+            return Ok(listaWards);
         }
 
         [HttpGet("exemploLINQGroupBy")]

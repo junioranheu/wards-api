@@ -31,6 +31,9 @@ namespace Wards.Application.UseCases.Wards
             services.AddScoped<IObterWardUseCase, ObterWardUseCase>();
             services.AddScoped<IObterWardQuery, ObterWardQuery>();
 
+            services.AddScoped<IBulkCopyCriarWardUseCase, BulkCopyCriarWardUseCase>();
+            services.AddScoped<IBulkCopyCriarWardCommand, BulkCopyCriarWardCommand>();
+
             return services;
         }
     }
