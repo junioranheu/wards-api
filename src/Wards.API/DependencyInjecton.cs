@@ -85,7 +85,7 @@ namespace Wards.API
 
         private static void AddHealthCheck(IServiceCollection services)
         {
-            services.AddHealthChecks().AddDbContextCheck<WardsContext>(); // Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore
+            services.AddHealthChecks().AddDbContextCheck<WardsContext>(); // Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore;
         }
     }
 }

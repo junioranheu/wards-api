@@ -27,7 +27,14 @@ namespace Wards.Application
             AddAutoMapper(services);
             AddLogger(builder);
 
-            // UseCases;
+            AddUseCases(services);
+            AddServices(services);
+
+            return services;
+        }
+
+        private static void AddUseCases(IServiceCollection services)
+        {
             services.AddImportsApplication();
             services.AddLogsApplication();
             services.AddTokensApplication();
@@ -38,14 +45,14 @@ namespace Wards.Application
             services.AddFeriadosApplication();
             services.AddFeriadosDatasApplication();
             services.AddFeriadosEstadosApplication();
+        }
 
-            // Services;
+        private static void AddServices(IServiceCollection services)
+        {
             services.AddCsvImportService();
             services.AddXlsxExportService();
             services.AddUsuariosService();
             services.AddResetarBancoDadosService();
-
-            return services;
         }
 
         private static void AddAutoMapper(IServiceCollection services)
