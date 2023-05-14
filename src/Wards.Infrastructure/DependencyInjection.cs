@@ -22,9 +22,9 @@ namespace Wards.Infrastructure
             AddServices(services, builder);
             AddAuth(services, builder);
             AddFactory(services);
-            AddContext(builder);
-            AddSwagger(builder);
-            AddCors(builder);
+            AddContext(services, builder);
+            AddSwagger(services);
+            AddCors(services, builder);
 
             return services;
         }
@@ -80,12 +80,12 @@ namespace Wards.Infrastructure
             services.AddSingleton<IConnectionFactory, ConnectionFactory>();
         }
 
-        private static void AddContext(WebApplicationBuilder builder)
+        private static void AddContext(IServiceCollection services, WebApplicationBuilder builder)
         {
             string con = new ConnectionFactory(builder.Configuration).CreateDbStringConnection();
 
             // Entity Framework;
-            builder.Services.AddDbContext<WardsContext>(x =>
+            services.AddDbContext<WardsContext>(x =>
             {
                 // x.UseSqlServer(con);
                 x.UseMySql(con, ServerVersion.AutoDetect(con));
@@ -96,12 +96,12 @@ namespace Wards.Infrastructure
             });
 
             // Dapper;
-            builder.Services.AddScoped<IDbConnection>((sp) => new MySqlConnection(con));
+            services.AddScoped<IDbConnection>((sp) => new MySqlConnection(con));
         }
 
-        private static void AddSwagger(WebApplicationBuilder builder)
+        private static void AddSwagger(IServiceCollection services)
         {
-            builder.Services.AddSwaggerGen(c =>
+            services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new() { Title = "Wards.API", Version = "v1" });
 
@@ -130,9 +130,9 @@ namespace Wards.Infrastructure
             });
         }
 
-        private static void AddCors(WebApplicationBuilder builder)
+        private static void AddCors(IServiceCollection services, WebApplicationBuilder builder)
         {
-            builder.Services.AddCors(x =>
+            services.AddCors(x =>
                 x.AddPolicy(name: builder.Configuration["CORSSettings:Cors"] ?? string.Empty, builder =>
                 {
                     builder.AllowAnyHeader()

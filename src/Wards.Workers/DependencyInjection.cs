@@ -11,6 +11,13 @@ namespace Wards.WorkersServices
     {
         public static IServiceCollection AddDependencyInjectionWorkersServices(this IServiceCollection services, WebApplicationBuilder builder)
         {
+            AddQuartz(services, builder);
+
+            return services;
+        }
+
+        private static void AddQuartz(IServiceCollection services, WebApplicationBuilder builder)
+        {
             services.AddQuartz(x =>
             {
                 x.UseMicrosoftDependencyInjectionJobFactory();
@@ -18,9 +25,7 @@ namespace Wards.WorkersServices
                 AddJobs(x, builder);
             });
 
-            builder.Services.AddQuartzHostedService(x => x.WaitForJobsToComplete = true);
-
-            return services;
+            services.AddQuartzHostedService(x => x.WaitForJobsToComplete = true);
         }
 
         private static void AddJobs(IServiceCollectionQuartzConfigurator q, WebApplicationBuilder builder)

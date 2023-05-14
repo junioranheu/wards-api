@@ -11,40 +11,40 @@ namespace Wards.API
 {
     public static class DependencyInjection
     {
-        public static IServiceCollection AddDependencyInjectionAPI(this IServiceCollection services, WebApplicationBuilder builder)
+        public static IServiceCollection AddDependencyInjectionAPI(this IServiceCollection services)
         {
-            AddCompression(builder);
-            AddControllers(builder);
-            AddMisc(builder);
+            AddCompression(services);
+            AddControllers(services);
+            AddMisc(services);
             AddValidators(services);
             AddHealthCheck(services);
 
             return services;
         }
 
-        private static void AddCompression(WebApplicationBuilder builder)
+        private static void AddCompression(IServiceCollection services)
         {
-            builder.Services.AddResponseCompression(x =>
+            services.AddResponseCompression(x =>
             {
                 x.EnableForHttps = true;
                 x.Providers.Add<BrotliCompressionProvider>();
                 x.Providers.Add<GzipCompressionProvider>();
             });
 
-            builder.Services.Configure<BrotliCompressionProviderOptions>(x =>
+            services.Configure<BrotliCompressionProviderOptions>(x =>
             {
                 x.Level = CompressionLevel.Optimal;
             });
 
-            builder.Services.Configure<GzipCompressionProviderOptions>(x =>
+            services.Configure<GzipCompressionProviderOptions>(x =>
             {
                 x.Level = CompressionLevel.Optimal;
             });
         }
 
-        private static void AddControllers(WebApplicationBuilder builder)
+        private static void AddControllers(IServiceCollection services)
         {
-            builder.Services.AddControllers(x =>
+            services.AddControllers(x =>
             {
                 x.Filters.Add<RequestFilter>();
                 x.Filters.Add<ErrorFilter>();
@@ -56,9 +56,9 @@ namespace Wards.API
                 });
         }
 
-        private static void AddMisc(WebApplicationBuilder builder)
+        private static void AddMisc(IServiceCollection services)
         {
-            builder.Services.AddMemoryCache();
+            services.AddMemoryCache();
         }
 
         private static void AddValidators(IServiceCollection services)

@@ -13,7 +13,7 @@ using Wards.WorkersServices;
 #region builder
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 {
-    builder.Services.AddDependencyInjectionAPI(builder);
+    builder.Services.AddDependencyInjectionAPI();
     builder.Services.AddDependencyInjectionApplication(builder);
     builder.Services.AddDependencyInjectionInfrastructure(builder);
     builder.Services.AddDependencyInjectionWorkersServices(builder);
