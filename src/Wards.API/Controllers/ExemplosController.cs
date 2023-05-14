@@ -61,7 +61,6 @@ namespace Wards.API.Controllers
         //    return Ok(true);
         //}
 
-
         /// <summary>
         /// Exemplo de inser com BulkCopy;
         /// </summary>
