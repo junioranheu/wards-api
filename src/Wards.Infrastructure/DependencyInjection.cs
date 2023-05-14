@@ -85,7 +85,7 @@ namespace Wards.Infrastructure
             string con = new ConnectionFactory(builder.Configuration).CreateDbStringConnection();
 
             // Entity Framework;
-            builder.Services.AddDbContext<CargaVerificadaContext>(x =>
+            builder.Services.AddDbContext<WardsContext>(x =>
             {
                 // x.UseSqlServer(con);
                 x.UseMySql(con, ServerVersion.AutoDetect(con));
