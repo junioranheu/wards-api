@@ -18,6 +18,7 @@ namespace Wards.Application.UseCases.Auxiliares.ListarEstado.Queries
         {
             var linq = await _context.Estados.
                        Where(e => e.IsAtivo == true).
+                       OrderBy(e => e.EstadoId).
                        Skip((input.IsSelectAll ? 0 : input.Index * input.Limit)).
                        Take((input.IsSelectAll ? int.MaxValue : input.Limit)).
                        AsNoTracking().ToListAsync();

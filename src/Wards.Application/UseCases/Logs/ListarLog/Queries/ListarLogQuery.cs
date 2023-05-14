@@ -18,6 +18,7 @@ namespace Wards.Application.UseCases.Logs.ListarLog.Queries
         {
             var linq = await _context.Logs.
                              Include(u => u.Usuarios).
+                             OrderBy(l => l.LogId).
                              Skip((input.IsSelectAll ? 0 : input.Index * input.Limit)).
                              Take((input.IsSelectAll ? int.MaxValue : input.Limit)).
                              OrderByDescending(l => l.LogId).

@@ -89,7 +89,10 @@ namespace Wards.Infrastructure
             {
                 // x.UseSqlServer(con);
                 x.UseMySql(con, ServerVersion.AutoDetect(con));
+
+#if DEBUG
                 x.EnableSensitiveDataLogging();
+#endif
             });
 
             // Dapper;

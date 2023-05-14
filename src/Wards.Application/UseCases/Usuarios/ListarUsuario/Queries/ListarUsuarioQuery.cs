@@ -18,6 +18,7 @@ namespace Wards.Application.UseCases.Usuarios.ListarUsuario.Queries
         {
             var linq = await _context.Usuarios.
                              Include(ur => ur.UsuarioRoles)!.ThenInclude(r => r.Roles).
+                             OrderBy(u => u.UsuarioId).
                              Skip((input.IsSelectAll ? 0 : input.Index * input.Limit)).
                              Take((input.IsSelectAll ? int.MaxValue : input.Limit)).
                              AsNoTracking().ToListAsync();
