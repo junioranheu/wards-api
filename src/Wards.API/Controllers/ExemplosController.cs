@@ -40,6 +40,9 @@ namespace Wards.API.Controllers
             _bulkCopyCriarWardUseCase = bulkCopyCriarWardUseCase;
         }
 
+        /// <summary>
+        /// Exemplo de inser com BulkCopy;
+        /// </summary>
         [HttpGet("exemploBulkCopy")]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<Ward>))]
@@ -64,6 +67,9 @@ namespace Wards.API.Controllers
             return Ok(listaWards);
         }
 
+        /// <summary>
+        /// Exemplo de LINQ avançado, fazendo select com group by e inserir resultado em um Output;
+        /// </summary>
         [HttpGet("exemploLINQGroupBy")]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<LogAgrupadoOutput>))]
