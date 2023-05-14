@@ -5,7 +5,7 @@ using System.Globalization;
 using System.Text.RegularExpressions;
 using Wards.Infrastructure.Factory;
 
-namespace Wards.Application.Services.Import.CSV.Importar
+namespace Wards.Application.Services.Imports.CSV.Importar
 {
     public sealed class ImportService : IImportService
     {

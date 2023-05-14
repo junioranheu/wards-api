@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Wards.Application.Services.Import.CSV.Importar;
+using Wards.Application.Services.Imports.CSV.Importar;
 
-namespace Wards.Application.Services.Import
+namespace Wards.Application.Services.Imports
 {
     public static class DependencyInjection
     {

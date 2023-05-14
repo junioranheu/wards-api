@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System.Data;
-using Wards.Application.Services.Import.CSV.Importar;
+using Wards.Application.Services.Imports.CSV.Importar;
 using Wards.Domain.Entities;
 
 namespace Wards.Application.UseCases.Imports.CriarExemploUsuario

@@ -2,7 +2,7 @@
 using System.Reflection;
 using static Wards.Utils.Common;
 
-namespace Wards.Application.Services.Export.XLSX.Exportar
+namespace Wards.Application.Services.Exports.XLSX.Exportar
 {
     public sealed class ExportService : IExportService
     {

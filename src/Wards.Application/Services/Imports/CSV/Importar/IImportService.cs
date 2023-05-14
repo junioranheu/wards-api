@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System.Data;
 
-namespace Wards.Application.Services.Import.CSV.Importar
+namespace Wards.Application.Services.Imports.CSV.Importar
 {
     public interface IImportService
     {

@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Wards.Application.Services.Export.XLSX.Exportar;
+using Wards.Application.Services.Exports.XLSX.Exportar;
 
-namespace Wards.Application.Services.Export
+namespace Wards.Application.Services.Exports
 {
     public static class DependencyInjection
     {

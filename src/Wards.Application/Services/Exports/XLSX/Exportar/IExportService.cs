@@ -1,4 +1,4 @@
-﻿namespace Wards.Application.Services.Export.XLSX.Exportar
+﻿namespace Wards.Application.Services.Exports.XLSX.Exportar
 {
     public interface IExportService
     {

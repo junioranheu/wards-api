@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Wards.API.Filters;
-using Wards.Application.Services.Import.CSV.Shared;
+using Wards.Application.Services.Imports.CSV.Shared;
 using Wards.Application.UseCases.Imports.CriarExemploUsuario;
 using Wards.Domain.Consts;
 using Wards.Domain.Enums;

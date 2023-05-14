@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 
-namespace Wards.Application.Services.Import.CSV.Shared
+namespace Wards.Application.Services.Imports.CSV.Shared
 {
     public sealed class ImportInput
     {
