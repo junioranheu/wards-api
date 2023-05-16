@@ -64,17 +64,20 @@ namespace Wards.API
         private static void AddValidators(IServiceCollection services)
         {
             #region api_behavior_validator
-            services.Configure<ApiBehaviorOptions>(x =>
-                x.InvalidModelStateResponseFactory = actionContext =>
+            services.Configure<ApiBehaviorOptions>(o =>
+            {
+                o.InvalidModelStateResponseFactory = actionContext =>
+                {
+                    var obj = new
                     {
-                        return new BadRequestObjectResult(new
-                        {
-                            Code = StatusCodes.Status400BadRequest,
-                            Messages = actionContext.ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage)
-                        });
-                    }
-            );
-            #endregion
+                        Code = StatusCodes.Status400BadRequest,
+                        Messages = actionContext.ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage),
+                    };
+
+                    return new JsonResult(obj);
+                };
+            });
+            #endregion
 
             services.AddFluentValidationAutoValidation();
             services.AddFluentValidationClientsideAdapters();
