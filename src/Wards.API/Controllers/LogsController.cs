@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Wards.API.Filters;
 using Wards.Application.UseCases.Logs.CriarLog;
+using Wards.Application.UseCases.Logs.ExportarCsvLog;
 using Wards.Application.UseCases.Logs.ExportarXlsxLog;
 using Wards.Application.UseCases.Logs.ListarLog;
 using Wards.Application.UseCases.Logs.Shared.Input;
@@ -19,15 +20,18 @@ namespace Wards.API.Controllers
         private readonly ICriarLogUseCase _criarUseCase;
         private readonly IListarLogUseCase _listarUseCase;
         private readonly IExportarXlsxLogUseCase _exportarXlsxUseCase;
+        private readonly IExportarCsvLogUseCase _exportarCsvUseCase;
 
         public LogsController(
             ICriarLogUseCase criarUseCase, 
             IListarLogUseCase listarUseCase,
-            IExportarXlsxLogUseCase exportarXlsxUseCase)
+            IExportarXlsxLogUseCase exportarXlsxUseCase,
+            IExportarCsvLogUseCase exportarCsvUseCase)
         {
             _criarUseCase = criarUseCase;
             _listarUseCase = listarUseCase;
             _exportarXlsxUseCase = exportarXlsxUseCase;
+            _exportarCsvUseCase = exportarCsvUseCase;
         }
 
         [HttpPost]
@@ -60,7 +64,7 @@ namespace Wards.API.Controllers
         [AuthorizeFilter]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(File))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(NotFound))]
-        public async Task<ActionResult> ExportarXLSXCargaGlobal(bool isTodos)
+        public async Task<ActionResult> ExportarXlsx(bool isTodos)
         {
             int usuarioId = await ObterUsuarioId();
             byte[]? xlsx = await _exportarXlsxUseCase.ExecuteAsync(usuarioId, isTodos);
@@ -69,6 +73,21 @@ namespace Wards.API.Controllers
                 return NotFound();
 
             return File(xlsx, ObterDescricaoEnum(TipoExtensaoArquivoRetorno.XLSX), "export.xlsx");
+        }
+
+        [HttpGet("exportarCsv")]
+        [AuthorizeFilter]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(File))]
+        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(NotFound))]
+        public async Task<ActionResult> ExportarCsv(bool isTodos)
+        {
+            int usuarioId = await ObterUsuarioId();
+            byte[]? xlsx = await _exportarCsvUseCase.ExecuteAsync(usuarioId, isTodos);
+
+            if (xlsx is null || xlsx.Length == 0)
+                return NotFound();
+
+            return File(xlsx, ObterDescricaoEnum(TipoExtensaoArquivoRetorno.CSV), "export.csv");
         }
     }
 }
