@@ -4,7 +4,7 @@ using static Wards.Utils.Common;
 
 namespace Wards.Application.Services.Exports.XLSX.Exportar
 {
-    public sealed class ExportService : IExportService
+    public sealed class ExportXLSXService : IExportXlsxService
     {
         /// <summary>
         /// O parâmetro "tipoRowInicial" é "controverso" (não foi encontrado uma maneira melhor de implementar essa feature - já que não é possível SetarValor() e MergearCelulas() fora desse service);
@@ -88,7 +88,10 @@ namespace Wards.Application.Services.Exports.XLSX.Exportar
                     valor = VerificarSeExisteTerceiroParametro_ObterValor_SeSim(colunas, i, valor);
                     valor = VerificarSeNecessarioFormatarAlgumDado(isDataFormatoExport, reflection, valor);
 
-                    SetarValor(worksheet, linhaAtual, i, valor!.GetType(), valor);
+                    if (valor is not null)
+                    {
+                        SetarValor(worksheet, linhaAtual, i, valor!.GetType(), valor);
+                    }
                 }
 
                 linhaAtual++;

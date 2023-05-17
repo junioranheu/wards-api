@@ -33,6 +33,23 @@ namespace Wards.Application
             return services;
         }
 
+        private static void AddAutoMapper(IServiceCollection services)
+        {
+            var mapperConfig = new MapperConfiguration(x =>
+            {
+                x.AddProfile(new AutoMapperConfig());
+            });
+
+            IMapper mapper = mapperConfig.CreateMapper();
+            services.AddSingleton(mapper);
+        }
+
+        private static void AddLogger(WebApplicationBuilder builder)
+        {
+            builder.Logging.ClearProviders();
+            builder.Logging.AddConsole();
+        }
+
         private static void AddUseCases(IServiceCollection services)
         {
             services.AddImportsApplication();
@@ -49,27 +66,10 @@ namespace Wards.Application
 
         private static void AddServices(IServiceCollection services)
         {
-            services.AddCsvImportService();
-            services.AddXlsxExportService();
+            services.AddImportCsvService();
+            services.AddExportXlsxService();
             services.AddUsuariosService();
             services.AddResetarBancoDadosService();
-        }
-
-        private static void AddAutoMapper(IServiceCollection services)
-        {
-            var mapperConfig = new MapperConfiguration(x =>
-            {
-                x.AddProfile(new AutoMapperConfig());
-            });
-
-            IMapper mapper = mapperConfig.CreateMapper();
-            services.AddSingleton(mapper);
-        }
-
-        private static void AddLogger(WebApplicationBuilder builder)
-        {
-            builder.Logging.ClearProviders();
-            builder.Logging.AddConsole();
         }
     }
 }

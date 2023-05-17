@@ -7,11 +7,11 @@ using Wards.Infrastructure.Factory;
 
 namespace Wards.Application.Services.Imports.CSV.Importar
 {
-    public sealed class ImportService : IImportService
+    public sealed class ImportCsvService : IImportCsvService
     {
         private readonly IConnectionFactory _connectionFactory;
 
-        public ImportService(IConnectionFactory connectionFactory)
+        public ImportCsvService(IConnectionFactory connectionFactory)
         {
             _connectionFactory = connectionFactory;
         }

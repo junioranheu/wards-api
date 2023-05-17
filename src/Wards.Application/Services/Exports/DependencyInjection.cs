@@ -5,9 +5,9 @@ namespace Wards.Application.Services.Exports
 {
     public static class DependencyInjection
     {
-        public static IServiceCollection AddXlsxExportService(this IServiceCollection services)
+        public static IServiceCollection AddExportXlsxService(this IServiceCollection services)
         {
-            services.AddScoped<IExportService, ExportService>();
+            services.AddScoped<IExportXlsxService, ExportXLSXService>();
 
             return services;
         }

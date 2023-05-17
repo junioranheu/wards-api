@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Wards.Application.UseCases.Logs.CriarLog;
 using Wards.Application.UseCases.Logs.CriarLog.Commands;
-using Wards.Application.UseCases.Logs.ExportarLog;
-using Wards.Application.UseCases.Logs.ExportarLog.Commands;
+using Wards.Application.UseCases.Logs.ExportarXlsxLog;
+using Wards.Application.UseCases.Logs.ExportarXlsxLog.Commands;
 using Wards.Application.UseCases.Logs.ListarLog;
 using Wards.Application.UseCases.Logs.ListarLog.Queries;
 
@@ -18,8 +18,8 @@ namespace Wards.Application.UseCases.Logs
             services.AddScoped<IListarLogUseCase, ListarLogUseCase>();
             services.AddScoped<IListarLogQuery, ListarLogQuery>();
 
-            services.AddScoped<IExportarLogUseCase, ExportarLogUseCase>();
-            services.AddScoped<IExportarLogCommand, ExportarLogCommand>();
+            services.AddScoped<IExportarXlsxLogUseCase, ExportarXlsxLogUseCase>();
+            services.AddScoped<IExportarXlsxLogCommand, ExportarXlsxLogCommand>();
 
             return services;
         }

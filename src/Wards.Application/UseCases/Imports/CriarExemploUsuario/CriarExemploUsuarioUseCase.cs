@@ -7,9 +7,9 @@ namespace Wards.Application.UseCases.Imports.CriarExemploUsuario
 {
     public sealed class CriarExemploUsuarioUseCase : ICriarExemploUsuarioUseCase
     {
-        public readonly IImportService _importHandler;
+        public readonly IImportCsvService _importHandler;
 
-        public CriarExemploUsuarioUseCase(IImportService importHandler)
+        public CriarExemploUsuarioUseCase(IImportCsvService importHandler)
         {
             _importHandler = importHandler;
         }

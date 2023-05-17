@@ -3,22 +3,22 @@ using Wards.Application.Services.Exports.XLSX.Exportar;
 using Wards.Domain.Entities;
 using Wards.Infrastructure.Data;
 
-namespace Wards.Application.UseCases.Logs.ExportarLog.Commands
+namespace Wards.Application.UseCases.Logs.ExportarXlsxLog.Commands
 {
-    public sealed class ExportarLogCommand : IExportarLogCommand
+    public sealed class ExportarXlsxLogCommand : IExportarXlsxLogCommand
     {
         private readonly WardsContext _context;
-        private readonly IExportService _exportService;
+        private readonly IExportXlsxService _exportXlsxService;
 
-        public ExportarLogCommand(WardsContext context, IExportService exportService)
+        public ExportarXlsxLogCommand(WardsContext context, IExportXlsxService exportXlsxService)
         {
             _context = context;
-            _exportService = exportService;
+            _exportXlsxService = exportXlsxService;
         }
 
-        public async Task<byte[]?> Execute(int usuarioId)
+        public async Task<byte[]?> Execute(int usuarioId, bool isTodos)
         {
-            List<Log>? listaLogs = await ListarLogs(usuarioId);
+            List<Log>? listaLogs = await ListarLogs(usuarioId, isTodos);
 
             string[,] colunas = {
                 { "ID do log", nameof(Log.LogId), string.Empty }, { "Tipo da requisição", nameof(Log.TipoRequisicao), string.Empty },
@@ -28,17 +28,17 @@ namespace Wards.Application.UseCases.Logs.ExportarLog.Commands
                 { "Data", nameof(Log.Data), string.Empty }
             };
 
-            byte[]? xlsx = _exportService.ConverterDadosParaXLSXEmBytes(lista: listaLogs,
+            byte[]? xlsx = _exportXlsxService.ConverterDadosParaXLSXEmBytes(lista: listaLogs,
                 colunas: colunas, nomeSheet: "Logs", isDataFormatoExport: false, aplicarEstiloNasCelulas: "A1:I1", tipoRowInicial: 0);
 
             return xlsx;
         }
 
-        private async Task<List<Log>?> ListarLogs(int usuarioId)
+        private async Task<List<Log>?> ListarLogs(int usuarioId, bool isTodos)
         {
             var listaLogs = await _context.Logs.
                                   Include(u => u.Usuarios).
-                                  Where(l => l.UsuarioId == usuarioId).
+                                  Where(l => (isTodos ? true : l.UsuarioId == usuarioId)).
                                   AsNoTracking().ToListAsync();
 
             return listaLogs;

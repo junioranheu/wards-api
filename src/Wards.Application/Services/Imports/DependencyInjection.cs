@@ -5,9 +5,9 @@ namespace Wards.Application.Services.Imports
 {
     public static class DependencyInjection
     {
-        public static IServiceCollection AddCsvImportService(this IServiceCollection services)
+        public static IServiceCollection AddImportCsvService(this IServiceCollection services)
         {
-            services.AddScoped<IImportService, ImportService>();
+            services.AddScoped<IImportCsvService, ImportCsvService>();
 
             return services;
         }

@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Wards.API.Filters;
 using Wards.Application.UseCases.Logs.CriarLog;
-using Wards.Application.UseCases.Logs.ExportarLog;
+using Wards.Application.UseCases.Logs.ExportarXlsxLog;
 using Wards.Application.UseCases.Logs.ListarLog;
 using Wards.Application.UseCases.Logs.Shared.Input;
 using Wards.Application.UseCases.Logs.Shared.Output;
@@ -18,16 +18,16 @@ namespace Wards.API.Controllers
     {
         private readonly ICriarLogUseCase _criarUseCase;
         private readonly IListarLogUseCase _listarUseCase;
-        private readonly IExportarLogUseCase _exportarUseCase;
+        private readonly IExportarXlsxLogUseCase _exportarXlsxUseCase;
 
         public LogsController(
             ICriarLogUseCase criarUseCase, 
             IListarLogUseCase listarUseCase,
-            IExportarLogUseCase exportarUseCase)
+            IExportarXlsxLogUseCase exportarXlsxUseCase)
         {
             _criarUseCase = criarUseCase;
             _listarUseCase = listarUseCase;
-            _exportarUseCase = exportarUseCase;
+            _exportarXlsxUseCase = exportarXlsxUseCase;
         }
 
         [HttpPost]
@@ -56,14 +56,14 @@ namespace Wards.API.Controllers
             return Ok(lista);
         }
 
-        [HttpGet("exportar")]
+        [HttpGet("exportarXlsx")]
         [AuthorizeFilter]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(File))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(NotFound))]
-        public async Task<ActionResult> ExportarXLSXCargaGlobal()
+        public async Task<ActionResult> ExportarXLSXCargaGlobal(bool isTodos)
         {
             int usuarioId = await ObterUsuarioId();
-            byte[]? xlsx = await _exportarUseCase.ExecuteAsync(usuarioId);
+            byte[]? xlsx = await _exportarXlsxUseCase.ExecuteAsync(usuarioId, isTodos);
 
             if (xlsx is null || xlsx.Length == 0)
                 return NotFound();
