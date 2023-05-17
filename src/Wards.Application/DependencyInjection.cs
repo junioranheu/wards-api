@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Wards.Application.AutoMapper;
 using Wards.Application.Services.Exports;
+using Wards.Application.Services.Exports.CSV;
 using Wards.Application.Services.Imports;
 using Wards.Application.Services.Sistemas;
 using Wards.Application.Services.Usuarios;
@@ -68,6 +69,7 @@ namespace Wards.Application
         {
             services.AddImportCsvService();
             services.AddExportXlsxService();
+            services.AddExportCsvService();
             services.AddUsuariosService();
             services.AddResetarBancoDadosService();
         }
