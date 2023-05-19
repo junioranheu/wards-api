@@ -1,4 +1,4 @@
-# Wards — API para centralizar "wards" e pedaços de códigos úteis
+# Wards — Coletânea de códigos super úteis
 
 Repositório de códigos úteis que servem de apoio para novos projetos em .NET. Simples e objetivo assim.
 
