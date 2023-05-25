@@ -19,7 +19,7 @@ namespace Wards.Application.UseCases.Tokens.DeletarRefreshToken.Commands
                              Where(u => u.UsuarioId == input.UsuarioId).
                              AsNoTracking().ToListAsync();
 
-            if (linq is not null)
+            if (linq.Any())
             {
                 _context.RefreshTokens.RemoveRange(linq);
             }
