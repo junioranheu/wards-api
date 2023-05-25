@@ -24,7 +24,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Wards.API\Wards.API.csproj" />
     <ProjectReference Include="..\Wards.Application\Wards.Application.csproj" />
     <ProjectReference Include="..\Wards.Infrastructure\Wards.Infrastructure.csproj" />
   </ItemGroup>
