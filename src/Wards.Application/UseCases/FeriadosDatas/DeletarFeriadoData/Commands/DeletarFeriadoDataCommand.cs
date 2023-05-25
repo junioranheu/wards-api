@@ -15,9 +15,9 @@ namespace Wards.Application.UseCases.FeriadosDatas.DeletarFeriadoData.Commands
         public async Task Execute(int feriadoId)
         {
             var fd = await _context.FeriadosDatas.
-            Where(fe => fe.FeriadoId == feriadoId).ToListAsync();
+                           Where(fe => fe.FeriadoId == feriadoId).ToListAsync();
 
-            if (fd is not null)
+            if (fd.Any())
             {
                 _context.FeriadosDatas.RemoveRange(fd);
                 await _context.SaveChangesAsync();

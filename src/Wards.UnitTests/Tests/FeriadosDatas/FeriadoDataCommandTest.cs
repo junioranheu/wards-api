@@ -1,15 +1,18 @@
-﻿using Moq;
-using Wards.Application.UseCases.FeriadosDatas.CriarFeriadoData;
+﻿using Microsoft.EntityFrameworkCore;
 using Wards.Application.UseCases.FeriadosDatas.CriarFeriadoData.Commands;
+using Wards.Infrastructure.Data;
+using Wards.UnitTests.Fixtures;
 using Xunit;
 
 namespace Wards.UnitTests.Tests.FeriadosDatas
 {
-    public sealed class FeriadoDataUseCaseTest
+    public sealed class FeriadoDataCommandTest
     {
-        public FeriadoDataUseCaseTest()
-        {
+        private readonly WardsContext _context;
 
+        public FeriadoDataCommandTest()
+        {
+            _context = Fixture.CriarContext();
         }
 
         [Theory]
@@ -21,22 +24,19 @@ namespace Wards.UnitTests.Tests.FeriadosDatas
         public async Task Criar_ChecarResultadoEsperado(string[] data, int? feriadoId, bool esperado)
         {
             // Arrange;
-            var criarCommand = new Mock<ICriarFeriadoDataCommand>();
-            criarCommand.Setup(x => x.Execute(It.IsAny<string[]>(), It.IsAny<int>())).Returns(Task.CompletedTask);
-
-            var useCase = new CriarFeriadoDataUseCase(criarCommand.Object);
+            var command = new CriarFeriadoDataCommand(_context);
 
             // Act;
             try
             {
-                await useCase.Execute(data, feriadoId.GetValueOrDefault()); // Como pegar um int?;
+                await command.Execute(data, feriadoId.GetValueOrDefault()); // Pegar um int?;
+                var db = await _context.FeriadosDatas.FirstOrDefaultAsync(x => x.FeriadoId == feriadoId);
 
                 // Assert;
-                Assert.True(esperado);
+                Assert.Equal(db is not null, esperado);
             }
             catch (Exception)
             {
-                // Assert;
                 Assert.False(esperado);
             }
         }
