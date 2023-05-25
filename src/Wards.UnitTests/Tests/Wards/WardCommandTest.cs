@@ -39,7 +39,7 @@ namespace Wards.UnitTests.Tests.Wards
             WardInput input = WardMock.CriarWardInput(titulo, conteudo, usuarioId);
 
             // Act;
-             await command.Execute(_map.Map<Ward>(input));
+            await command.Execute(_map.Map<Ward>(input));
             var db = await _context.Wards.FirstOrDefaultAsync(x => x.Titulo == titulo);
 
             // Assert;

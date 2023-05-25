@@ -16,6 +16,9 @@ using Wards.Infrastructure.Auth.Token;
 using Wards.UnitTests.Fixtures.Mocks;
 using Wards.UnitTests.Fixtures;
 using Xunit;
+using Wards.Application.UseCases.Wards.CriarWard.Commands;
+using Wards.Application.UseCases.Wards.CriarWard;
+using Wards.Application.UseCases.Wards.Shared.Input;
 
 namespace Wards.UnitTests.Tests.Cidades
 {
@@ -29,31 +32,27 @@ namespace Wards.UnitTests.Tests.Cidades
         }
 
         [Theory]
-        [InlineData("Junior de Souza", "junioranheu", "junioranheu@gmail.com", "Juninho26@", "#1", true)]
-        [InlineData("Otávio Villas Boas", "otavioGOD", "otavio@gmail.com", "Otavinho26@", "#2", true)]
-        [InlineData("Mariana Scalzaretto", "elfamscal", "elfa@gmail.com", "Marianinha26@", "#3", true)]
-        [InlineData("Ju", "aea", "aea@gmail.com", "aea@", "#4", false)]
-        [InlineData("Junior de S.", "junioranheu", "junioranheu@gmail.com", "senhainvalida", "#5", false)]
-        public async Task CriarUsuarioUseCase_ChecarResultadoEsperado(string nomeCompleto, string nomeUsuarioSistema, string email, string senha, string chamado, bool esperado)
+        [InlineData("xxx", "xxx", true, true)]
+        [InlineData("xxx", "xxx", true, true)]
+        [InlineData("xxx", "xxx", true, true)]
+        [InlineData("xxx", "xxx", true, true)]
+        [InlineData("xxx", "xxx", true, true)]
+        [InlineData("xxx", "xxx", true, true)]
+        public async Task Criar_ChecarResultadoEsperado(string nome, string estadoId, bool isAtivo, bool esperado)
         {
             // Arrange;
-            var webHostEnvironment = new Mock<IWebHostEnvironment>();
-            var jwtTokenGenerator = new Mock<IJwtTokenGenerator>();
-            var criarUsuarioCondicaoArbitrariaUseCase = new Mock<IObterUsuarioCondicaoArbitrariaUseCase>();
-            var criarRefreshTokenUseCase = new Mock<ICriarRefreshTokenUseCase>();
+            var criarCommand = new Mock<ICriarWardCommand>();
+            criarWardCommand.Setup(x => x.Execute(It.IsAny<Ward>())).Returns(Task.FromResult(1));
 
-            var criarUsuarioCommand = new Mock<ICriarUsuarioCommand>();
-            criarUsuarioCommand.Setup(x => x.Execute(It.IsAny<Usuario>())).Returns(Task.FromResult(new Usuario() { UsuarioId = 1, NomeCompleto = "Junior" }));
+            var useCase = new CriarWardUseCase(_map, criarWardCommand.Object);
 
-            var useCase = new CriarUsuarioUseCase(webHostEnvironment.Object, _map, jwtTokenGenerator.Object, criarUsuarioCommand.Object, criarUsuarioCondicaoArbitrariaUseCase.Object, criarRefreshTokenUseCase.Object);
-
-            CriarUsuarioInput input = UsuarioMock.CriarUsuarioInput(nomeCompleto, nomeUsuarioSistema, email, senha, chamado);
+            WardInput input = WardMock.CriarWardInput(titulo, conteudo, usuarioId);
 
             // Act;
             var resp = await useCase.Execute(input);
 
             // Assert;
-            Assert.Equal(resp?.UsuarioId > 0, esperado);
+            Assert.Equal(resp > 0, esperado);
         }
     }
 }
