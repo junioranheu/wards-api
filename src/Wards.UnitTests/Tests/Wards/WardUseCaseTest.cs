@@ -24,10 +24,10 @@ namespace Wards.UnitTests.Tests.Wards
         public async Task Criar_ChecarResultadoEsperado(string titulo, string conteudo, int? usuarioId, bool esperado)
         {
             // Arrange;
-            var criar = new Mock<ICriarWardCommand>();
-            criar.Setup(x => x.Execute(It.IsAny<Ward>())).Returns(Task.FromResult(1));
+            var criarCommand = new Mock<ICriarWardCommand>();
+            criarCommand.Setup(x => x.Execute(It.IsAny<Ward>())).Returns(Task.FromResult(1));
 
-            var useCase = new CriarWardUseCase(_map, criar.Object);
+            var useCase = new CriarWardUseCase(_map, criarCommand.Object);
 
             WardInput input = WardMock.CriarWardInput(titulo, conteudo, usuarioId);
 
