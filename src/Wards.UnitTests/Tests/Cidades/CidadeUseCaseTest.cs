@@ -1,24 +1,29 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Hosting;
 using Moq;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using Wards.Application.UseCases.Tokens.CriarRefreshToken;
-using Wards.Application.UseCases.Usuarios.CriarUsuario;
 using Wards.Application.UseCases.Usuarios.CriarUsuario.Commands;
+using Wards.Application.UseCases.Usuarios.CriarUsuario;
 using Wards.Application.UseCases.Usuarios.ObterUsuarioCondicaoArbitraria;
 using Wards.Application.UseCases.Usuarios.Shared.Input;
 using Wards.Domain.Entities;
 using Wards.Infrastructure.Auth.Token;
-using Wards.UnitTests.Fixtures;
 using Wards.UnitTests.Fixtures.Mocks;
+using Wards.UnitTests.Fixtures;
 using Xunit;
 
-namespace Wards.UnitTests.Tests.Usuarios
+namespace Wards.UnitTests.Tests.Cidades
 {
-    public sealed class UsuarioUseCaseTest
+    public sealed class CidadeUseCaseTest
     {
         private readonly IMapper _map;
 
-        public UsuarioUseCaseTest()
+        public CidadeUseCaseTest()
         {
             _map = Fixture.CriarMapper();
         }
@@ -29,7 +34,7 @@ namespace Wards.UnitTests.Tests.Usuarios
         [InlineData("Mariana Scalzaretto", "elfamscal", "elfa@gmail.com", "Marianinha26@", "#3", true)]
         [InlineData("Ju", "aea", "aea@gmail.com", "aea@", "#4", false)]
         [InlineData("Junior de S.", "junioranheu", "junioranheu@gmail.com", "senhainvalida", "#5", false)]
-        public async Task Criar_ChecarResultadoEsperado(string nomeCompleto, string nomeUsuarioSistema, string email, string senha, string chamado, bool esperado)
+        public async Task CriarUsuarioUseCase_ChecarResultadoEsperado(string nomeCompleto, string nomeUsuarioSistema, string email, string senha, string chamado, bool esperado)
         {
             // Arrange;
             var webHostEnvironment = new Mock<IWebHostEnvironment>();

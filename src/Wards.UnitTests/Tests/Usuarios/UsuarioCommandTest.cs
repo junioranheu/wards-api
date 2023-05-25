@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using Moq;
 using Wards.Application.UseCases.Shared.Models;
 using Wards.Application.UseCases.Usuarios.CriarUsuario.Commands;
@@ -32,7 +31,7 @@ namespace Wards.UnitTests.Tests.Usuarios
         [InlineData("Ju", "aea", "aea@gmail.com", "aea@", "#4", true)]
         [InlineData("Junior de S.", "junioranheu", "junioranheu@gmail.com", "tmr-pes-weon", "#5", true)]
         [InlineData("", "", "", "", "", false)]
-        public async Task CriarUsuarioCommand_ChecarResultadoEsperado(string nomeCompleto, string nomeUsuarioSistema, string email, string senha, string chamado, bool esperado)
+        public async Task Criar_ChecarResultadoEsperado(string nomeCompleto, string nomeUsuarioSistema, string email, string senha, string chamado, bool esperado)
         {
             // Arrange;
             var command = new CriarUsuarioCommand(_context);
@@ -47,7 +46,7 @@ namespace Wards.UnitTests.Tests.Usuarios
         }
 
         [Fact]
-        public async Task ListarUsuarioQuery_ChecarResultadoEsperado()
+        public async Task Listar_ChecarResultadoEsperado()
         {
             // Arrange;
             var paginacao = new Mock<PaginacaoInput>();

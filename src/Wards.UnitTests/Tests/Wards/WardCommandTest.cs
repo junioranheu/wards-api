@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using Moq;
 using Wards.Application.UseCases.Shared.Models;
 using Wards.Application.UseCases.Wards.CriarWard.Commands;
@@ -33,7 +32,7 @@ namespace Wards.UnitTests.Tests.Wards
         [InlineData("Como criar uma API", "Para criar uma API você deverá bla bla bla", 0, true)]
         [InlineData("Como criar uma API", "Para criar uma API você deverá bla bla bla", null, true)]
         [InlineData("Como criar uma API", "Para criar uma API você deverá bla bla bla", 10, true)]
-        public async Task CriarWardCommand_ChecarResultadoEsperado(string titulo, string conteudo, int? usuarioId, bool esperado)
+        public async Task Criar_ChecarResultadoEsperado(string titulo, string conteudo, int? usuarioId, bool esperado)
         {
             // Arrange;
             var command = new CriarWardCommand(_context);
@@ -48,7 +47,7 @@ namespace Wards.UnitTests.Tests.Wards
         }
 
         [Fact]
-        public async Task ListarWardQuery_ChecarResultadoEsperado()
+        public async Task Listar_ChecarResultadoEsperado()
         {
             // Arrange;
             var paginacao = new Mock<PaginacaoInput>();

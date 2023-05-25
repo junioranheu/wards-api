@@ -21,7 +21,7 @@ namespace Wards.UnitTests.Tests.Wards
 
         [Theory]
         [InlineData("Como criar uma API", "Para criar uma API você deverá bla bla bla", 10, true)]
-        public async Task CriarWardUseCase_ChecarResultadoEsperado(string titulo, string conteudo, int? usuarioId, bool esperado)
+        public async Task Criar_ChecarResultadoEsperado(string titulo, string conteudo, int? usuarioId, bool esperado)
         {
             // Arrange;
             var criarWardCommand = new Mock<ICriarWardCommand>();
