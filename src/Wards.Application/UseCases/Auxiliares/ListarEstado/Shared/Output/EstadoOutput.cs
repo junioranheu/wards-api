@@ -1,8 +1,6 @@
-﻿using Wards.Application.UseCases.Shared.Models;
-
-namespace Wards.Application.UseCases.Auxiliares.ListarEstado.Shared.Output
+﻿namespace Wards.Application.UseCases.Auxiliares.ListarEstado.Shared.Output
 {
-    public sealed class EstadoOutput : ApiOutput
+    public sealed class EstadoOutput
     {
         public int EstadoId { get; set; }
 

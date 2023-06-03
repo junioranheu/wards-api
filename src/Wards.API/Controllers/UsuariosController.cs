@@ -59,15 +59,10 @@ namespace Wards.API.Controllers
         {
             if (User.Identity!.IsAuthenticated)
             {
-                return StatusCode(StatusCodes.Status403Forbidden, new UsuarioOutput() { Messages = new string[] { ObterDescricaoEnum(CodigoErroEnum.UsuarioJaAutenticado) } });
+                throw new Exception(ObterDescricaoEnum(CodigoErroEnum.UsuarioJaAutenticado));
             }
 
             var resp = await _autenticarUseCase.Execute(new AutenticarUsuarioInput() { Login = "adm", Senha = "123" });
-
-            if (resp.Messages!.Length > 0)
-            {
-                return StatusCode(StatusCodes.Status403Forbidden, resp);
-            }
 
             return Ok(resp.Token);
         }
@@ -80,15 +75,10 @@ namespace Wards.API.Controllers
         {
             if (User.Identity!.IsAuthenticated)
             {
-                return StatusCode(StatusCodes.Status403Forbidden, new UsuarioOutput() { Messages = new string[] { ObterDescricaoEnum(CodigoErroEnum.UsuarioJaAutenticado) } });
+                throw new Exception(ObterDescricaoEnum(CodigoErroEnum.UsuarioJaAutenticado));
             }
 
             var resp = await _autenticarUseCase.Execute(input);
-
-            if (resp.Messages!.Length > 0)
-            {
-                return StatusCode(StatusCodes.Status403Forbidden, resp);
-            }
 
             return Ok(resp);
         }
@@ -101,11 +91,6 @@ namespace Wards.API.Controllers
         {
             var resp = await _criarRefreshTokenUsuarioUseCase.Execute(input.Token!, input.RefreshToken!, ObterUsuarioEmail());
 
-            if (resp!.Messages!.Length > 0)
-            {
-                return StatusCode(StatusCodes.Status403Forbidden, resp);
-            }
-
             return Ok(resp);
         }
 
@@ -116,13 +101,7 @@ namespace Wards.API.Controllers
         public async Task<ActionResult<AutenticarUsuarioOutput>> Criar(CriarUsuarioInput input)
         {
             var resp = await _criarUseCase.Execute(input);
-
-            if (resp!.Messages!.Length > 0)
-            {
-                return StatusCode(StatusCodes.Status403Forbidden, resp);
-            }
-
-            await _criarUsuarioRoleUseCase.Execute(input.UsuariosRolesId!, resp.UsuarioId);
+            await _criarUsuarioRoleUseCase.Execute(input.UsuariosRolesId!, resp!.UsuarioId);
 
             return Ok(resp);
         }
@@ -137,7 +116,7 @@ namespace Wards.API.Controllers
 
             if (!lista.Any())
             {
-                return StatusCode(StatusCodes.Status404NotFound, new UsuarioOutput() { Messages = new string[] { ObterDescricaoEnum(CodigoErroEnum.NaoEncontrado) } });
+                throw new Exception(ObterDescricaoEnum(CodigoErroEnum.NaoEncontrado));
             }
 
             return Ok(lista);
@@ -153,7 +132,7 @@ namespace Wards.API.Controllers
 
             if (item is null)
             {
-                return StatusCode(StatusCodes.Status404NotFound, new UsuarioOutput() { Messages = new string[] { ObterDescricaoEnum(CodigoErroEnum.NaoEncontrado) } });
+                throw new Exception(ObterDescricaoEnum(CodigoErroEnum.NaoEncontrado));
             }
 
             return Ok(item);
@@ -168,11 +147,6 @@ namespace Wards.API.Controllers
             int usuarioId = await ObterUsuarioId();
             var resp = await _solicitarVerificacaoContaUsuarioUseCase.Execute(usuarioId);
 
-            if (resp!.Messages!.Length > 0)
-            {
-                return StatusCode(StatusCodes.Status403Forbidden, resp);
-            }
-
             return Ok(true);
         }
 
@@ -184,15 +158,10 @@ namespace Wards.API.Controllers
         {
             if (string.IsNullOrEmpty(codigoVerificacao))
             {
-                return StatusCode(StatusCodes.Status403Forbidden, new UsuarioOutput() { Messages = new string[] { ObterDescricaoEnum(CodigoErroEnum.CodigoVerificacaoInvalido) } });
+                throw new Exception(ObterDescricaoEnum(CodigoErroEnum.CodigoVerificacaoInvalido));
             }
 
-            var resp = await _verificarContaUsuarioUseCase.Execute(codigoVerificacao);
-
-            if (resp!.Messages!.Length > 0)
-            {
-                return StatusCode(StatusCodes.Status403Forbidden, resp);
-            }
+            await _verificarContaUsuarioUseCase.Execute(codigoVerificacao);
 
             return Ok(true);
         }

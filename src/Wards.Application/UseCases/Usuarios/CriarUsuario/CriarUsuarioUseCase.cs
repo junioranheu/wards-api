@@ -55,18 +55,18 @@ namespace Wards.Application.UseCases.Usuarios.CriarUsuario
 
             if (input?.NomeCompleto?.Length < 3 || input?.NomeUsuarioSistema?.Length < 3)
             {
-                return (new AutenticarUsuarioOutput() { Messages = new string[] { ObterDescricaoEnum(CodigoErroEnum.RequisitosNome) } });
+                throw new Exception(ObterDescricaoEnum(CodigoErroEnum.RequisitosNome));
             }
 
             if (!ValidarEmail(input?.Email!))
             {
-                return (new AutenticarUsuarioOutput() { Messages = new string[] { ObterDescricaoEnum(CodigoErroEnum.EmailInvalido) } });
+                throw new Exception(ObterDescricaoEnum(CodigoErroEnum.EmailInvalido));
             }
 
             var (isValido, mensagemErro) = ValidarSenha(input?.Senha!, input?.NomeCompleto!, input?.NomeUsuarioSistema!, input?.Email!);
             if (!isValido)
             {
-                return (new AutenticarUsuarioOutput() { Messages = new string[] { mensagemErro } });
+                throw new Exception(mensagemErro);
             }
 
             string codigoVerificacao = GerarStringAleatoria(6, true);

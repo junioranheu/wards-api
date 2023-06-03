@@ -17,11 +17,11 @@ namespace Wards.Application.UseCases.Usuarios.SolicitarVerificacaoContaUsuario
         public async Task<UsuarioOutput?> Execute(int usuarioId)
         {
             (string mensagemErro, string email, string nomeCompleto, string codigoVerificacao) = await _solicitarVerificacaoContaUsuarioCommand.Execute(usuarioId);
-            string erros =mensagemErro;
+            string erros = mensagemErro;
 
             if (!string.IsNullOrEmpty(erros))
             {
-                return (new UsuarioOutput() { Messages = new string[] { erros } });
+                throw new Exception(erros);
             }
 
             try
@@ -33,7 +33,7 @@ namespace Wards.Application.UseCases.Usuarios.SolicitarVerificacaoContaUsuario
             }
             catch (Exception)
             {
-                return (new UsuarioOutput() { Messages = new string[] { ObterDescricaoEnum(CodigoErroEnum.ContaNaoVerificadaComFalhaNoEnvioNovoEmailVerificacao) } });
+                throw new Exception(ObterDescricaoEnum(CodigoErroEnum.ContaNaoVerificadaComFalhaNoEnvioNovoEmailVerificacao));
             }
 
             return new UsuarioOutput();

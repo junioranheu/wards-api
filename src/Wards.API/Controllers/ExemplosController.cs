@@ -101,7 +101,7 @@ namespace Wards.API.Controllers
 
             if (!lista.Any())
             {
-                return StatusCode(StatusCodes.Status404NotFound, new LogOutput() { Messages = new string[] { ObterDescricaoEnum(CodigoErroEnum.NaoEncontrado) } });
+                throw new Exception(ObterDescricaoEnum(CodigoErroEnum.NaoEncontrado));
             }
 
             List<LogAgrupadoOutput> linq = lista.

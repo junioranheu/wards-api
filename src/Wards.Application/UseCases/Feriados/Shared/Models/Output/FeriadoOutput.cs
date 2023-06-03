@@ -1,12 +1,11 @@
 ﻿using Wards.Application.UseCases.FeriadosDatas.Shared.Output;
 using Wards.Application.UseCases.FeriadosEstados.Shared.Output;
-using Wards.Application.UseCases.Shared.Models;
 using Wards.Application.UseCases.Usuarios.Shared.Output;
 using Wards.Domain.Enums;
 
 namespace Wards.Application.UseCases.Feriados.Shared.Models.Output
 {
-    public sealed class FeriadoOutput : ApiOutput
+    public sealed class FeriadoOutput
     {
         public int FeriadoId { get; set; }
 

@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Wards.Application.UseCases.Usuarios.Shared.Output;
+﻿using Wards.Application.UseCases.Usuarios.Shared.Output;
 using Wards.Application.UseCases.Usuarios.VerificarContaUsuario.Commands;
 
 namespace Wards.Application.UseCases.Usuarios.VerificarContaUsuario
@@ -19,7 +18,7 @@ namespace Wards.Application.UseCases.Usuarios.VerificarContaUsuario
 
             if (!string.IsNullOrEmpty(resp))
             {
-                return (new UsuarioOutput() { Messages = new string[] { resp } });
+                throw new Exception(resp);
             }
 
             return new UsuarioOutput();

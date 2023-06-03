@@ -36,7 +36,7 @@ namespace Wards.Application.UseCases.Usuarios.CriarRefreshTokenUsuario
 
             if (usuario is null)
             {
-                return (new CriarRefreshTokenUsuarioOutput() { Messages = new string[] { ObterDescricaoEnum(CodigoErroEnum.NaoEncontrado) } });
+                throw new Exception(ObterDescricaoEnum(CodigoErroEnum.NaoEncontrado));
             }
 
             int usuarioId = usuario.UsuarioId;
@@ -44,7 +44,7 @@ namespace Wards.Application.UseCases.Usuarios.CriarRefreshTokenUsuario
 
             if (refreshTokenSalvoAnteriormente != refreshToken)
             {
-                return (new CriarRefreshTokenUsuarioOutput() { Messages = new string[] { ObterDescricaoEnum(CodigoErroEnum.RefreshTokenInvalido) } });
+                throw new Exception(ObterDescricaoEnum(CodigoErroEnum.RefreshTokenInvalido));
             }
 
             ClaimsPrincipal? principal = _jwtTokenGenerator.GetInfoTokenExpirado(token);

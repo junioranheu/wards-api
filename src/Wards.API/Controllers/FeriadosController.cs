@@ -103,7 +103,7 @@ namespace Wards.API.Controllers
 
             if (!lista.Any())
             {
-                return StatusCode(StatusCodes.Status404NotFound, new FeriadoOutput() { Messages = new string[] { ObterDescricaoEnum(CodigoErroEnum.NaoEncontrado) } });
+                throw new Exception(ObterDescricaoEnum(CodigoErroEnum.NaoEncontrado));
             }
 
             return Ok(lista);
@@ -119,7 +119,7 @@ namespace Wards.API.Controllers
 
             if (item is null)
             {
-                return StatusCode(StatusCodes.Status404NotFound, new FeriadoOutput() { Messages = new string[] { ObterDescricaoEnum(CodigoErroEnum.NaoEncontrado) } });
+                throw new Exception(ObterDescricaoEnum(CodigoErroEnum.NaoEncontrado));
             }
 
             return Ok(item);

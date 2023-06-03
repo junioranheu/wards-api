@@ -1,8 +1,6 @@
-﻿using Wards.Application.UseCases.Shared.Models;
-
-namespace Wards.Application.UseCases.Auths.Shared.Output
+﻿namespace Wards.Application.UseCases.Auths.Shared.Output
 {
-    public sealed class CriarRefreshTokenUsuarioOutput : ApiOutput
+    public sealed class CriarRefreshTokenUsuarioOutput
     {
         public string? Token { get; set; } = null;
 

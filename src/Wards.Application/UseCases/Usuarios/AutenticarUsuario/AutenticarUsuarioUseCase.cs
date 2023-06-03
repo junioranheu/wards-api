@@ -36,17 +36,17 @@ namespace Wards.Application.UseCases.Usuarios.AutenticarUsuario
 
             if (output is null)
             {
-                return (new AutenticarUsuarioOutput() { Messages = new string[] { ObterDescricaoEnum(CodigoErroEnum.UsuarioNaoEncontrado) } });
+                throw new Exception(ObterDescricaoEnum(CodigoErroEnum.UsuarioNaoEncontrado));
             }
 
             if (!VerificarCriptografia(senha: input?.Senha ?? string.Empty, senhaCriptografada: senhaCriptografada))
             {
-                return (new AutenticarUsuarioOutput() { Messages = new string[] { ObterDescricaoEnum(CodigoErroEnum.UsuarioSenhaIncorretos) } });
+                throw new Exception(ObterDescricaoEnum(CodigoErroEnum.UsuarioSenhaIncorretos));
             }
 
             if (!output.IsAtivo)
             {
-                return (new AutenticarUsuarioOutput() { Messages = new string[] { ObterDescricaoEnum(CodigoErroEnum.ContaDesativada) } });
+                throw new Exception(ObterDescricaoEnum(CodigoErroEnum.ContaDesativada));
             }
 
             output!.Token = _jwtTokenGenerator.GerarToken(nomeCompleto: output.NomeCompleto!, email: output.Email!, listaClaims: null);

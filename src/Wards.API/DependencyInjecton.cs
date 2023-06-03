@@ -1,11 +1,14 @@
-﻿using FluentValidation;
+﻿using DocumentFormat.OpenXml.InkML;
+using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.ResponseCompression;
 using System.IO.Compression;
+using System.Security.Cryptography.Xml;
 using Wards.API.Filters;
 using Wards.Application.UseCases.Wards.Shared.Input;
 using Wards.Infrastructure.Data;
+using static Wards.Utils.Common;
 
 namespace Wards.API
 {
@@ -70,8 +73,10 @@ namespace Wards.API
                 {
                     var obj = new
                     {
-                        Code = StatusCodes.Status400BadRequest,
-                        Messages = actionContext.ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage),
+                        Codigo = StatusCodes.Status400BadRequest,
+                        Data = DetalharDataHora(),
+                        Caminho = actionContext.HttpContext.Request.Path,
+                        Mensagens = actionContext.ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage)
                     };
 
                     return new JsonResult(obj);

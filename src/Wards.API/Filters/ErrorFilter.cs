@@ -23,16 +23,19 @@ namespace Wards.API.Filters
         public override async Task OnExceptionAsync(ExceptionContext context)
         {
             Exception ex = context.Exception;
-            string mensagemErro = $"Ocorreu um erro ao processar sua requisição. Data: {DetalharDataHora()}. Caminho: {context.HttpContext.Request.Path}. {(!string.IsNullOrEmpty(ex.InnerException?.Message) ? $"Mais informações: {ex.InnerException.Message}" : $"Mais informações: {ex.Message}")}";
+            string mensagemErroCompleta = $"Ocorreu um erro ao processar sua requisição. Data: {DetalharDataHora()}. Caminho: {context.HttpContext.Request.Path}. {(!string.IsNullOrEmpty(ex.InnerException?.Message) ? $"Mais informações: {ex.InnerException.Message}" : $"Mais informações: {ex.Message}")}";
+            string mensagemErroSimples = !string.IsNullOrEmpty(ex.InnerException?.Message) ? ex.InnerException.Message : ex.Message;
 
             var detalhes = new BadRequestObjectResult(new
             {
-                Code = StatusCodes.Status500InternalServerError,
-                Messages = new string[] { mensagemErro }
+                Codigo = StatusCodes.Status500InternalServerError,
+                Data = DetalharDataHora(),
+                Caminho = context.HttpContext.Request.Path,
+                Mensagens = new string[] { mensagemErroSimples }
             });
 
-            await CriarLog(context, mensagemErro, await ObterUsuarioId(context));
-            ExibirILogger(ex, mensagemErro);
+            await CriarLog(context, mensagemErroCompleta, await ObterUsuarioId(context));
+            ExibirILogger(ex, mensagemErroCompleta);
 
             context.Result = detalhes;
             context.ExceptionHandled = true;

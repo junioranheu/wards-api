@@ -1,9 +1,8 @@
-﻿using Wards.Application.UseCases.Shared.Models;
-using Wards.Application.UseCases.UsuariosRoles.Shared.Output;
+﻿using Wards.Application.UseCases.UsuariosRoles.Shared.Output;
 
 namespace Wards.Application.UseCases.Usuarios.Shared.Output
 {
-    public sealed class UsuarioOutput : ApiOutput
+    public sealed class UsuarioOutput
     {
         public int UsuarioId { get; set; }
 
