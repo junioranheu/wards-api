@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
+using MySqlConnector;
 using System.ComponentModel;
+using System.Data;
 using System.Net;
 using System.Net.Mail;
 using System.Reflection;
@@ -464,6 +466,71 @@ namespace Wards.Utils
         public static string FormatarDataExport(DateTime data)
         {
             return data.ToString("dd/MM/yyyy hh");
+        }
+
+        /// <summary>
+        /// Recebe um resultado de uma query (LINQ) como parâmetro, 
+        /// converte os dados para DataTable e depois realiza o Bulkinsert;
+        /// </summary>
+        public static async Task ConverterLINQQueryParaDataTableParaBulkInsert<T>(List<T> queryLINQ, string nomeTabelaDestino, MySqlConnection connection)
+        {
+            DataTable dataTable = ConverterListaParaDataTable(queryLINQ);
+
+            // SqlBulkCopy sqlBulk = new(connection) // Para SQL Server;
+            MySqlBulkCopy sqlBulk = new(connection)
+            {
+                DestinationTableName = nomeTabelaDestino
+            };
+
+            await connection.OpenAsync();
+            sqlBulk.BulkCopyTimeout = 180;
+            // sqlBulk.BatchSize = 5000; // Para SQL Server;
+            await sqlBulk.WriteToServerAsync(dataTable);
+            await connection.CloseAsync();
+
+            static DataTable ConverterListaParaDataTable<T>(List<T> items)
+            {
+                DataTable dataTable = new(typeof(T).Name);
+                PropertyInfo[] Props = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+                List<PropertyInfo> listaTipos = new();
+
+                foreach (PropertyInfo prop in Props)
+                {
+                    var type = (prop.PropertyType.IsGenericType && prop.PropertyType.GetGenericTypeDefinition() == typeof(Nullable<>) ? Nullable.GetUnderlyingType(prop.PropertyType) : prop.PropertyType);
+
+                    if (!IsForeignKey(prop))
+                    {
+                        dataTable.Columns.Add(prop.Name, type!);
+                        listaTipos.Add(prop);
+                    }
+                }
+
+                foreach (T item in items)
+                {
+                    var values = new object[dataTable.Columns.Count];
+
+                    for (int i = 0; i < values.Length; i++)
+                    {
+                        if (!IsForeignKey(listaTipos[i]))
+                        {
+                            values[i] = listaTipos[i].GetValue(item, null)!;
+                        }
+                    }
+
+                    dataTable.Rows.Add(values);
+                }
+
+                return dataTable;
+            }
+
+            static bool IsForeignKey(PropertyInfo property)
+            {
+                var propertyType = property.PropertyType;
+                var isCollection = propertyType.IsGenericType && propertyType.GetGenericTypeDefinition() == typeof(ICollection<>);
+                var isClass = propertyType.IsClass && propertyType != typeof(string);
+
+                return isCollection || isClass;
+            }
         }
     }
 }

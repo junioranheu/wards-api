@@ -1,20 +1,21 @@
 ﻿using Wards.Domain.Entities;
-using Wards.Infrastructure.Data;
+using Wards.Infrastructure.Factory;
+using static Wards.Utils.Common;
 
 namespace Wards.Application.UseCases.Wards.BulkCopyCriarWard.Commands
 {
     public sealed class BulkCopyCriarWardCommand : IBulkCopyCriarWardCommand
     {
-        private readonly WardsContext _context;
+        private readonly IConnectionFactory _connectionFactory;
 
-        public BulkCopyCriarWardCommand(WardsContext context)
+        public BulkCopyCriarWardCommand(IConnectionFactory connectionFactory)
         {
-            _context = context;
+            _connectionFactory = connectionFactory;
         }
-        
+
         public async Task Execute(List<Ward> input)
         {
-            await _context.BulkInsertAsync(input, x => x.BatchSize = 5000);
+            await ConverterLINQQueryParaDataTableParaBulkInsert(input, "Wards", _connectionFactory.CreateDbSqlConnection());
         }
     }
 }

@@ -40,27 +40,6 @@ namespace Wards.API.Controllers
             _bulkCopyCriarWardUseCase = bulkCopyCriarWardUseCase;
         }
 
-        // Queue: https://stackoverflow.com/a/52163745
-        // Hangfire: https://stackoverflow.com/a/39285614
-
-        //[HttpGet("exemploQueue")]
-        //[AllowAnonymous]
-        //[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(bool))]
-        //public ActionResult<bool> ExemploQueue()
-        //{
-        //    _backgroundQueue.Enqueue(async cancellationToken =>
-        //    {
-        //        var lista = await _listarLogUseCase.Execute(new PaginacaoInput() { IsSelectAll = true });
-
-        //        if (lista.Any())
-        //        {
-        //            string a = "xxx";
-        //        }
-        //    });
-
-        //    return Ok(true);
-        //}
-
         /// <summary>
         /// Exemplo de inser com BulkCopy;
         /// </summary>
