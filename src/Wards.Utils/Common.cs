@@ -488,7 +488,7 @@ namespace Wards.Utils
             await sqlBulk.WriteToServerAsync(dataTable);
             await connection.CloseAsync();
 
-            static DataTable ConverterListaParaDataTable<T>(List<T> items)
+            static DataTable ConverterListaParaDataTable(List<T> items)
             {
                 DataTable dataTable = new(typeof(T).Name);
                 PropertyInfo[] Props = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance);

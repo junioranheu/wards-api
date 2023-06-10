@@ -45,7 +45,7 @@ namespace Wards.API.Controllers
         /// </summary>
         [HttpGet("exemploBulkCopy")]
         [AllowAnonymous]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<Ward>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(bool))]
         public async Task<ActionResult<List<Ward>>> ExemploBulkCopy()
         {
             List<WardInput> listaWards = new();
@@ -64,7 +64,7 @@ namespace Wards.API.Controllers
 
             await _bulkCopyCriarWardUseCase.Execute(listaWards);
 
-            return Ok(listaWards);
+            return Ok(true);
         }
 
         /// <summary>
