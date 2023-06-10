@@ -41,7 +41,7 @@ namespace Wards.API.Controllers
         }
 
         /// <summary>
-        /// Exemplo de inser com BulkCopy;
+        /// Exemplo de insert com BulkCopy e DataTable;
         /// </summary>
         [HttpGet("exemploBulkCopy")]
         [AllowAnonymous]
