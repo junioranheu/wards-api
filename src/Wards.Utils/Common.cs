@@ -474,13 +474,20 @@ namespace Wards.Utils
         /// </summary>
         public static async Task ConverterLINQQueryParaDataTableParaBulkInsert<T>(List<T> queryLINQ, string nomeTabelaDestino, MySqlConnection connection)
         {
-            DataTable dataTable = ConverterListaParaDataTable(queryLINQ);
+            // Para SQL Server;    
+            // SqlBulkCopy sqlBulk = new(connection)
+            // {
+            //     DestinationTableName = nomeTabelaDestino
+            // };
 
-            // SqlBulkCopy sqlBulk = new(connection) // Para SQL Server;
+            // Para MySQL;  
             MySqlBulkCopy sqlBulk = new(connection)
             {
                 DestinationTableName = nomeTabelaDestino
             };
+
+            // DataTable dataTable = ConverterListaParaDataTable(queryLINQ, sqlBulk); // Para SQL Server;  
+            DataTable dataTable = ConverterListaParaDataTable(queryLINQ); // Para MySQL;  
 
             await connection.OpenAsync();
             sqlBulk.BulkCopyTimeout = 180;
@@ -488,24 +495,27 @@ namespace Wards.Utils
             await sqlBulk.WriteToServerAsync(dataTable);
             await connection.CloseAsync();
 
-            static DataTable ConverterListaParaDataTable(List<T> items)
+            // static DataTable ConverterListaParaDataTable(List<T> queryLINQ, MySqlBulkCopy sqlBulk) // Para SQL Server;  
+            static DataTable ConverterListaParaDataTable(List<T> queryLINQ) // Para MySQL;  
             {
                 DataTable dataTable = new(typeof(T).Name);
-                PropertyInfo[] Props = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+                PropertyInfo[] props = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
                 List<PropertyInfo> listaTipos = new();
 
-                foreach (PropertyInfo prop in Props)
+                foreach (PropertyInfo prop in props)
                 {
                     var type = (prop.PropertyType.IsGenericType && prop.PropertyType.GetGenericTypeDefinition() == typeof(Nullable<>) ? Nullable.GetUnderlyingType(prop.PropertyType) : prop.PropertyType);
 
                     if (!IsForeignKey(prop))
                     {
-                        dataTable.Columns.Add(prop.Name, type!);
+                        // sqlBulk.ColumnMappings.Add(prop.Name, prop.Name); // Para SQL Server;
+                        dataTable.Columns.Add(prop.Name, type!); // Para MySQL;
+
                         listaTipos.Add(prop);
                     }
                 }
 
-                foreach (T item in items)
+                foreach (T item in queryLINQ)
                 {
                     var values = new object[dataTable.Columns.Count];
 

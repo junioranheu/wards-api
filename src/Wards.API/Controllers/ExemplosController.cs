@@ -50,7 +50,8 @@ namespace Wards.API.Controllers
         {
             List<WardInput> listaWards = new();
 
-            for (int i = 0; i < GerarNumeroAleatorio(1000, 2000); i++)
+            //for (int i = 0; i < GerarNumeroAleatorio(1000, 2000); i++)
+            for (int i = 0; i < GerarNumeroAleatorio(100000, 100001); i++)
             {
                 WardInput ward = new()
                 {
