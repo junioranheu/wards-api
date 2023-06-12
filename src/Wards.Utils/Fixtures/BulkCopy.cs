@@ -23,8 +23,9 @@ namespace Wards.Utils.Fixtures
             await connection.OpenAsync();
             sqlBulk.BulkCopyTimeout = 180;
             sqlBulk.BatchSize = 5000;
-            await sqlBulk.WriteToServerAsync(dataTable);
+            var resposta = await sqlBulk.WriteToServerAsync(dataTable);
             await connection.CloseAsync();
+            dataTable.Clear();
         }
 
         public static async Task ConverterLINQQueryParaDataTableParaBulkInsert<T>(List<T> queryLINQ, string nomeTabelaDestino, MySqlConnection connection)
@@ -40,6 +41,7 @@ namespace Wards.Utils.Fixtures
             sqlBulk.BulkCopyTimeout = 180;
             await sqlBulk.WriteToServerAsync(dataTable);
             await connection.CloseAsync();
+            dataTable.Clear();
         }
 
         #region metodos_extras;
