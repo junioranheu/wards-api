@@ -504,12 +504,12 @@ namespace Wards.Utils
 
                 foreach (PropertyInfo prop in props)
                 {
-                    var type = (prop.PropertyType.IsGenericType && prop.PropertyType.GetGenericTypeDefinition() == typeof(Nullable<>) ? Nullable.GetUnderlyingType(prop.PropertyType) : prop.PropertyType);
+                    Type? type = (prop.PropertyType.IsGenericType && prop.PropertyType.GetGenericTypeDefinition() == typeof(Nullable<>) ? Nullable.GetUnderlyingType(prop.PropertyType) : prop.PropertyType);
 
                     if (!IsForeignKey(prop))
                     {
                         // sqlBulk.ColumnMappings.Add(prop.Name, prop.Name); // Para SQL Server;
-                        dataTable.Columns.Add(prop.Name, type!); // Para MySQL;
+                        dataTable.Columns.Add(prop.Name, type!);
 
                         listaTipos.Add(prop);
                     }
