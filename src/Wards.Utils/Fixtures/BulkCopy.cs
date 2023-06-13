@@ -8,6 +8,7 @@ namespace Wards.Utils.Fixtures
     public static class BulkCopy
     {
         /// <summary>
+        /// Método para SQL Server;
         /// Recebe um resultado de uma query (LINQ) como parâmetro, 
         /// converte os dados para DataTable e depois realiza o Bulkinsert;
         /// </summary>
@@ -23,11 +24,16 @@ namespace Wards.Utils.Fixtures
             await connection.OpenAsync();
             sqlBulk.BulkCopyTimeout = 180;
             sqlBulk.BatchSize = 5000;
-            var resposta = await sqlBulk.WriteToServerAsync(dataTable);
+            await sqlBulk.WriteToServerAsync(dataTable);
             await connection.CloseAsync();
             dataTable.Clear();
         }
 
+        /// <summary>
+        /// Método para MySQL;
+        /// Recebe um resultado de uma query (LINQ) como parâmetro, 
+        /// converte os dados para DataTable e depois realiza o Bulkinsert;
+        /// </summary>
         public static async Task ConverterLINQQueryParaDataTableParaBulkInsert<T>(List<T> queryLINQ, string nomeTabelaDestino, MySqlConnection connection)
         {
             MySqlBulkCopy sqlBulk = new(connection)
