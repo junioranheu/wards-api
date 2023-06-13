@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Wards.Domain.Enums;
 using Wards.Infrastructure.Data;
-using static Wards.Utils.Common;
+using static Wards.Utils.Fixtures.Get;
 
 namespace Wards.Application.UseCases.Usuarios.VerificarContaUsuario.Commands
 {
@@ -25,7 +25,7 @@ namespace Wards.Application.UseCases.Usuarios.VerificarContaUsuario.Commands
                 return ObterDescricaoEnum(CodigoErroEnum.CodigoVerificacaoInvalido);
             }
 
-            if (HorarioBrasilia() > linq.ValidadeCodigoVerificacao)
+            if (GerarHorarioBrasilia() > linq.ValidadeCodigoVerificacao)
             {
                 return ObterDescricaoEnum(CodigoErroEnum.CodigoExpirado);
             }

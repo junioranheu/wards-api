@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using static Wards.Utils.Common;
+using static Wards.Utils.Fixtures.Validate;
 
 namespace Wards.Application.UseCases.Usuarios.Shared.Input
 {

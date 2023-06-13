@@ -2,7 +2,7 @@
 using Wards.Application.UseCases.Feriados.ObterFeriado.Queries;
 using Wards.Domain.Entities;
 using Wards.Infrastructure.Data;
-using static Wards.Utils.Common;
+using static Wards.Utils.Fixtures.Get;
 
 namespace Wards.Application.UseCases.Feriados.AtualizarFeriado.Commands
 {
@@ -30,7 +30,7 @@ namespace Wards.Application.UseCases.Feriados.AtualizarFeriado.Commands
             item.Nome = !string.IsNullOrEmpty(input.Nome) ? input.Nome : item.Nome;
             item.IsMovel = input.IsMovel;
             item.IsAtivo = input.IsAtivo;
-            item.DataAtualizacao = HorarioBrasilia();
+            item.DataAtualizacao = GerarHorarioBrasilia();
             item.UsuarioIdMod = input.UsuarioIdMod;
 
             _context.Update(item);

@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Wards.Domain.Enums;
-using static Wards.Utils.Common;
+using static Wards.Utils.Fixtures.Get;
 
 namespace Wards.Domain.Entities
 {
@@ -18,7 +18,7 @@ namespace Wards.Domain.Entities
 
         public bool IsAtivo { get; set; } = true;
 
-        public DateTime DataCriacao { get; set; } = HorarioBrasilia();
+        public DateTime DataCriacao { get; set; } = GerarHorarioBrasilia();
 
         public DateTime? DataAtualizacao { get; set; } = null;
 

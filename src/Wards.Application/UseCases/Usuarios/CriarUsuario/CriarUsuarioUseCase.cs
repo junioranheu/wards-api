@@ -9,7 +9,9 @@ using Wards.Application.UseCases.Usuarios.Shared.Output;
 using Wards.Domain.Entities;
 using Wards.Domain.Enums;
 using Wards.Infrastructure.Auth.Token;
-using static Wards.Utils.Common;
+using static Wards.Utils.Fixtures.Get;
+using static Wards.Utils.Fixtures.Encrypt;
+using static Wards.Utils.Fixtures.Validate;
 
 namespace Wards.Application.UseCases.Usuarios.CriarUsuario
 {
@@ -94,7 +96,7 @@ namespace Wards.Application.UseCases.Usuarios.CriarUsuario
         private async Task<AutenticarUsuarioOutput> CriarUsuario(CriarUsuarioInput input, string codigoVerificacao)
         {
             input!.CodigoVerificacao = codigoVerificacao;
-            input!.ValidadeCodigoVerificacao = HorarioBrasilia().AddHours(24);
+            input!.ValidadeCodigoVerificacao = GerarHorarioBrasilia().AddHours(24);
             input!.Senha = Criptografar(input?.Senha!);
             input!.HistPerfisAtivos = input?.UsuariosRolesId?.Length > 0 ? string.Join(", ", input.UsuariosRolesId) : string.Empty;
 

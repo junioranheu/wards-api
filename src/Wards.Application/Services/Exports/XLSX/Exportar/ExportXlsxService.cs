@@ -1,6 +1,6 @@
 ﻿using ClosedXML.Excel;
 using System.Reflection;
-using static Wards.Utils.Common;
+using static Wards.Utils.Fixtures.Format;
 
 namespace Wards.Application.Services.Exports.XLSX.Exportar
 {

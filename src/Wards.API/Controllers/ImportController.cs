@@ -5,7 +5,7 @@ using Wards.Application.Services.Imports.CSV.Shared;
 using Wards.Application.UseCases.Imports.CriarExemploUsuario;
 using Wards.Domain.Consts;
 using Wards.Domain.Enums;
-using static Wards.Utils.Common;
+using static Wards.Utils.Fixtures.Get;
 
 namespace Wards.API.Controllers
 {

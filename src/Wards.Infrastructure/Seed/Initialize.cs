@@ -4,7 +4,8 @@ using Wards.Domain.Entities;
 using Wards.Domain.Enums;
 using Wards.Infrastructure.Data;
 using Wards.Infrastructure.Seed.Seeds;
-using static Wards.Utils.Common;
+using static Wards.Utils.Fixtures.Get;
+using static Wards.Utils.Fixtures.Encrypt;
 
 namespace Wards.Infrastructure.Seed
 {
@@ -22,7 +23,7 @@ namespace Wards.Infrastructure.Seed
             // Código para adicionar migrations: Add-Migration <xxx>;
             // E, então, comentar as linhas "EnsureDeletedAsync" e "EnsureCreatedAsync".
 
-            await Seed(context, HorarioBrasilia());
+            await Seed(context, GerarHorarioBrasilia());
         }
 
         public static async Task Seed(WardsContext context, DateTime dataAgora)
@@ -36,8 +37,8 @@ namespace Wards.Infrastructure.Seed
 
             if (!await context.Usuarios.AnyAsync())
             {
-                await context.Usuarios.AddAsync(new Usuario() { UsuarioId = 1, NomeCompleto = "Administrador", NomeUsuarioSistema = "adm", Email = "adm@Hotmail.com", Senha = Criptografar("123"), Chamado = "Chamado #1", Foto = "1AAAAA.jpg", CodigoVerificacao = GerarStringAleatoria(6, true), ValidadeCodigoVerificacao = HorarioBrasilia().AddHours(24), HistPerfisAtivos = "1, 2" });
-                await context.Usuarios.AddAsync(new Usuario() { UsuarioId = 2, NomeCompleto = "Junior Souza", NomeUsuarioSistema = "junioranheu", Email = "junioranheu@gmail.com", Senha = Criptografar("123"), Chamado = "Chamado #2", Foto = "2AAAAA.jpg", CodigoVerificacao = GerarStringAleatoria(6, true), ValidadeCodigoVerificacao = HorarioBrasilia().AddHours(24), HistPerfisAtivos = "1" });
+                await context.Usuarios.AddAsync(new Usuario() { UsuarioId = 1, NomeCompleto = "Administrador", NomeUsuarioSistema = "adm", Email = "adm@Hotmail.com", Senha = Criptografar("123"), Chamado = "Chamado #1", Foto = "1AAAAA.jpg", CodigoVerificacao = GerarStringAleatoria(6, true), ValidadeCodigoVerificacao = GerarHorarioBrasilia().AddHours(24), HistPerfisAtivos = "1, 2" });
+                await context.Usuarios.AddAsync(new Usuario() { UsuarioId = 2, NomeCompleto = "Junior Souza", NomeUsuarioSistema = "junioranheu", Email = "junioranheu@gmail.com", Senha = Criptografar("123"), Chamado = "Chamado #2", Foto = "2AAAAA.jpg", CodigoVerificacao = GerarStringAleatoria(6, true), ValidadeCodigoVerificacao = GerarHorarioBrasilia().AddHours(24), HistPerfisAtivos = "1" });
             }
 
             if (!await context.UsuariosRoles.AnyAsync())

@@ -4,7 +4,7 @@ using Wards.Application.UseCases.Auxiliares.ListarEstado;
 using Wards.Application.UseCases.Auxiliares.ListarEstado.Shared.Output;
 using Wards.Application.UseCases.Shared.Models;
 using Wards.Domain.Enums;
-using static Wards.Utils.Common;
+using static Wards.Utils.Fixtures.Get;
 
 namespace Wards.API.Controllers
 {

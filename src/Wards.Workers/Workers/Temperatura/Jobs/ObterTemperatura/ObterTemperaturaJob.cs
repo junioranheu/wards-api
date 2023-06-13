@@ -4,7 +4,7 @@ using System.Text.Json;
 using Wards.Application.UseCases.Logs.CriarLog.Commands;
 using Wards.Domain.Entities;
 using Wards.WorkersServices.Workers.Temperatura.Models;
-using static Wards.Utils.Common;
+using static Wards.Utils.Fixtures.Get;
 
 namespace Wards.WorkersServices.Workers.Temperatura.Jobs.ObterTemperatura
 {
@@ -28,7 +28,7 @@ namespace Wards.WorkersServices.Workers.Temperatura.Jobs.ObterTemperatura
                 string longitude = "-45.1199";
                 ApiOpenMeteo? resp = ObterTemperatura(latitude, longitude);
 
-                string msg = $"Latitude {latitude} e longitude {longitude}, às {HorarioBrasilia()}, está {resp!.Current_Weather!.Temperature ?? 0}º";
+                string msg = $"Latitude {latitude} e longitude {longitude}, às {GerarHorarioBrasilia()}, está {resp!.Current_Weather!.Temperature ?? 0}º";
                 await Console.Out.WriteLineAsync(msg);
 
                 Log log = new() { Descricao = $"Sucesso no Worker {typeof(ObterTemperaturaJob)} — {msg}", StatusResposta = StatusCodes.Status200OK };

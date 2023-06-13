@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 using Wards.Domain.Enums;
-using static Wards.Utils.Common;
+using static Wards.Utils.Fixtures.Get;
 
 namespace Wards.Domain.Entities
 {
@@ -17,6 +17,6 @@ namespace Wards.Domain.Entities
         public UsuarioRoleEnum RoleId { get; set; }
         public Role? Roles { get; set; }
 
-        public DateTime Data { get; set; } = HorarioBrasilia();
+        public DateTime Data { get; set; } = GerarHorarioBrasilia();
     }
 }

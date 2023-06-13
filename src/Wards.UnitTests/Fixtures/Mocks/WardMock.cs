@@ -1,5 +1,5 @@
 ﻿using Wards.Application.UseCases.Wards.Shared.Input;
-using static Wards.Utils.Common;
+using static Wards.Utils.Fixtures.Get;
 
 namespace Wards.UnitTests.Fixtures.Mocks
 {

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using static Wards.Utils.Common;
+using static Wards.Utils.Fixtures.Get;
 
 namespace Wards.Domain.Entities
 {
@@ -23,6 +23,6 @@ namespace Wards.Domain.Entities
         [ForeignKey(nameof(UsuarioId))]
         public Usuario? Usuarios { get; init; }
 
-        public DateTime Data { get; set; } = HorarioBrasilia();
+        public DateTime Data { get; set; } = GerarHorarioBrasilia();
     }
 }

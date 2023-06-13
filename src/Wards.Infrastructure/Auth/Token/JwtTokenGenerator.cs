@@ -5,7 +5,7 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using Wards.Infrastructure.Auth.Models;
-using static Wards.Utils.Common;
+using static Wards.Utils.Fixtures.Get;
 
 namespace Wards.Infrastructure.Auth.Token
 {
@@ -103,11 +103,11 @@ namespace Wards.Infrastructure.Auth.Token
         {
             // Por algum motivo inexplicável é necessário ajustar a hora por uma diferença apresentada quando publicado em produção no Azure;
             // Produção: +3 horas;
-            DateTime horarioBrasiliaAjustado = HorarioBrasilia().AddHours(+3);
+            DateTime horarioBrasiliaAjustado = GerarHorarioBrasilia().AddHours(+3);
 
 #if DEBUG
             // Dev: horário normal;
-            horarioBrasiliaAjustado = HorarioBrasilia();
+            horarioBrasiliaAjustado = GerarHorarioBrasilia();
 #endif
 
             return horarioBrasiliaAjustado;

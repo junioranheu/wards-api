@@ -5,7 +5,7 @@ using Wards.Application.Services.Usuarios.ObterUsuarioCache;
 using Wards.Application.UseCases.Logs.CriarLog;
 using Wards.Application.UseCases.Logs.Shared.Input;
 using Wards.Application.UseCases.Usuarios.Shared.Output;
-using static Wards.Utils.Common;
+using static Wards.Utils.Fixtures.Get;
 
 namespace Wards.API.Filters
 {
@@ -23,13 +23,13 @@ namespace Wards.API.Filters
         public override async Task OnExceptionAsync(ExceptionContext context)
         {
             Exception ex = context.Exception;
-            string mensagemErroCompleta = $"Ocorreu um erro ao processar sua requisição. Data: {DetalharDataHora()}. Caminho: {context.HttpContext.Request.Path}. {(!string.IsNullOrEmpty(ex.InnerException?.Message) ? $"Mais informações: {ex.InnerException.Message}" : $"Mais informações: {ex.Message}")}";
+            string mensagemErroCompleta = $"Ocorreu um erro ao processar sua requisição. Data: {ObterDetalhesDataHora()}. Caminho: {context.HttpContext.Request.Path}. {(!string.IsNullOrEmpty(ex.InnerException?.Message) ? $"Mais informações: {ex.InnerException.Message}" : $"Mais informações: {ex.Message}")}";
             string mensagemErroSimples = !string.IsNullOrEmpty(ex.InnerException?.Message) ? ex.InnerException.Message : ex.Message;
 
             var detalhes = new BadRequestObjectResult(new
             {
                 Codigo = StatusCodes.Status500InternalServerError,
-                Data = DetalharDataHora(),
+                Data = ObterDetalhesDataHora(),
                 Caminho = context.HttpContext.Request.Path,
                 Mensagens = new string[] { mensagemErroSimples }
             });

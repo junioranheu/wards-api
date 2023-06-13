@@ -6,7 +6,9 @@ using Wards.Application.UseCases.Usuarios.Shared.Output;
 using Wards.Domain.Enums;
 using Wards.Infrastructure.Auth.Token;
 using Wards.Utils.Entities;
-using static Wards.Utils.Common;
+using static Wards.Utils.Fixtures.Convert;
+using static Wards.Utils.Fixtures.Get;
+using static Wards.Utils.Fixtures.Post;
 
 namespace Wards.Application.UseCases.Usuarios
 {
@@ -43,7 +45,7 @@ namespace Wards.Application.UseCases.Usuarios
 
                 List<EmailDadosReplace> listaDadosReplace = new()
                 {
-                    new EmailDadosReplace { Key = "Url", Value = $"{CaminhoFront()}/usuario/verificar-conta/{codigoVerificacao}"},
+                    new EmailDadosReplace { Key = "Url", Value = $"{ObterCaminhoFront()}/usuario/verificar-conta/{codigoVerificacao}"},
                     new EmailDadosReplace { Key = "NomeUsuario", Value = nomeUsuario }
                 };
 
@@ -80,7 +82,7 @@ namespace Wards.Application.UseCases.Usuarios
                 return null;
             }
 
-            return PathToFile(arquivoAleatorio, Path.GetFileName(arquivoAleatorio), "image/jpg");
+            return ConverterPathParaFile(arquivoAleatorio, Path.GetFileName(arquivoAleatorio), "image/jpg");
         }
 
         internal static async Task<string?> VerificarParametrosDepoisUparFoto(IWebHostEnvironment _webHostEnvironment, int usuarioId, IFormFile? arquivo)

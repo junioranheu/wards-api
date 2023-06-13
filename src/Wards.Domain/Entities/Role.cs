@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Wards.Domain.Enums;
-using static Wards.Utils.Common;
+using static Wards.Utils.Fixtures.Get;
 
 namespace Wards.Domain.Entities
 {
@@ -15,6 +15,6 @@ namespace Wards.Domain.Entities
 
         public bool IsAtivo { get; set; } = true;
 
-        public DateTime Data { get; set; } = HorarioBrasilia();
+        public DateTime Data { get; set; } = GerarHorarioBrasilia();
     }
 }

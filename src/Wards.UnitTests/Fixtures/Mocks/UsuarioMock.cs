@@ -2,7 +2,7 @@
 using Wards.Application.UseCases.Usuarios.Shared.Input;
 using Wards.Domain.Entities;
 using Wards.Infrastructure.Data;
-using static Wards.Utils.Common;
+using static Wards.Utils.Fixtures.Get;
 
 namespace Wards.UnitTests.Fixtures.Mocks
 {

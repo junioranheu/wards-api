@@ -12,7 +12,7 @@ using Wards.Application.UseCases.Wards.BulkCopyCriarWard;
 using Wards.Application.UseCases.Wards.Shared.Input;
 using Wards.Domain.Entities;
 using Wards.Domain.Enums;
-using static Wards.Utils.Common;
+using static Wards.Utils.Fixtures.Get;
 
 namespace Wards.API.Controllers
 {
@@ -279,7 +279,7 @@ namespace Wards.API.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(bool))]
         public async Task<ActionResult<bool>> ResetarBancoDados(int minuto)
         {
-            if (HorarioBrasilia().Minute != minuto)
+            if (GerarHorarioBrasilia().Minute != minuto)
                 return StatusCode(StatusCodes.Status403Forbidden, false);
 
             bool isOk = await _resetarBancoDadosService.Execute();

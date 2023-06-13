@@ -1,6 +1,6 @@
 ﻿using Wards.Domain.Enums;
 using Wards.Infrastructure.Data;
-using static Wards.Utils.Common;
+using static Wards.Utils.Fixtures.Get;
 
 namespace Wards.Application.UseCases.Usuarios.SolicitarVerificacaoContaUsuario.Commands
 {
@@ -29,7 +29,7 @@ namespace Wards.Application.UseCases.Usuarios.SolicitarVerificacaoContaUsuario.C
             }
 
             // #2 - Se o código estiver válido, não envie outro e-mail;
-            if (linq?.ValidadeCodigoVerificacao >= HorarioBrasilia())
+            if (linq?.ValidadeCodigoVerificacao >= GerarHorarioBrasilia())
             {
                 return (ObterDescricaoEnum(CodigoErroEnum.EmailValidacaoJaEnviado), string.Empty, string.Empty, string.Empty);
             }
@@ -37,7 +37,7 @@ namespace Wards.Application.UseCases.Usuarios.SolicitarVerificacaoContaUsuario.C
             // #3 - Gerar código de verificação e atualizar;
             string codigoVerificacao = GerarStringAleatoria(6, true);
             linq!.CodigoVerificacao = codigoVerificacao;
-            linq.ValidadeCodigoVerificacao = HorarioBrasilia().AddHours(24);
+            linq.ValidadeCodigoVerificacao = GerarHorarioBrasilia().AddHours(24);
 
             _context.Update(linq);
             await _context.SaveChangesAsync();

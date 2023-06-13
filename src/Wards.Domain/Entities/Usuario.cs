@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
-using static Wards.Utils.Common;
+using static Wards.Utils.Fixtures.Get;
 
 namespace Wards.Domain.Entities
 {
@@ -39,7 +39,7 @@ namespace Wards.Domain.Entities
 
         public bool IsLatest { get; set; } = true;
 
-        public DateTime Data { get; set; } = HorarioBrasilia();
+        public DateTime Data { get; set; } = GerarHorarioBrasilia();
 
         public IEnumerable<UsuarioRole>? UsuarioRoles { get; init; }
     }

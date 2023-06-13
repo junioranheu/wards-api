@@ -7,7 +7,7 @@ using Wards.Application.UseCases.Usuarios.ObterUsuario;
 using Wards.Application.UseCases.Usuarios.Shared.Output;
 using Wards.Domain.Enums;
 using Wards.Infrastructure.Auth.Token;
-using static Wards.Utils.Common;
+using static Wards.Utils.Fixtures.Get;
 
 namespace Wards.Application.UseCases.Usuarios.CriarRefreshTokenUsuario
 {

@@ -8,7 +8,7 @@ using System.Security.Cryptography.Xml;
 using Wards.API.Filters;
 using Wards.Application.UseCases.Wards.Shared.Input;
 using Wards.Infrastructure.Data;
-using static Wards.Utils.Common;
+using static Wards.Utils.Fixtures.Get;
 
 namespace Wards.API
 {
@@ -74,7 +74,7 @@ namespace Wards.API
                     var obj = new
                     {
                         Codigo = StatusCodes.Status400BadRequest,
-                        Data = DetalharDataHora(),
+                        Data = ObterDetalhesDataHora(),
                         Caminho = actionContext.HttpContext.Request.Path,
                         Mensagens = actionContext.ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage)
                     };

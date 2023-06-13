@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using static Wards.Utils.Common;
+using static Wards.Utils.Fixtures.Get;
 
 namespace Wards.Domain.Entities
 {
@@ -13,6 +13,6 @@ namespace Wards.Domain.Entities
         public int UsuarioId { get; set; }
         public Usuario? Usuarios { get; set; }
 
-        public DateTime DataRegistro { get; set; } = HorarioBrasilia();
+        public DateTime DataRegistro { get; set; } = GerarHorarioBrasilia();
     }
 }

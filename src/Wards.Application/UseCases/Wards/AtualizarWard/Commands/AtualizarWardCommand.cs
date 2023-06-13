@@ -1,7 +1,7 @@
 ﻿using Wards.Application.UseCases.Wards.ObterWard.Queries;
 using Wards.Domain.Entities;
 using Wards.Infrastructure.Data;
-using static Wards.Utils.Common;
+using static Wards.Utils.Fixtures.Get;
 
 namespace Wards.Application.UseCases.Wards.AtualizarWard.Commands
 {
@@ -27,7 +27,7 @@ namespace Wards.Application.UseCases.Wards.AtualizarWard.Commands
 
             item.Conteudo = !string.IsNullOrEmpty(input.Conteudo) ? input.Conteudo : item.Conteudo;
             item.UsuarioModId = input.UsuarioModId;
-            item.DataMod = HorarioBrasilia();
+            item.DataMod = GerarHorarioBrasilia();
             item.IsAtivo = input.IsAtivo;
 
             _context.Update(item);

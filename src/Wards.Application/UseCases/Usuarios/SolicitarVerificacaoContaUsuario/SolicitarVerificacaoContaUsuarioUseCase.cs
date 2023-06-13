@@ -1,7 +1,7 @@
 ﻿using Wards.Application.UseCases.Usuarios.Shared.Output;
 using Wards.Application.UseCases.Usuarios.SolicitarVerificacaoContaUsuario.Commands;
 using Wards.Domain.Enums;
-using static Wards.Utils.Common;
+using static Wards.Utils.Fixtures.Get;
 
 namespace Wards.Application.UseCases.Usuarios.SolicitarVerificacaoContaUsuario
 {
