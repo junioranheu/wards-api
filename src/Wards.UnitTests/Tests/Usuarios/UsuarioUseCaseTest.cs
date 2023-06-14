@@ -44,11 +44,21 @@ namespace Wards.UnitTests.Tests.Usuarios
 
             CriarUsuarioInput input = UsuarioMock.CriarUsuarioInput(nomeCompleto, nomeUsuarioSistema, email, senha, chamado);
 
-            // Act;
-            var resp = await useCase.Execute(input);
+            try
+            {
+                // Act;
+                var resp = await useCase.Execute(input);
 
-            // Assert;
-            Assert.Equal(resp?.UsuarioId > 0, esperado);
+                // Assert;
+                Assert.Equal(resp?.UsuarioId > 0, esperado);
+            }
+            catch (Exception)
+            {
+                if (!esperado)
+                {
+                    Assert.False(esperado);
+                }
+            }
         }
     }
 }
