@@ -11,19 +11,25 @@ namespace Wards.Infrastructure.Seed
 {
     public static class DbInitializer
     {
-        public static async Task Initialize(WardsContext context)
+        public static async Task Initialize(WardsContext context, bool isAplicarMigrations, bool isResetar)
         {
             context.Database.SetCommandTimeout(600);
-            await context.Database.EnsureDeletedAsync();
             string script = context.Database.GenerateCreateScript();
-            await context.Database.EnsureCreatedAsync();
-            
-            // Caso seja necessário usar Migrations...
-            // Deve-se usar o código "await context.Database.MigrateAsync();" (Verificar possibilidade de utilizar assíncrono);
-            // Código para adicionar migrations: Add-Migration <xxx>;
-            // E, então, comentar as linhas "EnsureDeletedAsync" e "EnsureCreatedAsync".
 
-            await Seed(context, GerarHorarioBrasilia());
+            if (isAplicarMigrations)
+            {
+                await context.Database.MigrateAsync();
+            }
+            else if (isResetar)
+            {
+                await context.Database.EnsureDeletedAsync();
+                await context.Database.EnsureCreatedAsync();
+            }
+
+            if (isAplicarMigrations || isResetar)
+            {
+                await Seed(context, GerarHorarioBrasilia());
+            }
         }
 
         public static async Task Seed(WardsContext context, DateTime dataAgora)

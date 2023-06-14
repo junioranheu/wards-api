@@ -8,8 +8,8 @@ namespace Wards.Application.Services.Sistemas
     {
         public static IServiceCollection AddResetarBancoDadosService(this IServiceCollection services)
         {
-            services.AddScoped<IResetarBancoDadosService, ResetarBancoDadosService>();
-            services.AddScoped<IResetarBancoDadosCommand, ResetarBancoDadosCommand>();
+            services.AddScoped<IMigrateDatabaseService, MigrateDatabaseService>();
+            services.AddScoped<IMigrateDatabaseCommand, MigrateDatabaseCommand>();
 
             return services;
         }

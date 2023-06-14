@@ -71,7 +71,7 @@ static async Task DBInitialize(WebApplication app, IServiceProvider services, bo
     try
     {
         WardsContext context = services.GetRequiredService<WardsContext>();
-        await DbInitializer.Initialize(context);
+        await DbInitializer.Initialize(context, isAplicarMigrations: false, isResetar: true);
     }
     catch (Exception ex)
     {

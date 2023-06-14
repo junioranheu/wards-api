@@ -22,7 +22,7 @@ namespace Wards.API.Controllers
     {
         private readonly IListarLogUseCase _listarLogUseCase;
         private readonly IListarUsuarioUseCase _listarUsuarioUseCase;
-        private readonly IResetarBancoDadosService _resetarBancoDadosService;
+        private readonly IMigrateDatabaseService _migrateDatabaseService;
         private readonly IBulkCopyCriarWardUseCase _bulkCopyCriarWardUseCase;
 
         /// <summary>
@@ -31,12 +31,12 @@ namespace Wards.API.Controllers
         public ExemplosController(
             IListarLogUseCase listarLogUseCase,
             IListarUsuarioUseCase listarUsuarioUseCase,
-            IResetarBancoDadosService resetarBancoDadosService,
+            IMigrateDatabaseService migrateDatabaseService,
             IBulkCopyCriarWardUseCase bulkCopyCriarWardUseCase)
         {
             _listarLogUseCase = listarLogUseCase;
             _listarUsuarioUseCase = listarUsuarioUseCase;
-            _resetarBancoDadosService = resetarBancoDadosService;
+            _migrateDatabaseService = migrateDatabaseService;
             _bulkCopyCriarWardUseCase = bulkCopyCriarWardUseCase;
         }
 
@@ -262,32 +262,18 @@ namespace Wards.API.Controllers
             return Ok(listaPrincipalFinal);
         }
 
-        /// <summary>
-        /// Método provisório para resetar, recriar e seedar a estrutura do banco de dados completa;
-        /// A criação do método foi necessária para criação da base em QA;
-        /// Existe uma verificação simplória (parâmetro "minuto") porventura;
-        /// !!! Em produção, esse método deve ser terminantemente removido ou, pelo menos, ocultado;
-        /// </summary>
-#if DEBUG
-        [ApiExplorerSettings(IgnoreApi = false)]
-#else
-        [ApiExplorerSettings(IgnoreApi = true)]
-#endif  
-        [HttpGet("resetarBancoDados")]
+        [HttpGet("migrateDatabase")]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(bool))]
         [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(bool))]
-        public async Task<ActionResult<bool>> ResetarBancoDados(int minuto)
+        public async Task<ActionResult<bool>> MigrateDatabase(int minuto)
         {
             if (GerarHorarioBrasilia().Minute != minuto)
                 return StatusCode(StatusCodes.Status403Forbidden, false);
 
-            bool isOk = await _resetarBancoDadosService.Execute();
+            await _migrateDatabaseService.Execute(isAplicarMigrations: true);
 
-            if (!isOk)
-                return StatusCode(StatusCodes.Status403Forbidden, isOk);
-
-            return Ok(isOk);
+            return Ok($"Update-Database finalizado com sucesso às {GerarHorarioBrasilia()}");
         }
     }
 }
