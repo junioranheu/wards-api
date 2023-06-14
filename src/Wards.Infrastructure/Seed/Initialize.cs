@@ -19,7 +19,7 @@ namespace Wards.Infrastructure.Seed
             await context.Database.EnsureCreatedAsync();
             
             // Caso seja necessário usar Migrations...
-            // Deve-se usar o código "context.Database.Migrate();" (Verificar possibilidade de utilizar assíncrono);
+            // Deve-se usar o código "await context.Database.MigrateAsync();" (Verificar possibilidade de utilizar assíncrono);
             // Código para adicionar migrations: Add-Migration <xxx>;
             // E, então, comentar as linhas "EnsureDeletedAsync" e "EnsureCreatedAsync".
 
