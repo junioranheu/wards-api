@@ -1,5 +1,6 @@
 ﻿using Wards.Application.UseCases.Wards.ObterWard.Queries;
 using Wards.Domain.Entities;
+using Wards.Domain.Enums;
 using Wards.Infrastructure.Data;
 using static Wards.Utils.Fixtures.Get;
 
@@ -22,7 +23,7 @@ namespace Wards.Application.UseCases.Wards.AtualizarWard.Commands
 
             if (item is null)
             {
-                return 0;
+                throw new Exception(ObterDescricaoEnum(CodigoErroEnum.NaoEncontrado));
             }
 
             item.Conteudo = !string.IsNullOrEmpty(input.Conteudo) ? input.Conteudo : item.Conteudo;

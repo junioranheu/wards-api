@@ -79,7 +79,7 @@ namespace Wards.Domain.Enums
         [Description("Não autorizado")]
         NaoAutorizado = 403,
 
-        [Description("Dado não encontrado")]
+        [Description("Registro não encontrado")]
         NaoEncontrado = 404,
 
         [Description("Refresh token inválido")]

@@ -1,5 +1,6 @@
 ﻿using Wards.Application.UseCases.Feriados.ObterFeriado.Queries;
 using Wards.Domain.Entities;
+using Wards.Domain.Enums;
 using Wards.Infrastructure.Data;
 using static Wards.Utils.Fixtures.Get;
 
@@ -22,12 +23,10 @@ namespace Wards.Application.UseCases.Feriados.AtualizarFeriado.Commands
 
             if (item is null)
             {
-                return 0;
+                throw new Exception(ObterDescricaoEnum(CodigoErroEnum.NaoEncontrado));
             }
 
-            Feriado? deepClone = GerarDeepClone(item);
-
-            item.Tipo = input.Tipo != null ? input.Tipo : item.Tipo;
+            item.Tipo = input.Tipo is not null ? input.Tipo : item.Tipo;
             item.Nome = !string.IsNullOrEmpty(input.Nome) ? input.Nome : item.Nome;
             item.IsMovel = input.IsMovel;
             item.IsAtivo = input.IsAtivo;

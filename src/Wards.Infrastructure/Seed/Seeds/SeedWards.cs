@@ -76,6 +76,8 @@ namespace Wards.Infrastructure.Seed.Seeds
                 ", UsuarioId = 1 });
 
                 await context.Wards.AddAsync(new Ward() { WardId = 4, Titulo = "Remover referências não utilizadas", Conteudo = "Clique com o botão direito em qualquer <i>solution</i> de seu projeto no VS 2022, e clique na opção 'Remover Referências Não Usadas...'", UsuarioId = 1 });
+
+                await context.Wards.AddAsync(new Ward() { WardId = 5, Titulo = "Instalar certificação SSL para ambiente localhost", Conteudo = "Abra o prompt de comando e digite <i>dotnet dev-certs https--trust</i>'", UsuarioId = 1 });    
             }
             #endregion
         }
