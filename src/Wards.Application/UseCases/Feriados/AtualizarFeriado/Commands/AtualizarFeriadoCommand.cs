@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
-using Wards.Application.UseCases.Feriados.ObterFeriado.Queries;
+﻿using Wards.Application.UseCases.Feriados.ObterFeriado.Queries;
 using Wards.Domain.Entities;
 using Wards.Infrastructure.Data;
 using static Wards.Utils.Fixtures.Get;
@@ -25,6 +24,8 @@ namespace Wards.Application.UseCases.Feriados.AtualizarFeriado.Commands
             {
                 return 0;
             }
+
+            Feriado? deepClone = GerarDeepClone(item);
 
             item.Tipo = input.Tipo != null ? input.Tipo : item.Tipo;
             item.Nome = !string.IsNullOrEmpty(input.Nome) ? input.Nome : item.Nome;
