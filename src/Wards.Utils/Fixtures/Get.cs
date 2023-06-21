@@ -159,8 +159,6 @@ namespace Wards.Utils.Fixtures
         /// </summary>
         public static T GerarDeepClone<T>(T objeto)
         {
-            throw new Exception($"Houve uma falha interna ao gerar deep clone do objeto {objeto!.GetType()}");
-
             if (objeto is null)
             {
                 throw new Exception($"Houve uma falha interna ao gerar deep clone do objeto {objeto!.GetType()}");

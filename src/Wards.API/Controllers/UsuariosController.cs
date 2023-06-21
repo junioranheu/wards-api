@@ -13,6 +13,7 @@ using Wards.Application.UseCases.Usuarios.Shared.Output;
 using Wards.Application.UseCases.Usuarios.SolicitarVerificacaoContaUsuario;
 using Wards.Application.UseCases.Usuarios.VerificarContaUsuario;
 using Wards.Application.UseCases.UsuariosRoles.CriarUsuarioRole;
+using Wards.Domain.Entities;
 using Wards.Domain.Enums;
 using static Wards.Utils.Fixtures.Get;
 
