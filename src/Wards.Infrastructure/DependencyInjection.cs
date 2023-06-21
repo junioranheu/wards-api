@@ -8,6 +8,7 @@ using Microsoft.OpenApi.Models;
 using MySqlConnector;
 using System.Data;
 using System.Text;
+using Wards.Domain.Consts;
 using Wards.Infrastructure.Auth.Models;
 using Wards.Infrastructure.Auth.Token;
 using Wards.Infrastructure.Data;
@@ -103,7 +104,7 @@ namespace Wards.Infrastructure
         {
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new() { Title = "Wards.API", Version = "v1" });
+                c.SwaggerDoc("v1", new() { Title = $"{SistemaConst.NomeSistema}.API", Version = "v1" });
 
                 var jwtSecurityScheme = new OpenApiSecurityScheme
                 {

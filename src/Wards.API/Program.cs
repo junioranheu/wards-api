@@ -5,6 +5,7 @@ using Newtonsoft.Json.Linq;
 using Swashbuckle.AspNetCore.SwaggerUI;
 using Wards.API;
 using Wards.Application;
+using Wards.Domain.Consts;
 using Wards.Infrastructure;
 using Wards.Infrastructure.Data;
 using Wards.Infrastructure.Seed;
@@ -33,7 +34,7 @@ WebApplication app = builder.Build();
         app.UseSwagger();
         app.UseSwaggerUI(c =>
         {
-            c.SwaggerEndpoint("/swagger/v1/swagger.json", "Wards.API");
+            c.SwaggerEndpoint("/swagger/v1/swagger.json", $"{SistemaConst.NomeSistema}.API");
             // c.RoutePrefix = ""; 
             c.DocExpansion(DocExpansion.None);
         });
