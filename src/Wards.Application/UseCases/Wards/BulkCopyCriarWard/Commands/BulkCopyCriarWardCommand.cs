@@ -1,6 +1,6 @@
 ﻿using Wards.Domain.Entities;
 using Wards.Infrastructure.Data;
-using static Wards.Utils.Fixtures.BulkCopy;
+using static Bulk.BulkCopy;
 
 namespace Wards.Application.UseCases.Wards.BulkCopyCriarWard.Commands
 {
