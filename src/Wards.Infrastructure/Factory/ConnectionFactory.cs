@@ -24,13 +24,13 @@ namespace Wards.Infrastructure.Factory
 
         public IDbConnection CreateDbConnection()
         {
-            // return new SqlConnection(_configuration.GetConnectionString("CPFL"));
+            // return new SqlConnection(_configuration.GetConnectionString("con"));
             return new MySqlConnection(CreateDbStringConnection());
         }
 
         public MySqlConnection CreateDbSqlConnection()
         {
-            // return new SqlConnection(_configuration.GetConnectionString("CPFL"));
+            // return new SqlConnection(_configuration.GetConnectionString("con"));
             return new MySqlConnection(CreateDbStringConnection());
         }
     }
