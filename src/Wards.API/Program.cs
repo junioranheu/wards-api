@@ -10,7 +10,6 @@ using Wards.Domain.Consts;
 using Wards.Infrastructure;
 using Wards.Infrastructure.Data;
 using Wards.Infrastructure.Seed;
-using Wards.WorkersServices;
 
 #region builder
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
@@ -18,7 +17,7 @@ WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
     builder.Services.AddDependencyInjectionAPI();
     builder.Services.AddDependencyInjectionApplication(builder);
     builder.Services.AddDependencyInjectionInfrastructure(builder);
-    builder.Services.AddDependencyInjectionWorkersServices(builder); // ***
+    // builder.Services.AddDependencyInjectionWorkersServices(builder);
 }
 #endregion
 

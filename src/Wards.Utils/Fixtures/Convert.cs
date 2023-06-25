@@ -76,7 +76,7 @@ namespace Wards.Utils.Fixtures
         /// <summary>
         /// Converter caminho de um arquivo para stream;
         /// </summary>
-        public static async Task<Stream?> ConverterPathParaStream(string path, int? chunkSize = 4096)
+        public static async Task<Stream?> ConverterPathParaStream(string path, long? chunkSize = 4096)
         {
             if (string.IsNullOrEmpty(path))
             {
@@ -88,7 +88,7 @@ namespace Wards.Utils.Fixtures
                 return null;
             }
 
-            return await Task.FromResult(new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read, chunkSize.GetValueOrDefault(), FileOptions.Asynchronous));
+            return await Task.FromResult(new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read, (int)chunkSize.GetValueOrDefault(), FileOptions.Asynchronous));
         }
 
         /// <summary>

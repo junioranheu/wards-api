@@ -1,8 +1,11 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Azure;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
 using System.Globalization;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Text.Json;
 using Wards.Application.Services.Sistemas.ResetarBancoDados;
 using Wards.Application.UseCases.Logs.ListarLog;
 using Wards.Application.UseCases.Logs.Shared.Output;
@@ -55,7 +58,7 @@ namespace Wards.API.Controllers
         /// </summary>
         [HttpGet("exemploStreamingFileEmChunks")]
         [AllowAnonymous]
-        public async IAsyncEnumerable<byte[]> ExemploStreamingFileEmChunks([EnumeratorCancellation] CancellationToken cancellationToken, string? nomeArquivo = "background.jpg", int? chunkSizeBytes = 1000000)
+        public async IAsyncEnumerable<dynamic> ExemploStreamingFileEmChunks([EnumeratorCancellation] CancellationToken cancellationToken, string? nomeArquivo = "background.jpg", long? chunkSizeBytes = 1048576)
         {
             if (nomeArquivo is null || chunkSizeBytes is null || chunkSizeBytes < 1)
             {
@@ -65,11 +68,17 @@ namespace Wards.API.Controllers
             string[] listaArquivos = Directory.GetFiles($"{_webHostEnvironment.ContentRootPath}/Assets/Misc/");
             string? arquivo = listaArquivos.Where(x => x.Contains(nomeArquivo)).FirstOrDefault() ?? throw new Exception($"Nenhum arquivo foi encontrado com o nome '{nomeArquivo}'");
 
-            IAsyncEnumerable<byte[]> streamFileEmChunks = StreamFileEmChunks(arquivo, chunkSizeBytes.GetValueOrDefault(), cancellationToken);
+            IAsyncEnumerable<(double porcentagemCompleta, byte[] chunk)> streamFileEmChunks = StreamFileEmChunks(arquivo, chunkSizeBytes.GetValueOrDefault(), cancellationToken);
 
-            await foreach (byte[] chunk in streamFileEmChunks)
+            await foreach (var (porcentagemCompleta, chunk) in streamFileEmChunks)
             {
-                yield return chunk;
+                dynamic obj = new
+                {
+                    porcentagemCompleta,
+                    chunk
+                };
+
+                yield return obj;
             }
         }
 

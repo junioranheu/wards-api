@@ -146,7 +146,7 @@ namespace Wards.Utils.Fixtures
         /// Base64 to .mp4: base64.guru/converter/decode/video;
         /// Base64 to .jpg: onlinejpgtools.com/convert-base64-to-jpg;
         /// </summary>
-        public static async IAsyncEnumerable<byte[]> StreamFileEmChunks(string arquivo, int chunkSizeBytes, [EnumeratorCancellation] CancellationToken cancellationToken)
+        public static async IAsyncEnumerable<(double porcentagemCompleta, byte[] chunk)> StreamFileEmChunks(string arquivo, long chunkSizeBytes, [EnumeratorCancellation] CancellationToken cancellationToken)
         {
             if (arquivo is null || chunkSizeBytes < 1)
             {
@@ -154,17 +154,24 @@ namespace Wards.Utils.Fixtures
             }
 
             Stream? stream = await ConverterPathParaStream(arquivo, chunkSizeBytes) ?? throw new Exception("Houve um erro interno ao buscar arquivo no servidor e convertê-lo em Stream");
-            byte[]? buffer = new byte[chunkSizeBytes > stream.Length ? (int)stream.Length : chunkSizeBytes];
+            byte[]? buffer = new byte[chunkSizeBytes];
 
-            int bytesLidos;
-            while (!cancellationToken.IsCancellationRequested && ((bytesLidos = await stream.ReadAsync(buffer, cancellationToken)) > 0))
+            while (!cancellationToken.IsCancellationRequested && (await stream.ReadAsync(buffer, cancellationToken) > 0))
             {
-                byte[]? chunk = new byte[bytesLidos];
-                buffer.CopyTo(chunk, 0);
+                byte[]? chunk = new byte[chunkSizeBytes];
 
-                yield return chunk;
+                try
+                {
+                    buffer.CopyTo(chunk, 0);
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception($"Houve um erro interno. Mais informações: {ex.Message}");
+                }
 
-                await Task.Delay(500, cancellationToken);
+                yield return (porcentagemCompleta: (System.Convert.ToDouble(stream.Position) / System.Convert.ToDouble(stream.Length) * 100), chunk);
+
+                await Task.Delay(1000, cancellationToken);
             }
         }
     }
