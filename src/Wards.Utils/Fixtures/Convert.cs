@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 
 namespace Wards.Utils.Fixtures
 {
@@ -58,7 +59,7 @@ namespace Wards.Utils.Fixtures
         }
 
         /// <summary>
-        /// Converter caminho de um arquivo para imagem;
+        /// Converter path de um arquivo para arquivo com base em "tipoConteudo";
         /// </summary>
         public static IFormFile ConverterPathParaFile(string path, string nomeArquivo, string tipoConteudo)
         {
@@ -71,6 +72,36 @@ namespace Wards.Utils.Fixtures
             };
 
             return formFile;
+        }
+
+        /// <summary>
+        /// Converter caminho de um arquivo para stream;
+        /// </summary>
+        public static async Task<Stream?> ConverterPathParaStream(IWebHostEnvironment _webHostEnvironment, string path, int? chunkSize = 4096)
+        {
+            string rootPath = _webHostEnvironment.ContentRootPath;
+
+            if (string.IsNullOrEmpty(rootPath))
+            {
+                return null;
+            }
+
+            string caminhoFinal = $"{rootPath}/{path}";
+
+            if (!System.IO.File.Exists(caminhoFinal))
+            {
+                return null;
+            }
+
+            return await Task.FromResult(new FileStream(caminhoFinal, FileMode.Open, FileAccess.Read, FileShare.Read, chunkSize.GetValueOrDefault(), FileOptions.Asynchronous));
+        }
+
+        /// <summary>
+        /// Auto-sugestivo;
+        /// </summary>
+        public static int ConverterMegasParaBytes(int? megas)
+        {
+            return megas.GetValueOrDefault() * (1024 * 1024);
         }
     }
 }

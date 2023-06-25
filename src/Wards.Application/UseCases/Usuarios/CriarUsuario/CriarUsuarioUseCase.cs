@@ -9,8 +9,8 @@ using Wards.Application.UseCases.Usuarios.Shared.Output;
 using Wards.Domain.Entities;
 using Wards.Domain.Enums;
 using Wards.Infrastructure.Auth.Token;
-using static Wards.Utils.Fixtures.Get;
 using static Wards.Utils.Fixtures.Encrypt;
+using static Wards.Utils.Fixtures.Get;
 using static Wards.Utils.Fixtures.Validate;
 
 namespace Wards.Application.UseCases.Usuarios.CriarUsuario

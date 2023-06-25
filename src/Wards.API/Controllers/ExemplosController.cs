@@ -13,7 +13,9 @@ using Wards.Application.UseCases.Wards.BulkCopyCriarWard;
 using Wards.Application.UseCases.Wards.Shared.Input;
 using Wards.Domain.Entities;
 using Wards.Domain.Enums;
+using static Wards.Utils.Fixtures.Convert;
 using static Wards.Utils.Fixtures.Get;
+using System;
 
 namespace Wards.API.Controllers
 {
@@ -22,6 +24,7 @@ namespace Wards.API.Controllers
     public class ExemplosController : Controller
     {
         #region constructor
+        private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly IListarLogUseCase _listarLogUseCase;
         private readonly IListarUsuarioUseCase _listarUsuarioUseCase;
         private readonly IMigrateDatabaseService _migrateDatabaseService;
@@ -31,11 +34,13 @@ namespace Wards.API.Controllers
         /// Controller para testes e exemplos aleatórios e possivelmente úteis;
         /// </summary>
         public ExemplosController(
+            IWebHostEnvironment webHostEnvironment,
             IListarLogUseCase listarLogUseCase,
             IListarUsuarioUseCase listarUsuarioUseCase,
             IMigrateDatabaseService migrateDatabaseService,
             IBulkCopyCriarWardUseCase bulkCopyCriarWardUseCase)
         {
+            _webHostEnvironment = webHostEnvironment;
             _listarLogUseCase = listarLogUseCase;
             _listarUsuarioUseCase = listarUsuarioUseCase;
             _migrateDatabaseService = migrateDatabaseService;
@@ -44,12 +49,45 @@ namespace Wards.API.Controllers
         #endregion
 
         #region streaming
+        [HttpGet("exemploStreamingFileChunks")]
+        [AllowAnonymous]
+        //public async IAsyncEnumerable<byte[]> ExemploStreamingFileChunks([EnumeratorCancellation] CancellationToken cancellationToken, string? pathVideo = "/Assets/Videos/orochi_vs_nego_drama.mp4", int? chunkSize = 4096)
+        public async IAsyncEnumerable<byte[]> ExemploStreamingFileChunks([EnumeratorCancellation] CancellationToken cancellationToken, string? pathVideo = "/Assets/Videos/peruviano.jpg", int? chunkSizeEmMegaBytes = 5)
+        {
+            if (pathVideo is null)
+            {
+                throw new Exception("O parâmetro 'pathVideo' não deve ser nulo");
+            }
+
+            int chuchSizeEmBytes = ConverterMegasParaBytes(chunkSizeEmMegaBytes);
+            Stream? stream = await ConverterPathParaStream(_webHostEnvironment, pathVideo, chuchSizeEmBytes);
+
+            if (stream is null)
+            {
+                throw new Exception("Houve um erro interno ao buscar arquivo no servidor e convertê-lo em Stream");
+            }
+
+            var buffer = new byte[chuchSizeEmBytes + 1];
+            int bytesRead;
+
+            while (!cancellationToken.IsCancellationRequested && ((bytesRead = await stream.ReadAsync(buffer)) > 0))
+            {
+                byte[]? chunk = new byte[bytesRead];
+                buffer.CopyTo(chunk, 0);
+
+                yield return chunk;
+
+                await Task.Delay(500, cancellationToken);
+            }
+        }
+
         [HttpGet("exemploSimularStreamingYieldTextoSimples")]
-        public async IAsyncEnumerable<Ward> ExemploSimularStreamingYieldTextoSimples([EnumeratorCancellation] CancellationToken ct)
+        [AllowAnonymous]
+        public async IAsyncEnumerable<Ward> ExemploSimularStreamingYieldTextoSimples([EnumeratorCancellation] CancellationToken cancellationToken)
         {
             int i = 1;
 
-            while (!ct.IsCancellationRequested)
+            while (!cancellationToken.IsCancellationRequested)
             {
                 yield return new Ward
                 {
@@ -59,7 +97,7 @@ namespace Wards.API.Controllers
                     UsuarioId = GerarNumeroAleatorio(1, 999)
                 };
 
-                await Task.Delay(1000, ct);
+                await Task.Delay(1000, cancellationToken);
             }
         }
         #endregion

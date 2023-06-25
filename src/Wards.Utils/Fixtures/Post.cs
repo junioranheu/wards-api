@@ -20,7 +20,7 @@ namespace Wards.Utils.Fixtures
 
         /// <summary>
         /// SMTP Gmail;
-        /// https://www.youtube.com/watch?v=FZfneLNyE4o&ab_channel=AWPLife 
+        /// www.youtube.com/watch?v=FZfneLNyE4o&ab_channel=AWPLife 
         /// </summary>
         public static async Task<bool> EnviarEmail(string emailTo, string assunto, string nomeArquivo, List<EmailDadosReplace> listaDadosReplace)
         {
