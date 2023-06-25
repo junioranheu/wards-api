@@ -158,6 +158,7 @@ namespace Wards.Utils.Fixtures
 
             while (!cancellationToken.IsCancellationRequested && (await stream.ReadAsync(buffer, cancellationToken) > 0))
             {
+                // await Task.Delay(1000, cancellationToken);
                 byte[]? chunk = new byte[chunkSizeBytes];
 
                 try
@@ -169,15 +170,11 @@ namespace Wards.Utils.Fixtures
                     throw new Exception($"Houve um erro interno. Mais informações: {ex.Message}");
                 }
 
-                StreamingFileOutput output = new()
+                yield return new StreamingFileOutput()
                 {
                     PorcentagemCompleta = System.Convert.ToDouble(stream.Position) / System.Convert.ToDouble(stream.Length) * 100,
                     Chunk = chunk
                 };
-
-                yield return output;
-
-                // await Task.Delay(1000, cancellationToken);
             }
         }
     }
