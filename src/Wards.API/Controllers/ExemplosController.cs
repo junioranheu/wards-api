@@ -15,7 +15,6 @@ using Wards.Domain.Entities;
 using Wards.Domain.Enums;
 using static Wards.Utils.Fixtures.Convert;
 using static Wards.Utils.Fixtures.Get;
-using System;
 
 namespace Wards.API.Controllers
 {
@@ -51,9 +50,11 @@ namespace Wards.API.Controllers
         #region streaming
         [HttpGet("exemploStreamingFileEmChunks")]
         [AllowAnonymous]
-        //public async IAsyncEnumerable<byte[]> ExemploStreamingFileEmChunks([EnumeratorCancellation] CancellationToken cancellationToken, string? path = "/Assets/Videos/orochi_vs_nego_drama.mp4", int? chunkSize = 4096)
-        public async IAsyncEnumerable<byte[]> ExemploStreamingFileEmChunks([EnumeratorCancellation] CancellationToken cancellationToken, string? path = "/Assets/Videos/peruviano.jpg", int? chunkSizeEmMegaBytes = 5)
+        public async IAsyncEnumerable<byte[]> ExemploStreamingFileEmChunks([EnumeratorCancellation] CancellationToken cancellationToken, string? path = "/Assets/Misc/orochi_vs_nego_drama.mp4", int? chunkSizeEmMegaBytes = 1)
+        //public async IAsyncEnumerable<byte[]> ExemploStreamingFileEmChunks([EnumeratorCancellation] CancellationToken cancellationToken, string? path = "/Assets/Misc/background.jpg", int? chunkSizeEmMegaBytes = 1)
         {
+            // Base64 to .mp4: base64.guru/converter/decode/video
+            // Base64 to .jpg: onlinejpgtools.com/convert-base64-to-jpg
             if (path is null)
             {
                 throw new Exception("O parâmetro 'pathVideo' não deve ser nulo");
@@ -65,6 +66,11 @@ namespace Wards.API.Controllers
             if (stream is null)
             {
                 throw new Exception("Houve um erro interno ao buscar arquivo no servidor e convertê-lo em Stream");
+            }
+
+            if (chuchSizeEmBytes > stream.Length)
+            {
+                chuchSizeEmBytes = (int)stream.Length;
             }
 
             byte[]? buffer = new byte[chuchSizeEmBytes];
