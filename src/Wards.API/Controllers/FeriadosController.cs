@@ -11,9 +11,9 @@ using Wards.Application.UseCases.FeriadosEstados.DeletarFeriadoEstado;
 using Wards.Application.UseCases.Feriados.Shared.Models.Input;
 using Wards.Application.UseCases.Feriados.Shared.Models.Output;
 using Wards.Application.UseCases.Logs.Shared.Output;
-using Wards.Application.UseCases.Shared.Models;
 using Wards.Domain.Enums;
 using static Wards.Utils.Fixtures.Get;
+using Wards.Application.UseCases.Shared.Models.Input;
 
 namespace Wards.API.Controllers
 {

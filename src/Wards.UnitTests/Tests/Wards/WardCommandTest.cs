@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Moq;
-using Wards.Application.UseCases.Shared.Models;
+using Wards.Application.UseCases.Shared.Models.Input;
 using Wards.Application.UseCases.Wards.CriarWard.Commands;
 using Wards.Application.UseCases.Wards.ListarWard.Queries;
 using Wards.Application.UseCases.Wards.Shared.Input;

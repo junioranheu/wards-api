@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Wards.API.Filters;
-using Wards.Application.UseCases.Shared.Models;
+using Wards.Application.UseCases.Shared.Models.Input;
 using Wards.Application.UseCases.Wards.AtualizarWard;
 using Wards.Application.UseCases.Wards.CriarWard;
 using Wards.Application.UseCases.Wards.DeletarWard;

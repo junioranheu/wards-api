@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Wards.Application.UseCases.Auxiliares.ListarEstado;
 using Wards.Application.UseCases.Auxiliares.ListarEstado.Shared.Output;
-using Wards.Application.UseCases.Shared.Models;
+using Wards.Application.UseCases.Shared.Models.Input;
 using Wards.Domain.Enums;
 using static Wards.Utils.Fixtures.Get;
 

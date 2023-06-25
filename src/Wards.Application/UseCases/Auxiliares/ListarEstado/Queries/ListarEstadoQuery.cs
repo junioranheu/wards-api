@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Wards.Application.UseCases.Shared.Models;
+using Wards.Application.UseCases.Shared.Models.Input;
 using Wards.Domain.Entities;
 using Wards.Infrastructure.Data;
 

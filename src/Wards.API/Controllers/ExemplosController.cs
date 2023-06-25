@@ -1,15 +1,12 @@
-﻿using Azure;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json.Linq;
 using System.Globalization;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using System.Text.Json;
 using Wards.Application.Services.Sistemas.ResetarBancoDados;
 using Wards.Application.UseCases.Logs.ListarLog;
 using Wards.Application.UseCases.Logs.Shared.Output;
-using Wards.Application.UseCases.Shared.Models;
+using Wards.Application.UseCases.Shared.Models.Input;
 using Wards.Application.UseCases.Usuarios.ListarUsuario;
 using Wards.Application.UseCases.Usuarios.Shared.Output;
 using Wards.Application.UseCases.Wards.BulkCopyCriarWard;

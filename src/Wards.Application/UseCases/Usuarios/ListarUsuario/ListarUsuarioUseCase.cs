@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Wards.Application.UseCases.Shared.Models;
+using Wards.Application.UseCases.Shared.Models.Input;
 using Wards.Application.UseCases.Usuarios.ListarUsuario.Queries;
 using Wards.Application.UseCases.Usuarios.Shared.Output;
 

@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Wards.API.Filters;
 using Wards.Application.UseCases.Auths.Shared.Output;
-using Wards.Application.UseCases.Shared.Models;
+using Wards.Application.UseCases.Shared.Models.Input;
 using Wards.Application.UseCases.Usuarios.AutenticarUsuario;
 using Wards.Application.UseCases.Usuarios.CriarRefreshTokenUsuario;
 using Wards.Application.UseCases.Usuarios.CriarUsuario;

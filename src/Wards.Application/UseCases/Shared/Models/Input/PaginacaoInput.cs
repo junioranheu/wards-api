@@ -1,4 +1,4 @@
-﻿namespace Wards.Application.UseCases.Shared.Models
+﻿namespace Wards.Application.UseCases.Shared.Models.Input
 {
     public class PaginacaoInput
     {

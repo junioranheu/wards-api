@@ -7,7 +7,7 @@ using Wards.Application.UseCases.Logs.ExportarXlsxLog;
 using Wards.Application.UseCases.Logs.ListarLog;
 using Wards.Application.UseCases.Logs.Shared.Input;
 using Wards.Application.UseCases.Logs.Shared.Output;
-using Wards.Application.UseCases.Shared.Models;
+using Wards.Application.UseCases.Shared.Models.Input;
 using Wards.Domain.Enums;
 using static Wards.Utils.Fixtures.Get;
 

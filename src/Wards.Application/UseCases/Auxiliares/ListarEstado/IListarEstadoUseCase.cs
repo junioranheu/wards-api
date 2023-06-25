@@ -1,5 +1,5 @@
 ﻿using Wards.Application.UseCases.Auxiliares.ListarEstado.Shared.Output;
-using Wards.Application.UseCases.Shared.Models;
+using Wards.Application.UseCases.Shared.Models.Input;
 
 namespace Wards.Application.UseCases.Auxiliares.ListarEstado
 {
