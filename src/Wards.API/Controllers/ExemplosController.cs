@@ -51,7 +51,6 @@ namespace Wards.API.Controllers
         [HttpGet("exemploStreamingFileEmChunks")]
         [AllowAnonymous]
         public async IAsyncEnumerable<byte[]> ExemploStreamingFileEmChunks([EnumeratorCancellation] CancellationToken cancellationToken, string? path = "/Assets/Misc/orochi_vs_nego_drama.mp4", int? chunkSizeEmMegaBytes = 1)
-        //public async IAsyncEnumerable<byte[]> ExemploStreamingFileEmChunks([EnumeratorCancellation] CancellationToken cancellationToken, string? path = "/Assets/Misc/background.jpg", int? chunkSizeEmMegaBytes = 1)
         {
             // Base64 to .mp4: base64.guru/converter/decode/video
             // Base64 to .jpg: onlinejpgtools.com/convert-base64-to-jpg
