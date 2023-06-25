@@ -13,7 +13,6 @@ using Wards.Application.UseCases.Wards.BulkCopyCriarWard;
 using Wards.Application.UseCases.Wards.Shared.Input;
 using Wards.Domain.Entities;
 using Wards.Domain.Enums;
-using static Wards.Utils.Fixtures.Convert;
 using static Wards.Utils.Fixtures.Get;
 using static Wards.Utils.Fixtures.Post;
 

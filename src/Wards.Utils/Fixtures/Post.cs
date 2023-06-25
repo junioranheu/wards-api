@@ -154,7 +154,7 @@ namespace Wards.Utils.Fixtures
             }
 
             Stream? stream = await ConverterPathParaStream(arquivo, chunkSizeBytes) ?? throw new Exception("Houve um erro interno ao buscar arquivo no servidor e convertê-lo em Stream");
-            byte[]? buffer = new byte[chunkSizeBytes > stream.Length ? (int)stream.Length : (int)chunkSizeBytes];
+            byte[]? buffer = new byte[chunkSizeBytes > stream.Length ? (int)stream.Length : chunkSizeBytes];
 
             int bytesLidos;
             while (!cancellationToken.IsCancellationRequested && ((bytesLidos = await stream.ReadAsync(buffer, cancellationToken)) > 0))
