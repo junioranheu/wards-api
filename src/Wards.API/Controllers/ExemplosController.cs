@@ -21,6 +21,7 @@ namespace Wards.API.Controllers
     [ApiController]
     public class ExemplosController : Controller
     {
+        #region constructor
         private readonly IListarLogUseCase _listarLogUseCase;
         private readonly IListarUsuarioUseCase _listarUsuarioUseCase;
         private readonly IMigrateDatabaseService _migrateDatabaseService;
@@ -40,7 +41,9 @@ namespace Wards.API.Controllers
             _migrateDatabaseService = migrateDatabaseService;
             _bulkCopyCriarWardUseCase = bulkCopyCriarWardUseCase;
         }
+        #endregion
 
+        #region streaming
         [HttpGet("exemploStreamingYield")]
         public async IAsyncEnumerable<Ward> ExemploStreamingYield([EnumeratorCancellation] CancellationToken ct)
         {
@@ -59,7 +62,9 @@ namespace Wards.API.Controllers
                 await Task.Delay(1000, ct);
             }
         }
+        #endregion
 
+        #region bulk_copy
         /// <summary>
         /// Exemplo de insert com BulkCopy e DataTable;
         /// </summary>
@@ -86,7 +91,9 @@ namespace Wards.API.Controllers
 
             return Ok(true);
         }
+        #endregion
 
+        #region linq
         /// <summary>
         /// Exemplo de LINQ avançado, fazendo select com group by e inserir resultado em um Output;
         /// </summary>
@@ -281,7 +288,9 @@ namespace Wards.API.Controllers
 
             return Ok(listaPrincipalFinal);
         }
+        #endregion
 
+        #region migrate
         [HttpGet("migrateDatabase")]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(bool))]
@@ -295,5 +304,6 @@ namespace Wards.API.Controllers
 
             return Ok($"Update-Database finalizado com sucesso às {GerarHorarioBrasilia()}");
         }
+        #endregion
     }
 }
