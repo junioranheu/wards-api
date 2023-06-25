@@ -67,7 +67,7 @@ namespace Wards.API.Controllers
                 throw new Exception("Houve um erro interno ao buscar arquivo no servidor e convertê-lo em Stream");
             }
 
-            var buffer = new byte[chuchSizeEmBytes + 1];
+            var buffer = new byte[chuchSizeEmBytes];
             int bytesLidos;
 
             while (!cancellationToken.IsCancellationRequested && ((bytesLidos = await stream.ReadAsync(buffer)) > 0))
