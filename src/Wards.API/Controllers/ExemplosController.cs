@@ -51,8 +51,8 @@ namespace Wards.API.Controllers
         #region streaming
         [HttpGet("exemploStreamingFileEmChunks")]
         [AllowAnonymous]
-        //public async IAsyncEnumerable<byte[]> exemploStreamingFileEmChunks([EnumeratorCancellation] CancellationToken cancellationToken, string? path = "/Assets/Videos/orochi_vs_nego_drama.mp4", int? chunkSize = 4096)
-        public async IAsyncEnumerable<byte[]> exemploStreamingFileEmChunks([EnumeratorCancellation] CancellationToken cancellationToken, string? path = "/Assets/Videos/peruviano.jpg", int? chunkSizeEmMegaBytes = 5)
+        //public async IAsyncEnumerable<byte[]> ExemploStreamingFileEmChunks([EnumeratorCancellation] CancellationToken cancellationToken, string? path = "/Assets/Videos/orochi_vs_nego_drama.mp4", int? chunkSize = 4096)
+        public async IAsyncEnumerable<byte[]> ExemploStreamingFileEmChunks([EnumeratorCancellation] CancellationToken cancellationToken, string? path = "/Assets/Videos/peruviano.jpg", int? chunkSizeEmMegaBytes = 5)
         {
             if (path is null)
             {
@@ -67,7 +67,7 @@ namespace Wards.API.Controllers
                 throw new Exception("Houve um erro interno ao buscar arquivo no servidor e convertê-lo em Stream");
             }
 
-            var buffer = new byte[chuchSizeEmBytes];
+            byte[]? buffer = new byte[chuchSizeEmBytes];
             int bytesLidos;
 
             while (!cancellationToken.IsCancellationRequested && ((bytesLidos = await stream.ReadAsync(buffer)) > 0))
