@@ -1,10 +1,9 @@
-﻿using DocumentFormat.OpenXml.InkML;
-using FluentValidation;
+﻿using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.ResponseCompression;
 using System.IO.Compression;
-using System.Security.Cryptography.Xml;
+using System.Text.Json.Serialization;
 using Wards.API.Filters;
 using Wards.Application.UseCases.Wards.Shared.Input;
 using Wards.Infrastructure.Data;
@@ -52,10 +51,10 @@ namespace Wards.API
                 x.Filters.Add<RequestFilter>();
                 x.Filters.Add<ErrorFilter>();
             }).
-                AddNewtonsoftJson(x =>
+                AddJsonOptions(x =>
                 {
-                    x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
-                    x.SerializerSettings.Formatting = Newtonsoft.Json.Formatting.Indented;
+                    x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+                    x.JsonSerializerOptions.WriteIndented = true;
                 });
         }
 

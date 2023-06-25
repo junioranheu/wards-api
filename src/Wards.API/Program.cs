@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.Extensions.FileProviders;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -17,7 +18,7 @@ WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
     builder.Services.AddDependencyInjectionAPI();
     builder.Services.AddDependencyInjectionApplication(builder);
     builder.Services.AddDependencyInjectionInfrastructure(builder);
-    builder.Services.AddDependencyInjectionWorkersServices(builder);
+    builder.Services.AddDependencyInjectionWorkersServices(builder); // ***
 }
 #endregion
 
@@ -35,7 +36,7 @@ WebApplication app = builder.Build();
         app.UseSwaggerUI(c =>
         {
             c.SwaggerEndpoint("/swagger/v1/swagger.json", $"{SistemaConst.NomeSistema}.API");
-            // c.RoutePrefix = ""; 
+            // c.RoutePrefix = ""; // ***
             c.DocExpansion(DocExpansion.None);
         });
 
@@ -48,7 +49,16 @@ WebApplication app = builder.Build();
     }
 
     app.UseCors(builder.Configuration["CORSSettings:Cors"]!);
-    app.UseResponseCompression();
+
+    /// <summary>
+    /// O trecho "app.UseWhen" abaixo é necessário quando a API tem uma resposta IAsyncEnumerable/Yield;
+    /// O "UseResponseCompression" conflita com esse tipo de requisição, portanto é obrigatória a verificação abaixo;
+    /// Caso não existam requisições desse tipo na API, é apenas necessário o trecho "app.UseResponseCompression()";
+    /// </summary>
+    app.UseWhen(context => !IsStreamingRequest(context), x =>
+    {
+        x.UseResponseCompression();
+    });
 
     app.UseAuthentication();
     app.UseAuthorization();
@@ -78,6 +88,30 @@ static async Task DBInitialize(WebApplication app, IServiceProvider services, bo
     {
         app.Logger.LogError(ex, "{detalhes}", "Houve um problema ao resetar a base de dados");
     }
+}
+
+static bool IsStreamingRequest(HttpContext context)
+{
+    Endpoint? endpoint = context.GetEndpoint();
+
+    if (endpoint is RouteEndpoint routeEndpoint)
+    {
+        ControllerActionDescriptor? acao = routeEndpoint.Metadata.GetMetadata<ControllerActionDescriptor>();
+
+        if (acao is not null)
+        {
+            Type? tipo = acao.MethodInfo.ReturnType;
+
+            if (tipo.IsGenericType && tipo.GetGenericTypeDefinition() == typeof(IAsyncEnumerable<>))
+            {
+                return true;
+            }
+
+            return false;
+        }
+    }
+
+    return false;
 }
 
 static void AddHealthCheck(WebApplication app)

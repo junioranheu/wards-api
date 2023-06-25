@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Globalization;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using Wards.Application.Services.Sistemas.ResetarBancoDados;
 using Wards.Application.UseCases.Logs.ListarLog;
 using Wards.Application.UseCases.Logs.Shared.Output;
@@ -38,6 +39,25 @@ namespace Wards.API.Controllers
             _listarUsuarioUseCase = listarUsuarioUseCase;
             _migrateDatabaseService = migrateDatabaseService;
             _bulkCopyCriarWardUseCase = bulkCopyCriarWardUseCase;
+        }
+
+        [HttpGet("exemploStreamingYield")]
+        public async IAsyncEnumerable<Ward> ExemploStreamingYield([EnumeratorCancellation] CancellationToken ct)
+        {
+            int i = 0;
+
+            while (!ct.IsCancellationRequested)
+            {
+                yield return new Ward
+                {
+                    WardId = i++,
+                    Titulo = GerarStringAleatoria(GerarNumeroAleatorio(5, 10), true),
+                    Conteudo = GerarStringAleatoria(GerarNumeroAleatorio(10, 20), false),
+                    UsuarioId = 1
+                };
+
+                await Task.Delay(1000, ct);
+            }
         }
 
         /// <summary>
