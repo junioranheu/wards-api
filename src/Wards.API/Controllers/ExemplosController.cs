@@ -66,7 +66,7 @@ namespace Wards.API.Controllers
             string[] listaArquivos = Directory.GetFiles($"{_webHostEnvironment.ContentRootPath}/Assets/Misc/");
             string? arquivo = listaArquivos.Where(x => x.Contains(nomeArquivo)).FirstOrDefault() ?? throw new Exception($"Nenhum arquivo foi encontrado com o nome '{nomeArquivo}'");
 
-            IAsyncEnumerable<byte[]> streamFileEmChunks = StreamFileEmChunks(cancellationToken, arquivo, chunkSizeBytes.GetValueOrDefault());
+            IAsyncEnumerable<byte[]> streamFileEmChunks = StreamFileEmChunks(arquivo, chunkSizeBytes.GetValueOrDefault(), cancellationToken);
 
             await foreach (byte[] chunk in streamFileEmChunks)
             {
@@ -208,7 +208,7 @@ namespace Wards.API.Controllers
             }
 
             // double valor = objeto is IConvertible ? ((IConvertible)objeto).ToDouble(null) : 0d; // Caso seja necessário converter resultado para double;
-            string valor = objeto is IConvertible ? ((IConvertible)objeto).ToString(null) : "";
+            string valor = objeto is IConvertible convertible ? convertible.ToString(null) : "";
 
             // >>>>>>>>>>>>>>>>>>>>>>>>>>>>> Segunda forma de obter valor dinamicamente (com reflection);
             UsuarioOutput exemplo = lista!.FirstOrDefault()!;
@@ -316,7 +316,7 @@ namespace Wards.API.Controllers
 
             // Remover da "listaPrincipal" os itens que se repetem;
             IEnumerable<DateTime> listaPrincipalFinal = listaPrincipal.
-                                                        Where(lp => (listaDatasQueSeRepetem!.Count > 0 ? !listaDatasQueSeRepetem.Any(x => x.Month == lp.Data.Month && x.Year == lp.Data.Year) : true)).
+                                                        Where(lp => (listaDatasQueSeRepetem!.Count <= 0 || !listaDatasQueSeRepetem.Any(x => x.Month == lp.Data.Month && x.Year == lp.Data.Year))).
                                                         ToList().
                                                         Select(lp => lp.Data);
 

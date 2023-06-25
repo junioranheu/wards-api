@@ -27,7 +27,7 @@ namespace Wards.Utils.Fixtures
 
             if (base64.Contains(split))
             {
-                normalizarBase64 = base64.Substring(base64.IndexOf(split) + split.Length);
+                normalizarBase64 = base64[(base64.IndexOf(split) + split.Length)..];
             }
 
             byte[] bytes = System.Convert.FromBase64String(normalizarBase64);
@@ -47,7 +47,7 @@ namespace Wards.Utils.Fixtures
             List<IFormFile> formFiles = new();
 
             string split = ";base64,";
-            string normalizarBase64 = base64.Substring(base64.IndexOf(split) + split.Length);
+            string normalizarBase64 = base64[(base64.IndexOf(split) + split.Length)..];
             byte[] bytes = System.Convert.FromBase64String(normalizarBase64);
             MemoryStream stream = new(bytes);
 

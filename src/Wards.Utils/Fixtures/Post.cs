@@ -146,7 +146,7 @@ namespace Wards.Utils.Fixtures
         /// Base64 to .mp4: base64.guru/converter/decode/video;
         /// Base64 to .jpg: onlinejpgtools.com/convert-base64-to-jpg;
         /// </summary>
-        public static async IAsyncEnumerable<byte[]> StreamFileEmChunks([EnumeratorCancellation] CancellationToken cancellationToken, string arquivo, int chunkSizeBytes)
+        public static async IAsyncEnumerable<byte[]> StreamFileEmChunks(string arquivo, int chunkSizeBytes, [EnumeratorCancellation] CancellationToken cancellationToken)
         {
             if (arquivo is null || chunkSizeBytes < 1)
             {
@@ -157,7 +157,7 @@ namespace Wards.Utils.Fixtures
             byte[]? buffer = new byte[chunkSizeBytes > stream.Length ? (int)stream.Length : (int)chunkSizeBytes];
 
             int bytesLidos;
-            while (!cancellationToken.IsCancellationRequested && ((bytesLidos = await stream.ReadAsync(buffer)) > 0))
+            while (!cancellationToken.IsCancellationRequested && ((bytesLidos = await stream.ReadAsync(buffer, cancellationToken)) > 0))
             {
                 byte[]? chunk = new byte[bytesLidos];
                 buffer.CopyTo(chunk, 0);
