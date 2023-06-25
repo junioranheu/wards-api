@@ -5,12 +5,11 @@ using System.Net;
 using System.Security.Claims;
 using Wards.Application.Services.Usuarios.ListarUsuarioRolesCache;
 using Wards.Application.UseCases.UsuariosRoles.Shared.Output;
-using Wards.Domain.Entities;
 using Wards.Domain.Enums;
 
 namespace Wards.API.Filters
 {
-    public class AuthAttribute : TypeFilterAttribute
+    public sealed class AuthAttribute : TypeFilterAttribute
     {
         public AuthAttribute(params UsuarioRoleEnum[] roles) : base(typeof(AuthorizeFilter))
         {

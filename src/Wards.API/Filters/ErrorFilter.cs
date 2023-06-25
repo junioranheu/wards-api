@@ -9,7 +9,7 @@ using static Wards.Utils.Fixtures.Get;
 
 namespace Wards.API.Filters
 {
-    public class ErrorFilter : ExceptionFilterAttribute
+    public sealed class ErrorFilter : ExceptionFilterAttribute
     {
         private readonly ILogger _logger;
         private readonly ICriarLogUseCase _criarLogUseCase;
