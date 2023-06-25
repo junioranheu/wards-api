@@ -44,10 +44,10 @@ namespace Wards.API.Controllers
         #endregion
 
         #region streaming
-        [HttpGet("exemploStreamingYield")]
-        public async IAsyncEnumerable<Ward> ExemploStreamingYield([EnumeratorCancellation] CancellationToken ct)
+        [HttpGet("exemploSimularStreamingYieldTextoSimples")]
+        public async IAsyncEnumerable<Ward> ExemploSimularStreamingYieldTextoSimples([EnumeratorCancellation] CancellationToken ct)
         {
-            int i = 0;
+            int i = 1;
 
             while (!ct.IsCancellationRequested)
             {
@@ -56,7 +56,7 @@ namespace Wards.API.Controllers
                     WardId = i++,
                     Titulo = GerarStringAleatoria(GerarNumeroAleatorio(5, 10), true),
                     Conteudo = GerarStringAleatoria(GerarNumeroAleatorio(10, 20), false),
-                    UsuarioId = 1
+                    UsuarioId = GerarNumeroAleatorio(1, 999)
                 };
 
                 await Task.Delay(1000, ct);
