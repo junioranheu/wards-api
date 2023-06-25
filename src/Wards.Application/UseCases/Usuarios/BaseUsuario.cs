@@ -5,7 +5,7 @@ using Wards.Application.UseCases.Tokens.Shared.Input;
 using Wards.Application.UseCases.Usuarios.Shared.Output;
 using Wards.Domain.Enums;
 using Wards.Infrastructure.Auth.Token;
-using Wards.Utils.Entities;
+using Wards.Utils.Entities.Output;
 using static Wards.Utils.Fixtures.Convert;
 using static Wards.Utils.Fixtures.Get;
 using static Wards.Utils.Fixtures.Post;
@@ -43,10 +43,10 @@ namespace Wards.Application.UseCases.Usuarios
                 const string assunto = "Verifique sua conta";
                 string nomeArquivo = ObterDescricaoEnum(EmailEnum.VerificarConta);
 
-                List<EmailDadosReplace> listaDadosReplace = new()
+                List<EmailDadosReplaceOutput> listaDadosReplace = new()
                 {
-                    new EmailDadosReplace { Key = "Url", Value = $"{ObterCaminhoFront()}/usuario/verificar-conta/{codigoVerificacao}"},
-                    new EmailDadosReplace { Key = "NomeUsuario", Value = nomeUsuario }
+                    new EmailDadosReplaceOutput { Key = "Url", Value = $"{ObterCaminhoFront()}/usuario/verificar-conta/{codigoVerificacao}"},
+                    new EmailDadosReplaceOutput { Key = "NomeUsuario", Value = nomeUsuario }
                 };
 
                 bool resposta = await EnviarEmail(emailTo, assunto, nomeArquivo, listaDadosReplace);

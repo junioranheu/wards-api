@@ -3,7 +3,7 @@ using Microsoft.Extensions.Configuration;
 using System.Net;
 using System.Net.Mail;
 using System.Runtime.CompilerServices;
-using Wards.Utils.Entities;
+using Wards.Utils.Entities.Output;
 using static Wards.Utils.Fixtures.Convert;
 
 namespace Wards.Utils.Fixtures
@@ -24,7 +24,7 @@ namespace Wards.Utils.Fixtures
         /// Enviar e-mail (SMTP) via Gmail;
         /// www.youtube.com/watch?v=FZfneLNyE4o&ab_channel=AWPLife 
         /// </summary>
-        public static async Task<bool> EnviarEmail(string emailTo, string assunto, string nomeArquivo, List<EmailDadosReplace> listaDadosReplace)
+        public static async Task<bool> EnviarEmail(string emailTo, string assunto, string nomeArquivo, List<EmailDadosReplaceOutput> listaDadosReplace)
         {
             if (string.IsNullOrEmpty(emailTo) || string.IsNullOrEmpty(assunto) || string.IsNullOrEmpty(nomeArquivo))
             {
@@ -63,7 +63,7 @@ namespace Wards.Utils.Fixtures
 
             return true;
 
-            static string AjustarConteudoEmailHTML(string caminhoFinalArquivoHTML, List<EmailDadosReplace>? listaDadosReplace)
+            static string AjustarConteudoEmailHTML(string caminhoFinalArquivoHTML, List<EmailDadosReplaceOutput>? listaDadosReplace)
             {
                 string conteudoEmailHtml = string.Empty;
 
@@ -146,7 +146,7 @@ namespace Wards.Utils.Fixtures
         /// Base64 to .mp4: base64.guru/converter/decode/video;
         /// Base64 to .jpg: onlinejpgtools.com/convert-base64-to-jpg;
         /// </summary>
-        public static async IAsyncEnumerable<(double porcentagemCompleta, byte[] chunk)> StreamFileEmChunks(string arquivo, long chunkSizeBytes, [EnumeratorCancellation] CancellationToken cancellationToken)
+        public static async IAsyncEnumerable<StreamingFileOutput> StreamFileEmChunks(string arquivo, long chunkSizeBytes, [EnumeratorCancellation] CancellationToken cancellationToken)
         {
             if (arquivo is null || chunkSizeBytes < 1)
             {
@@ -169,9 +169,15 @@ namespace Wards.Utils.Fixtures
                     throw new Exception($"Houve um erro interno. Mais informações: {ex.Message}");
                 }
 
-                yield return (porcentagemCompleta: (System.Convert.ToDouble(stream.Position) / System.Convert.ToDouble(stream.Length) * 100), chunk);
+                StreamingFileOutput output = new()
+                {
+                    PorcentagemCompleta = System.Convert.ToDouble(stream.Position) / System.Convert.ToDouble(stream.Length) * 100,
+                    Chunk = chunk
+                };
 
-                await Task.Delay(1000, cancellationToken);
+                yield return output;
+
+                // await Task.Delay(1000, cancellationToken);
             }
         }
     }

@@ -1,4 +1,4 @@
-﻿namespace Wards.Application.UseCases.Shared.Models.Output
+﻿namespace Wards.Utils.Entities.Output
 {
     public class StreamingFileOutput
     {
