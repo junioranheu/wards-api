@@ -48,33 +48,28 @@ namespace Wards.API.Controllers
         #endregion
 
         #region streaming
+        /// <summary>
+        /// Exemplo de streaming de um arquivo em chunks;
+        /// Base64 to .mp4: base64.guru/converter/decode/video;
+        /// Base64 to .jpg: onlinejpgtools.com/convert-base64-to-jpg;
+        /// </summary>
+
         [HttpGet("exemploStreamingFileEmChunks")]
         [AllowAnonymous]
-        public async IAsyncEnumerable<byte[]> ExemploStreamingFileEmChunks([EnumeratorCancellation] CancellationToken cancellationToken, string? path = "/Assets/Misc/orochi_vs_nego_drama.mp4", int? chunkSizeEmMegaBytes = 1)
+        public async IAsyncEnumerable<byte[]> ExemploStreamingFileEmChunks([EnumeratorCancellation] CancellationToken cancellationToken, string? nomeArquivo = "background.jpg", int? chunkSizeBytes = 1000000)
         {
-            // Base64 to .mp4: base64.guru/converter/decode/video
-            // Base64 to .jpg: onlinejpgtools.com/convert-base64-to-jpg
-            if (path is null)
+            if (nomeArquivo is null || chunkSizeBytes is null || chunkSizeBytes < 1)
             {
-                throw new Exception("O parâmetro 'pathVideo' não deve ser nulo");
-            }
+                throw new Exception("Os parâmetros 'nomeArquivo' e 'chunkSizeBytes' não devem ser nulos");
+            }  
 
-            int chuchSizeEmBytes = ConverterMegasParaBytes(chunkSizeEmMegaBytes);
-            Stream? stream = await ConverterPathParaStream(_webHostEnvironment, path, chuchSizeEmBytes);
+            string[] listaArquivos = Directory.GetFiles($"{_webHostEnvironment.ContentRootPath}/Assets/Misc/");
+            string? arquivo = listaArquivos.Where(x => x.Contains(nomeArquivo)).FirstOrDefault() ?? throw new Exception($"Nenhum arquivo foi encontrado com o nome '{nomeArquivo}'");
 
-            if (stream is null)
-            {
-                throw new Exception("Houve um erro interno ao buscar arquivo no servidor e convertê-lo em Stream");
-            }
+            Stream? stream = await ConverterPathParaStream(arquivo, chunkSizeBytes) ?? throw new Exception("Houve um erro interno ao buscar arquivo no servidor e convertê-lo em Stream");
+            byte[]? buffer = new byte[chunkSizeBytes > stream.Length ? (int)stream.Length : (int)chunkSizeBytes];
 
-            if (chuchSizeEmBytes > stream.Length)
-            {
-                chuchSizeEmBytes = (int)stream.Length;
-            }
-
-            byte[]? buffer = new byte[chuchSizeEmBytes];
             int bytesLidos;
-
             while (!cancellationToken.IsCancellationRequested && ((bytesLidos = await stream.ReadAsync(buffer)) > 0))
             {
                 byte[]? chunk = new byte[bytesLidos];
@@ -86,6 +81,9 @@ namespace Wards.API.Controllers
             }
         }
 
+        /// <summary>
+        /// Exemplo de (simulação) streaming (com yield) de um texto simples;
+        /// </summary>
         [HttpGet("exemploSimularStreamingYieldTextoSimples")]
         [AllowAnonymous]
         public async IAsyncEnumerable<Ward> ExemploSimularStreamingYieldTextoSimples([EnumeratorCancellation] CancellationToken cancellationToken)

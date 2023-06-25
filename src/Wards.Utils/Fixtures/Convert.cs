@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 
 namespace Wards.Utils.Fixtures
 {
@@ -77,31 +76,27 @@ namespace Wards.Utils.Fixtures
         /// <summary>
         /// Converter caminho de um arquivo para stream;
         /// </summary>
-        public static async Task<Stream?> ConverterPathParaStream(IWebHostEnvironment _webHostEnvironment, string path, int? chunkSize = 4096)
+        public static async Task<Stream?> ConverterPathParaStream(string path, int? chunkSize = 4096)
         {
-            string rootPath = _webHostEnvironment.ContentRootPath;
-
-            if (string.IsNullOrEmpty(rootPath))
+            if (string.IsNullOrEmpty(path))
             {
                 return null;
             }
 
-            string caminhoFinal = $"{rootPath}/{path}";
-
-            if (!System.IO.File.Exists(caminhoFinal))
+            if (!System.IO.File.Exists(path))
             {
                 return null;
             }
 
-            return await Task.FromResult(new FileStream(caminhoFinal, FileMode.Open, FileAccess.Read, FileShare.Read, chunkSize.GetValueOrDefault(), FileOptions.Asynchronous));
+            return await Task.FromResult(new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read, chunkSize.GetValueOrDefault(), FileOptions.Asynchronous));
         }
 
         /// <summary>
         /// Auto-sugestivo;
         /// </summary>
-        public static int ConverterMegasParaBytes(int? megas)
+        public static int ConverterMegasParaBytes(double? megas)
         {
-            return megas.GetValueOrDefault() * (1024 * 1024);
+            return System.Convert.ToInt32(megas.GetValueOrDefault() * (1024 * 1024));
         }
     }
 }
