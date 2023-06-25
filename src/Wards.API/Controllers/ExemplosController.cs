@@ -49,18 +49,18 @@ namespace Wards.API.Controllers
         #endregion
 
         #region streaming
-        [HttpGet("exemploStreamingFileChunks")]
+        [HttpGet("exemploStreamingFileEmChunks")]
         [AllowAnonymous]
-        //public async IAsyncEnumerable<byte[]> ExemploStreamingFileChunks([EnumeratorCancellation] CancellationToken cancellationToken, string? pathVideo = "/Assets/Videos/orochi_vs_nego_drama.mp4", int? chunkSize = 4096)
-        public async IAsyncEnumerable<byte[]> ExemploStreamingFileChunks([EnumeratorCancellation] CancellationToken cancellationToken, string? pathVideo = "/Assets/Videos/peruviano.jpg", int? chunkSizeEmMegaBytes = 5)
+        //public async IAsyncEnumerable<byte[]> exemploStreamingFileEmChunks([EnumeratorCancellation] CancellationToken cancellationToken, string? path = "/Assets/Videos/orochi_vs_nego_drama.mp4", int? chunkSize = 4096)
+        public async IAsyncEnumerable<byte[]> exemploStreamingFileEmChunks([EnumeratorCancellation] CancellationToken cancellationToken, string? path = "/Assets/Videos/peruviano.jpg", int? chunkSizeEmMegaBytes = 5)
         {
-            if (pathVideo is null)
+            if (path is null)
             {
                 throw new Exception("O parâmetro 'pathVideo' não deve ser nulo");
             }
 
             int chuchSizeEmBytes = ConverterMegasParaBytes(chunkSizeEmMegaBytes);
-            Stream? stream = await ConverterPathParaStream(_webHostEnvironment, pathVideo, chuchSizeEmBytes);
+            Stream? stream = await ConverterPathParaStream(_webHostEnvironment, path, chuchSizeEmBytes);
 
             if (stream is null)
             {
@@ -68,11 +68,11 @@ namespace Wards.API.Controllers
             }
 
             var buffer = new byte[chuchSizeEmBytes + 1];
-            int bytesRead;
+            int bytesLidos;
 
-            while (!cancellationToken.IsCancellationRequested && ((bytesRead = await stream.ReadAsync(buffer)) > 0))
+            while (!cancellationToken.IsCancellationRequested && ((bytesLidos = await stream.ReadAsync(buffer)) > 0))
             {
-                byte[]? chunk = new byte[bytesRead];
+                byte[]? chunk = new byte[bytesLidos];
                 buffer.CopyTo(chunk, 0);
 
                 yield return chunk;
