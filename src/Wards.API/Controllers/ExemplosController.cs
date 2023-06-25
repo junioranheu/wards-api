@@ -15,6 +15,7 @@ using Wards.Domain.Entities;
 using Wards.Domain.Enums;
 using static Wards.Utils.Fixtures.Convert;
 using static Wards.Utils.Fixtures.Get;
+using static Wards.Utils.Fixtures.Post;
 
 namespace Wards.API.Controllers
 {
@@ -53,7 +54,6 @@ namespace Wards.API.Controllers
         /// Base64 to .mp4: base64.guru/converter/decode/video;
         /// Base64 to .jpg: onlinejpgtools.com/convert-base64-to-jpg;
         /// </summary>
-
         [HttpGet("exemploStreamingFileEmChunks")]
         [AllowAnonymous]
         public async IAsyncEnumerable<byte[]> ExemploStreamingFileEmChunks([EnumeratorCancellation] CancellationToken cancellationToken, string? nomeArquivo = "background.jpg", int? chunkSizeBytes = 1000000)
@@ -61,23 +61,16 @@ namespace Wards.API.Controllers
             if (nomeArquivo is null || chunkSizeBytes is null || chunkSizeBytes < 1)
             {
                 throw new Exception("Os parâmetros 'nomeArquivo' e 'chunkSizeBytes' não devem ser nulos");
-            }  
+            }
 
             string[] listaArquivos = Directory.GetFiles($"{_webHostEnvironment.ContentRootPath}/Assets/Misc/");
             string? arquivo = listaArquivos.Where(x => x.Contains(nomeArquivo)).FirstOrDefault() ?? throw new Exception($"Nenhum arquivo foi encontrado com o nome '{nomeArquivo}'");
 
-            Stream? stream = await ConverterPathParaStream(arquivo, chunkSizeBytes) ?? throw new Exception("Houve um erro interno ao buscar arquivo no servidor e convertê-lo em Stream");
-            byte[]? buffer = new byte[chunkSizeBytes > stream.Length ? (int)stream.Length : (int)chunkSizeBytes];
+            IAsyncEnumerable<byte[]> streamFileEmChunks = StreamFileEmChunks(cancellationToken, arquivo, chunkSizeBytes.GetValueOrDefault());
 
-            int bytesLidos;
-            while (!cancellationToken.IsCancellationRequested && ((bytesLidos = await stream.ReadAsync(buffer)) > 0))
+            await foreach (byte[] chunk in streamFileEmChunks)
             {
-                byte[]? chunk = new byte[bytesLidos];
-                buffer.CopyTo(chunk, 0);
-
                 yield return chunk;
-
-                await Task.Delay(500, cancellationToken);
             }
         }
 
