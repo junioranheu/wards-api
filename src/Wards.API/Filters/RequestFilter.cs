@@ -20,9 +20,14 @@ namespace Wards.API.Filters
 
         public override async Task OnActionExecutionAsync(ActionExecutingContext filterContextExecuting, ActionExecutionDelegate next)
         {
+            if (filterContextExecuting.HttpContext.RequestAborted.IsCancellationRequested)
+            {
+                filterContextExecuting.Result = new StatusCodeResult(StatusCodes.Status400BadRequest);
+                return;
+            }
+
             ActionExecutedContext filterContextExecuted = await next();
             HttpRequest request = filterContextExecuted.HttpContext.Request;
-            // HttpResponse response = filterContextExecuted.HttpContext.Response;
             int? statusResposta = (filterContextExecuted.Result as ObjectResult)?.StatusCode;
 
             int usuarioId = await ObterUsuarioId(filterContextExecuted);
