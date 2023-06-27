@@ -17,7 +17,7 @@ WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
     builder.Services.AddDependencyInjectionAPI();
     builder.Services.AddDependencyInjectionApplication(builder);
     builder.Services.AddDependencyInjectionInfrastructure(builder);
-    // builder.Services.AddDependencyInjectionWorkersServices(builder);
+    // builder.Services.AddDependencyInjectionWorkersServices(builder); // ***
 }
 #endregion
 
