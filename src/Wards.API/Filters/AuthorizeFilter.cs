@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System.Net;
-using System.Security.Claims;
+using Wards.API.Filters.Base;
 using Wards.Application.Services.Usuarios.ListarUsuarioRolesCache;
 using Wards.Application.UseCases.UsuariosRoles.Shared.Output;
 using Wards.Domain.Enums;
@@ -47,26 +47,11 @@ namespace Wards.API.Filters
             return true;
         }
 
-        private static string ObterUsuarioEmail(AuthorizationFilterContext filterContextExecuted)
-        {
-            if (filterContextExecuted.HttpContext.User.Identity!.IsAuthenticated)
-            {
-                // Obter o e-mail do usuário pela Azure;
-                //var claim = filterContextExecuted.HttpContext.User.Claims.First(c => c.Type == "preferred_username");
-                //return claim.Value ?? string.Empty;
-
-                // Obter o e-mail do usuário pela autenticação própria;
-                string email = filterContextExecuted.HttpContext.User.FindFirst(ClaimTypes.Email)!.Value;
-                return email ?? string.Empty;
-            }
-
-            return string.Empty;
-        }
-
         private static async Task<IEnumerable<UsuarioRoleOutput>?> ListarUsuarioRoles(AuthorizationFilterContext context)
         {
             var service = context.HttpContext.RequestServices.GetService<IListarUsuarioRolesCacheService>();
-            IEnumerable<UsuarioRoleOutput>? usuarioRoles = await service!.Execute(ObterUsuarioEmail(context));
+            string? email = new BaseFilter().BaseObterUsuarioEmail(context);
+            IEnumerable<UsuarioRoleOutput>? usuarioRoles = await service!.Execute(email);
 
             return usuarioRoles;
         }

@@ -1,11 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Newtonsoft.Json;
-using System.Security.Claims;
-using Wards.Application.Services.Usuarios.ObterUsuarioCache;
+using Wards.API.Filters.Base;
 using Wards.Application.UseCases.Logs.CriarLog;
 using Wards.Application.UseCases.Logs.Shared.Input;
-using Wards.Application.UseCases.Usuarios.Shared.Output;
 
 namespace Wards.API.Filters
 {
@@ -30,7 +28,7 @@ namespace Wards.API.Filters
             HttpRequest request = filterContextExecuted.HttpContext.Request;
             int? statusResposta = (filterContextExecuted.Result as ObjectResult)?.StatusCode;
 
-            int usuarioId = await ObterUsuarioId(filterContextExecuted);
+            int usuarioId = await new BaseFilter().BaseObterUsuarioId(filterContextExecuted);
             string parametros = ObterParametrosRequisicao(filterContextExecuting);
 
             LogInput log = new()
@@ -44,30 +42,6 @@ namespace Wards.API.Filters
             };
 
             await _criarLogUseCase.Execute(log);
-        }
-
-        private static string ObterUsuarioEmail(ActionExecutedContext context)
-        {
-            if (context.HttpContext.User.Identity!.IsAuthenticated)
-            {
-                // Obter o e-mail do usuário pela Azure;
-                //var claim = filterContextExecuted.HttpContext.User.Claims.First(c => c.Type == "preferred_username");
-                //return claim.Value ?? string.Empty;
-
-                // Obter o e-mail do usuário pela autenticação própria;
-                string email = context.HttpContext.User.FindFirst(ClaimTypes.Email)!.Value;
-                return email ?? string.Empty;
-            }
-
-            return string.Empty;
-        }
-
-        private static async Task<int> ObterUsuarioId(ActionExecutedContext context)
-        {
-            var service = context.HttpContext.RequestServices.GetService<IObterUsuarioCacheService>();
-            UsuarioOutput? usuario = await service!.Execute(ObterUsuarioEmail(context));
-
-            return usuario is not null ? usuario.UsuarioId : 0;
         }
 
         private static string ObterParametrosRequisicao(ActionExecutingContext filterContextExecuting)
