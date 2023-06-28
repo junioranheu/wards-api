@@ -11,6 +11,7 @@ using Wards.Application.UseCases.Usuarios.ListarUsuario;
 using Wards.Application.UseCases.Usuarios.Shared.Output;
 using Wards.Application.UseCases.Wards.BulkCopyCriarWard;
 using Wards.Application.UseCases.Wards.Shared.Input;
+using Wards.Domain.Consts;
 using Wards.Domain.Entities;
 using Wards.Domain.Enums;
 using Wards.Utils.Entities.Output;
@@ -78,6 +79,7 @@ namespace Wards.API.Controllers
         /// Exemplo de (simulação) streaming (com yield) de um texto simples;
         /// </summary>
         [HttpGet("exemploSimularStreamingYieldTextoSimples")]
+        [ResponseCache(Duration = TemposConst.UmMinutoEmSegundos)]
         [AllowAnonymous]
         public async IAsyncEnumerable<Ward> ExemploSimularStreamingYieldTextoSimples([EnumeratorCancellation] CancellationToken cancellationToken)
         {

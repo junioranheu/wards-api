@@ -2,6 +2,8 @@
 {
     public static class TemposConst
     {
+        public const int UmMinutoEmSegundos = 60;
+
         public const int UmaHoraEmSegundos = 3600;
 
         public const int UmDiaEmSegundos = 86400;
