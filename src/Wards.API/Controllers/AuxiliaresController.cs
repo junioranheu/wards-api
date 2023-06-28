@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Wards.Application.UseCases.Auxiliares.ListarEstado;
 using Wards.Application.UseCases.Auxiliares.ListarEstado.Shared.Output;
 using Wards.Application.UseCases.Shared.Models.Input;
+using Wards.Domain.Consts;
 using Wards.Domain.Enums;
 using static Wards.Utils.Fixtures.Get;
 
@@ -20,6 +21,7 @@ namespace Wards.API.Controllers
         }
 
         [HttpGet("listarEstado")]
+        [ResponseCache(Duration = TemposConst.UmMesEmSegundos)]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<EstadoOutput>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(EstadoOutput))]
