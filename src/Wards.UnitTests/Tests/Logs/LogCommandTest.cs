@@ -58,7 +58,7 @@ namespace Wards.UnitTests.Tests.Logs
             var resp = await query.Execute(paginacao.Object);
 
             // Assert;
-            Assert.True(resp is not null);
+            Assert.True(resp.Count() > 0);
         }
     }
 }
