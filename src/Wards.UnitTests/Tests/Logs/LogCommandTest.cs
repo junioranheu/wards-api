@@ -1,7 +1,10 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Moq;
 using Wards.Application.UseCases.Logs.CriarLog.Commands;
+using Wards.Application.UseCases.Logs.ListarLog.Queries;
 using Wards.Application.UseCases.Logs.Shared.Input;
+using Wards.Application.UseCases.Shared.Models.Input;
 using Wards.Domain.Entities;
 using Wards.Infrastructure.Data;
 using Wards.UnitTests.Fixtures;
@@ -37,6 +40,25 @@ namespace Wards.UnitTests.Tests.Logs
 
             // Assert;
             Assert.Equal(db is not null, esperado);
+        }
+
+        [Fact]
+        public async Task Listar_ChecarResultadoEsperado()
+        {
+            // Arrange;
+            var paginacao = new Mock<PaginacaoInput>();
+
+            List<LogInput> listaInput = LogMock.CriarListaLogInput();
+            await _context.Logs.AddRangeAsync(_map.Map<List<Log>>(listaInput));
+            await _context.SaveChangesAsync();
+
+            var query = new ListarLogQuery(_context);
+
+            // Act;
+            var resp = await query.Execute(paginacao.Object);
+
+            // Assert;
+            Assert.True(resp is not null);
         }
     }
 }
