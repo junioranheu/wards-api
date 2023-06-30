@@ -1,9 +1,12 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Hosting;
 using Moq;
+using Wards.Application.UseCases.Shared.Models.Input;
 using Wards.Application.UseCases.Tokens.CriarRefreshToken;
 using Wards.Application.UseCases.Usuarios.CriarUsuario;
 using Wards.Application.UseCases.Usuarios.CriarUsuario.Commands;
+using Wards.Application.UseCases.Usuarios.ListarUsuario;
+using Wards.Application.UseCases.Usuarios.ListarUsuario.Queries;
 using Wards.Application.UseCases.Usuarios.ObterUsuarioCondicaoArbitraria;
 using Wards.Application.UseCases.Usuarios.Shared.Input;
 using Wards.Domain.Entities;
@@ -59,6 +62,23 @@ namespace Wards.UnitTests.Tests.Usuarios
                     Assert.False(esperado);
                 }
             }
+        }
+
+        [Fact]
+        public async Task Listar_ChecarResultadoEsperado()
+        {
+            // Arrange;
+            var paginacao = new Mock<PaginacaoInput>();
+            var listarQuery = new Mock<IListarUsuarioQuery>();
+            listarQuery.Setup(x => x.Execute(It.IsAny<PaginacaoInput>())).Returns(Task.FromResult(UsuarioMock.CriarListaUsuario()));
+
+            var useCase = new ListarUsuarioUseCase(_map, listarQuery.Object);
+
+            // Act;
+            var teste = await useCase.Execute(paginacao.Object);
+
+            // Assert;
+            Assert.True(teste.Count() > 0);
         }
     }
 }
