@@ -1,27 +1,12 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Hosting;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Wards.Application.UseCases.Tokens.CriarRefreshToken;
-using Wards.Application.UseCases.Usuarios.CriarUsuario.Commands;
-using Wards.Application.UseCases.Usuarios.CriarUsuario;
-using Wards.Application.UseCases.Usuarios.ObterUsuarioCondicaoArbitraria;
-using Wards.Application.UseCases.Usuarios.Shared.Input;
-using Wards.Domain.Entities;
-using Wards.Infrastructure.Auth.Token;
-using Wards.UnitTests.Fixtures.Mocks;
-using Wards.UnitTests.Fixtures;
-using Xunit;
-using Wards.Application.UseCases.Wards.CriarWard.Commands;
-using Wards.Application.UseCases.Wards.CriarWard;
-using Wards.Application.UseCases.Wards.Shared.Input;
-using Wards.Application.UseCases.Logs.CriarLog.Commands;
 using Wards.Application.UseCases.Logs.CriarLog;
+using Wards.Application.UseCases.Logs.CriarLog.Commands;
 using Wards.Application.UseCases.Logs.Shared.Input;
+using Wards.Domain.Entities;
+using Wards.UnitTests.Fixtures;
+using Wards.UnitTests.Fixtures.Mocks;
+using Xunit;
 
 namespace Wards.UnitTests.Tests.Logs
 {
