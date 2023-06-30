@@ -11,7 +11,7 @@ namespace Wards.UnitTests.Fixtures.Mocks
             {
                 Titulo = !string.IsNullOrEmpty(titulo) ? titulo : GerarStringAleatoria(5, false),
                 Conteudo = !string.IsNullOrEmpty(conteudo) ? conteudo : GerarStringAleatoria(5, false),
-                UsuarioId = usuarioId > 0 ? usuarioId : GerarNumeroAleatorio(int.MinValue, int.MaxValue)
+                UsuarioId = usuarioId > 0 ? usuarioId : GerarNumeroAleatorio(1, 999)
             };
 
             return ward;
