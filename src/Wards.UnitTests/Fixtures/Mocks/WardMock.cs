@@ -1,5 +1,4 @@
 ﻿using Wards.Application.UseCases.Wards.Shared.Input;
-using Wards.Domain.Entities;
 using static Wards.Utils.Fixtures.Get;
 
 namespace Wards.UnitTests.Fixtures.Mocks
@@ -13,7 +12,7 @@ namespace Wards.UnitTests.Fixtures.Mocks
                 Titulo = !string.IsNullOrEmpty(titulo) ? titulo : GerarStringAleatoria(5, false),
                 Conteudo = !string.IsNullOrEmpty(conteudo) ? conteudo : GerarStringAleatoria(5, false),
                 UsuarioId = usuarioId > 0 ? usuarioId : GerarNumeroAleatorio(1, 999),
-                Usuarios = new Usuario(),
+                Usuarios = new(),
                 IsAtivo = true
             };
 

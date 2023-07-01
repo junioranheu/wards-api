@@ -1,5 +1,5 @@
 ﻿using System.Text.Json.Serialization;
-using Wards.Domain.Entities;
+using Wards.Application.UseCases.Usuarios.Shared.Input;
 
 namespace Wards.Application.UseCases.Wards.Shared.Input
 {
@@ -15,7 +15,7 @@ namespace Wards.Application.UseCases.Wards.Shared.Input
         public int? UsuarioId { get; set; }
 
         [JsonIgnore]
-        public Usuario? Usuarios { get; set; }
+        public CriarUsuarioInput? Usuarios { get; set; }
 
         [JsonIgnore]
         public int? UsuarioModId { get; set; }
