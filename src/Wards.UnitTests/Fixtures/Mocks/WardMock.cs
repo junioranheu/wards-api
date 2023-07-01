@@ -5,7 +5,7 @@ namespace Wards.UnitTests.Fixtures.Mocks
 {
     public static class WardMock
     {
-        public static WardInput CriarWardInput(string titulo, string conteudo, int? usuarioId)
+        public static WardInput CriarInput(string titulo, string conteudo, int? usuarioId)
         {
             WardInput ward = new()
             {
@@ -19,12 +19,12 @@ namespace Wards.UnitTests.Fixtures.Mocks
             return ward;
         }
 
-        public static List<WardInput> CriarListaWardInput()
+        public static List<WardInput> CriarListaInput()
         {
             List<WardInput> lista = new()
             {
-                CriarWardInput(GerarStringAleatoria(5, false), GerarStringAleatoria(5, false), 1),
-                CriarWardInput(GerarStringAleatoria(5, false), GerarStringAleatoria(5, false), 1)
+                CriarInput(GerarStringAleatoria(5, false), GerarStringAleatoria(5, false), 1),
+                CriarInput(GerarStringAleatoria(5, false), GerarStringAleatoria(5, false), 1)
             };
 
             return lista;

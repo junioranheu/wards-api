@@ -29,7 +29,7 @@ namespace Wards.UnitTests.Tests.Wards
 
             var useCase = new CriarWardUseCase(_map, criarCommand.Object);
 
-            WardInput input = WardMock.CriarWardInput(titulo, conteudo, usuarioId);
+            WardInput input = WardMock.CriarInput(titulo, conteudo, usuarioId);
 
             // Act;
             var resp = await useCase.Execute(input);

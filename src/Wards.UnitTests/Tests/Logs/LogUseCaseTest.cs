@@ -33,7 +33,7 @@ namespace Wards.UnitTests.Tests.Logs
 
             var useCase = new CriarLogUseCase(_map, criarCommand.Object);
 
-            LogInput input = LogMock.CriarLogInput(tipoRequisicao, endpoint, parametros, descricao, statusResposta, usuarioId);
+            LogInput input = LogMock.CriarInput(tipoRequisicao, endpoint, parametros, descricao, statusResposta, usuarioId);
 
             try
             {
@@ -56,7 +56,9 @@ namespace Wards.UnitTests.Tests.Logs
             // Arrange;
             var paginacao = new Mock<PaginacaoInput>();
             var listarQuery = new Mock<IListarLogQuery>();
-            listarQuery.Setup(x => x.Execute(It.IsAny<PaginacaoInput>())).Returns(Task.FromResult(LogMock.CriarListaLog()));
+
+            var lista = _map.Map<IEnumerable<Log>>(LogMock.CriarListaInput());
+            listarQuery.Setup(x => x.Execute(It.IsAny<PaginacaoInput>())).Returns(Task.FromResult(lista));
 
             var useCase = new ListarLogUseCase(_map, listarQuery.Object);
 
@@ -64,7 +66,7 @@ namespace Wards.UnitTests.Tests.Logs
             var teste = await useCase.Execute(paginacao.Object);
 
             // Assert;
-            Assert.True(teste.Count() > 0);
+            Assert.True(teste.Any());
         }
     }
 }

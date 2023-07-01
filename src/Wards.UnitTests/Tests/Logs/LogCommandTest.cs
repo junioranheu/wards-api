@@ -32,7 +32,7 @@ namespace Wards.UnitTests.Tests.Logs
         {
             // Arrange;
             var command = new CriarLogCommand(_context);
-            LogInput input = LogMock.CriarLogInput(tipoRequisicao, endpoint, parametros, descricao, statusResposta, usuarioId);
+            LogInput input = LogMock.CriarInput(tipoRequisicao, endpoint, parametros, descricao, statusResposta, usuarioId);
 
             // Act;
             await command.Execute(_map.Map<Log>(input));
@@ -48,7 +48,7 @@ namespace Wards.UnitTests.Tests.Logs
             // Arrange;
             var paginacao = new Mock<PaginacaoInput>();
 
-            List<LogInput> listaInput = LogMock.CriarListaLogInput();
+            List<LogInput> listaInput = LogMock.CriarListaInput();
             await _context.Logs.AddRangeAsync(_map.Map<List<Log>>(listaInput));
             await _context.SaveChangesAsync();
 

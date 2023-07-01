@@ -35,7 +35,7 @@ namespace Wards.UnitTests.Tests.Usuarios
         {
             // Arrange;
             var command = new CriarUsuarioCommand(_context);
-            CriarUsuarioInput input = UsuarioMock.CriarUsuarioInput(nomeCompleto, nomeUsuarioSistema, email, senha, chamado);
+            CriarUsuarioInput input = UsuarioMock.CriarInput(nomeCompleto, nomeUsuarioSistema, email, senha, chamado);
 
             // Act;
             await command.Execute(_map.Map<Usuario>(input));
@@ -51,7 +51,7 @@ namespace Wards.UnitTests.Tests.Usuarios
             // Arrange;
             var paginacao = new Mock<PaginacaoInput>();
 
-            List<CriarUsuarioInput> listaInput = UsuarioMock.CriarListaUsuarioInput();
+            List<CriarUsuarioInput> listaInput = UsuarioMock.CriarListaInput();
             await _context.Usuarios.AddRangeAsync(_map.Map<List<Usuario>>(listaInput));
             await _context.SaveChangesAsync();
 
@@ -61,7 +61,7 @@ namespace Wards.UnitTests.Tests.Usuarios
             var resp = await query.Execute(paginacao.Object);
 
             // Assert;
-            Assert.True(resp.Count() > 0);
+            Assert.True(resp.Any());
         }
     }
 }

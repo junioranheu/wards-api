@@ -45,7 +45,7 @@ namespace Wards.UnitTests.Tests.Usuarios
 
             var useCase = new CriarUsuarioUseCase(webHostEnvironment.Object, _map, jwtTokenGenerator.Object, criarUsuarioCommand.Object, criarUsuarioCondicaoArbitrariaUseCase.Object, criarRefreshTokenUseCase.Object);
 
-            CriarUsuarioInput input = UsuarioMock.CriarUsuarioInput(nomeCompleto, nomeUsuarioSistema, email, senha, chamado);
+            CriarUsuarioInput input = UsuarioMock.CriarInput(nomeCompleto, nomeUsuarioSistema, email, senha, chamado);
 
             try
             {
@@ -70,7 +70,9 @@ namespace Wards.UnitTests.Tests.Usuarios
             // Arrange;
             var paginacao = new Mock<PaginacaoInput>();
             var listarQuery = new Mock<IListarUsuarioQuery>();
-            listarQuery.Setup(x => x.Execute(It.IsAny<PaginacaoInput>())).Returns(Task.FromResult(UsuarioMock.CriarListaUsuario()));
+
+            var lista = _map.Map<IEnumerable<Usuario>>(UsuarioMock.CriarListaInput());
+            listarQuery.Setup(x => x.Execute(It.IsAny<PaginacaoInput>())).Returns(Task.FromResult(lista));
 
             var useCase = new ListarUsuarioUseCase(_map, listarQuery.Object);
 
@@ -78,7 +80,7 @@ namespace Wards.UnitTests.Tests.Usuarios
             var teste = await useCase.Execute(paginacao.Object);
 
             // Assert;
-            Assert.True(teste.Count() > 0);
+            Assert.True(teste.Any());
         }
     }
 }

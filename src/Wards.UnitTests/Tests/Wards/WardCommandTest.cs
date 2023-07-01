@@ -36,7 +36,7 @@ namespace Wards.UnitTests.Tests.Wards
         {
             // Arrange;
             var command = new CriarWardCommand(_context);
-            WardInput input = WardMock.CriarWardInput(titulo, conteudo, usuarioId);
+            WardInput input = WardMock.CriarInput(titulo, conteudo, usuarioId);
 
             // Act;
             await command.Execute(_map.Map<Ward>(input));
@@ -52,7 +52,7 @@ namespace Wards.UnitTests.Tests.Wards
             // Arrange;
             var paginacao = new Mock<PaginacaoInput>();
 
-            List<WardInput> listaInput = WardMock.CriarListaWardInput();
+            List<WardInput> listaInput = WardMock.CriarListaInput();
             await _context.Wards.AddRangeAsync(_map.Map<List<Ward>>(listaInput));
             await _context.SaveChangesAsync();
 
