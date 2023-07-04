@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MySqlConnector;
+using System.Data.SqlClient;
 using System.Globalization;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -11,10 +13,13 @@ using Wards.Application.UseCases.Usuarios.ListarUsuario;
 using Wards.Application.UseCases.Usuarios.Shared.Output;
 using Wards.Application.UseCases.Wards.BulkCopyCriarWard;
 using Wards.Application.UseCases.Wards.Shared.Input;
+using Wards.Application.UseCases.Wards.Shared.Output;
 using Wards.Domain.Consts;
 using Wards.Domain.Entities;
 using Wards.Domain.Enums;
+using Wards.Infrastructure.Factory;
 using Wards.Utils.Entities.Output;
+using static Wards.Utils.Fixtures.Convert;
 using static Wards.Utils.Fixtures.Get;
 using static Wards.Utils.Fixtures.Post;
 
@@ -26,6 +31,7 @@ namespace Wards.API.Controllers
     {
         #region constructor
         private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly IConnectionFactory _connectionFactory;
         private readonly IListarLogUseCase _listarLogUseCase;
         private readonly IListarUsuarioUseCase _listarUsuarioUseCase;
         private readonly IMigrateDatabaseService _migrateDatabaseService;
@@ -36,16 +42,116 @@ namespace Wards.API.Controllers
         /// </summary>
         public ExemplosController(
             IWebHostEnvironment webHostEnvironment,
+            IConnectionFactory connectionFactory,
             IListarLogUseCase listarLogUseCase,
             IListarUsuarioUseCase listarUsuarioUseCase,
             IMigrateDatabaseService migrateDatabaseService,
             IBulkCopyCriarWardUseCase bulkCopyCriarWardUseCase)
         {
             _webHostEnvironment = webHostEnvironment;
+            _connectionFactory = connectionFactory;
             _listarLogUseCase = listarLogUseCase;
             _listarUsuarioUseCase = listarUsuarioUseCase;
             _migrateDatabaseService = migrateDatabaseService;
             _bulkCopyCriarWardUseCase = bulkCopyCriarWardUseCase;
+        }
+        #endregion
+
+        #region query
+        /// <summary>
+        /// Busca ao banco sem Entity Framework; utilizando SqlCommand & SqlDataReader, à moda antiga;
+        /// Exemplo para MySQL;
+        /// </summary>
+        [HttpGet("exemploQuerySqlCommand_MySQL")]
+        [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<WardOutput>))]
+        public async Task<ActionResult<List<WardOutput>>> ExemploQuerySqlCommand_MySQL(string parametroNome)
+        {
+            var connection = _connectionFactory.ObterMySqlConnection();
+
+            MySqlCommand selectCommand = new(@$"SELECT w.WardId, w.Titulo, w.Conteudo, w.Data, u.NomeCompleto
+                                              FROM Wards w 
+                                              LEFT JOIN Usuarios u ON u.UsuarioId = w.UsuarioId
+                                              WHERE 1 = 1
+                                              AND u.IsAtivo = 1
+                                              AND u.NomeCompleto LIKE CONCAT('%', @parametro1, '%');", connection);
+
+            selectCommand.Parameters.AddWithValue("@parametro1", parametroNome);
+
+            await connection.OpenAsync();
+
+            MySqlDataReader reader = await selectCommand.ExecuteReaderAsync();
+
+            List<WardOutput> listaOutput = new();
+
+            while (await reader.ReadAsync())
+            {
+                WardOutput output = new()
+                {
+                    WardId = NormalizarSqlDataReader<int>(reader["WardId"]),
+                    Titulo = NormalizarSqlDataReader<string>(reader["Titulo"]),
+                    Conteudo = NormalizarSqlDataReader<string>(reader["Conteudo"])!,
+                    Data = NormalizarSqlDataReader<DateTime>(reader["Data"]),
+                    Usuarios = new UsuarioOutput()
+                    {
+                        NomeCompleto = NormalizarSqlDataReader<string>(reader["NomeCompleto"])
+                    }
+                };
+
+                listaOutput.Add(output);
+            }
+
+            await connection.CloseAsync();
+
+            return listaOutput;
+        }
+
+        /// <summary>
+        /// Busca ao banco sem Entity Framework; utilizando SqlCommand & SqlDataReader, à moda antiga;
+        /// Exemplo para SQL Server;
+        /// </summary>
+        [HttpGet("exemploQuerySqlCommand_SQLServer")]
+        [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<WardOutput>))]
+        public async Task<ActionResult<List<WardOutput>>> ExemploQuerySqlCommand_SQLServer(string parametroNome)
+        {
+            var connection = _connectionFactory.ObterSqlServerConnection();
+
+            SqlCommand selectCommand = new(@$"SELECT w.WardId, w.Titulo, w.Conteudo, w.Data, u.NomeCompleto
+                                              FROM Wards w 
+                                              LEFT JOIN Usuarios u ON u.UsuarioId = w.UsuarioId
+                                              WHERE 1 = 1
+                                              AND u.IsAtivo = 1
+                                              AND u.NomeCompleto LIKE CONCAT('%', @parametro1, '%');", connection);
+
+            selectCommand.Parameters.AddWithValue("@parametro1", parametroNome);
+
+            await connection.OpenAsync();
+
+            SqlDataReader reader = await selectCommand.ExecuteReaderAsync();
+
+            List<WardOutput> listaOutput = new();
+
+            while (await reader.ReadAsync())
+            {
+                WardOutput output = new()
+                {
+                    WardId = NormalizarSqlDataReader<int>(reader["WardId"]),
+                    Titulo = NormalizarSqlDataReader<string>(reader["Titulo"]),
+                    Conteudo = NormalizarSqlDataReader<string>(reader["Conteudo"])!,
+                    Data = NormalizarSqlDataReader<DateTime>(reader["Data"]),
+                    Usuarios = new UsuarioOutput()
+                    {
+                        NomeCompleto = NormalizarSqlDataReader<string>(reader["NomeCompleto"])
+                    }
+                };
+
+                listaOutput.Add(output);
+            }
+
+            await connection.CloseAsync();
+
+            return listaOutput;
         }
         #endregion
 

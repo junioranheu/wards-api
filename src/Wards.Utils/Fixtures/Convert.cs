@@ -98,5 +98,19 @@ namespace Wards.Utils.Fixtures
         {
             return System.Convert.ToInt32(megas.GetValueOrDefault() * (1024 * 1024));
         }
+
+        /// <summary>
+        /// Normalizar valor que é lido por um "SqlDataReader", que muitas vezes vem quebrado;
+        /// stackoverflow.com/a/870771;
+        /// </summary>
+        public static T? NormalizarSqlDataReader<T>(object obj)
+        {
+            if (obj == null || obj == DBNull.Value)
+            {
+                return default;
+            }
+
+            return (T)obj;
+        }
     }
 }

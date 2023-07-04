@@ -5,14 +5,12 @@ using Microsoft.Extensions.Logging;
 using Wards.Application.AutoMapper;
 using Wards.Application.Services.Exports;
 using Wards.Application.Services.Exports.CSV;
-using Wards.Application.Services.Imports;
 using Wards.Application.Services.Sistemas;
 using Wards.Application.Services.Usuarios;
 using Wards.Application.UseCases.Auxiliares;
 using Wards.Application.UseCases.Feriados;
 using Wards.Application.UseCases.FeriadosDatas;
 using Wards.Application.UseCases.FeriadosEstados;
-using Wards.Application.UseCases.Imports;
 using Wards.Application.UseCases.Logs;
 using Wards.Application.UseCases.Tokens;
 using Wards.Application.UseCases.Usuarios;
@@ -53,7 +51,6 @@ namespace Wards.Application
 
         private static void AddUseCases(IServiceCollection services)
         {
-            services.AddImportsApplication();
             services.AddLogsApplication();
             services.AddTokensApplication();
             services.AddUsuariosApplication();
@@ -67,7 +64,6 @@ namespace Wards.Application
 
         private static void AddServices(IServiceCollection services)
         {
-            services.AddImportCsvService();
             services.AddExportXlsxService();
             services.AddExportCsvService();
             services.AddUsuariosService();

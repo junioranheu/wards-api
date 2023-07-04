@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using MySqlConnector;
-using System.Data;
+using System.Data.SqlClient;
 
 namespace Wards.Infrastructure.Factory
 {
@@ -13,7 +13,7 @@ namespace Wards.Infrastructure.Factory
             _configuration = configuration;
         }
 
-        public string CreateDbStringConnection()
+        public string ObterStringConnection()
         {
             var secretSenhaBancoDados = _configuration["SecretSenhaBancoDados"]; // secrets.json;
             string con = _configuration.GetConnectionString(_configuration["SystemSettings:NomeConnectionString"]!)!;
@@ -22,16 +22,14 @@ namespace Wards.Infrastructure.Factory
             return con;
         }
 
-        public IDbConnection CreateDbConnection()
+        public SqlConnection ObterSqlServerConnection()
         {
-            // return new SqlConnection(_configuration.GetConnectionString("con"));
-            return new MySqlConnection(CreateDbStringConnection());
+            return new SqlConnection(_configuration.GetConnectionString("con"));
         }
 
-        public MySqlConnection CreateDbSqlConnection()
+        public MySqlConnection ObterMySqlConnection()
         {
-            // return new SqlConnection(_configuration.GetConnectionString("con"));
-            return new MySqlConnection(CreateDbStringConnection());
+            return new MySqlConnection(ObterStringConnection());
         }
     }
 }

@@ -62,19 +62,19 @@ namespace Wards.Infrastructure
                  });
         }
 
-        private static void AddAuthAzure(IServiceCollection services, WebApplicationBuilder builder)
-        {
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                    .AddJwtBearer(x =>
-                    {
-                        x.Audience = builder.Configuration["AzureSettings:CliendId"] ?? string.Empty;
-                        x.Authority = builder.Configuration["AzureSettings:Authority"] ?? string.Empty;
-                        x.TokenValidationParameters = new TokenValidationParameters
-                        {
-                            ValidateIssuer = false
-                        };
-                    });
-        }
+        //private static void AddAuthAzure(IServiceCollection services, WebApplicationBuilder builder)
+        //{
+        //    services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+        //            .AddJwtBearer(x =>
+        //            {
+        //                x.Audience = builder.Configuration["AzureSettings:CliendId"] ?? string.Empty;
+        //                x.Authority = builder.Configuration["AzureSettings:Authority"] ?? string.Empty;
+        //                x.TokenValidationParameters = new TokenValidationParameters
+        //                {
+        //                    ValidateIssuer = false
+        //                };
+        //            });
+        //}
 
         private static void AddFactory(IServiceCollection services)
         {
@@ -83,7 +83,7 @@ namespace Wards.Infrastructure
 
         private static void AddContext(IServiceCollection services, WebApplicationBuilder builder)
         {
-            string con = new ConnectionFactory(builder.Configuration).CreateDbStringConnection();
+            string con = new ConnectionFactory(builder.Configuration).ObterStringConnection();
 
             // Entity Framework;
             services.AddDbContext<WardsContext>(x =>

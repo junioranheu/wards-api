@@ -1,12 +1,12 @@
 ﻿using MySqlConnector;
-using System.Data;
+using System.Data.SqlClient;
 
 namespace Wards.Infrastructure.Factory
 {
     public interface IConnectionFactory
     {
-        IDbConnection CreateDbConnection();
-        MySqlConnection CreateDbSqlConnection();
-        string CreateDbStringConnection();
+        MySqlConnection ObterMySqlConnection();
+        SqlConnection ObterSqlServerConnection();
+        string ObterStringConnection();
     }
 }
