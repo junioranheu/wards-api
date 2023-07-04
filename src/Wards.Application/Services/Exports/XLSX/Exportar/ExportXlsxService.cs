@@ -1,40 +1,47 @@
 ﻿using ClosedXML.Excel;
 using System.Reflection;
+using Wards.Domain.Enums;
 using static Wards.Utils.Fixtures.Format;
 
 namespace Wards.Application.Services.Exports.XLSX.Exportar
 {
-    public sealed class ExportXLSXService : IExportXlsxService
+    public sealed class ExportXLSXService : IExportXLSXService
     {
         /// <summary>
-        /// O parâmetro "tipoRowInicial" é "controverso" (não foi encontrado uma maneira melhor de implementar essa feature - já que não é possível SetarValor() e MergearCelulas() fora desse service);
+        /// O parâmetro "tipoExport" é "controverso" (não foi encontrado uma maneira melhor de implementar essa feature - já que não é possível SetarValor() e MergearCelulas() fora desse service);
         /// É necessário, em alguns casos, inserir uma row de "título" a mais; 
         /// Nesses casos, devem ser criados à mão (diferentemente do título principal) campo a campo;
-        /// Caso o parâmetro seja menor que 1, significa que essa row a mais é descartada;
+        /// Caso o parâmetro seja nulo, significa que essa row a mais é descartada;
         /// Esse parâmetro deve ser controlado à mão... a cada nova necessidade, um if novo é criado em AdicionarRowInicial().
         /// </summary>
-        public byte[]? ConverterDadosParaXLSXEmBytes<T>(List<T>? lista, string[,] colunas, string nomeSheet, bool isDataFormatoExport, string aplicarEstiloNasCelulas, int tipoRowInicial = 0)
+        public byte[]? ConverterDadosParaXLSXEmBytes<T>(List<T>? lista, string[,] colunas, string nomeSheet, bool isDataFormatoExport, string aplicarEstiloNasCelulas, TipoExportEnum? tipoExport = null)
         {
             using var workbook = new XLWorkbook();
             IXLWorksheet worksheet = workbook.Worksheets.Add(nomeSheet);
 
+            int linhaAtual = 1; // Dependendo se há ou não "tipoExport", a "linhaAtual" é alterada (para ajustar o título e o conteúdo);
+
             // Row inicial;
-            if (tipoRowInicial > 0)
-                AdicionarRowInicial(worksheet, tipoRowInicial);
+            if (tipoExport is not null)
+                linhaAtual = AdicionarRowInicial(worksheet, tipoExport, linhaAtual);
 
             if (!string.IsNullOrEmpty(aplicarEstiloNasCelulas))
             {
                 IXLStyle style = XLWorkbook.DefaultStyle;
+
                 style.Fill.SetBackgroundColor(XLColor.LightGray);
                 style.Font.SetBold(true);
+
                 style.Border.BottomBorder = XLBorderStyleValues.Thin;
                 style.Border.TopBorder = XLBorderStyleValues.Thin;
                 style.Border.LeftBorder = XLBorderStyleValues.Thin;
                 style.Border.RightBorder = XLBorderStyleValues.Thin;
+
+                style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
+
                 worksheet.Range(aplicarEstiloNasCelulas).Style = style;
             }
-
-            int linhaAtual = tipoRowInicial > 0 ? 2 : 1; // Dependendo se há ou não "tipoRowInicial", a "linhaAtual" é alterada (para ajustar o título e o conteúdo);
 
             // Título das colunas;
             for (int i = 0; i < colunas.GetLength(0); i++)
@@ -50,29 +57,32 @@ namespace Wards.Application.Services.Exports.XLSX.Exportar
             return xlsx;
         }
 
-        private static void AdicionarRowInicial(IXLWorksheet worksheet, int tipoRowInicial)
+        private static int AdicionarRowInicial(IXLWorksheet worksheet, TipoExportEnum? tipoExport, int linhaAtual)
         {
-            if (tipoRowInicial == 1)
+            if (tipoExport == TipoExportEnum.LOG)
             {
-                AdicionarRowInicialConsolidadoCargaGlobal(worksheet);
+                AdicionarRowInicialLog(worksheet);
+                linhaAtual = 2;
             }
 
-            static void AdicionarRowInicialConsolidadoCargaGlobal(IXLWorksheet worksheet)
+            return linhaAtual;
+
+            static void AdicionarRowInicialLog(IXLWorksheet worksheet)
             {
-                SetarValor(worksheet, 0, 0, typeof(String), "Mensagem #1"); // A;
+                SetarValor(worksheet, linhaAtual: 0, i: 0, typeof(String), "Mensagem #1"); // A;
 
-                SetarValor(worksheet, 0, 1, typeof(String), "Mensagem #2"); // B - I;
-                MergearCelulas(worksheet, 0, 1, 0, 8);
+                SetarValor(worksheet, linhaAtual: 0, i: 1, typeof(String), "Mensagem #2"); // B - I;
+                MergearCelulas(worksheet, linhaA: 0, colunaA: 1, linhaB: 0, colunaB: 8);
 
-                SetarValor(worksheet, 0, 9, typeof(String), ""); // J;
+                SetarValor(worksheet, linhaAtual: 0, i: 9, typeof(String), ""); // J;
 
-                SetarValor(worksheet, 0, 10, typeof(String), "Mensagem #4"); // K - Q;
-                MergearCelulas(worksheet, 0, 10, 0, 16);
+                SetarValor(worksheet, linhaAtual: 0, i: 10, typeof(String), "Mensagem #4"); // K - Q;
+                MergearCelulas(worksheet, linhaA: 0, colunaA: 10, linhaB: 0, colunaB: 16);
 
-                SetarValor(worksheet, 0, 17, typeof(String), "Mensagem #5"); // R - U;
-                MergearCelulas(worksheet, 0, 17, 0, 20);
+                SetarValor(worksheet, linhaAtual: 0, i: 17, typeof(String), "Mensagem #5"); // R - U;
+                MergearCelulas(worksheet, linhaA: 0, colunaA: 17, linhaB: 0, colunaB: 20);
 
-                SetarValor(worksheet, 0, 21, typeof(String), ""); // V;
+                SetarValor(worksheet, linhaAtual: 0, i: 21, typeof(String), ""); // V;
             }
         }
 

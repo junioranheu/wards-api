@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Wards.Application.Services.Exports.XLSX.Exportar;
 using Wards.Domain.Entities;
+using Wards.Domain.Enums;
 using Wards.Infrastructure.Data;
 
 namespace Wards.Application.UseCases.Logs.ExportarXlsxLog.Commands
@@ -8,9 +9,9 @@ namespace Wards.Application.UseCases.Logs.ExportarXlsxLog.Commands
     public sealed class ExportarXlsxLogCommand : IExportarXlsxLogCommand
     {
         private readonly WardsContext _context;
-        private readonly IExportXlsxService _exportXlsxService;
+        private readonly IExportXLSXService _exportXlsxService;
 
-        public ExportarXlsxLogCommand(WardsContext context, IExportXlsxService exportXlsxService)
+        public ExportarXlsxLogCommand(WardsContext context, IExportXLSXService exportXlsxService)
         {
             _context = context;
             _exportXlsxService = exportXlsxService;
@@ -29,7 +30,7 @@ namespace Wards.Application.UseCases.Logs.ExportarXlsxLog.Commands
             };
 
             byte[]? xlsx = _exportXlsxService.ConverterDadosParaXLSXEmBytes(lista: listaLogs,
-                colunas: colunas, nomeSheet: "Logs", isDataFormatoExport: false, aplicarEstiloNasCelulas: "A1:I1", tipoRowInicial: 0);
+                colunas: colunas, nomeSheet: "Logs", isDataFormatoExport: false, aplicarEstiloNasCelulas: "A1:I1", tipoExport: TipoExportEnum.LOG);
 
             return xlsx;
         }

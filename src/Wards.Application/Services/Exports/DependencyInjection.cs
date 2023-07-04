@@ -7,7 +7,7 @@ namespace Wards.Application.Services.Exports
     {
         public static IServiceCollection AddExportXlsxService(this IServiceCollection services)
         {
-            services.AddScoped<IExportXlsxService, ExportXLSXService>();
+            services.AddScoped<IExportXLSXService, ExportXLSXService>();
 
             return services;
         }

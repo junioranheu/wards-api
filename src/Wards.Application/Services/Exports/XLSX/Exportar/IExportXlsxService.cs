@@ -1,7 +1,9 @@
-﻿namespace Wards.Application.Services.Exports.XLSX.Exportar
+﻿using Wards.Domain.Enums;
+
+namespace Wards.Application.Services.Exports.XLSX.Exportar
 {
-    public interface IExportXlsxService
+    public interface IExportXLSXService
     {
-        byte[]? ConverterDadosParaXLSXEmBytes<T>(List<T>? lista, string[,] colunas, string nomeSheet, bool isDataFormatoExport, string aplicarEstiloNasCelulas, int tipoRowInicial = 0);
+        byte[]? ConverterDadosParaXLSXEmBytes<T>(List<T>? lista, string[,] colunas, string nomeSheet, bool isDataFormatoExport, string aplicarEstiloNasCelulas, TipoExportEnum? tipoExport = null);
     }
 }
