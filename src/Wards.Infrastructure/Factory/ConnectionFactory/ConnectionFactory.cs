@@ -2,7 +2,7 @@
 using MySqlConnector;
 using System.Data.SqlClient;
 
-namespace Wards.Infrastructure.Factory
+namespace Wards.Infrastructure.Factory.ConnectionFactory
 {
     public class ConnectionFactory : IConnectionFactory
     {

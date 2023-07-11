@@ -4,8 +4,8 @@ using Wards.Domain.Entities;
 using Wards.Domain.Enums;
 using Wards.Infrastructure.Data;
 using Wards.Infrastructure.Seed.Seeds;
-using static Wards.Utils.Fixtures.Get;
 using static Wards.Utils.Fixtures.Encrypt;
+using static Wards.Utils.Fixtures.Get;
 
 namespace Wards.Infrastructure.Seed
 {
@@ -14,7 +14,7 @@ namespace Wards.Infrastructure.Seed
         public static async Task Initialize(WardsContext context, bool isAplicarMigrations, bool isResetar)
         {
             context.Database.SetCommandTimeout(600);
-            string script = context.Database.GenerateCreateScript();
+            // string script = context.Database.GenerateCreateScript();
 
             if (isAplicarMigrations)
             {

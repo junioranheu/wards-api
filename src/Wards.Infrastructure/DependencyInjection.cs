@@ -12,7 +12,7 @@ using Wards.Domain.Consts;
 using Wards.Infrastructure.Auth.Models;
 using Wards.Infrastructure.Auth.Token;
 using Wards.Infrastructure.Data;
-using Wards.Infrastructure.Factory;
+using Wards.Infrastructure.Factory.ConnectionFactory;
 
 namespace Wards.Infrastructure
 {

@@ -13,6 +13,8 @@ namespace Wards.Domain.Entities
 
         public string Conteudo { get; set; } = string.Empty;
 
+        public int QtdCurtidas { get; set; }
+
         public int UsuarioId { get; set; }
         public Usuario? Usuarios { get; init; }
 

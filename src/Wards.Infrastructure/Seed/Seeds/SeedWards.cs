@@ -11,7 +11,7 @@ namespace Wards.Infrastructure.Seed.Seeds
             #region seed_wards
             if (!await context.Wards.AnyAsync())
             {
-                await context.Wards.AddAsync(new Ward() { WardId = 1, Titulo = "Título do teste #1", Conteudo = "Teste #1", UsuarioId = 1 });
+                await context.Wards.AddAsync(new Ward() { WardId = 1, Titulo = "Título do teste #1", Conteudo = "Teste #1", QtdCurtidas = 0, UsuarioId = 1 });
 
                 await context.Wards.AddAsync(new Ward() { WardId = 2, Titulo = "Como utilizar Response Compression no .NET", Conteudo = @"<p><strong>Compacta&ccedil;&atilde;o Gzip e Brotli</strong></p>
 
@@ -48,7 +48,7 @@ namespace Wards.Infrastructure.Seed.Seeds
                             });</code></pre>
 
                 <p>&nbsp;</p>
-                ", UsuarioId = 1 });
+                ", QtdCurtidas = 0, UsuarioId = 1 });
 
                 await context.Wards.AddAsync(new Ward() { WardId = 3, Titulo = "Como checar o environment em .NET", Conteudo = @"<p><strong>Checar se o ambiente &eacute; de produ&ccedil;&atilde;o</strong></p>
 
@@ -73,11 +73,11 @@ namespace Wards.Infrastructure.Seed.Seeds
                 #endif</code></pre>
 
                 <p>&nbsp;</p>
-                ", UsuarioId = 1 });
+                ", QtdCurtidas = 0, UsuarioId = 1 });
 
-                await context.Wards.AddAsync(new Ward() { WardId = 4, Titulo = "Remover referências não utilizadas", Conteudo = "Clique com o botão direito em qualquer <i>solution</i> de seu projeto no VS 2022, e clique na opção 'Remover Referências Não Usadas...'", UsuarioId = 1 });
+                await context.Wards.AddAsync(new Ward() { WardId = 4, Titulo = "Remover referências não utilizadas", Conteudo = "Clique com o botão direito em qualquer <i>solution</i> de seu projeto no VS 2022, e clique na opção 'Remover Referências Não Usadas...'", QtdCurtidas = 0, UsuarioId = 1 });
 
-                await context.Wards.AddAsync(new Ward() { WardId = 5, Titulo = "Instalar certificação SSL para ambiente localhost", Conteudo = "Abra o prompt de comando e digite <i>dotnet dev-certs https--trust</i>'", UsuarioId = 1 });
+                await context.Wards.AddAsync(new Ward() { WardId = 5, Titulo = "Instalar certificação SSL para ambiente localhost", Conteudo = "Abra o prompt de comando e digite <i>dotnet dev-certs https--trust</i>'", QtdCurtidas = 0, UsuarioId = 1 });
 
                 await context.Wards.AddAsync(new Ward()
                 {
@@ -88,6 +88,7 @@ namespace Wards.Infrastructure.Seed.Seeds
                 <br/>2 - Abra o prompt de comando no projeto e aponte para a camada de infraestrutura;
                 <br/>3 - Crie uma migration: <i>Add-Migration NomeDaMigration</i>;
                 <br/>4 - Para finalizar, rode o comando <i>Update-Database</i>.",
+                    QtdCurtidas = 0,
                     UsuarioId = 1
                 });
             }

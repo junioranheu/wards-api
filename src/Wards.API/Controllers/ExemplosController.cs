@@ -17,7 +17,7 @@ using Wards.Application.UseCases.Wards.Shared.Output;
 using Wards.Domain.Consts;
 using Wards.Domain.Entities;
 using Wards.Domain.Enums;
-using Wards.Infrastructure.Factory;
+using Wards.Infrastructure.Factory.ConnectionFactory;
 using Wards.Utils.Entities.Output;
 using static Wards.Utils.Fixtures.Convert;
 using static Wards.Utils.Fixtures.Get;
