@@ -84,6 +84,10 @@ namespace Wards.API.Controllers
 
             List<WardOutput> listaOutput = new();
 
+            if (!reader.HasRows) {
+                return listaOutput;
+            }
+
             while (await reader.ReadAsync())
             {
                 WardOutput output = new()
@@ -131,6 +135,10 @@ namespace Wards.API.Controllers
             SqlDataReader reader = await selectCommand.ExecuteReaderAsync();
 
             List<WardOutput> listaOutput = new();
+
+            if (!reader.HasRows) {
+                return listaOutput;
+            }
 
             while (await reader.ReadAsync())
             {
