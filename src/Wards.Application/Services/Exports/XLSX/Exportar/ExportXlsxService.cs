@@ -21,7 +21,7 @@ namespace Wards.Application.Services.Exports.XLSX.Exportar
             // Estilo padrão;
             if (!string.IsNullOrEmpty(aplicarEstiloNasCelulas))
             {
-                SetarEstilo(worksheet, aplicarEstiloNasCelulas, cor: XLColor.LightGray);
+                SetarEstilo(worksheet, aplicarEstiloNasCelulas, corR: 232, corG: 233, corB: 235);
             }
 
             // Row inicial;
@@ -57,25 +57,25 @@ namespace Wards.Application.Services.Exports.XLSX.Exportar
             static void AdicionarRowInicialLog(IXLWorksheet worksheet)
             {
                 SetarValor(worksheet, linhaAtual: 0, i: 0, typeof(String), "Mensagem #1"); // A;
-                SetarEstilo(worksheet, aplicarEstiloNasCelulas: "A1:A1", cor: XLColor.DarkGreen);
+                SetarEstilo(worksheet, aplicarEstiloNasCelulas: "A1:A1", corR: 119, corG: 147, corB: 60);
 
                 SetarValor(worksheet, linhaAtual: 0, i: 1, typeof(String), "Mensagem #2"); // B - I;
                 MergearCelulas(worksheet, linhaA: 0, colunaA: 1, linhaB: 0, colunaB: 8);
-                SetarEstilo(worksheet, aplicarEstiloNasCelulas: "B1:I1", cor: XLColor.Tan);
+                SetarEstilo(worksheet, aplicarEstiloNasCelulas: "B1:I1", corR: 255, corG: 255, corB: 153);
 
                 SetarValor(worksheet, linhaAtual: 0, i: 9, typeof(String), ""); // J;
-                SetarEstilo(worksheet, aplicarEstiloNasCelulas: "J1:J1", cor: XLColor.LightBlue);
+                SetarEstilo(worksheet, aplicarEstiloNasCelulas: "J1:J1", corR: 204, corG: 255, corB: 255);
 
                 SetarValor(worksheet, linhaAtual: 0, i: 10, typeof(String), "Mensagem #4"); // K - Q;
                 MergearCelulas(worksheet, linhaA: 0, colunaA: 10, linhaB: 0, colunaB: 16);
-                SetarEstilo(worksheet, aplicarEstiloNasCelulas: "K1:Q1", cor: XLColor.Aqua);
+                SetarEstilo(worksheet, aplicarEstiloNasCelulas: "K1:Q1", corR: 204, corG: 255, corB: 204);
 
                 SetarValor(worksheet, linhaAtual: 0, i: 17, typeof(String), "Mensagem #5"); // R - U;
                 MergearCelulas(worksheet, linhaA: 0, colunaA: 17, linhaB: 0, colunaB: 20);
-                SetarEstilo(worksheet, aplicarEstiloNasCelulas: "R1:U1", cor: XLColor.TealBlue);
+                SetarEstilo(worksheet, aplicarEstiloNasCelulas: "R1:U1", corR: 51, corG: 204, corB: 204);
 
                 SetarValor(worksheet, linhaAtual: 0, i: 21, typeof(String), ""); // V;
-                SetarEstilo(worksheet, aplicarEstiloNasCelulas: "V1:V1", cor: XLColor.Rose);
+                SetarEstilo(worksheet, aplicarEstiloNasCelulas: "V1:V1", corR: 255, corG: 204, corB: 153);
             }
         }
 
@@ -168,11 +168,11 @@ namespace Wards.Application.Services.Exports.XLSX.Exportar
             worksheet.Range(worksheet.Cell((linhaA + 1), (colunaA + 1)), worksheet.Cell((linhaB + 1), (colunaB + 1))).Merge();
         }
 
-        private static void SetarEstilo(IXLWorksheet worksheet, string aplicarEstiloNasCelulas, XLColor cor)
+        private static void SetarEstilo(IXLWorksheet worksheet, string aplicarEstiloNasCelulas, int corR, int corG, int corB)
         {
             IXLStyle style = XLWorkbook.DefaultStyle;
 
-            style.Fill.SetBackgroundColor(cor);
+            style.Fill.SetBackgroundColor(XLColor.FromArgb(corR, corG, corB));
             style.Font.SetBold(true);
 
             style.Border.BottomBorder = XLBorderStyleValues.Thin;
