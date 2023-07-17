@@ -49,11 +49,13 @@ namespace Wards.Application.UseCases.Usuarios.CriarUsuario
         /// </summary>
         public async Task<AutenticarUsuarioOutput?> Execute(CriarUsuarioInput input)
         {
-            //var verificarUsuario = await _obterUsuarioCondicaoArbitrariaUseCase.Execute(input?.Email, input?.NomeUsuarioSistema);
+            string login = !string.IsNullOrEmpty(input.Email) ? input.Email : input.NomeUsuarioSistema;
+            var verificarUsuario = await _obterUsuarioCondicaoArbitrariaUseCase.Execute(login);
 
-            //if (verificarUsuario is not null) {
-            //  return (new AutenticarUsuarioOutput(), ObterDescricaoEnum(CodigosErrosEnum.UsuarioExistente));
-            //}
+            if (verificarUsuario.usuario is not null)
+            {
+                throw new Exception(ObterDescricaoEnum(CodigoErroEnum.UsuarioExistente));
+            }
 
             if (input?.NomeCompleto?.Length < 3 || input?.NomeUsuarioSistema?.Length < 3)
             {
