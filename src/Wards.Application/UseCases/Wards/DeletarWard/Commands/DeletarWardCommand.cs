@@ -15,8 +15,8 @@ namespace Wards.Application.UseCases.Wards.DeletarWard.Commands
         public async Task<bool> Execute(int id)
         {
             var linq = await _context.Wards.
-                             Where(w => w.WardId == id).
-                             AsNoTracking().FirstOrDefaultAsync();
+                       Where(w => w.WardId == id).
+                       AsNoTracking().FirstOrDefaultAsync();
 
             if (linq is null)
             {

@@ -17,12 +17,12 @@ namespace Wards.Application.UseCases.Usuarios.ObterUsuario.Queries
         public async Task<Usuario?> Execute(int id, string email)
         {
             var linq = await _context.Usuarios.
-                             Include(ur => ur.UsuarioRoles)!.ThenInclude(r => r.Roles).
-                             Where(u =>
-                                 id > 0 ? u.UsuarioId == id : true
-                                 && !string.IsNullOrEmpty(email) ? u.Email == email : true
-                                 && u.IsLatest == true // É necessário ser o último para referenciar o "UsuarioPerfis" atual; 
-                             ).AsNoTracking().FirstOrDefaultAsync();
+                       Include(ur => ur.UsuarioRoles)!.ThenInclude(r => r.Roles).
+                       Where(u =>
+                          id > 0 ? u.UsuarioId == id : true
+                          && !string.IsNullOrEmpty(email) ? u.Email == email : true
+                          && u.IsLatest == true // É necessário ser o último para referenciar o "UsuarioPerfis" atual; 
+                       ).AsNoTracking().FirstOrDefaultAsync();
 
             return linq;
         }

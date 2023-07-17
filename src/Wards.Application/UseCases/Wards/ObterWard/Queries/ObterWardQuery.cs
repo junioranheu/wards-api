@@ -16,10 +16,10 @@ namespace Wards.Application.UseCases.Wards.ObterWard.Queries
         public async Task<Ward?> Execute(int id)
         {
             var linq = await _context.Wards.
-                             Include(u => u.Usuarios).
-                             Include(u => u.UsuariosMods).
-                             Where(w => w.WardId == id && w.IsAtivo == true).
-                             AsNoTracking().FirstOrDefaultAsync();
+                       Include(u => u.Usuarios).
+                       Include(u => u.UsuariosMods).
+                       Where(w => w.WardId == id && w.IsAtivo == true).
+                       AsNoTracking().FirstOrDefaultAsync();
 
             return linq;
         }

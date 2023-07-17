@@ -17,11 +17,11 @@ namespace Wards.Application.UseCases.Usuarios.ListarUsuario.Queries
         public async Task<IEnumerable<Usuario>> Execute(PaginacaoInput input)
         {
             var linq = await _context.Usuarios.
-                             Include(ur => ur.UsuarioRoles)!.ThenInclude(r => r.Roles).
-                             OrderBy(u => u.UsuarioId).
-                             Skip((input.IsSelectAll ? 0 : input.Index * input.Limit)).
-                             Take((input.IsSelectAll ? int.MaxValue : input.Limit)).
-                             AsNoTracking().ToListAsync();
+                       Include(ur => ur.UsuarioRoles)!.ThenInclude(r => r.Roles).
+                       OrderBy(u => u.UsuarioId).
+                       Skip((input.IsSelectAll ? 0 : input.Index * input.Limit)).
+                       Take((input.IsSelectAll ? int.MaxValue : input.Limit)).
+                       AsNoTracking().ToListAsync();
 
             return linq;
         }

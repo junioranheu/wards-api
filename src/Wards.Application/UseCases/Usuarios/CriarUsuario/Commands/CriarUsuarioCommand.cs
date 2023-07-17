@@ -27,8 +27,8 @@ namespace Wards.Application.UseCases.Usuarios.CriarUsuario.Commands
         private async Task AtualizarFlags(Usuario input)
         {
             var linq = await _context.Usuarios.
-                             Where(u => u.Email == input.Email && u.IsAtivo == true).
-                             AsNoTracking().ToListAsync();
+                       Where(u => u.Email == input.Email && u.IsAtivo == true).
+                       AsNoTracking().ToListAsync();
 
             if (linq.Count > 0)
             {

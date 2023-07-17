@@ -17,11 +17,11 @@ namespace Wards.Application.UseCases.Logs.ListarLog.Queries
         public async Task<IEnumerable<Log>> Execute(PaginacaoInput input)
         {
             var linq = await _context.Logs.
-                             Include(u => u.Usuarios).
-                             OrderByDescending(l => l.LogId).
-                             Skip((input.IsSelectAll ? 0 : input.Index * input.Limit)).
-                             Take((input.IsSelectAll ? int.MaxValue : input.Limit)).
-                             AsNoTracking().ToListAsync();
+                       Include(u => u.Usuarios).
+                       OrderByDescending(l => l.LogId).
+                       Skip((input.IsSelectAll ? 0 : input.Index * input.Limit)).
+                       Take((input.IsSelectAll ? int.MaxValue : input.Limit)).
+                       AsNoTracking().ToListAsync();
 
             return linq;
         }

@@ -38,9 +38,9 @@ namespace Wards.Application.UseCases.Logs.ExportarXlsxLog.Commands
         private async Task<List<Log>?> ListarLogs(int usuarioId, bool isTodos)
         {
             var listaLogs = await _context.Logs.
-                                  Include(u => u.Usuarios).
-                                  Where(l => (isTodos ? true : l.UsuarioId == usuarioId)).
-                                  AsNoTracking().ToListAsync();
+                            Include(u => u.Usuarios).
+                            Where(l => (isTodos ? true : l.UsuarioId == usuarioId)).
+                            AsNoTracking().ToListAsync();
 
             return listaLogs;
         }

@@ -17,13 +17,13 @@ namespace Wards.Application.UseCases.Wards.ListarWard.Queries
         public async Task<IEnumerable<Ward>> Execute(PaginacaoInput input)
         {
             var linq = await _context.Wards.
-                             Include(u => u.Usuarios).
-                             Include(u => u.UsuariosMods).
-                             Where(w => w.IsAtivo == true).
-                             OrderBy(w => w.WardId).
-                             Skip((input.IsSelectAll ? 0 : input.Index * input.Limit)).
-                             Take((input.IsSelectAll ? int.MaxValue : input.Limit)).
-                             AsNoTracking().ToListAsync();
+                       Include(u => u.Usuarios).
+                       Include(u => u.UsuariosMods).
+                       Where(w => w.IsAtivo == true).
+                       OrderBy(w => w.WardId).
+                       Skip((input.IsSelectAll ? 0 : input.Index * input.Limit)).
+                       Take((input.IsSelectAll ? int.MaxValue : input.Limit)).
+                       AsNoTracking().ToListAsync();
 
             return linq;
         }

@@ -16,8 +16,8 @@ namespace Wards.Application.UseCases.Tokens.DeletarRefreshToken.Commands
         public async Task Execute(RefreshToken input)
         {
             var linq = await _context.RefreshTokens.
-                             Where(u => u.UsuarioId == input.UsuarioId).
-                             AsNoTracking().ToListAsync();
+                       Where(u => u.UsuarioId == input.UsuarioId).
+                       AsNoTracking().ToListAsync();
 
             if (linq.Any())
             {

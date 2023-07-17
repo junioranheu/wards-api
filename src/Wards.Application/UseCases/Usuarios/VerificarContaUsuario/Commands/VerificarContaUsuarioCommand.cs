@@ -17,8 +17,8 @@ namespace Wards.Application.UseCases.Usuarios.VerificarContaUsuario.Commands
         public async Task<string> Execute(string codigoVerificacao)
         {
             var linq = await _context.Usuarios.
-             Where(u => u.CodigoVerificacao == codigoVerificacao).
-             AsNoTracking().FirstOrDefaultAsync();
+                       Where(u => u.CodigoVerificacao == codigoVerificacao).
+                       AsNoTracking().FirstOrDefaultAsync();
 
             if (linq is null)
             {

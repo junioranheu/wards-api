@@ -16,12 +16,12 @@ namespace Wards.Application.UseCases.Feriados.ObterFeriado.Queries
         public async Task<Feriado?> Execute(int id)
         {
             var linq = await _context.Feriados.
-             Include(u => u.Usuarios).
-             Include(um => um.UsuariosMods).
-             Include(fd => fd.FeriadosDatas).
-             Include(fe => fe.FeriadosEstados)!.ThenInclude(e => e.Estados).
-             Where(f => f.FeriadoId == id && f.IsAtivo == true).
-             FirstOrDefaultAsync();
+                       Include(u => u.Usuarios).
+                       Include(um => um.UsuariosMods).
+                       Include(fd => fd.FeriadosDatas).
+                       Include(fe => fe.FeriadosEstados)!.ThenInclude(e => e.Estados).
+                       Where(f => f.FeriadoId == id && f.IsAtivo == true).
+                       FirstOrDefaultAsync();
 
             return linq;
         }
