@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using NewsLetterCadastros.Application.UseCases.NewsLettersCadastros;
+using NewsletterCadastros.Application.UseCases.NewslettersCadastros;
 using Wards.Application.AutoMapper;
 using Wards.Application.Services.Exports;
 using Wards.Application.Services.Exports.CSV;
@@ -61,7 +61,7 @@ namespace Wards.Application
             services.AddFeriadosApplication();
             services.AddFeriadosDatasApplication();
             services.AddFeriadosEstadosApplication();
-            services.AddNewsLettersCadastrosApplication();
+            services.AddNewslettersCadastrosApplication();
         }
 
         private static void AddServices(IServiceCollection services)

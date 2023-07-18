@@ -68,6 +68,9 @@ namespace Wards.Domain.Enums
         [Description("Permissão não encontrada")]
         TipoRoleNaoEncontrado = 121,
 
+        [Description("Este e-mail já está cadastrado na Newsletter")]
+        NewsletterEmailJaCadastrado = 122,
+
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=- 200 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         [Description("Processo concluído com sucesso")]
         OK = 200,

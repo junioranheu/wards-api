@@ -1,17 +1,16 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Text.Json.Serialization;
 using static Wards.Utils.Fixtures.Get;
 
-namespace Wards.Domain.Entities
+namespace Wards.Application.UseCases.NewslettersCadastros.Shared.Input
 {
-    public sealed class NewsletterCadastro
+    public sealed class NewsletterCadastroInput
     {
-        [Key]
-        public int NewsletterCadastroId { get; set; }
-
         public string Email { get; set; } = string.Empty;
 
+        [JsonIgnore]
         public bool IsAtivo { get; set; } = true;
 
+        [JsonIgnore]
         public DateTime Data { get; set; } = GerarHorarioBrasilia();
     }
 }

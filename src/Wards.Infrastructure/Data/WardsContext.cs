@@ -22,7 +22,7 @@ namespace Wards.Infrastructure.Data
         public DbSet<Feriado> Feriados { get; set; }
         public DbSet<FeriadoData> FeriadosDatas { get; set; }
         public DbSet<FeriadoEstado> FeriadosEstados { get; set; }
-        public DbSet<NewsLetterCadastro> NewsLettersCadastros { get; set; }
+        public DbSet<NewsletterCadastro> NewslettersCadastros { get; set; }
 
         // Usuários;
         public DbSet<Role> Roles { get; set; }
