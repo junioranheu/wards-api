@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Wards.API.Controllers;
+using Wards.Application.UseCases.NewsLettersCadastros.CriarNewsLetterCadastro;
 using Wards.Application.UseCases.NewsLettersCadastros.ListarNewsLetterCadastro;
 using Wards.Application.UseCases.NewsLettersCadastros.Shared.Input;
 using Wards.Application.UseCases.NewsLettersCadastros.Shared.Output;

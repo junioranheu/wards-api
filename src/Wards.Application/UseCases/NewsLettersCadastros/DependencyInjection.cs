@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Wards.Application.UseCases.NewsLettersCadastros.CriarNewsLetterCadastro;
 using Wards.Application.UseCases.NewsLettersCadastros.CriarNewsLetterCadastro.Commands;
 using Wards.Application.UseCases.NewsLettersCadastros.ListarNewsLetterCadastro;
 using Wards.Application.UseCases.NewsLettersCadastros.ListarNewsLetterCadastro.Queries;
