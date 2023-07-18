@@ -6,6 +6,8 @@ using Wards.Application.UseCases.FeriadosDatas.Shared.Output;
 using Wards.Application.UseCases.FeriadosEstados.Shared.Output;
 using Wards.Application.UseCases.Logs.Shared.Input;
 using Wards.Application.UseCases.Logs.Shared.Output;
+using Wards.Application.UseCases.NewsLettersCadastros.Shared.Input;
+using Wards.Application.UseCases.NewsLettersCadastros.Shared.Output;
 using Wards.Application.UseCases.Tokens.Shared.Input;
 using Wards.Application.UseCases.Usuarios.Shared.Input;
 using Wards.Application.UseCases.Usuarios.Shared.Output;
@@ -41,6 +43,9 @@ namespace Wards.Application.AutoMapper
             CreateMap<FeriadoData, FeriadoDataOutput>();
 
             CreateMap<FeriadoEstado, FeriadoEstadoOutput>();
+
+            CreateMap<NewsLetterCadastroInput, NewsLetterCadastro>();
+            CreateMap<NewsLetterCadastro, NewsLetterCadastroOutput>();
 
             // Auxiliares;
             CreateMap<Estado, EstadoOutput>();
