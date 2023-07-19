@@ -20,6 +20,12 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<None Update="Assets\**">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+
+	<ItemGroup>
 		<None Update="Uploads\**">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
