@@ -50,9 +50,9 @@ namespace Wards.Application.UseCases.Usuarios.CriarUsuario
         public async Task<AutenticarUsuarioOutput?> Execute(CriarUsuarioInput input)
         {
             string login = !string.IsNullOrEmpty(input.Email) ? input.Email : input.NomeUsuarioSistema;
-            var verificarUsuario = await _obterUsuarioCondicaoArbitrariaUseCase.Execute(login);
+            var (usuario, _) = await _obterUsuarioCondicaoArbitrariaUseCase.Execute(login);
 
-            if (verificarUsuario.usuario is not null)
+            if (usuario is not null)
             {
                 throw new Exception(ObterDescricaoEnum(CodigoErroEnum.UsuarioExistente));
             }
