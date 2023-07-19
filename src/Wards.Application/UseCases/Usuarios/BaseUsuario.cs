@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Wards.Application.UseCases.Tokens.CriarRefreshToken;
 using Wards.Application.UseCases.Tokens.Shared.Input;
 using Wards.Application.UseCases.Usuarios.Shared.Output;
+using Wards.Domain.Consts;
 using Wards.Domain.Enums;
 using Wards.Infrastructure.Auth.Token;
 using Wards.Utils.Entities.Output;
@@ -45,6 +46,7 @@ namespace Wards.Application.UseCases.Usuarios
 
                 List<EmailDadosReplaceOutput> listaDadosReplace = new()
                 {
+                    new EmailDadosReplaceOutput { Key = "NomeProjeto", Value = SistemaConst.NomeSistema },
                     new EmailDadosReplaceOutput { Key = "Url", Value = $"{ObterCaminhoFront()}/usuario/verificar-conta/{codigoVerificacao}"},
                     new EmailDadosReplaceOutput { Key = "NomeUsuario", Value = nomeUsuario }
                 };
