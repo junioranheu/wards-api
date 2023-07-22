@@ -18,7 +18,20 @@ namespace Wards.Application.UseCases.Wards.ListarWard
 
         public async Task<IEnumerable<WardOutput>> Execute(PaginacaoInput input)
         {
-            return _map.Map<IEnumerable<WardOutput>>(await _listarQuery.Execute(input));
+            var output = _map.Map<IEnumerable<WardOutput>>(await _listarQuery.Execute(input));
+
+            foreach (var item in output)
+            {
+                if (item.BlobImagemPrincipal is not null)
+                {
+                    item.FormFileImagemPrincipal = CONVERTERBLOBPARAIFORMFILE();
+                    item.BlobImagemPrincipal = null;
+                }
+            }
+
+            // FAZER ESSA MESMA COISA PRO OBTER TAMBÉM!!!!!!!!!!
+
+            return output;
         }
     }
 }

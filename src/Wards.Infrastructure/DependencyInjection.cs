@@ -106,7 +106,7 @@ namespace Wards.Infrastructure
             {
                 c.SwaggerDoc("v1", new() { Title = $"{SistemaConst.NomeSistema}.API", Version = "v1" });
 
-                var jwtSecurityScheme = new OpenApiSecurityScheme
+                OpenApiSecurityScheme jwtSecurityScheme = new()
                 {
                     Scheme = "bearer",
                     BearerFormat = "JWT",

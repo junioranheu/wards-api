@@ -51,7 +51,7 @@ namespace Wards.API.Controllers
             _verificarContaUsuarioUseCase = verificarContaUsuarioUseCase;
         }
 
-        [ApiExplorerSettings(IgnoreApi = true)] // ***
+        [ApiExplorerSettings(IgnoreApi = false)] // ***
         [HttpPost("autenticarLazy")]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]

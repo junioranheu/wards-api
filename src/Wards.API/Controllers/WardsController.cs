@@ -9,6 +9,7 @@ using Wards.Application.UseCases.Wards.ObterWard;
 using Wards.Application.UseCases.Wards.Shared.Input;
 using Wards.Application.UseCases.Wards.Shared.Output;
 using Wards.Domain.Enums;
+using static Wards.Utils.Fixtures.Convert;
 using static Wards.Utils.Fixtures.Get;
 
 namespace Wards.API.Controllers
@@ -58,10 +59,21 @@ namespace Wards.API.Controllers
         [AuthorizeFilter(UsuarioRoleEnum.Administrador)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(WardOutput))]
-        public async Task<ActionResult<int>> Criar(WardInput input)
+        public async Task<ActionResult<int>> Criar([FromForm] WardInputAlt input, IFormFile formFileImagemPrincipal)
         {
-            input.UsuarioId = await ObterUsuarioId();
-            var resp = await _criarUseCase.Execute(input);
+            WardInput w = new()
+            {
+                Titulo = input.Titulo,
+                Conteudo = input.Conteudo
+            };
+
+            if (formFileImagemPrincipal is not null)
+            {
+                w.BlobImagemPrincipal = await ConverterIFormFileParaBytes(formFileImagemPrincipal);
+            }
+
+            w.UsuarioId = await ObterUsuarioId();
+            var resp = await _criarUseCase.Execute(w);
 
             if (resp < 1)
             {

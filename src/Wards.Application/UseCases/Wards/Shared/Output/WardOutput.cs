@@ -1,4 +1,5 @@
-﻿using Wards.Application.UseCases.Usuarios.Shared.Output;
+﻿using Microsoft.AspNetCore.Http;
+using Wards.Application.UseCases.Usuarios.Shared.Output;
 using static Wards.Utils.Fixtures.Get;
 
 namespace Wards.Application.UseCases.Wards.Shared.Output
@@ -8,6 +9,8 @@ namespace Wards.Application.UseCases.Wards.Shared.Output
         public int WardId { get; set; }
 
         public string? Titulo { get; set; }
+
+        public byte[]? BlobImagemPrincipal { get; set; }
 
         public string? Conteudo { get; set; }
 
@@ -22,5 +25,8 @@ namespace Wards.Application.UseCases.Wards.Shared.Output
         public DateTime? DataMod { get; set; } = null;
 
         public bool IsAtivo { get; set; } = true;
+
+        // Campos extras;
+        public IFormFile? FormFileImagemPrincipal { get; set; } // Deve ser convertido de byte[] posteriormente para IFormFile;
     }
 }

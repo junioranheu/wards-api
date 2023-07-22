@@ -86,7 +86,7 @@ namespace Wards.API
             services.AddFluentValidationAutoValidation();
             services.AddFluentValidationClientsideAdapters();
 
-            AssemblyScanner? validators = AssemblyScanner.FindValidatorsInAssemblyContaining<WardInputValidator>();
+            AssemblyScanner? validators = AssemblyScanner.FindValidatorsInAssemblyContaining<WardInputAltValidator>();
             validators.ForEach(x => services.AddValidatorsFromAssemblyContaining(x.ValidatorType));
         }
 

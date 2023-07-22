@@ -5,9 +5,13 @@ namespace Wards.Application.UseCases.Wards.Shared.Input
 {
     public sealed class WardInput
     {
+        [JsonIgnore]
         public int WardId { get; set; }
 
         public string Titulo { get; set; } = string.Empty;
+
+        [JsonIgnore]
+        public byte[]? BlobImagemPrincipal { get; set; } = Array.Empty<byte>();
 
         public string Conteudo { get; set; } = string.Empty;
 
@@ -21,6 +25,6 @@ namespace Wards.Application.UseCases.Wards.Shared.Input
         public int? UsuarioModId { get; set; }
 
         [JsonIgnore]
-        public bool? IsAtivo { get; set; }
+        public bool? IsAtivo { get; set; } = true;
     }
 }

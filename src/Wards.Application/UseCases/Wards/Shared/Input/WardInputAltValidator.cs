@@ -2,13 +2,12 @@
 
 namespace Wards.Application.UseCases.Wards.Shared.Input
 {
-    public sealed class WardInputValidator : AbstractValidator<WardInput>
+    public sealed class WardInputAltValidator : AbstractValidator<WardInputAlt>
     {
-        public WardInputValidator()
+        public WardInputAltValidator()
         {
             RuleFor(x => x.Titulo).NotNull().NotEmpty().MinimumLength(3);
             RuleFor(x => x.Conteudo).NotNull().NotEmpty().MinimumLength(10);
-            RuleFor(x => x.UsuarioId).NotNull().GreaterThan(0);
         }
     }
 }

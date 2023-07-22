@@ -6,11 +6,11 @@ namespace Wards.UnitTests.Tests.Wards
 {
     public sealed class WardValidatorTest
     {
-        private readonly WardInputValidator _validator;
+        private readonly WardInputAltValidator _validator;
 
         public WardValidatorTest()
         {
-            _validator = new WardInputValidator();
+            _validator = new WardInputAltValidator();
         }
 
         [Theory]
