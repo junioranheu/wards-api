@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
+using System.Net.Mime;
+using static Wards.Utils.Fixtures.Get;
 
 namespace Wards.Utils.Fixtures
 {
@@ -14,6 +16,21 @@ namespace Wards.Utils.Fixtures
             await formFile.CopyToAsync(memoryStream);
 
             return memoryStream.ToArray();
+        }
+
+        /// <summary>
+        /// Converter bytes[] para IFormFile;
+        /// </summary>
+        public static IFormFile ConverterBytesParaIFormFile(byte[] bytes)
+        {
+            using var memoryStream = new MemoryStream(bytes);
+            string strRandom = GerarStringAleatoria(5, false);
+            FormFile formFile = new(memoryStream, 0, bytes.Length, strRandom, strRandom)
+            {
+                Headers = new HeaderDictionary()
+            };
+
+            return formFile;
         }
 
         /// <summary>
@@ -37,6 +54,14 @@ namespace Wards.Utils.Fixtures
             formFiles.Add(file);
 
             return formFiles[0];
+        }
+
+        /// <summary>
+        /// Converter bytes[] para Base64;
+        /// </summary>
+        public static string ConverterBytesParaBase64(byte[] bytes)
+        {
+            return System.Convert.ToBase64String(bytes);
         }
 
         /// <summary>

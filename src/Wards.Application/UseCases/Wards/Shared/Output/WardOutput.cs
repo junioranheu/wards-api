@@ -25,8 +25,5 @@ namespace Wards.Application.UseCases.Wards.Shared.Output
         public DateTime? DataMod { get; set; } = null;
 
         public bool IsAtivo { get; set; } = true;
-
-        // Campos extras;
-        public IFormFile? FormFileImagemPrincipal { get; set; } // Deve ser convertido de byte[] posteriormente para IFormFile;
     }
 }
