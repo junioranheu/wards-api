@@ -21,7 +21,7 @@ namespace Wards.UnitTests.Tests.Wards
         public void Validar_Titulo(string titulo, bool esperado)
         {
             // Arrange;
-            var model = new WardInput { Titulo = titulo };
+            var model = new WardInputAlt { Titulo = titulo };
 
             // Act;
             var result = _validator.TestValidate(model);
@@ -45,7 +45,7 @@ namespace Wards.UnitTests.Tests.Wards
         public void Validar_Conteudo(string conteudo, bool esperado)
         {
             // Arrange;
-            var model = new WardInput { Conteudo = conteudo };
+            var model = new WardInputAlt { Conteudo = conteudo };
 
             // Act;
             var result = _validator.TestValidate(model);
@@ -58,29 +58,6 @@ namespace Wards.UnitTests.Tests.Wards
             else
             {
                 result.ShouldHaveValidationErrorFor(x => x.Conteudo);
-            }
-        }
-
-        [Theory]
-        [InlineData(null, false)]
-        [InlineData(0, false)]
-        [InlineData(22, true)]
-        public void Validar_UsuarioId(int? usuarioId, bool esperado)
-        {
-            // Arrange;
-            var model = new WardInput { UsuarioId = usuarioId };
-
-            // Act;
-            var result = _validator.TestValidate(model);
-
-            // Assert;
-            if (esperado)
-            {
-                result.ShouldNotHaveValidationErrorFor(x => x.UsuarioId);
-            }
-            else
-            {
-                result.ShouldHaveValidationErrorFor(x => x.UsuarioId);
             }
         }
     }

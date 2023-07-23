@@ -19,18 +19,7 @@ namespace Wards.Application.UseCases.Wards.ListarWard
 
         public async Task<IEnumerable<WardOutput>> Execute(PaginacaoInput input)
         {
-            var output = _map.Map<IEnumerable<WardOutput>>(await _listarQuery.Execute(input));
-
-            foreach (var item in output)
-            {
-                if (item.ImagemPrincipalBlob is not null && item.ImagemPrincipalBlob.Length > 0)
-                {
-                    item.ImagemPrincipalBase64 = ConverterBytesParaBase64(item.ImagemPrincipalBlob);
-                    item.ImagemPrincipalBlob = null;
-                }
-            }
-
-            return output;
+            return _map.Map<IEnumerable<WardOutput>>(await _listarQuery.Execute(input));
         }
     }
 }

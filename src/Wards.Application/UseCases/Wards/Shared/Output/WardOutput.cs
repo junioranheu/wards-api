@@ -24,8 +24,5 @@ namespace Wards.Application.UseCases.Wards.Shared.Output
         public DateTime? DataMod { get; set; } = null;
 
         public bool IsAtivo { get; set; } = true;
-
-        // Propriedades extras;
-        public string? ImagemPrincipalBase64 { get; set; }
     }
 }
