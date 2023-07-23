@@ -20,7 +20,7 @@ namespace Wards.Application.UseCases.Wards.ListarWard.Queries
                        Include(u => u.Usuarios).
                        Include(u => u.UsuariosMods).
                        Where(w => w.IsAtivo == true).
-                       OrderBy(w => w.WardId).
+                       OrderByDescending(w => w.DataMod).ThenByDescending(w => w.Data).
                        Skip((input.IsSelectAll ? 0 : input.Index * input.Limit)).
                        Take((input.IsSelectAll ? int.MaxValue : input.Limit)).
                        AsNoTracking().ToListAsync();
