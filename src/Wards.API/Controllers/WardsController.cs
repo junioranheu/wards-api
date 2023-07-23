@@ -69,7 +69,7 @@ namespace Wards.API.Controllers
 
             if (formFileImagemPrincipal is not null)
             {
-                w.BlobImagemPrincipal = await ConverterIFormFileParaBytes(formFileImagemPrincipal);
+                w.ImagemPrincipalBlob = await ConverterIFormFileParaBytes(formFileImagemPrincipal);
             }
 
             w.UsuarioId = await ObterUsuarioId();

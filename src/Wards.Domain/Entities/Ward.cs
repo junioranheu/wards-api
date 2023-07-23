@@ -11,7 +11,7 @@ namespace Wards.Domain.Entities
 
         public string Titulo { get; set; } = string.Empty;
 
-        public byte[]? BlobImagemPrincipal { get; set; } = Array.Empty<byte>();
+        public byte[]? ImagemPrincipalBlob { get; set; } = Array.Empty<byte>();
 
         public string Conteudo { get; set; } = string.Empty;
 

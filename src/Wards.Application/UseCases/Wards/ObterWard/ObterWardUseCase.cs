@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Wards.Application.UseCases.Wards.ObterWard.Queries;
 using Wards.Application.UseCases.Wards.Shared.Output;
+using static Wards.Utils.Fixtures.Convert;
 
 namespace Wards.Application.UseCases.Wards.ObterWard
 {
@@ -17,7 +18,15 @@ namespace Wards.Application.UseCases.Wards.ObterWard
 
         public async Task<WardOutput?> Execute(int id)
         {
-            return _map.Map<WardOutput>(await _obterQuery.Execute(id));
+            var output = _map.Map<WardOutput>(await _obterQuery.Execute(id));
+
+            if (output.ImagemPrincipalBlob is not null && output.ImagemPrincipalBlob.Length > 0)
+            {
+                output.ImagemPrincipalBase64 = ConverterBytesParaBase64(output.ImagemPrincipalBlob);
+                output.ImagemPrincipalBlob = null;
+            }
+
+            return output;
         }
     }
 }
