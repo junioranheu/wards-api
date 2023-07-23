@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Http;
-using System.Net.Mime;
 using static Wards.Utils.Fixtures.Get;
 
 namespace Wards.Utils.Fixtures
