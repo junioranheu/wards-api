@@ -89,6 +89,18 @@ namespace Wards.Infrastructure.Seed.Seeds
                     QtdCurtidas = 0,
                     UsuarioId = 1
                 });
+
+                //for (int i = 0; i < 100; i++)
+                //{
+                //    await context.Wards.AddAsync(new Ward()
+                //    {
+                //        WardId = 7 + i,
+                //        Titulo = "ABC",
+                //        Conteudo = "teste",
+                //        QtdCurtidas = 0,
+                //        UsuarioId = 1
+                //    });
+                //}
             }
             #endregion
         }
