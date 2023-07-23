@@ -25,6 +25,9 @@ namespace Wards.Application.UseCases.Wards.Shared.Input
         public int? UsuarioModId { get; set; }
 
         [JsonIgnore]
+        public DateTime? DataMod { get; set; }
+
+        [JsonIgnore]
         public bool? IsAtivo { get; set; } = true;
     }
 }

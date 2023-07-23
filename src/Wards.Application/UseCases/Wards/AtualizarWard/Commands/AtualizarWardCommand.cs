@@ -26,6 +26,8 @@ namespace Wards.Application.UseCases.Wards.AtualizarWard.Commands
                 throw new Exception(ObterDescricaoEnum(CodigoErroEnum.NaoEncontrado));
             }
 
+            item.Titulo = !string.IsNullOrEmpty(input.Titulo) ? input.Titulo : item.Titulo;
+            item.ImagemPrincipalBlob = input.ImagemPrincipalBlob?.Length > 0 ? input.ImagemPrincipalBlob : item.ImagemPrincipalBlob;
             item.Conteudo = !string.IsNullOrEmpty(input.Conteudo) ? input.Conteudo : item.Conteudo;
             item.UsuarioModId = input.UsuarioModId;
             item.DataMod = GerarHorarioBrasilia();

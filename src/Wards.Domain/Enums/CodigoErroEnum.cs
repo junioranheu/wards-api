@@ -4,72 +4,75 @@ namespace Wards.Domain.Enums
 {
     public enum CodigoErroEnum
     {
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=- 100 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=- 900 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         [Description("Já existe outro usuário cadastrado com este e-mail ou nome de usuário")]
-        UsuarioExistente = 101,
+        UsuarioExistente = 901,
 
         [Description("Tipo de usuário não permitido")]
-        TipoUsuarioNaoPermitido = 102,
+        TipoUsuarioNaoPermitido = 902,
 
         [Description("Tipo de usuário não encontrado")]
-        TipoUsuarioNaoEncontrado = 103,
+        TipoUsuarioNaoEncontrado = 903,
 
         [Description("Os requisitos de senha não foram cumpridos. A senha deve ser mais segura")]
-        RequisitosSenhaNaoCumprido = 104,
+        RequisitosSenhaNaoCumprido = 904,
 
         [Description("O nome completo ou nome de usuário não atingem o mínimo de caracteres necessários")]
-        RequisitosNome = 105,
+        RequisitosNome = 905,
 
         [Description("E-mail inválido")]
-        EmailInvalido = 106,
+        EmailInvalido = 906,
 
         [Description("O usuário ou senha estão incorretos")]
-        UsuarioSenhaIncorretos = 107,
+        UsuarioSenhaIncorretos = 907,
 
         [Description("Esta conta está desativada")]
-        ContaDesativada = 108,
+        ContaDesativada = 908,
 
         [Description("Este usuário não foi encontrado")]
-        UsuarioNaoEncontrado = 109,
+        UsuarioNaoEncontrado = 909,
 
         [Description("Este código de verificação é inválido")]
-        CodigoVerificacaoInvalido = 110,
+        CodigoVerificacaoInvalido = 910,
 
         [Description("Este código está expirado")]
-        CodigoExpirado = 111,
+        CodigoExpirado = 911,
 
         [Description("Esta conta já se encontra verificada portanto não é possível verificá-la novamente")]
-        ContaJaVerificada = 112,
+        ContaJaVerificada = 912,
 
         [Description("Esta conta ainda não foi verificada. Um novo e-mail foi enviado para você. Verifique-a e tente novamente mais tarde")]
-        ContaNaoVerificadaMasNovoEmailVerificacaoEnviado = 113,
+        ContaNaoVerificadaMasNovoEmailVerificacaoEnviado = 913,
 
         [Description("Esta conta ainda não foi verificada. Além disso, houve um erro ao enviar um novo e-mail de vericação. Tente novamente mais tarde")]
-        ContaNaoVerificadaComFalhaNoEnvioNovoEmailVerificacao = 114,
+        ContaNaoVerificadaComFalhaNoEnvioNovoEmailVerificacao = 914,
 
         [Description("As senhas não se coincidem")]
-        SenhasNaoCoincidem = 115,
+        SenhasNaoCoincidem = 915,
 
         [Description("A senha atual não está correta, portanto o processo foi abortado")]
-        SenhaIncorretaAoAtualizar = 116,
+        SenhaIncorretaAoAtualizar = 916,
 
         [Description("Um e-mail de recuperação de senha já foi enviado para você há pouco tempo. Tente novamente mais tarde")]
-        EmailRecuperacaoJaEnviado = 117,
+        EmailRecuperacaoJaEnviado =917,
 
         [Description("Esse código de recuperação não está vinculado a nenhum usuário")]
-        HashRecuperacaoNaoExiste = 118,
+        HashRecuperacaoNaoExiste = 918,
 
         [Description("Um e-mail de validação de conta já foi enviado para você há pouco tempo. Tente novamente mais tarde")]
-        EmailValidacaoJaEnviado = 119,
+        EmailValidacaoJaEnviado = 919,
 
         [Description("Você já está autenticado, portanto não pode fazer isso agora")]
-        UsuarioJaAutenticado = 120,
+        UsuarioJaAutenticado = 920,
 
         [Description("Permissão não encontrada")]
-        TipoRoleNaoEncontrado = 121,
+        TipoRoleNaoEncontrado = 921,
 
         [Description("Este e-mail já está cadastrado na Newsletter")]
-        NewsletterEmailJaCadastrado = 122,
+        NewsletterEmailJaCadastrado = 922,
+
+        [Description("Formato de arquivo não permitido. Apenas imagens são permitidas")]
+        FormatoDeArquivoNaoPermitido_ApenasImagemPermitidas = 923,
 
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=- 200 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         [Description("Processo concluído com sucesso")]

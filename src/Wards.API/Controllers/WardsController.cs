@@ -11,6 +11,7 @@ using Wards.Application.UseCases.Wards.Shared.Output;
 using Wards.Domain.Enums;
 using static Wards.Utils.Fixtures.Convert;
 using static Wards.Utils.Fixtures.Get;
+using static Wards.Utils.Fixtures.Validate;
 
 namespace Wards.API.Controllers
 {
@@ -42,10 +43,28 @@ namespace Wards.API.Controllers
         [AuthorizeFilter(UsuarioRoleEnum.Administrador)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(WardOutput))]
-        public async Task<ActionResult<int>> Atualizar(WardInput input)
+        public async Task<ActionResult<int>> Atualizar([FromForm] WardInputAlt input, IFormFile? formFileImagemPrincipal)
         {
-            input.UsuarioModId = await ObterUsuarioId();
-            var resp = await _atualizarUseCase.Execute(input);
+            WardInput w = new()
+            {
+                WardId = input.WardId.GetValueOrDefault(),
+                Titulo = input.Titulo,
+                Conteudo = input.Conteudo,
+                UsuarioModId = await ObterUsuarioId(),
+                DataMod = GerarHorarioBrasilia()
+            };
+
+            if (formFileImagemPrincipal is not null)
+            {
+                if (!ValidarIFormFile_IsImagem(formFileImagemPrincipal))
+                {
+                    throw new Exception(ObterDescricaoEnum(CodigoErroEnum.FormatoDeArquivoNaoPermitido_ApenasImagemPermitidas));
+                }
+
+                w.ImagemPrincipalBlob = await ConverterIFormFileParaBytes(formFileImagemPrincipal);
+            }
+
+            var resp = await _atualizarUseCase.Execute(w);
 
             if (resp < 1)
             {
@@ -59,20 +78,25 @@ namespace Wards.API.Controllers
         [AuthorizeFilter(UsuarioRoleEnum.Administrador)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(WardOutput))]
-        public async Task<ActionResult<int>> Criar([FromForm] WardInputAlt input, IFormFile formFileImagemPrincipal)
+        public async Task<ActionResult<int>> Criar([FromForm] WardInputAlt input, IFormFile? formFileImagemPrincipal)
         {
             WardInput w = new()
             {
                 Titulo = input.Titulo,
-                Conteudo = input.Conteudo
+                Conteudo = input.Conteudo,
+                UsuarioId = await ObterUsuarioId()
             };
 
             if (formFileImagemPrincipal is not null)
             {
+                if (!ValidarIFormFile_IsImagem(formFileImagemPrincipal))
+                {
+                    throw new Exception(ObterDescricaoEnum(CodigoErroEnum.FormatoDeArquivoNaoPermitido_ApenasImagemPermitidas));
+                }
+
                 w.ImagemPrincipalBlob = await ConverterIFormFileParaBytes(formFileImagemPrincipal);
             }
 
-            w.UsuarioId = await ObterUsuarioId();
             var resp = await _criarUseCase.Execute(w);
 
             if (resp < 1)
