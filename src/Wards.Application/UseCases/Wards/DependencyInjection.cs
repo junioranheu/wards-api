@@ -9,6 +9,8 @@ using Wards.Application.UseCases.Wards.DeletarWard;
 using Wards.Application.UseCases.Wards.DeletarWard.Commands;
 using Wards.Application.UseCases.Wards.ListarWard;
 using Wards.Application.UseCases.Wards.ListarWard.Queries;
+using Wards.Application.UseCases.Wards.ObterAleatorioWard;
+using Wards.Application.UseCases.Wards.ObterAleatorioWard.Queries;
 using Wards.Application.UseCases.Wards.ObterWard;
 using Wards.Application.UseCases.Wards.ObterWard.Queries;
 
@@ -32,6 +34,9 @@ namespace Wards.Application.UseCases.Wards
 
             services.AddScoped<IObterWardUseCase, ObterWardUseCase>();
             services.AddScoped<IObterWardQuery, ObterWardQuery>();
+
+            services.AddScoped<IObterAleatorioWardUseCase, ObterAleatorioWardUseCase>();
+            services.AddScoped<IObterAleatorioWardQuery, ObterAleatorioWardQuery>();
 
             services.AddScoped<IBulkCopyCriarWardUseCase, BulkCopyCriarWardUseCase>();
             services.AddScoped<IBulkCopyCriarWardCommand, BulkCopyCriarWardCommand>();

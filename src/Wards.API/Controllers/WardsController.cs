@@ -5,6 +5,7 @@ using Wards.Application.UseCases.Wards.AtualizarWard;
 using Wards.Application.UseCases.Wards.CriarWard;
 using Wards.Application.UseCases.Wards.DeletarWard;
 using Wards.Application.UseCases.Wards.ListarWard;
+using Wards.Application.UseCases.Wards.ObterAleatorioWard;
 using Wards.Application.UseCases.Wards.ObterWard;
 using Wards.Application.UseCases.Wards.Shared.Input;
 using Wards.Application.UseCases.Wards.Shared.Output;
@@ -24,19 +25,22 @@ namespace Wards.API.Controllers
         private readonly IDeletarWardUseCase _deletarUseCase;
         private readonly IListarWardUseCase _listarUseCase;
         private readonly IObterWardUseCase _obterUseCase;
+        private readonly IObterAleatorioWardUseCase _obterAleatorioUseCase;
 
         public WardsController(
             IAtualizarWardUseCase atualizarUseCase,
             ICriarWardUseCase criarUseCase,
             IDeletarWardUseCase deletarUseCase,
             IListarWardUseCase listarUseCase,
-            IObterWardUseCase obterUseCase)
+            IObterWardUseCase obterUseCase,
+            IObterAleatorioWardUseCase obterAleatorioUseCase)
         {
             _atualizarUseCase = atualizarUseCase;
             _criarUseCase = criarUseCase;
             _deletarUseCase = deletarUseCase;
             _listarUseCase = listarUseCase;
             _obterUseCase = obterUseCase;
+            _obterAleatorioUseCase = obterAleatorioUseCase;
         }
 
         [HttpPut]
@@ -137,6 +141,21 @@ namespace Wards.API.Controllers
         public async Task<ActionResult<WardOutput>> Obter(int id)
         {
             var item = await _obterUseCase.Execute(id);
+
+            if (item is null)
+            {
+                throw new Exception(ObterDescricaoEnum(CodigoErroEnum.NaoEncontrado));
+            }
+
+            return Ok(item);
+        }
+
+        [HttpGet("obterAleatorio")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(WardOutput))]
+        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(WardOutput))]
+        public async Task<ActionResult<WardOutput>> ObterAleatorio()
+        {
+            var item = await _obterAleatorioUseCase.Execute();
 
             if (item is null)
             {
