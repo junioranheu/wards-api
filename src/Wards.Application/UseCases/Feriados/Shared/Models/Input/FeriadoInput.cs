@@ -21,7 +21,7 @@ namespace Wards.Application.UseCases.Feriados.Shared.Models.Input
         [JsonIgnore]
         public int? UsuarioIdMod { get; set; }
 
-        // Extras;
+        // Propriedades extras;
         public string[]? Data { get; set; }
 
         public int[]? DistribuidoraId { get; set; }

@@ -29,5 +29,8 @@ namespace Wards.Application.UseCases.Wards.Shared.Input
 
         [JsonIgnore]
         public bool? IsAtivo { get; set; } = true;
+
+        // Propriedades extras;
+        public int[]? ListaHashtags { get; set; }
     }
 }

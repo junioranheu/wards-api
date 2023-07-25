@@ -21,7 +21,9 @@ namespace Wards.Application.UseCases.Tokens.DeletarRefreshToken.Commands
 
             if (linq.Any())
             {
+                _context.ChangeTracker.Clear();
                 _context.RefreshTokens.RemoveRange(linq);
+                await _context.SaveChangesAsync();
             }
         }
     }

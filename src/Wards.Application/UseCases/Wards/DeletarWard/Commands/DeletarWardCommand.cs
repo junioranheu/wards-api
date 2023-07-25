@@ -24,6 +24,7 @@ namespace Wards.Application.UseCases.Wards.DeletarWard.Commands
             }
 
             _context.Wards.Remove(linq);
+            await _context.SaveChangesAsync();
 
             return true;
         }

@@ -14,6 +14,7 @@ using Wards.Application.UseCases.Usuarios.Shared.Output;
 using Wards.Application.UseCases.UsuariosRoles.Shared.Output;
 using Wards.Application.UseCases.Wards.Shared.Input;
 using Wards.Application.UseCases.Wards.Shared.Output;
+using Wards.Application.UseCases.WardsHashtags.Shared.Input;
 using Wards.Domain.Entities;
 
 namespace Wards.Application.AutoMapper
@@ -36,6 +37,8 @@ namespace Wards.Application.AutoMapper
 
             CreateMap<WardInput, Ward>();
             CreateMap<Ward, WardOutput>();
+
+            CreateMap<WardHashtagInput, WardHashtag>();
 
             CreateMap<FeriadoInput, Feriado>();
             CreateMap<Feriado, FeriadoOutput>();

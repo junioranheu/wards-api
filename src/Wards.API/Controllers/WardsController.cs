@@ -55,7 +55,8 @@ namespace Wards.API.Controllers
                 Titulo = input.Titulo,
                 Conteudo = input.Conteudo,
                 UsuarioModId = await ObterUsuarioId(),
-                DataMod = GerarHorarioBrasilia()
+                DataMod = GerarHorarioBrasilia(),
+                ListaHashtags = input.ListaHashtags
             };
 
             if (formFileImagemPrincipal is not null)
@@ -88,7 +89,8 @@ namespace Wards.API.Controllers
             {
                 Titulo = input.Titulo,
                 Conteudo = input.Conteudo,
-                UsuarioId = await ObterUsuarioId()
+                UsuarioId = await ObterUsuarioId(),
+                ListaHashtags = input.ListaHashtags
             };
 
             if (formFileImagemPrincipal is not null)

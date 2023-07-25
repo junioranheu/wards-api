@@ -22,7 +22,7 @@ namespace Wards.Application.UseCases.Usuarios.Shared.Output
 
         public IEnumerable<UsuarioRoleOutput>? UsuarioRoles { get; init; }
 
-        // Extra;
+        // Propriedades extras;
         public string? Token { get; set; } = null;
 
         public string? RefreshToken { get; set; } = null;

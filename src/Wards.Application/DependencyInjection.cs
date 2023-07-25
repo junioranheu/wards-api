@@ -17,6 +17,7 @@ using Wards.Application.UseCases.Tokens;
 using Wards.Application.UseCases.Usuarios;
 using Wards.Application.UseCases.UsuariosRoles;
 using Wards.Application.UseCases.Wards;
+using Wards.Application.UseCases.WardsHashtags;
 
 namespace Wards.Application
 {
@@ -57,6 +58,7 @@ namespace Wards.Application
             services.AddUsuariosApplication();
             services.AddUsuariosRolesApplication();
             services.AddWardsApplication();
+            services.AddWardsHashtagsApplication();
             services.AddAuxiliaresApplication();
             services.AddFeriadosApplication();
             services.AddFeriadosDatasApplication();

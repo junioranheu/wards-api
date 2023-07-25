@@ -25,7 +25,7 @@ namespace Wards.Application.UseCases.Feriados.ListarFeriado.Queries
                        OrderBy(f => f.FeriadoId).
                        Skip((input.IsSelectAll ? 0 : input.Index * input.Limit)).
                        Take((input.IsSelectAll ? int.MaxValue : input.Limit)).
-                       ToListAsync();
+                       AsNoTracking().ToListAsync();
 
             return linq;
         }

@@ -29,7 +29,7 @@ namespace Wards.Application.UseCases.Usuarios.Shared.Input
         [JsonIgnore]
         public string? HistPerfisAtivos { get; set; } = string.Empty;
 
-        // Extra;
+        // Propriedades extras;
         public int[]? UsuariosRolesId { get; set; } = null;
     }
 }

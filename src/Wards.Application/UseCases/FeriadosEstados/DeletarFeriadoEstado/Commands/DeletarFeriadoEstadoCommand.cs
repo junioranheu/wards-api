@@ -15,10 +15,12 @@ namespace Wards.Application.UseCases.FeriadosEstados.DeletarFeriadoEstado.Comman
         public async Task Execute(int feriadoId)
         {
             var fe = await _context.FeriadosEstados.
-                     Where(fe => fe.FeriadoId == feriadoId).ToListAsync();
+                     Where(fe => fe.FeriadoId == feriadoId).
+                     AsNoTracking().ToListAsync();
 
             if (fe.Any())
             {
+                _context.ChangeTracker.Clear();
                 _context.FeriadosEstados.RemoveRange(fe);
                 await _context.SaveChangesAsync();
             }
