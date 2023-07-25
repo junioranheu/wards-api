@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using Wards.Application.UseCases.Wards.ObterAleatorioWard.Queries;
 using Wards.Application.UseCases.Wards.Shared.Output;
+using Wards.Domain.Enums;
+using static Wards.Utils.Fixtures.Get;
 
 namespace Wards.Application.UseCases.Wards.ObterAleatorioWard
 {
@@ -17,7 +19,17 @@ namespace Wards.Application.UseCases.Wards.ObterAleatorioWard
 
         public async Task<WardOutput?> Execute()
         {
-            return _map.Map<WardOutput>(await _obterAleatorioQuery.Execute());
+            var query = await _obterAleatorioQuery.Execute();
+
+            if (query is null)
+            {
+                throw new Exception(ObterDescricaoEnum(CodigoErroEnum.NaoEncontrado));
+            }
+
+            var output = _map.Map<WardOutput>(query);
+            output.ListaHashtags = query!.WardsHashtags!.Select(x => x.Hashtags!.Nome).ToArray();
+
+            return output;
         }
     }
 }

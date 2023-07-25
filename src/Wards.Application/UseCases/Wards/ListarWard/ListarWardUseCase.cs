@@ -2,7 +2,8 @@
 using Wards.Application.UseCases.Shared.Models.Input;
 using Wards.Application.UseCases.Wards.ListarWard.Queries;
 using Wards.Application.UseCases.Wards.Shared.Output;
-using static Wards.Utils.Fixtures.Convert;
+using Wards.Domain.Enums;
+using static Wards.Utils.Fixtures.Get;
 
 namespace Wards.Application.UseCases.Wards.ListarWard
 {
@@ -19,7 +20,21 @@ namespace Wards.Application.UseCases.Wards.ListarWard
 
         public async Task<IEnumerable<WardOutput>> Execute(PaginacaoInput input)
         {
-            return _map.Map<IEnumerable<WardOutput>>(await _listarQuery.Execute(input));
+            var query = await _listarQuery.Execute(input);
+
+            if (query is null)
+            {
+                throw new Exception(ObterDescricaoEnum(CodigoErroEnum.NaoEncontrado));
+            }
+
+            var output = _map.Map<IEnumerable<WardOutput>>(await _listarQuery.Execute(input));
+
+            foreach (var item in output)
+            {
+                item.ListaHashtags = query.Where(x => x.WardId == item.WardId).FirstOrDefault()!.WardsHashtags!.Select(x => x.Hashtags!.Nome).ToArray();
+            }
+
+            return output;
         }
     }
 }

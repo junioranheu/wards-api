@@ -18,6 +18,7 @@ namespace Wards.Application.UseCases.Wards.ObterWard.Queries
             var linq = await _context.Wards.
                        Include(u => u.Usuarios).
                        Include(u => u.UsuariosMods).
+                       Include(wh => wh.WardsHashtags)!.ThenInclude(h => h.Hashtags).
                        Where(w => w.WardId == id && w.IsAtivo == true).
                        AsNoTracking().FirstOrDefaultAsync();
 

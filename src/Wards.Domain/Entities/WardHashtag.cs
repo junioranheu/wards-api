@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using static Wards.Utils.Fixtures.Get;
 
 namespace Wards.Domain.Entities
@@ -9,6 +10,7 @@ namespace Wards.Domain.Entities
         public int WardHashtagId { get; set; }
 
         public int? WardId { get; set; }
+        [NotMapped]
         public Ward? Wards { get; init; }
 
         public int? HashtagId { get; set; }

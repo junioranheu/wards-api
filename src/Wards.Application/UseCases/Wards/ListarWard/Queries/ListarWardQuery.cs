@@ -19,6 +19,7 @@ namespace Wards.Application.UseCases.Wards.ListarWard.Queries
             var linq = await _context.Wards.
                        Include(u => u.Usuarios).
                        Include(u => u.UsuariosMods).
+                       Include(wh => wh.WardsHashtags)!.ThenInclude(h => h.Hashtags).
                        Where(w => w.IsAtivo == true).
                        OrderByDescending(w => w.DataMod).ThenByDescending(w => w.Data).
                        Skip((input.IsSelectAll ? 0 : input.Index * input.Limit)).

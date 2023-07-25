@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using Wards.Application.UseCases.Wards.ObterWard.Queries;
 using Wards.Application.UseCases.Wards.Shared.Output;
+using Wards.Domain.Enums;
+using static Wards.Utils.Fixtures.Get;
 
 namespace Wards.Application.UseCases.Wards.ObterWard
 {
@@ -17,7 +19,17 @@ namespace Wards.Application.UseCases.Wards.ObterWard
 
         public async Task<WardOutput?> Execute(int id)
         {
-            return _map.Map<WardOutput>(await _obterQuery.Execute(id));
+            var query = await _obterQuery.Execute(id);
+
+            if (query is null)
+            {
+                throw new Exception(ObterDescricaoEnum(CodigoErroEnum.NaoEncontrado));
+            }
+
+            var output = _map.Map<WardOutput>(query);
+            output.ListaHashtags = query!.WardsHashtags!.Select(x => x.Hashtags!.Nome).ToArray();
+
+            return output;
         }
     }
 }

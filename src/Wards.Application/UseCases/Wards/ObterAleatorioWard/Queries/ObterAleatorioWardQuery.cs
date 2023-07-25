@@ -30,6 +30,7 @@ namespace Wards.Application.UseCases.Wards.ObterAleatorioWard.Queries
             var linq = await _context.Wards.
                        Include(u => u.Usuarios).
                        Include(u => u.UsuariosMods).
+                       Include(wh => wh.WardsHashtags)!.ThenInclude(h => h.Hashtags).
                        Where(w => w.IsAtivo == true).
                        Skip(skip).
                        Take(1).
