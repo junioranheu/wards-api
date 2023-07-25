@@ -29,5 +29,7 @@ namespace Wards.Domain.Entities
         public DateTime? DataMod { get; set; } = null;
 
         public bool IsAtivo { get; set; } = true;
+
+        public IEnumerable<WardHashtag>? WardsHashtags { get; init; }
     }
 }

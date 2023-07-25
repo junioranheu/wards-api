@@ -79,7 +79,7 @@ namespace Wards.Infrastructure.Seed.Seeds
 
                 await context.Wards.AddAsync(new Ward()
                 {
-                    WardId = 6,
+                    WardId = 5,
                     Titulo = "Migrations",
                     Conteudo = @"Para utilizar migrations basta seguir os passos:
                 <br/>1 - Instale o pacote <i>dotnet add package Microsoft.EntityFrameworkCore.Tools</i>;

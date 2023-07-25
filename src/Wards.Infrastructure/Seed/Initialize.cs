@@ -60,6 +60,36 @@ namespace Wards.Infrastructure.Seed
             await SeedEstados.Seed(context);
             await SeedCidades.Seed(context);
 
+            if (!await context.Hashtags.AnyAsync())
+            {
+                await context.Hashtags.AddAsync(new Hashtag() { HashtagId = 1, Nome = "C#" });
+                await context.Hashtags.AddAsync(new Hashtag() { HashtagId = 2, Nome = ".NET" });
+                await context.Hashtags.AddAsync(new Hashtag() { HashtagId = 3, Nome = "React.js" });
+                await context.Hashtags.AddAsync(new Hashtag() { HashtagId = 4, Nome = "Front-end" });
+                await context.Hashtags.AddAsync(new Hashtag() { HashtagId = 5, Nome = "Back-end" });
+                await context.Hashtags.AddAsync(new Hashtag() { HashtagId = 6, Nome = "MySQL" });
+                await context.Hashtags.AddAsync(new Hashtag() { HashtagId = 7, Nome = "Visual Studio" });
+            }
+
+            if (!await context.WardsHashtags.AnyAsync())
+            {
+                await context.WardsHashtags.AddAsync(new WardHashtag() { WardHashtagId = 1, WardId = 1, HashtagId = 1 });
+                await context.WardsHashtags.AddAsync(new WardHashtag() { WardHashtagId = 2, WardId = 1, HashtagId = 2 });
+                await context.WardsHashtags.AddAsync(new WardHashtag() { WardHashtagId = 3, WardId = 1, HashtagId = 5 });
+
+                await context.WardsHashtags.AddAsync(new WardHashtag() { WardHashtagId = 4, WardId = 2, HashtagId = 1 });
+                await context.WardsHashtags.AddAsync(new WardHashtag() { WardHashtagId = 5, WardId = 2, HashtagId = 2 });
+                await context.WardsHashtags.AddAsync(new WardHashtag() { WardHashtagId = 6, WardId = 2, HashtagId = 5 });
+
+                await context.WardsHashtags.AddAsync(new WardHashtag() { WardHashtagId = 7, WardId = 3, HashtagId = 7 });
+
+                await context.WardsHashtags.AddAsync(new WardHashtag() { WardHashtagId = 8, WardId = 4, HashtagId = 7 });
+
+                await context.WardsHashtags.AddAsync(new WardHashtag() { WardHashtagId = 9, WardId = 5, HashtagId = 1 });
+                await context.WardsHashtags.AddAsync(new WardHashtag() { WardHashtagId = 10, WardId = 5, HashtagId = 2 });
+                await context.WardsHashtags.AddAsync(new WardHashtag() { WardHashtagId = 11, WardId = 5, HashtagId = 5 });
+            }
+
             if (!await context.Feriados.AnyAsync())
             {
                 await context.Feriados.AddAsync(new Feriado() { FeriadoId = 1, Tipo = TipoFeriadoEnum.Nacional, Nome = "Natal", IsMovel = false, UsuarioId = 1 });
