@@ -90,11 +90,11 @@ namespace Wards.Infrastructure.Seed.Seeds
                     UsuarioId = 1
                 });
 
-                //for (int i = 0; i < 100; i++)
+                //for (int i = 0; i < 20000; i++)
                 //{
                 //    await context.Wards.AddAsync(new Ward()
                 //    {
-                //        WardId = 7 + i,
+                //        WardId = 6 + i,
                 //        Titulo = "ABC",
                 //        Conteudo = "teste",
                 //        QtdCurtidas = 0,

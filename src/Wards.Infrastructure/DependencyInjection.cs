@@ -86,7 +86,7 @@ namespace Wards.Infrastructure
             string con = new ConnectionFactory(builder.Configuration).ObterStringConnection();
 
             // Entity Framework;
-            services.AddDbContext<WardsContext>(x =>
+            services.AddDbContextPool<WardsContext>(x =>
             {
                 // x.UseSqlServer(con);
                 x.UseMySql(con, ServerVersion.AutoDetect(con));

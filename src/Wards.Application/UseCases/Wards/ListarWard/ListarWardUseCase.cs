@@ -27,7 +27,7 @@ namespace Wards.Application.UseCases.Wards.ListarWard
                 throw new Exception(ObterDescricaoEnum(CodigoErroEnum.NaoEncontrado));
             }
 
-            var output = _map.Map<IEnumerable<WardOutput>>(await _listarQuery.Execute(input));
+            var output = _map.Map<IEnumerable<WardOutput>>(query);
 
             foreach (var item in output)
             {
