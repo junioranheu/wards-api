@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Wards.Application.UseCases.Wards.AtualizarWard.Commands;
 using Wards.Application.UseCases.Wards.Shared.Input;
-using Wards.Application.UseCases.WardsHashtags.CriarWardHashtag.Commands;
+using Wards.Application.UseCases.WardsHashtags.CriarWardHashtag;
 using Wards.Domain.Entities;
 
 namespace Wards.Application.UseCases.Wards.AtualizarWard
@@ -10,16 +10,16 @@ namespace Wards.Application.UseCases.Wards.AtualizarWard
     {
         private readonly IMapper _map;
         private readonly IAtualizarWardCommand _atualizarCommand;
-        private readonly ICriarWardHashtagCommand _criarWardHashtagCommand;
+        private readonly ICriarWardHashtagUseCase _criarWardHashtagUseCase;
 
         public AtualizarWardUseCase(
             IMapper map,
             IAtualizarWardCommand atualizarCommand,
-            ICriarWardHashtagCommand criarWardHashtagCommand)
+            ICriarWardHashtagUseCase criarWardHashtagUseCase)
         {
             _map = map;
             _atualizarCommand = atualizarCommand;
-            _criarWardHashtagCommand = criarWardHashtagCommand;
+            _criarWardHashtagUseCase = criarWardHashtagUseCase;
         }
 
         public async Task<int> Execute(WardInput input)
@@ -31,23 +31,7 @@ namespace Wards.Application.UseCases.Wards.AtualizarWard
                 return output;
             }
 
-            List<WardHashtag> listaHashtag = new();
-
-            foreach (var item in input.ListaHashtags)
-            {
-                WardHashtag hashtag = new()
-                {
-                    WardId = output,
-                    HashtagId = item
-                };
-
-                listaHashtag.Add(hashtag);
-            }
-
-            if (listaHashtag.Any())
-            {
-                await _criarWardHashtagCommand.Execute(listaHashtag, output);
-            }
+            await _criarWardHashtagUseCase.Execute(input.ListaHashtags, output);
 
             return output;
         }

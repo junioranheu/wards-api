@@ -20,5 +20,26 @@ namespace Wards.Application.UseCases.WardsHashtags.CriarWardHashtag
         {
             await _criarCommand.Execute(_map.Map<List<WardHashtag>>(listaInput), wardId);
         }
+
+        public async Task Execute(int[] listaHashtags, int wardId)
+        {
+            List<WardHashtag> listaHashtag = new();
+
+            foreach (var item in listaHashtags)
+            {
+                WardHashtag hashtag = new()
+                {
+                    WardId = wardId,
+                    HashtagId = item
+                };
+
+                listaHashtag.Add(hashtag);
+            }
+
+            if (listaHashtag.Any())
+            {
+                await _criarCommand.Execute(_map.Map<List<WardHashtag>>(listaHashtag), wardId);
+            }
+        }
     }
 }
