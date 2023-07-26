@@ -73,9 +73,9 @@ namespace Wards.Infrastructure.Seed.Seeds
                 <p>&nbsp;</p>
                 ", QtdCurtidas = 0, UsuarioId = 1 });
 
-                await context.Wards.AddAsync(new Ward() { WardId = 3, Titulo = "Remover referências não utilizadas", Conteudo = "Clique com o botão direito em qualquer <i>solution</i> de seu projeto no VS 2022, e clique na opção 'Remover Referências Não Usadas...'", QtdCurtidas = 0, UsuarioId = 1 });
+                await context.Wards.AddAsync(new Ward() { WardId = 3, Titulo = "Remover referências não utilizadas", Conteudo = "Clique com o botão direito em qualquer <i>solution</i> de seu projeto no VS 2022, e clique na opção <i>Remover Referências Não Usadas...</i>", QtdCurtidas = 0, UsuarioId = 1 });
 
-                await context.Wards.AddAsync(new Ward() { WardId = 4, Titulo = "Instalar certificação SSL para ambiente localhost", Conteudo = "Abra o prompt de comando e digite <i>dotnet dev-certs https--trust</i>'", QtdCurtidas = 0, UsuarioId = 1 });
+                await context.Wards.AddAsync(new Ward() { WardId = 4, Titulo = "Instalar certificação SSL para ambiente localhost", Conteudo = "Abra o prompt de comando e digite <i>dotnet dev-certs https--trust</i>", QtdCurtidas = 0, UsuarioId = 1 });
 
                 await context.Wards.AddAsync(new Ward()
                 {
@@ -90,11 +90,13 @@ namespace Wards.Infrastructure.Seed.Seeds
                     UsuarioId = 1
                 });
 
+                await context.Wards.AddAsync(new Ward() { WardId = 6, Titulo = "AddDbContext vs AddDbContextPool", Conteudo = "Bla bla bla AddDbContextPool!", QtdCurtidas = 0, UsuarioId = 1 });
+
                 //for (int i = 0; i < 20000; i++)
                 //{
                 //    await context.Wards.AddAsync(new Ward()
                 //    {
-                //        WardId = 6 + i,
+                //        WardId = 7 + i,
                 //        Titulo = "ABC",
                 //        Conteudo = "teste",
                 //        QtdCurtidas = 0,
