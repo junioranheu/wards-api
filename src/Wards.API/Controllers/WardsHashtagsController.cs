@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Wards.Application.UseCases.Shared.Models.Input;
-using Wards.Application.UseCases.Wards.Shared.Output;
-using Wards.Application.UseCases.WardsHashtags.ListarWardHashtag;
+using Wards.Application.UseCases.WardsHashtags.ListarHashtagQtd;
 using Wards.Application.UseCases.WardsHashtags.Shared.Output;
 using Wards.Domain.Enums;
 using static Wards.Utils.Fixtures.Get;
@@ -12,19 +10,19 @@ namespace Wards.API.Controllers
     [Route("api/[controller]")]
     public class WardsHashtagsController : BaseController<WardsHashtagsController>
     {
-        private readonly IListarWardHashtagUseCase _listarUseCase;
+        private readonly IListarHashtagQtdUseCase _listarUseCase;
 
-        public WardsHashtagsController(IListarWardHashtagUseCase listarUseCase)
+        public WardsHashtagsController(IListarHashtagQtdUseCase listarUseCase)
         {
             _listarUseCase = listarUseCase;
         }
 
-        [HttpGet("listar")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<WardHashtagOutput>))]
-        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(WardOutput))]
-        public async Task<ActionResult<IEnumerable<WardHashtagOutput>>> Listar([FromQuery] PaginacaoInput input)
+        [HttpGet("listarHashtagQtd")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<HashtagQtdOutput>))]
+        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(HashtagQtdOutput))]
+        public async Task<ActionResult<IEnumerable<HashtagQtdOutput>>> ListarHashtagQtd()
         {
-            var lista = await _listarUseCase.Execute(input);
+            var lista = await _listarUseCase.Execute();
 
             if (!lista.Any())
             {

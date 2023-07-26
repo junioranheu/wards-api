@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Wards.Application.UseCases.WardsHashtags.CriarWardHashtag;
 using Wards.Application.UseCases.WardsHashtags.CriarWardHashtag.Commands;
-using Wards.Application.UseCases.WardsHashtags.ListarWardHashtag;
-using Wards.Application.UseCases.WardsHashtags.ListarWardHashtag.Queries;
+using Wards.Application.UseCases.WardsHashtags.ListarHashtagQtd;
+using Wards.Application.UseCases.WardsHashtags.ListarHashtagQtd.Queries;
 
 namespace Wards.Application.UseCases.WardsHashtags
 {
@@ -13,8 +13,8 @@ namespace Wards.Application.UseCases.WardsHashtags
             services.AddScoped<ICriarWardHashtagUseCase, CriarWardHashtagUseCase>();
             services.AddScoped<ICriarWardHashtagCommand, CriarWardHashtagCommand>();
 
-            services.AddScoped<IListarWardHashtagUseCase, ListarWardHashtagUseCase>();
-            services.AddScoped<IListarWardHashtagQuery, ListarWardHashtagQuery>();
+            services.AddScoped<IListarHashtagQtdUseCase, ListarHashtagQtdUseCase>();
+            services.AddScoped<IListarHashtagQtdQuery, ListarHashtagQtdQuery>();
 
             return services;
         }

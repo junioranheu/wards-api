@@ -31,7 +31,7 @@ namespace Wards.Application.UseCases.Wards.ListarWard
 
             foreach (var item in output)
             {
-                item.ListaHashtags = query.Where(x => x.WardId == item.WardId).FirstOrDefault()!.WardsHashtags!.Select(x => x.Hashtags!.Nome).ToArray();
+                item.ListaHashtags = query.Where(x => x.WardId == item.WardId).FirstOrDefault()!.WardsHashtags!.Select(x => x.Hashtags!.Tag).ToArray();
             }
 
             return output;

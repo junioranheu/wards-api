@@ -40,7 +40,6 @@ namespace Wards.Application.AutoMapper
             CreateMap<Ward, WardOutput>();
 
             CreateMap<WardHashtagInput, WardHashtag>();
-            CreateMap<WardHashtag, WardHashtagOutput>();
 
             CreateMap<FeriadoInput, Feriado>();
             CreateMap<Feriado, FeriadoOutput>();

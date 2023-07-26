@@ -27,7 +27,7 @@ namespace Wards.Application.UseCases.Wards.ObterWard
             }
 
             var output = _map.Map<WardOutput>(query);
-            output.ListaHashtags = query!.WardsHashtags!.Select(x => x.Hashtags!.Nome).ToArray();
+            output.ListaHashtags = query!.WardsHashtags!.Select(x => x.Hashtags!.Tag).ToArray();
 
             return output;
         }

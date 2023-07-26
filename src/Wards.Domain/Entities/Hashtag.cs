@@ -8,7 +8,7 @@ namespace Wards.Domain.Entities
         [Key]
         public int HashtagId { get; set; }
 
-        public string Nome { get; set; } = string.Empty;
+        public string Tag { get; set; } = string.Empty;
 
         public bool IsAtivo { get; set; } = true;
 

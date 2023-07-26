@@ -62,13 +62,13 @@ namespace Wards.Infrastructure.Seed
 
             if (!await context.Hashtags.AnyAsync())
             {
-                await context.Hashtags.AddAsync(new Hashtag() { HashtagId = 1, Nome = "C#" });
-                await context.Hashtags.AddAsync(new Hashtag() { HashtagId = 2, Nome = ".NET" });
-                await context.Hashtags.AddAsync(new Hashtag() { HashtagId = 3, Nome = "React.js" });
-                await context.Hashtags.AddAsync(new Hashtag() { HashtagId = 4, Nome = "Front-end" });
-                await context.Hashtags.AddAsync(new Hashtag() { HashtagId = 5, Nome = "Back-end" });
-                await context.Hashtags.AddAsync(new Hashtag() { HashtagId = 6, Nome = "MySQL" });
-                await context.Hashtags.AddAsync(new Hashtag() { HashtagId = 7, Nome = "Visual Studio" });
+                await context.Hashtags.AddAsync(new Hashtag() { HashtagId = 1, Tag = "#csharp" });
+                await context.Hashtags.AddAsync(new Hashtag() { HashtagId = 2, Tag = "#dotnet" });
+                await context.Hashtags.AddAsync(new Hashtag() { HashtagId = 3, Tag = "#reactjs" });
+                await context.Hashtags.AddAsync(new Hashtag() { HashtagId = 4, Tag = "#frontend" });
+                await context.Hashtags.AddAsync(new Hashtag() { HashtagId = 5, Tag = "#backend" });
+                await context.Hashtags.AddAsync(new Hashtag() { HashtagId = 6, Tag = "#mysql" });
+                await context.Hashtags.AddAsync(new Hashtag() { HashtagId = 7, Tag = "#visualstudio" });
             }
 
             if (!await context.WardsHashtags.AnyAsync())
