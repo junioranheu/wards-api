@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Text.Json.Serialization;
 using Wards.Application.UseCases.Usuarios.Shared.Input;
 
 namespace Wards.Application.UseCases.Wards.Shared.Input
@@ -31,6 +32,6 @@ namespace Wards.Application.UseCases.Wards.Shared.Input
         public bool? IsAtivo { get; set; } = true;
 
         // Propriedades extras;
-        public int[]? ListaHashtags { get; set; }
+        public int[]? ListaHashtags { get; set; } // Propriedade para reter os ids referentes às hashtags da ward em questão;
     }
 }

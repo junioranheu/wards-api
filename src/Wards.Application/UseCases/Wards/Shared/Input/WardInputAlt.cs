@@ -1,4 +1,6 @@
-﻿namespace Wards.Application.UseCases.Wards.Shared.Input
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Wards.Application.UseCases.Wards.Shared.Input
 {
     public sealed class WardInputAlt
     {
