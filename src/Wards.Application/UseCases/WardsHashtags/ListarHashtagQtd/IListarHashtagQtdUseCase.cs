@@ -4,6 +4,6 @@ namespace Wards.Application.UseCases.WardsHashtags.ListarHashtagQtd
 {
     public interface IListarHashtagQtdUseCase
     {
-        Task<IEnumerable<HashtagQtdOutput>> Execute();
+        Task<IEnumerable<HashtagQtdOutput>> Execute(int max);
     }
 }

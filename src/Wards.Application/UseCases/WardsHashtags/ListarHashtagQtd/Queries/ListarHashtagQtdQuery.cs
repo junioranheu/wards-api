@@ -13,7 +13,7 @@ namespace Wards.Application.UseCases.WardsHashtags.ListarHashtagQtd.Queries
             _context = context;
         }
 
-        public async Task<IEnumerable<HashtagQtdOutput>> Execute()
+        public async Task<IEnumerable<HashtagQtdOutput>> Execute(int max)
         {
             var linq = await _context.WardsHashtags.
                        Include(ht => ht.Hashtags).
@@ -24,6 +24,7 @@ namespace Wards.Application.UseCases.WardsHashtags.ListarHashtagQtd.Queries
                            Quantidade = x.Count()
                        }).
                        OrderByDescending(h => h.Quantidade).ThenBy(h => h.Tag).
+                       Take(max > 0 ? max : int.MaxValue).
                        AsNoTracking().ToListAsync();
 
             return linq;

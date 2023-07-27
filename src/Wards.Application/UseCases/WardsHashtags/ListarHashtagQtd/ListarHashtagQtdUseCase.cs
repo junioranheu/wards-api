@@ -12,9 +12,9 @@ namespace Wards.Application.UseCases.WardsHashtags.ListarHashtagQtd
             _listarQuery = listarQuery;
         }
 
-        public async Task<IEnumerable<HashtagQtdOutput>> Execute()
+        public async Task<IEnumerable<HashtagQtdOutput>> Execute(int max)
         {
-            return await _listarQuery.Execute();
+            return await _listarQuery.Execute(max);
         }
     }
 }

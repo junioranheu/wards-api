@@ -5,6 +5,6 @@ namespace Wards.Application.UseCases.WardsHashtags.ListarHashtagQtd.Queries
 {
     public interface IListarHashtagQtdQuery
     {
-        Task<IEnumerable<HashtagQtdOutput>> Execute();
+        Task<IEnumerable<HashtagQtdOutput>> Execute(int max);
     }
 }

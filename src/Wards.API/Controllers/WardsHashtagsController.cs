@@ -20,9 +20,9 @@ namespace Wards.API.Controllers
         [HttpGet("listarHashtagQtd")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<HashtagQtdOutput>))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(HashtagQtdOutput))]
-        public async Task<ActionResult<IEnumerable<HashtagQtdOutput>>> ListarHashtagQtd()
+        public async Task<ActionResult<IEnumerable<HashtagQtdOutput>>> ListarHashtagQtd(int max = 0)
         {
-            var lista = await _listarUseCase.Execute();
+            var lista = await _listarUseCase.Execute(max);
 
             if (!lista.Any())
             {
