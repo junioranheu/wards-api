@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Wards.Domain.Entities;
 using Wards.Infrastructure.Data;
+using static Wards.Utils.Fixtures.Get;
 
 namespace Wards.Infrastructure.Seed.Seeds
 {
@@ -92,17 +93,17 @@ namespace Wards.Infrastructure.Seed.Seeds
 
                 await context.Wards.AddAsync(new Ward() { WardId = 6, Titulo = "AddDbContext vs AddDbContextPool", Conteudo = "Bla bla bla AddDbContextPool!", QtdCurtidas = 0, UsuarioId = 1 });
 
-                //for (int i = 0; i < 20000; i++)
-                //{
-                //    await context.Wards.AddAsync(new Ward()
-                //    {
-                //        WardId = 7 + i,
-                //        Titulo = "ABC",
-                //        Conteudo = "teste",
-                //        QtdCurtidas = 0,
-                //        UsuarioId = 1
-                //    });
-                //}
+                for (int i = 0; i < 10; i++)
+                {
+                    await context.Wards.AddAsync(new Ward()
+                    {
+                        WardId = 7 + i,
+                        Titulo = GerarStringAleatoria(7, true),
+                        Conteudo = GerarStringAleatoria(50, false),
+                        QtdCurtidas = GerarNumeroAleatorio(0, 500),
+                        UsuarioId = 1
+                    });
+                }
             }
             #endregion
         }
