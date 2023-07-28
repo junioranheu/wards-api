@@ -125,9 +125,9 @@ namespace Wards.API.Controllers
         [HttpGet("listar")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<WardOutput>))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(WardOutput))]
-        public async Task<ActionResult<IEnumerable<WardOutput>>> Listar([FromQuery] PaginacaoInput input)
+        public async Task<ActionResult<IEnumerable<WardOutput>>> Listar([FromQuery] PaginacaoInput input, string? keyword)
         {
-            var lista = await _listarUseCase.Execute(input);
+            var lista = await _listarUseCase.Execute(input, (keyword ?? string.Empty));
 
             if (!lista.Any())
             {

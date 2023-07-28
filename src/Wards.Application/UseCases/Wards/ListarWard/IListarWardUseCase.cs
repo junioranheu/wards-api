@@ -5,6 +5,6 @@ namespace Wards.Application.UseCases.Wards.ListarWard
 {
     public interface IListarWardUseCase
     {
-        Task<IEnumerable<WardOutput>> Execute(PaginacaoInput input);
+        Task<IEnumerable<WardOutput>> Execute(PaginacaoInput input, string keyword);
     }
 }

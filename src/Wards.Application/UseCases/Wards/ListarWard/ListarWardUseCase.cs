@@ -18,9 +18,9 @@ namespace Wards.Application.UseCases.Wards.ListarWard
             _listarQuery = listarQuery;
         }
 
-        public async Task<IEnumerable<WardOutput>> Execute(PaginacaoInput input)
+        public async Task<IEnumerable<WardOutput>> Execute(PaginacaoInput input, string keyword)
         {
-            var query = await _listarQuery.Execute(input);
+            var query = await _listarQuery.Execute(input, keyword);
 
             if (query is null)
             {
