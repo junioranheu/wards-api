@@ -22,7 +22,7 @@ namespace Wards.Application.UseCases.Wards.ListarWard.Queries
                        Include(wh => wh.WardsHashtags)!.ThenInclude(h => h.Hashtags).
                        Where(w =>
                           w.IsAtivo == true &&
-                          (!string.IsNullOrEmpty(keyword) ? (w.Titulo.Contains(keyword) || w.Conteudo.Contains(keyword)) : true)
+                          (!string.IsNullOrEmpty(keyword) ? (w.Titulo.Contains(keyword) || w.Conteudo.Contains(keyword)) || w.WardsHashtags!.Any(x => x.Hashtags!.Tag.Contains(keyword)) : true)
                        ).
                        OrderByDescending(w => w.DataMod).ThenByDescending(w => w.Data).
                        Skip((input.IsSelectAll ? 0 : input.Index * input.Limit)).
