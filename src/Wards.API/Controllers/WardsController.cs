@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Wards.API.Filters;
 using Wards.Application.UseCases.Shared.Models.Input;
 using Wards.Application.UseCases.Wards.AtualizarWard;
@@ -123,6 +124,7 @@ namespace Wards.API.Controllers
         }
 
         [HttpGet("listar")]
+        [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<WardOutput>))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(WardOutput))]
         public async Task<ActionResult<IEnumerable<WardOutput>>> Listar([FromQuery] PaginacaoInput input, string? keyword)
@@ -138,6 +140,7 @@ namespace Wards.API.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(WardOutput))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(WardOutput))]
         public async Task<ActionResult<WardOutput>> Obter(int id)
@@ -153,6 +156,7 @@ namespace Wards.API.Controllers
         }
 
         [HttpGet("obterAleatorio")]
+        [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(WardOutput))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(WardOutput))]
         public async Task<ActionResult<WardOutput>> ObterAleatorio()
