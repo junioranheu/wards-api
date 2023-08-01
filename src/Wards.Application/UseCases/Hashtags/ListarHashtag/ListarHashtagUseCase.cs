@@ -1,27 +1,23 @@
-﻿using Wards.Application.UseCases.Hashtags.ListarHashtag.Queries;
+﻿using AutoMapper;
+using Wards.Application.UseCases.Hashtags.ListarHashtag.Queries;
+using Wards.Application.UseCases.Hashtags.Shared.Output;
 
 namespace Wards.Application.UseCases.Hashtags.ListarHashtag
 {
     public sealed class ListarHashtagUseCase : IListarHashtagUseCase
     {
+        private readonly IMapper _map;
         private readonly IListarHashtagQuery _listarQuery;
 
-        public ListarHashtagUseCase(IListarHashtagQuery listarQuery)
+        public ListarHashtagUseCase(IMapper map, IListarHashtagQuery listarQuery)
         {
+            _map = map;
             _listarQuery = listarQuery;
         }
 
-        public async Task<List<string>> Execute()
+        public async Task<IEnumerable<HashtagOutput>> Execute()
         {
-            var linq = await _listarQuery.Execute();
-            List<string> output = new();
-
-            foreach (var item in linq)
-            {
-                output.Add(item.Tag);
-            }
-
-            return output;
+            return _map.Map<IEnumerable<HashtagOutput>>(await _listarQuery.Execute());
         }
     }
 }

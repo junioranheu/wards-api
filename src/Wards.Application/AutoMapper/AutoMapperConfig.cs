@@ -4,6 +4,7 @@ using Wards.Application.UseCases.Feriados.Shared.Models.Input;
 using Wards.Application.UseCases.Feriados.Shared.Models.Output;
 using Wards.Application.UseCases.FeriadosDatas.Shared.Output;
 using Wards.Application.UseCases.FeriadosEstados.Shared.Output;
+using Wards.Application.UseCases.Hashtags.Shared.Output;
 using Wards.Application.UseCases.Logs.Shared.Input;
 using Wards.Application.UseCases.Logs.Shared.Output;
 using Wards.Application.UseCases.NewslettersCadastros.Shared.Input;
@@ -15,7 +16,6 @@ using Wards.Application.UseCases.UsuariosRoles.Shared.Output;
 using Wards.Application.UseCases.Wards.Shared.Input;
 using Wards.Application.UseCases.Wards.Shared.Output;
 using Wards.Application.UseCases.WardsHashtags.Shared.Input;
-using Wards.Application.UseCases.WardsHashtags.Shared.Output;
 using Wards.Domain.Entities;
 
 namespace Wards.Application.AutoMapper
@@ -38,6 +38,8 @@ namespace Wards.Application.AutoMapper
 
             CreateMap<WardInput, Ward>();
             CreateMap<Ward, WardOutput>();
+
+            CreateMap<Hashtag, HashtagOutput>();
 
             CreateMap<WardHashtagInput, WardHashtag>();
 

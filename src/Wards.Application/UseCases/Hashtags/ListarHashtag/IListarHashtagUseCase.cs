@@ -1,7 +1,9 @@
-﻿namespace Wards.Application.UseCases.Hashtags.ListarHashtag
+﻿using Wards.Application.UseCases.Hashtags.Shared.Output;
+
+namespace Wards.Application.UseCases.Hashtags.ListarHashtag
 {
     public interface IListarHashtagUseCase
     {
-        Task<List<string>> Execute();
+        Task<IEnumerable<HashtagOutput>> Execute();
     }
 }
