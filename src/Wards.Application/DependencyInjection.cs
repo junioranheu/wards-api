@@ -12,6 +12,7 @@ using Wards.Application.UseCases.Auxiliares;
 using Wards.Application.UseCases.Feriados;
 using Wards.Application.UseCases.FeriadosDatas;
 using Wards.Application.UseCases.FeriadosEstados;
+using Wards.Application.UseCases.Hashtags;
 using Wards.Application.UseCases.Logs;
 using Wards.Application.UseCases.Tokens;
 using Wards.Application.UseCases.Usuarios;
@@ -58,6 +59,7 @@ namespace Wards.Application
             services.AddUsuariosApplication();
             services.AddUsuariosRolesApplication();
             services.AddWardsApplication();
+            services.AddHashtagsApplication();
             services.AddWardsHashtagsApplication();
             services.AddAuxiliaresApplication();
             services.AddFeriadosApplication();
