@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Wards.Application.UseCases.Hashtags.ListarHashtag;
+using Wards.Domain.Consts;
 using Wards.Domain.Enums;
 using static Wards.Utils.Fixtures.Get;
 
@@ -17,6 +18,7 @@ namespace Wards.API.Controllers
         }
 
         [HttpGet("listar")]
+        [ResponseCache(Duration = TemposConst.DezMinutosEmSegundos)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<string>))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(List<string>))]
         public async Task<ActionResult<List<string>>> Listar()
