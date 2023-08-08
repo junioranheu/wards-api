@@ -1,4 +1,6 @@
-﻿namespace Wards.Application.UseCases.Wards.Shared.Input
+﻿using Microsoft.AspNetCore.Http;
+
+namespace Wards.Application.UseCases.Wards.Shared.Input
 {
     public sealed class WardInputAlt
     {
@@ -10,5 +12,7 @@
 
         // Propriedades extras;
         public int[]? ListaHashtags { get; set; } // Propriedade para reter os ids referentes às hashtags da ward em questão;
+
+        public IFormFile? FormFileImagemPrincipal { get; set; }
     }
 }

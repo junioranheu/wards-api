@@ -48,7 +48,7 @@ namespace Wards.API.Controllers
         [AuthorizeFilter(UsuarioRoleEnum.Administrador)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(WardOutput))]
-        public async Task<ActionResult<int>> Atualizar([FromForm] WardInputAlt input, IFormFile? formFileImagemPrincipal)
+        public async Task<ActionResult<int>> Atualizar([FromForm] WardInputAlt input)
         {
             WardInput w = new()
             {
@@ -60,14 +60,14 @@ namespace Wards.API.Controllers
                 ListaHashtags = input.ListaHashtags
             };
 
-            if (formFileImagemPrincipal is not null)
+            if (input.FormFileImagemPrincipal is not null)
             {
-                if (!ValidarIFormFile_IsImagem(formFileImagemPrincipal))
+                if (!ValidarIFormFile_IsImagem(input.FormFileImagemPrincipal))
                 {
                     throw new Exception(ObterDescricaoEnum(CodigoErroEnum.FormatoDeArquivoNaoPermitido_ApenasImagemPermitidas));
                 }
 
-                w.ImagemPrincipalBlob = await ConverterIFormFileParaBytes(formFileImagemPrincipal);
+                w.ImagemPrincipalBlob = await ConverterIFormFileParaBytes(input.FormFileImagemPrincipal);
             }
 
             var resp = await _atualizarUseCase.Execute(w);
@@ -84,7 +84,7 @@ namespace Wards.API.Controllers
         [AuthorizeFilter(UsuarioRoleEnum.Administrador)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(WardOutput))]
-        public async Task<ActionResult<int>> Criar([FromForm] WardInputAlt input, IFormFile? formFileImagemPrincipal)
+        public async Task<ActionResult<int>> Criar([FromForm] WardInputAlt input)
         {
             WardInput w = new()
             {
@@ -94,14 +94,14 @@ namespace Wards.API.Controllers
                 ListaHashtags = input.ListaHashtags
             };
 
-            if (formFileImagemPrincipal is not null)
+            if (input.FormFileImagemPrincipal is not null)
             {
-                if (!ValidarIFormFile_IsImagem(formFileImagemPrincipal))
+                if (!ValidarIFormFile_IsImagem(input.FormFileImagemPrincipal))
                 {
                     throw new Exception(ObterDescricaoEnum(CodigoErroEnum.FormatoDeArquivoNaoPermitido_ApenasImagemPermitidas));
                 }
 
-                w.ImagemPrincipalBlob = await ConverterIFormFileParaBytes(formFileImagemPrincipal);
+                w.ImagemPrincipalBlob = await ConverterIFormFileParaBytes(input.FormFileImagemPrincipal);
             }
 
             var resp = await _criarUseCase.Execute(w);
