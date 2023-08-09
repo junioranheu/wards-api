@@ -57,10 +57,10 @@ namespace Wards.API.Controllers
                 Conteudo = input.Conteudo,
                 UsuarioModId = await ObterUsuarioId(),
                 DataMod = GerarHorarioBrasilia(),
-                ListaHashtags = input.ListaHashtags
+                ListaHashtags = Array.ConvertAll(input?.ListaHashtags?.Split(',')!, int.Parse)
             };
 
-            if (input.FormFileImagemPrincipal is not null)
+            if (input?.FormFileImagemPrincipal is not null)
             {
                 if (!ValidarIFormFile_IsImagem(input.FormFileImagemPrincipal))
                 {
@@ -91,10 +91,10 @@ namespace Wards.API.Controllers
                 Titulo = input.Titulo,
                 Conteudo = input.Conteudo,
                 UsuarioId = await ObterUsuarioId(),
-                ListaHashtags = input.ListaHashtags
+                ListaHashtags = Array.ConvertAll(input?.ListaHashtags?.Split(',')!, int.Parse)
             };
 
-            if (input.FormFileImagemPrincipal is not null)
+            if (input?.FormFileImagemPrincipal is not null)
             {
                 if (!ValidarIFormFile_IsImagem(input.FormFileImagemPrincipal))
                 {

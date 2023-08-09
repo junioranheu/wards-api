@@ -11,7 +11,7 @@ namespace Wards.Application.UseCases.Wards.Shared.Input
         public string Conteudo { get; set; } = string.Empty;
 
         // Propriedades extras;
-        public int[]? ListaHashtags { get; set; } // Propriedade para reter os ids referentes às hashtags da ward em questão;
+        public string? ListaHashtags { get; set; } // Propriedade para reter os ids referentes às hashtags da ward em questão;
 
         public IFormFile? FormFileImagemPrincipal { get; set; }
     }

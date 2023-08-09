@@ -8,7 +8,7 @@ namespace Wards.Application.UseCases.Wards.Shared.Input
         {
             RuleFor(x => x.Titulo).NotNull().NotEmpty().MinimumLength(3);
             RuleFor(x => x.Conteudo).NotNull().NotEmpty().MinimumLength(10);
-            RuleFor(x => x.ListaHashtags).NotNull().NotEmpty().WithMessage("A ward deve ter pelo menos 1 hashtag");
+            RuleFor(x => x.ListaHashtags).Must(x => x?.Length > 0).WithMessage("A ward deve ter pelo menos 1 hashtag");
         }
     }
 }
