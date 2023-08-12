@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Wards.Domain.Entities;
 using Wards.Infrastructure.Data;
-using static Wards.Utils.Fixtures.Get;
 
 namespace Wards.Infrastructure.Seed.Seeds
 {
@@ -12,98 +11,278 @@ namespace Wards.Infrastructure.Seed.Seeds
             #region seed_wards
             if (!await context.Wards.AnyAsync())
             {
-                await context.Wards.AddAsync(new Ward() { WardId = 1, Titulo = "Como utilizar Response Compression no .NET", Conteudo = @"<p><strong>Compacta&ccedil;&atilde;o Gzip e Brotli</strong></p>
+                await context.Wards.AddAsync(new Ward()
+                {
+                    WardId = 1,
+                    Titulo = "Como utilizar Response Compression no .NET",
+                    Conteudo = @"<section>
+<h1>Utilizando Response Compression no .NET</h1>
 
-                <p>Quando algu&eacute;m entra em seu site, um pedido &eacute; enviado para o servidor para entregar o arquivo solicitado. Quanto maiores forem esses arquivos, mais tempo levar&aacute; para carregar. Ao comprimir suas p&aacute;ginas da web e CSS antes de envi&aacute;-los para o navegador voc&ecirc; ir&aacute; reduzir significativamente o tempo de carregamento como os arquivos ser&atilde;o menores. Essa &eacute; a fun&ccedil;&atilde;o do Gzip.</p>
+<br/>
+<h2>Introdução</h2>
+<p>A compactação de resposta (Response Compression) é uma técnica importante para melhorar o desempenho e a eficiência de um aplicativo da web. Ao comprimir os dados antes de enviá-los ao cliente, você pode reduzir o tamanho das respostas HTTP, resultando em tempos de carregamento mais rápidos e economia de largura de banda. O ASP.NET oferece uma maneira fácil de habilitar a compactação de resposta para o seu aplicativo.</p>
 
-                <p>&nbsp;</p>
+<br/>
+<h2>Passo 1: Adicionar o Pacote NuGet</h2>
+<p>Para começar, adicione o pacote NuGet <b>Microsoft.AspNetCore.ResponseCompression</b> ao seu projeto ASP.NET. Isso fornecerá as classes e funcionalidades necessárias para habilitar a compactação de resposta.</p>
 
-                <p>Como implementar essa compacta&ccedil;&atilde;o no .NET 6/7:</p>
+<br/>
+<h2>Passo 2: Configurar a Compactação</h2>
+<p>No arquivo <b>Startup.cs</b>, configure a compactação de resposta no método <b>ConfigureServices</b>:</p>
 
-                <p><em>Sess&atilde;o app:</em></p>
+<code>using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.ResponseCompression;
+using System.IO.Compression;
 
-                <p>app.UseResponseCompression();</p>
+public class Startup
+{
+    public void ConfigureServices(IServiceCollection services)
+    {
+        services.AddResponseCompression(options =>
+        {
+            options.EnableForHttps = true;
+            options.Providers.Add<BrotliCompressionProvider>();
+            options.Providers.Add<GzipCompressionProvider>();
+        });
 
-                <p>&nbsp;</p>
+        services.Configure<BrotliCompressionProviderOptions>(options =>
+        {
+            options.Level = CompressionLevel.Optimal;
+        });
 
-                <p><em>Sess&atilde;o builder:</em>&nbsp; &nbsp;</p>
+        services.Configure<GzipCompressionProviderOptions>(options =>
+        {
+            options.Level = CompressionLevel.Optimal;
+        });
 
-                <pre>
-                <code class=""language-cs"">builder.Services.AddResponseCompression(o =&gt;
-                            {
-                                o.EnableForHttps = true;
-                                o.Providers.Add&lt;BrotliCompressionProvider&gt;();
-                                o.Providers.Add&lt;GzipCompressionProvider&gt;();
-                            });
+        // ...
+    }
 
-                            builder.Services.Configure&lt;BrotliCompressionProviderOptions&gt;(o =&gt;
-                            {
-                                o.Level = CompressionLevel.Optimal;
-                            });
+    public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+    {
+        app.UseResponseCompression();
+        // ...
+    }
+}</code>
 
-                            builder.Services.Configure&lt;GzipCompressionProviderOptions&gt;(o =&gt;
-                            {
-                                o.Level = CompressionLevel.Optimal;
-                            });</code></pre>
+<br/>
+<h2>Passo 3: Testar a Compactação</h2>
+<p>Agora, quando você executa o aplicativo, a compactação de resposta será aplicada automaticamente às respostas HTTP. Você pode verificar isso usando as ferramentas de desenvolvedor do navegador, que mostrarão o cabeçalho <b>Content-Encoding: br</b> para Brotli ou <b>Content-Encoding: gzip</b> para Gzip nas respostas compactadas.</p>
 
-                <p>&nbsp;</p>
-                ", QtdCurtidas = 0, UsuarioId = 1 });
+<br/>
+<h2>Observações Importantes</h2>
+<p>A compactação de resposta geralmente é mais eficaz para conteúdo de texto, como HTML, CSS e JavaScript. Para arquivos binários, como imagens ou vídeos, a compactação pode não resultar em uma economia significativa.</p>
 
-                await context.Wards.AddAsync(new Ward() { WardId = 2, Titulo = "Como checar o environment em .NET", Conteudo = @"<p><strong>Checar se o ambiente &eacute; de produ&ccedil;&atilde;o</strong></p>
+<br/>
+<h2>Conclusão</h2>
+<p>A utilização da compactação de resposta no .NET é uma estratégia eficaz para otimizar o desempenho do seu aplicativo da web. Ao seguir os passos acima e configurar a compactação de acordo com suas preferências, você pode habilitar facilmente a compactação de resposta, proporcionando uma experiência mais rápida e eficiente para os usuários.</p>
+</section>",
+                    QtdCurtidas = 0,
+                    UsuarioId = 1
+                });
 
-                <p>Como implementar essa valida&ccedil;&atilde;o no .NET 6/7:</p>
+                await context.Wards.AddAsync(new Ward()
+                {
+                    WardId = 2,
+                    Titulo = "Como checar o environment em .NET",
+                    Conteudo = @"<section>
+<h1>Verificando o ambiente em .NET: Debug ou produção</h1>
 
-                <p>&nbsp;</p>
+<br/>
+<h2>Introdução</h2>
+<p>Ao desenvolver aplicativos em .NET, é comum a necessidade de executar ações específicas com base no ambiente em que o aplicativo está sendo executado. Uma maneira prática de realizar essa verificação é usando o método <b>IsProduction()</b> fornecido pela classe <b>IWebHostEnvironment</b> do ASP.NET Core.</p>
 
-                <p><em>Program.cs</em></p>
+<br/>
+<h2>Passo 1: Usar o método IsProduction()</h2>
+<p>No ASP.NET Core, você pode acessar o ambiente atual do aplicativo usando a injeção de dependência. Primeiro, adicione uma dependência para <b>IWebHostEnvironment</b> ao construtor da sua classe:</p>
 
-                <pre>
-                <code class=""language-cs"">app.Environment.IsProduction()</code></pre>
+<code>private readonly IWebHostEnvironment _environment;
 
-                <p>&nbsp;</p>
+public MinhaClasse(IWebHostEnvironment environment)
+{
+    _environment = environment;
+}</code>
 
-                <p><em>Em outros arquivos:</em></p>
+<br/>
+<p>Em seguida, você pode usar o método <b>IsProduction()</b> para verificar se o aplicativo está sendo executado em ambiente de Produção:</p>
 
-                <pre>
-                <code class=""language-cs"">#if DEBUG
-                    return true;
-                #else
-                    return false;
-                #endif</code></pre>
+<code>if (_environment.IsProduction())
+{
+    Console.WriteLine(""O aplicativo está sendo executado em ambiente de Produção."");
+}
+else
+{
+    Console.WriteLine(""O aplicativo não está sendo executado em ambiente de Produção."");
+}</code>
 
-                <p>&nbsp;</p>
-                ", QtdCurtidas = 0, UsuarioId = 1 });
+<br/>
+<h2>Conclusão</h2>
+<p>O uso do método <b>IsProduction()</b> da classe <b>IWebHostEnvironment</b> no ASP.NET Core é uma maneira conveniente de verificar se o aplicativo está sendo executado em ambiente de Produção. Ao utilizar essa abordagem, você pode ajustar o comportamento do aplicativo de acordo com o ambiente atual, garantindo uma experiência otimizada tanto para o desenvolvimento quanto para a produção.</p>
+</section>",
+                    QtdCurtidas = 0,
+                    UsuarioId = 1
+                });
 
-                await context.Wards.AddAsync(new Ward() { WardId = 3, Titulo = "Remover referências não utilizadas", Conteudo = "Clique com o botão direito em qualquer <i>solution</i> de seu projeto no VS 2022, e clique na opção <i>Remover Referências Não Usadas...</i>", QtdCurtidas = 0, UsuarioId = 1 });
+                await context.Wards.AddAsync(new Ward()
+                {
+                    WardId = 3,
+                    Titulo = "Remover referências não utilizadas",
+                    Conteudo = @"<section>
+<h1>Remover referências não utilizadas no VS 2022</h1>
 
-                await context.Wards.AddAsync(new Ward() { WardId = 4, Titulo = "Instalar certificação SSL para ambiente localhost", Conteudo = "Abra o prompt de comando e digite <i>dotnet dev-certs https--trust</i>", QtdCurtidas = 0, UsuarioId = 1 });
+<br/>
+<h2>Introdução</h2>
+<p>Ao desenvolver projetos no Visual Studio 2022, é comum acumular referências a bibliotecas e assemblies que, com o tempo, podem se tornar não utilizadas. Isso pode afetar negativamente o desempenho e a organização do seu projeto. Felizmente, o Visual Studio oferece uma maneira fácil de identificar e remover referências não utilizadas de forma eficiente.</p>
+
+<br/>
+<h2>Passo 1: Abrir a Opção de Remover Referências Não Utilizadas</h2>
+<p>Para começar, clique com o botão direito em qualquer <b>solution</b> do seu projeto no Visual Studio 2022. No menu de contexto que aparece, clique na opção <b>Remover Referências Não Usadas...</b></p>
+
+<br/>
+<h2>Passo 2: Revisar e Confirmar</h2>
+<p>Uma janela pop-up será exibida, mostrando uma lista de referências que podem ser removidas por estarem sem uso. Revise cuidadosamente essa lista para garantir que as referências a serem removidas são realmente não utilizadas. Depois de revisar, clique no botão de confirmação para remover as referências selecionadas.</p>
+
+<br/>
+<h2>Passo 3: Compilar e Testar</h2>
+<p>Após a remoção das referências não utilizadas, é importante compilar e testar o seu projeto para garantir que tudo continue funcionando corretamente. Certifique-se de verificar se não há erros ou problemas de compilação.</p>
+
+<br/>
+<h2>Observações Importantes</h2>
+<p>Embora a remoção de referências não utilizadas seja uma prática benéfica, é importante ter cautela. Algumas referências podem ser usadas em partes do código que não foram analisadas. Sempre faça uma revisão completa do seu projeto após remover referências não utilizadas.</p>
+
+<br/>
+<h2>Conclusão</h2>
+<p>A opção de <b>Remover Referências Não Usadas</b> no Visual Studio 2022 é uma ferramenta valiosa para manter a organização e otimização do seu projeto. Usando essa opção, você pode facilmente identificar e eliminar referências desnecessárias, contribuindo para um código mais limpo e uma experiência de desenvolvimento aprimorada.</p>
+</section>",
+                    QtdCurtidas = 0,
+                    UsuarioId = 1
+                });
+
+                await context.Wards.AddAsync(new Ward()
+                {
+                    WardId = 4,
+                    Titulo = "Certificação SSL para ambiente localhost",
+                    Conteudo = @"<section>
+<h1>Certificado SSL para ambiente localhost no Visual Studio</h1>
+
+<br/>
+<h2>Introdução</h2>
+<p>Ao desenvolver aplicativos da web no Visual Studio, é comum precisar de um ambiente seguro usando HTTPS, mesmo em um ambiente localhost. Isso garante que você possa testar recursos que requerem conexões seguras, como autenticação ou acesso a APIs, sem problemas. Aqui estão os passos para instalar um certificado SSL para uso em um ambiente localhost no Visual Studio.</p>
+
+<br/>
+<h2>Passo 1: Geração do Certificado</h2>
+<p>O primeiro passo é gerar um certificado SSL autoassinado. Você pode fazer isso usando a ferramenta <b>openssl</b> ou uma ferramenta como o <b>dotnet dev-certs</b>. Abra um terminal e execute o seguinte comando:</p>
+<code>dotnet dev-certs https --trust</code>
+
+<br/>
+<h2>Passo 2: Configuração no Visual Studio</h2>
+<p>Abra seu projeto no Visual Studio e navegue até as configurações do projeto. No menu suspenso do projeto, clique com o botão direito em seu projeto e selecione ""Propriedades"". Na guia ""Debug"", marque a opção ""Enable SSL"" e selecione o certificado que você gerou anteriormente.</p>
+
+<br/>
+<h2>Passo 3: Atualização da URL</h2>
+<p>Agora, atualize a URL do projeto para usar HTTPS. No arquivo <b>launchSettings.json</b>, altere a URL para começar com ""https://localhost"". Por exemplo:</p>
+<code>""applicationUrl"": ""https://localhost:5001""</code>
+
+<br/>
+<h2>Passo 4: Execução do Projeto</h2>
+<p>Agora, ao executar seu projeto, ele usará o certificado SSL configurado para o ambiente localhost. Isso permitirá que você acesse sua aplicação via HTTPS.</p>
+
+<br/>
+<h2>Observações Importantes</h2>
+<p>Lembre-se de que o certificado SSL autoassinado não é confiável em um ambiente de produção. Ele é adequado apenas para ambiente de desenvolvimento. Além disso, ao acessar sua aplicação, seu navegador pode exibir um aviso de segurança devido à natureza do certificado autoassinado.</p>
+
+<br/>
+<h2>Conclusão</h2>
+<p>Instalar um certificado SSL para ambiente localhost no Visual Studio é fundamental para testar recursos seguros durante o desenvolvimento de aplicativos da web. Seguindo esses passos, você pode configurar seu ambiente de desenvolvimento para usar HTTPS, permitindo testes mais realistas e precisos.</p>
+</section>",
+                    QtdCurtidas = 0,
+                    UsuarioId = 1
+                });
 
                 await context.Wards.AddAsync(new Ward()
                 {
                     WardId = 5,
                     Titulo = "Migrations",
-                    Conteudo = @"Para utilizar migrations basta seguir os passos:
-                <br/>1 - Instale o pacote <i>dotnet add package Microsoft.EntityFrameworkCore.Tools</i>;
-                <br/>2 - Abra o prompt de comando no projeto e aponte para a camada de infraestrutura;
-                <br/>3 - Crie uma migration: <i>Add-Migration NomeDaMigration</i>;
-                <br/>4 - Para finalizar, rode o comando <i>Update-Database</i>.",
+                    Conteudo = @"<section>
+<h1>Entity Framework Core Migration no .NET 7</h1>
+
+<br/>
+<h2>Introdução</h2>
+<p>O Entity Framework Core Migration é uma ferramenta poderosa para gerenciar as mudanças no esquema do banco de dados em uma aplicação .NET. Com os comandos <b>add-migration</b> e <b>update-database</b>, você pode criar e aplicar migrações para manter o esquema do banco de dados sincronizado com o seu modelo de dados.</p>
+
+<br/>
+<h2>Passo 1: Instalação do Pacote</h2>
+<p>Antes de começar, certifique-se de que você tem o Entity Framework Core instalado no seu projeto .NET 7. Se não estiver instalado, você pode adicionar o pacote NuGet através do seguinte comando:</p>
+<blockquote>
+    <p><i>dotnet add package Microsoft.EntityFrameworkCore.Design</i></p>
+</blockquote>
+
+<br/>
+<h2>Passo 2: Criar uma Migração</h2>
+<p>Para criar uma nova migração, você deve usar o comando <b>add-migration</b>. Abra um terminal na pasta do seu projeto e execute o seguinte comando:</p>
+<code>Add-Migration NomeDaMigracao</code>
+<br/>
+<p>Substitua <i>NomeDaMigracao</i> pelo nome descritivo da sua migração.</p>
+
+<br/>
+<h2>Passo 3: Aplicar Migrações</h2>
+<p>Depois de criar uma ou mais migrações, você pode aplicá-las ao banco de dados usando o comando <b>update-database</b>:</p>
+<code>Update-Database</code>
+<br/>
+<p>Isso aplicará todas as migrações pendentes no banco de dados e atualizará o esquema de acordo com as alterações feitas no seu modelo.</p>
+
+<br/>
+<h2>Conclusão</h2>
+<p>O Entity Framework Core Migration é uma ferramenta essencial para gerenciar o esquema do banco de dados em uma aplicação .NET. Usando os comandos <b>add-migration</b> e <b>update-database</b>, você pode criar e aplicar migrações de forma eficiente, mantendo o banco de dados sincronizado com as alterações no seu modelo de dados.</p>
+</section>",
                     QtdCurtidas = 0,
                     UsuarioId = 1
                 });
 
-                await context.Wards.AddAsync(new Ward() { WardId = 6, Titulo = "AddDbContext vs AddDbContextPool", Conteudo = "Bla bla bla AddDbContextPool!", QtdCurtidas = 0, UsuarioId = 1 });
-
-                for (int i = 0; i < 22; i++)
+                await context.Wards.AddAsync(new Ward()
                 {
-                    await context.Wards.AddAsync(new Ward()
-                    {
-                        WardId = 7 + i,
-                        Titulo = GerarLoremIpsum(3, 10, 2, 4, 1, false),
-                        Conteudo = GerarLoremIpsum(5, 15, 2, 5, 2, true),
-                        QtdCurtidas = GerarNumeroAleatorio(0, 500),
-                        UsuarioId = 1
-                    });
-                }
+                    WardId = 6,
+                    Titulo = "AddDbContext vs AddDbContextPool",
+                    Conteudo = @"<section>
+<h1>AddDbContext vs AddDbContextPool no .NET 7</h1>
+
+<br/>
+<h2>Introdução</h2>
+<p>Ao trabalhar com o Entity Framework Core no .NET 7, você frequentemente precisa configurar o contexto do banco de dados em sua aplicação. Duas opções comuns são o uso dos métodos <b>AddDbContext</b> e <b>AddDbContextPool</b>. Ambos são usados para registrar um contexto do Entity Framework Core no contêiner de injeção de dependência, mas eles têm algumas diferenças importantes que você deve considerar ao escolher a abordagem adequada para o seu cenário.</p>
+
+<br/>
+<h2>AddDbContext</h2>
+<p>O método <b>AddDbContext</b> é usado para registrar um contexto do Entity Framework Core no contêiner de injeção de dependência. Ele cria uma nova instância do contexto para cada solicitação de serviço, o que significa que cada solicitação obtém seu próprio contexto exclusivo. Isso é adequado para a maioria dos cenários, especialmente quando a aplicação tem uma carga moderada de solicitações e o contexto não mantém muitos recursos em memória.</p>
+
+<br/>
+<h2>AddDbContextPool</h2>
+<p>O método <b>AddDbContextPool</b> também é usado para registrar um contexto do Entity Framework Core no contêiner de injeção de dependência. No entanto, ele cria um pool de contextos reutilizáveis, em vez de criar uma nova instância para cada solicitação. Isso é particularmente útil em cenários de alta carga, onde criar um novo contexto para cada solicitação pode ser caro em termos de recursos. Com o <b>AddDbContextPool</b>, os contextos são emprestados do pool e devolvidos após o uso, reduzindo a sobrecarga de criação e destruição de objetos.</p>
+
+<br/>
+<h2>Escolhendo entre AddDbContext e AddDbContextPool</h2>
+<p>A escolha entre <b>AddDbContext</b> e <b>AddDbContextPool</b> depende das necessidades específicas da sua aplicação. Se sua aplicação tiver uma carga moderada e recursos não forem uma preocupação crítica, <b>AddDbContext</b> pode ser a escolha adequada. Por outro lado, se você espera uma alta carga de solicitações e deseja otimizar o uso de recursos, <b>AddDbContextPool</b> pode ser a melhor opção.</p>
+
+<br/>
+<h2>Conclusão</h2>
+<p>Ao configurar o contexto do Entity Framework Core no .NET 7, a escolha entre <b>AddDbContext</b> e <b>AddDbContextPool</b> é crucial para o desempenho e eficiência da sua aplicação. Considere cuidadosamente as demandas da sua aplicação e escolha a opção que melhor atenda às suas necessidades.</p>
+
+</section>",
+                    QtdCurtidas = 0,
+                    UsuarioId = 1
+                });
+
+                //for (int i = 0; i < 22; i++)
+                //{
+                //    await context.Wards.AddAsync(new Ward()
+                //    {
+                //        WardId = 7 + i,
+                //        Titulo = GerarLoremIpsum(3, 10, 2, 4, 1, false),
+                //        Conteudo = GerarLoremIpsum(5, 15, 2, 5, 2, true),
+                //        QtdCurtidas = GerarNumeroAleatorio(0, 500),
+                //        UsuarioId = 1
+                //    });
+                //}
             }
             #endregion
         }

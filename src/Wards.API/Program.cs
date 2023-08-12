@@ -29,7 +29,7 @@ WebApplication app = builder.Build();
 
     if (app.Environment.IsDevelopment())
     {
-        await DBInitialize(app, services, isInitialize: false);
+        await DBInitialize(app, services, isInitialize: true);
 
         app.UseSwagger();
         app.UseSwaggerUI(c =>
