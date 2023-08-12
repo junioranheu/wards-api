@@ -64,6 +64,14 @@ namespace Wards.Utils.Fixtures
         }
 
         /// <summary>
+        /// Converter Base64 para bytes[];
+        /// </summary>
+        public static byte[] ConverterBasePara64Bytes(string base64)
+        {
+            return System.Convert.FromBase64String(base64);
+        }
+
+        /// <summary>
         /// Converter Base64 para imagem;
         /// </summary>
         public static IFormFile ConverterBase64ParaImagem(string base64)
