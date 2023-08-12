@@ -266,7 +266,84 @@ else
 <br/>
 <h2>Conclusão</h2>
 <p>Ao configurar o contexto do Entity Framework Core no .NET 7, a escolha entre <b>AddDbContext</b> e <b>AddDbContextPool</b> é crucial para o desempenho e eficiência da sua aplicação. Considere cuidadosamente as demandas da sua aplicação e escolha a opção que melhor atenda às suas necessidades.</p>
+</section>",
+                    QtdCurtidas = 0,
+                    UsuarioId = 1
+                });
 
+                await context.Wards.AddAsync(new Ward()
+                {
+                    WardId = 7,
+                    Titulo = "Biblioteca react-hot-toast",
+                    Conteudo = @"<section>
+<h1>Utilizando a biblioteca react-hot-toast</h1>
+
+<br/>
+<h2>Introdução</h2>
+<p>O react-hot-toast é uma biblioteca leve e simples que permite exibir notificações elegantes e interativas em aplicativos React. Com o react-hot-toast, você pode criar facilmente avisos, mensagens de sucesso, erros e muito mais, fornecendo uma experiência amigável para o usuário.</p>
+
+<br/>
+<h2>Passo 1: Instalar o pacote</h2>
+<p>Para começar a usar o react-hot-toast, primeiro você precisa instalar o pacote em seu projeto. Use o seguinte comando para adicionar o react-hot-toast:</p>
+<code>npm install react-hot-toast</code>
+
+<br/>
+<h2>Passo 2: Criar um Componente para Avisos</h2>
+<p>Você pode criar um componente personalizado para gerar e exibir avisos usando o react-hot-toast. Aqui está um exemplo de como criar um componente chamado <b>Aviso</b>:</p>
+<code>import { toast } from 'react-hot-toast';
+
+export const Aviso = {
+    toast(texto: string, ms: number, icone: string | null, isDark: boolean) {
+        const styleGlass = {
+            background: 'rgba(255, 255, 255, 0.08)',
+            borderRadius: '1rem',
+            boxShadow: '0 4px 30px rgba(0, 0, 0, 0.1)',
+            backdropFilter: 'blur(5px)',
+            color: 'var(--branco)',
+            userSelect: 'none'
+        } as any;
+
+        const styleDark = {
+            background: 'rgb(59, 59, 59)',
+            borderRadius: '1rem',
+            boxShadow: '0 4px 30px rgba(0, 0, 0, 0.25)',
+            color: 'var(--branco)',
+            userSelect: 'none'
+        } as any;
+
+        const style = isDark ? styleDark : styleGlass;
+
+        toast(
+            (t) => (
+                <span onClick={() => toast.dismiss(t.id)}>
+                    {texto}
+                </span>
+            ),
+            {
+                duration: ms,
+                position: 'top-center',
+                icon: icone,
+                style: style
+            }
+        );
+    }
+}
+</code>
+
+<br/>
+<h2>Passo 3: Usar o Componente de Avisos</h2>
+<p>Agora você pode usar o componente <b>Aviso</b> para exibir avisos em seu aplicativo. Basta chamar a função <b>toast</b> e passar os parâmetros desejados para personalizar a notificação. Por exemplo:</p>
+
+<code>
+import { Aviso } from './caminho-para-o-componente/Aviso';
+
+// ...
+
+Aviso.toast('Esta é uma mensagem de aviso', 3000, '🔔', true);</code>
+
+<br/>
+<h2>Conclusão</h2>
+<p>O react-hot-toast é uma ferramenta útil para adicionar notificações visuais atraentes ao seu aplicativo React. Ao seguir os passos acima e criar um componente personalizado de aviso, você pode facilmente implementar mensagens de aviso interativas em seu aplicativo, melhorando a experiência do usuário.</p>
 </section>",
                     QtdCurtidas = 0,
                     UsuarioId = 1
@@ -276,7 +353,7 @@ else
                 //{
                 //    await context.Wards.AddAsync(new Ward()
                 //    {
-                //        WardId = 7 + i,
+                //        WardId = 8 + i,
                 //        Titulo = GerarLoremIpsum(3, 10, 2, 4, 1, false),
                 //        Conteudo = GerarLoremIpsum(5, 15, 2, 5, 2, true),
                 //        QtdCurtidas = GerarNumeroAleatorio(0, 500),

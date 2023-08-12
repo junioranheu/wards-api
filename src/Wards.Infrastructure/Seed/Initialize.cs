@@ -88,6 +88,13 @@ namespace Wards.Infrastructure.Seed
                 await context.WardsHashtags.AddAsync(new WardHashtag() { WardHashtagId = 9, WardId = 5, HashtagId = 1 });
                 await context.WardsHashtags.AddAsync(new WardHashtag() { WardHashtagId = 10, WardId = 5, HashtagId = 2 });
                 await context.WardsHashtags.AddAsync(new WardHashtag() { WardHashtagId = 11, WardId = 5, HashtagId = 5 });
+
+                await context.WardsHashtags.AddAsync(new WardHashtag() { WardHashtagId = 12, WardId = 6, HashtagId = 1 });
+                await context.WardsHashtags.AddAsync(new WardHashtag() { WardHashtagId = 13, WardId = 6, HashtagId = 2 });
+                await context.WardsHashtags.AddAsync(new WardHashtag() { WardHashtagId = 14, WardId = 6, HashtagId = 5 });
+
+                await context.WardsHashtags.AddAsync(new WardHashtag() { WardHashtagId = 15, WardId = 7, HashtagId = 3 });
+                await context.WardsHashtags.AddAsync(new WardHashtag() { WardHashtagId = 16, WardId = 7, HashtagId = 4 });
             }
 
             if (!await context.Feriados.AnyAsync())
