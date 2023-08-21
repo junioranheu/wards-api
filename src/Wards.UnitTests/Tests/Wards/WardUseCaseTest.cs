@@ -3,6 +3,7 @@ using Moq;
 using Wards.Application.UseCases.Wards.CriarWard;
 using Wards.Application.UseCases.Wards.CriarWard.Commands;
 using Wards.Application.UseCases.Wards.Shared.Input;
+using Wards.Application.UseCases.WardsHashtags.CriarWardHashtag;
 using Wards.Domain.Entities;
 using Wards.UnitTests.Fixtures;
 using Wards.UnitTests.Fixtures.Mocks;
@@ -25,9 +26,10 @@ namespace Wards.UnitTests.Tests.Wards
         {
             // Arrange;
             var criarCommand = new Mock<ICriarWardCommand>();
+            var criarWardHashtagCommand = new Mock<ICriarWardHashtagUseCase>();
             criarCommand.Setup(x => x.Execute(It.IsAny<Ward>())).Returns(Task.FromResult(1));
 
-            var useCase = new CriarWardUseCase(_map, criarCommand.Object);
+            var useCase = new CriarWardUseCase(_map, criarCommand.Object, criarWardHashtagCommand.Object);
 
             WardInput input = WardMock.CriarInput(titulo, conteudo, usuarioId);
 

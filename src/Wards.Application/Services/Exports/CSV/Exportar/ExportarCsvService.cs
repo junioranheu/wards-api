@@ -2,7 +2,7 @@
 
 namespace Wards.Application.Services.Exports.CSV.Exportar
 {
-    public sealed class ExportCsvService : IExportCsvService
+    public sealed class ExportCSVService : IExportCSVService
     {
         public byte[]? ConverterDadosParaCSVEmBytes<T>(List<T>? lista, string[,] colunas)
         {

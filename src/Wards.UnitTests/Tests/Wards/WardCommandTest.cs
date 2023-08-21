@@ -59,7 +59,7 @@ namespace Wards.UnitTests.Tests.Wards
             var query = new ListarWardQuery(_context);
 
             // Act;
-            var resp = await query.Execute(paginacao.Object);
+            var resp = await query.Execute(paginacao.Object, string.Empty);
 
             // Assert;
             Assert.True(resp.Any());

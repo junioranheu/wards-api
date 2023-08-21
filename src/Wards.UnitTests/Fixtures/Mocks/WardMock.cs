@@ -11,6 +11,7 @@ namespace Wards.UnitTests.Fixtures.Mocks
             {
                 Titulo = !string.IsNullOrEmpty(titulo) ? titulo : GerarStringAleatoria(5, false),
                 Conteudo = !string.IsNullOrEmpty(conteudo) ? conteudo : GerarStringAleatoria(5, false),
+                ListaHashtags = new int[1],
                 UsuarioId = usuarioId > 0 ? usuarioId : GerarNumeroAleatorio(1, 999),
                 Usuarios = new(),
                 IsAtivo = true

@@ -1,6 +1,6 @@
 ﻿namespace Wards.Application.Services.Exports.CSV.Exportar
 {
-    public interface IExportCsvService
+    public interface IExportCSVService
     {
         byte[]? ConverterDadosParaCSVEmBytes<T>(List<T>? lista, string[,] colunas);
     }

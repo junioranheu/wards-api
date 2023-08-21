@@ -5,7 +5,6 @@ using Microsoft.Extensions.Logging;
 using NewsletterCadastros.Application.UseCases.NewslettersCadastros;
 using Wards.Application.AutoMapper;
 using Wards.Application.Services.Exports;
-using Wards.Application.Services.Exports.CSV;
 using Wards.Application.Services.Sistemas;
 using Wards.Application.Services.Usuarios;
 using Wards.Application.UseCases.Auxiliares;
@@ -70,8 +69,7 @@ namespace Wards.Application
 
         private static void AddServices(IServiceCollection services)
         {
-            services.AddExportXlsxService();
-            services.AddExportCsvService();
+            services.AddExportsService();
             services.AddUsuariosService();
             services.AddResetarBancoDadosService();
         }

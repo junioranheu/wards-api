@@ -8,9 +8,9 @@ namespace Wards.Application.UseCases.Logs.ExportarCsvLog.Commands
     public sealed class ExportarCsvLogCommand : IExportarCsvLogCommand
     {
         private readonly WardsContext _context;
-        private readonly IExportCsvService _exportCsvService;
+        private readonly IExportCSVService _exportCsvService;
 
-        public ExportarCsvLogCommand(WardsContext context, IExportCsvService exportCsvService)
+        public ExportarCsvLogCommand(WardsContext context, IExportCSVService exportCsvService)
         {
             _context = context;
             _exportCsvService = exportCsvService;
@@ -36,7 +36,7 @@ namespace Wards.Application.UseCases.Logs.ExportarCsvLog.Commands
         {
             var listaLogs = await _context.Logs.
                             Include(u => u.Usuarios).
-                            Where(l => (isTodos ? true : l.UsuarioId == usuarioId)).
+                            Where(l => (isTodos || l.UsuarioId == usuarioId)).
                             AsNoTracking().ToListAsync();
 
             return listaLogs;
