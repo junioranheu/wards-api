@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace Wards.Application.Services.Exports.CSV.Exportar
+namespace Wards.Application.Services.Exports.CSV
 {
     public sealed class ExportCSVService : IExportCSVService
     {

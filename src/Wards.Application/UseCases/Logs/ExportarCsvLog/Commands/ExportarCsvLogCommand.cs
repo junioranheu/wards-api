@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Wards.Application.Services.Exports.CSV.Exportar;
+using Wards.Application.Services.Exports.CSV;
 using Wards.Domain.Entities;
 using Wards.Infrastructure.Data;
 

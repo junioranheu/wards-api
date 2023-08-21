@@ -3,7 +3,7 @@ using System.Reflection;
 using Wards.Domain.Enums;
 using static Wards.Utils.Fixtures.Format;
 
-namespace Wards.Application.Services.Exports.XLSX.Exportar
+namespace Wards.Application.Services.Exports.XLSX
 {
     public sealed class ExportXLSXService : IExportXLSXService
     {
@@ -33,7 +33,7 @@ namespace Wards.Application.Services.Exports.XLSX.Exportar
             // Título das colunas;
             for (int i = 0; i < colunas.GetLength(0); i++)
             {
-                SetarValor(worksheet, (linhaAtual - 1), i, typeof(String), colunas[i, 0]);
+                SetarValor(worksheet, linhaAtual - 1, i, typeof(string), colunas[i, 0]);
             }
 
             // Conteúdo;
@@ -56,25 +56,25 @@ namespace Wards.Application.Services.Exports.XLSX.Exportar
 
             static void AdicionarRowInicialLog(IXLWorksheet worksheet)
             {
-                SetarValor(worksheet, linhaAtual: 0, i: 0, typeof(String), "Mensagem #1"); // A;
+                SetarValor(worksheet, linhaAtual: 0, i: 0, typeof(string), "Mensagem #1"); // A;
                 SetarEstilo(worksheet, aplicarEstiloNasCelulas: "A1:A1", corR: 119, corG: 147, corB: 60);
 
-                SetarValor(worksheet, linhaAtual: 0, i: 1, typeof(String), "Mensagem #2"); // B - I;
+                SetarValor(worksheet, linhaAtual: 0, i: 1, typeof(string), "Mensagem #2"); // B - I;
                 MergearCelulas(worksheet, linhaA: 0, colunaA: 1, linhaB: 0, colunaB: 8);
                 SetarEstilo(worksheet, aplicarEstiloNasCelulas: "B1:I1", corR: 255, corG: 255, corB: 153);
 
-                SetarValor(worksheet, linhaAtual: 0, i: 9, typeof(String), ""); // J;
+                SetarValor(worksheet, linhaAtual: 0, i: 9, typeof(string), ""); // J;
                 SetarEstilo(worksheet, aplicarEstiloNasCelulas: "J1:J1", corR: 204, corG: 255, corB: 255);
 
-                SetarValor(worksheet, linhaAtual: 0, i: 10, typeof(String), "Mensagem #4"); // K - Q;
+                SetarValor(worksheet, linhaAtual: 0, i: 10, typeof(string), "Mensagem #4"); // K - Q;
                 MergearCelulas(worksheet, linhaA: 0, colunaA: 10, linhaB: 0, colunaB: 16);
                 SetarEstilo(worksheet, aplicarEstiloNasCelulas: "K1:Q1", corR: 204, corG: 255, corB: 204);
 
-                SetarValor(worksheet, linhaAtual: 0, i: 17, typeof(String), "Mensagem #5"); // R - U;
+                SetarValor(worksheet, linhaAtual: 0, i: 17, typeof(string), "Mensagem #5"); // R - U;
                 MergearCelulas(worksheet, linhaA: 0, colunaA: 17, linhaB: 0, colunaB: 20);
                 SetarEstilo(worksheet, aplicarEstiloNasCelulas: "R1:U1", corR: 51, corG: 204, corB: 204);
 
-                SetarValor(worksheet, linhaAtual: 0, i: 21, typeof(String), ""); // V;
+                SetarValor(worksheet, linhaAtual: 0, i: 21, typeof(string), ""); // V;
                 SetarEstilo(worksheet, aplicarEstiloNasCelulas: "V1:V1", corR: 255, corG: 204, corB: 153);
             }
         }
@@ -138,11 +138,11 @@ namespace Wards.Application.Services.Exports.XLSX.Exportar
             {
                 valorConvertido = Convert.ToDateTime(valor);
             }
-            else if (tipo == typeof(Int32))
+            else if (tipo == typeof(int))
             {
                 valorConvertido = Convert.ToInt32(valor);
             }
-            else if (tipo == typeof(Double))
+            else if (tipo == typeof(double))
             {
                 valorConvertido = Convert.ToDouble(valor);
             }
@@ -151,7 +151,7 @@ namespace Wards.Application.Services.Exports.XLSX.Exportar
                 valorConvertido = Convert.ToString(valor);
             }
 
-            worksheet.Cell((linhaAtual + 1), (i + 1)).SetValue(valorConvertido);
+            worksheet.Cell(linhaAtual + 1, i + 1).SetValue(valorConvertido);
         }
 
         private static byte[]? GerarXLSXEmBytes(XLWorkbook workbook)
@@ -165,7 +165,7 @@ namespace Wards.Application.Services.Exports.XLSX.Exportar
 
         private static void MergearCelulas(IXLWorksheet worksheet, int linhaA, int colunaA, int linhaB, int colunaB)
         {
-            worksheet.Range(worksheet.Cell((linhaA + 1), (colunaA + 1)), worksheet.Cell((linhaB + 1), (colunaB + 1))).Merge();
+            worksheet.Range(worksheet.Cell(linhaA + 1, colunaA + 1), worksheet.Cell(linhaB + 1, colunaB + 1)).Merge();
         }
 
         private static void SetarEstilo(IXLWorksheet worksheet, string aplicarEstiloNasCelulas, int corR, int corG, int corB)

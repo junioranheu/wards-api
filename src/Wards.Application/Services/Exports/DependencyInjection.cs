@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Wards.Application.Services.Exports.CSV.Exportar;
-using Wards.Application.Services.Exports.XLSX.Exportar;
+using Wards.Application.Services.Exports.CSV;
+using Wards.Application.Services.Exports.XLSX;
 
 namespace Wards.Application.Services.Exports
 {

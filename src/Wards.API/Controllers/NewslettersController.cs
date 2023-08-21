@@ -1,10 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Wards.API.Controllers;
+using Wards.API.Filters;
+using Wards.Application.Services.Imports.CSV;
+using Wards.Application.Services.Imports.Shared.Models.Input;
 using Wards.Application.UseCases.NewslettersCadastros.CriarNewsletterCadastro;
 using Wards.Application.UseCases.NewslettersCadastros.ListarNewsletterCadastro;
 using Wards.Application.UseCases.NewslettersCadastros.Shared.Input;
 using Wards.Application.UseCases.NewslettersCadastros.Shared.Output;
 using Wards.Application.UseCases.Shared.Models.Input;
+using Wards.Domain.Consts;
 using Wards.Domain.Enums;
 using static Wards.Utils.Fixtures.Get;
 
@@ -16,11 +20,17 @@ namespace NewsletterCadastros.API.Controllers
     {
         private readonly ICriarNewsletterCadastroUseCase _criarUseCase;
         private readonly IListarNewsletterCadastroUseCase _listarUseCase;
+        private readonly IImportCSVService _importCSVService;
 
-        public NewslettersController(ICriarNewsletterCadastroUseCase criarUseCase, IListarNewsletterCadastroUseCase listarUseCase)
+        public NewslettersController(
+            ICriarNewsletterCadastroUseCase criarUseCase,
+            IListarNewsletterCadastroUseCase listarUseCase,
+            IImportCSVService importCSVService
+            )
         {
             _criarUseCase = criarUseCase;
             _listarUseCase = listarUseCase;
+            _importCSVService = importCSVService;
         }
 
         [HttpPost]
@@ -51,6 +61,20 @@ namespace NewsletterCadastros.API.Controllers
             }
 
             return Ok(lista);
+        }
+
+        [HttpPost]
+        [AuthorizeFilter(UsuarioRoleEnum.Administrador)]
+        [RequestSizeLimit(SistemaConst.QtdLimiteMBsImport)]
+        public async Task<ActionResult> ImportarPrevisao([FromForm] ImportCSVInput input)
+        {
+            if (!input.FormFile!.FileName.EndsWith(".csv"))
+                throw new Exception();
+
+            int usuarioId = await ObterUsuarioId();
+            await _importCSVService.ImportarCSV(input.FormFile, usuarioId);
+
+            return Ok();
         }
     }
 }

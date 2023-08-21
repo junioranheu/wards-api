@@ -70,6 +70,7 @@ namespace Wards.Application
         private static void AddServices(IServiceCollection services)
         {
             services.AddExportsService();
+            services.AddImportsService();
             services.AddUsuariosService();
             services.AddResetarBancoDadosService();
         }

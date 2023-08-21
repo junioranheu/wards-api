@@ -1,4 +1,4 @@
-﻿namespace Wards.Application.Services.Exports.CSV.Exportar
+﻿namespace Wards.Application.Services.Exports.CSV
 {
     public interface IExportCSVService
     {

@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Wards.Application.Services.Exports.XLSX.Exportar;
+using Wards.Application.Services.Exports.XLSX;
 using Wards.Domain.Entities;
 using Wards.Domain.Enums;
 using Wards.Infrastructure.Data;

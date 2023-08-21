@@ -1,6 +1,6 @@
 ﻿using Wards.Domain.Enums;
 
-namespace Wards.Application.Services.Exports.XLSX.Exportar
+namespace Wards.Application.Services.Exports.XLSX
 {
     public interface IExportXLSXService
     {
