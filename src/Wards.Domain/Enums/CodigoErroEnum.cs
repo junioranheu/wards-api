@@ -4,7 +4,7 @@ namespace Wards.Domain.Enums
 {
     public enum CodigoErroEnum
     {
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=- 900 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        #region 900
         [Description("Já existe outro usuário cadastrado com este e-mail ou nome de usuário")]
         UsuarioExistente = 901,
 
@@ -54,7 +54,7 @@ namespace Wards.Domain.Enums
         SenhaIncorretaAoAtualizar = 916,
 
         [Description("Um e-mail de recuperação de senha já foi enviado para você há pouco tempo. Tente novamente mais tarde")]
-        EmailRecuperacaoJaEnviado =917,
+        EmailRecuperacaoJaEnviado = 917,
 
         [Description("Esse código de recuperação não está vinculado a nenhum usuário")]
         HashRecuperacaoNaoExiste = 918,
@@ -74,11 +74,16 @@ namespace Wards.Domain.Enums
         [Description("Formato de arquivo não permitido. Apenas imagens são permitidas")]
         FormatoDeArquivoNaoPermitido_ApenasImagemPermitidas = 923,
 
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=- 200 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        [Description("Arquivo a ser importado está em um formato inválido")]
+        ArquivoImportFormatoInvalido = 924,
+        #endregion
+
+        #region 200
         [Description("Processo concluído com sucesso")]
         OK = 200,
+        #endregion
 
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=- 400 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        #region 400
         [Description("O servidor não pode ou não irá processar a requisição devido a alguma coisa que foi entendida como um erro do cliente")]
         BadRequest = 400,
 
@@ -90,9 +95,11 @@ namespace Wards.Domain.Enums
 
         [Description("Refresh token inválido")]
         RefreshTokenInvalido = 411,
+        #endregion
 
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=- 500 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        #region 500
         [Description("Houve um erro interno")]
         ErroInterno = 500
+        #endregion
     }
 }

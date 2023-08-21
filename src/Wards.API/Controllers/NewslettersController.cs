@@ -9,6 +9,7 @@ using Wards.Application.UseCases.NewslettersCadastros.Shared.Input;
 using Wards.Application.UseCases.NewslettersCadastros.Shared.Output;
 using Wards.Application.UseCases.Shared.Models.Input;
 using Wards.Domain.Consts;
+using Wards.Domain.Entities;
 using Wards.Domain.Enums;
 using static Wards.Utils.Fixtures.Get;
 
@@ -63,16 +64,18 @@ namespace NewsletterCadastros.API.Controllers
             return Ok(lista);
         }
 
-        [HttpPost]
+        [HttpPost("importar")]
         [AuthorizeFilter(UsuarioRoleEnum.Administrador)]
         [RequestSizeLimit(SistemaConst.QtdLimiteMBsImport)]
-        public async Task<ActionResult> ImportarPrevisao([FromForm] ImportCSVInput input)
+        public async Task<ActionResult> Importar([FromForm] ImportCSVInput input)
         {
-            if (!input.FormFile!.FileName.EndsWith(".csv"))
-                throw new Exception();
+            if (input.FormFile is null || !input.FormFile!.FileName.EndsWith(".csv"))
+                throw new Exception(ObterDescricaoEnum(CodigoErroEnum.ArquivoImportFormatoInvalido));
 
-            int usuarioId = await ObterUsuarioId();
-            await _importCSVService.ImportarCSV(input.FormFile, usuarioId);
+            input.UsuarioId = await ObterUsuarioId();
+            input.ClasseAlvo = new NewsletterCadastro();
+
+            await _importCSVService.ImportarCSV(input);
 
             return Ok();
         }
