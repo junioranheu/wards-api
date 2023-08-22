@@ -34,7 +34,7 @@ namespace Wards.Application.Services.Imports.CSV
 
             if (!listaObjetoFinal.Any())
             {
-                throw new Exception("Houve um problema interno. Aparentemente nenhum registro foi encontrado no CSV para ser salvo na base de dados. Contate o suporte");
+                throw new Exception("Houve um problema interno. Aparentemente nenhum registro foi encontrado no CSV para ser salvo na base de dados");
             }
 
             await _context.AddRangeAsync(listaObjetoFinal!);
@@ -115,20 +115,18 @@ namespace Wards.Application.Services.Imports.CSV
         {
             if (dado is null)
             {
-                // Retornar um valor padrão para tipos por valor (int, double, etc.)
+                // Retornar um valor padrão para tipos por valor (int, double, etc.);
                 if (tipo.IsValueType)
                 {
                     return Activator.CreateInstance(tipo)!;
                 }
 
-                // Se o tipo for uma classe, apenas retorna null
+                // Se o tipo for uma classe, apenas retorna null;
                 return null;
             }
 
-            // Convertendo o objeto "dado" para o tipo especificado;
-            object resultado = Convert.ChangeType(dado, tipo);
-
-            return resultado;
+            // Convertendo o objeto para o tipo especificado;
+            return Convert.ChangeType(dado, tipo);
         }
     }
 }
