@@ -3,7 +3,6 @@ using System.Reflection;
 using System.Text;
 using Wards.Application.Services.Imports.Shared.Models.Input;
 using Wards.Infrastructure.Data;
-using static Bulk.BulkCopy;
 using static Wards.Utils.Fixtures.Get;
 
 namespace Wards.Application.Services.Imports.CSV
@@ -31,14 +30,15 @@ namespace Wards.Application.Services.Imports.CSV
 
             Type tipoPropClasseAlvo = input.ClasseAlvo!.GetType();
             string csv = LerCSV(input.FormFile);
-            List<dynamic?> listaObjetoFinal = IterarConteudo(csv, input, tipoPropClasseAlvo);
+            List<object?> listaObjetoFinal = IterarConteudo(csv, input, tipoPropClasseAlvo);
 
             if (!listaObjetoFinal.Any())
             {
                 throw new Exception("Houve um problema interno. Aparentemente nenhum registro foi encontrado no CSV para ser salvo na base de dados. Contate o suporte");
             }
 
-            await BulkInsert(listaObjetoFinal, _context, input.NomeDaTabelaAlvoParaBulkInsert!);
+            await _context.AddRangeAsync(listaObjetoFinal!);
+            await _context.SaveChangesAsync();
         }
 
         private static string LerCSV(IFormFile formFile)
@@ -61,31 +61,6 @@ namespace Wards.Application.Services.Imports.CSV
             string csvContent = reader.ReadToEnd();
 
             return csvContent;
-        }
-
-        private static Encoding DetectarEncoding(Stream stream)
-        {
-            byte[] bom = new byte[4];
-            stream.Read(bom, 0, 4);
-
-            if (bom.Length >= 2 && bom[0] == 0xFE && bom[1] == 0xFF)
-            {
-                return Encoding.BigEndianUnicode;
-            }
-            if (bom.Length >= 2 && bom[0] == 0xFF && bom[1] == 0xFE)
-            {
-                if (bom.Length >= 4 && bom[2] == 0 && bom[3] == 0)
-                {
-                    return Encoding.UTF32;
-                }
-                return Encoding.Unicode;
-            }
-            if (bom.Length >= 3 && bom[0] == 0xEF && bom[1] == 0xBB && bom[2] == 0xBF)
-            {
-                return Encoding.UTF8;
-            }
-
-            return Encoding.UTF8;
         }
 
         private static List<object?> IterarConteudo(string csv, ImportCSVInput input, Type tipoPropClasseAlvo)
