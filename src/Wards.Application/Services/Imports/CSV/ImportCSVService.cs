@@ -2,12 +2,26 @@
 using System.Reflection;
 using System.Text;
 using Wards.Application.Services.Imports.Shared.Models.Input;
+using Wards.Infrastructure.Data;
+using static Bulk.BulkCopy;
 using static Wards.Utils.Fixtures.Get;
 
 namespace Wards.Application.Services.Imports.CSV
 {
+    /// <summary>
+    /// O ImportCSVService tem o intuito de ser o mais dinâmico possível;
+    /// Para que ele funcione corretamente, todos as propriedades ImportCSVInput devem ser preenchidas;
+    /// E o mais importante: os campos do CSV (IFormFile) deve estar na ordem exata da classe alvo (object ClasseAlvo);
+    /// </summary>
     public sealed class ImportCSVService : IImportCSVService
     {
+        private readonly WardsContext _context;
+
+        public ImportCSVService(WardsContext context)
+        {
+            _context = context;
+        }
+
         public async Task ImportarCSV(ImportCSVInput input)
         {
             if (input.FormFile is null || input.FormFile.Length == 0)
@@ -15,8 +29,16 @@ namespace Wards.Application.Services.Imports.CSV
                 throw new Exception("O arquivo a ser importado é inválido e/ou está corrompido");
             }
 
+            Type tipoPropClasseAlvo = input.ClasseAlvo!.GetType();
             string csv = LerCSV(input.FormFile);
-            List<object?> listaObjetoFinal = IterarConteudo(csv, input);
+            List<dynamic?> listaObjetoFinal = IterarConteudo(csv, input, tipoPropClasseAlvo);
+
+            if (!listaObjetoFinal.Any())
+            {
+                throw new Exception("Houve um problema interno. Aparentemente nenhum registro foi encontrado no CSV para ser salvo na base de dados. Contate o suporte");
+            }
+
+            await BulkInsert(listaObjetoFinal, _context, input.NomeDaTabelaAlvoParaBulkInsert!);
         }
 
         private static string LerCSV(IFormFile formFile)
@@ -66,13 +88,11 @@ namespace Wards.Application.Services.Imports.CSV
             return Encoding.UTF8;
         }
 
-        private static List<object?> IterarConteudo(string csv, ImportCSVInput input)
+        private static List<object?> IterarConteudo(string csv, ImportCSVInput input, Type tipoPropClasseAlvo)
         {
             string[] linhas = csv.Split('\n');
 
-            Type tipo = input.ClasseAlvo!.GetType();
-            PropertyInfo[] propriedades = tipo.GetProperties();
-
+            PropertyInfo[] propriedades = tipoPropClasseAlvo.GetProperties();
             List<object?> listaObjetoFinal = new();
 
             int i = 0;
@@ -85,7 +105,7 @@ namespace Wards.Application.Services.Imports.CSV
                 }
 
                 string[] dados = linha.Split(input.Separador);
-                object novaInstanciaObjetoAlvo = Activator.CreateInstance(tipo)!;
+                object novaInstanciaObjetoAlvo = Activator.CreateInstance(tipoPropClasseAlvo)!;
 
                 int j = 0;
                 foreach (var prop in propriedades)

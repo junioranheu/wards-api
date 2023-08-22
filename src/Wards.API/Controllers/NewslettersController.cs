@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Wards.API.Controllers;
+using Wards.API.Filters;
 using Wards.Application.Services.Imports.CSV;
 using Wards.Application.Services.Imports.Shared.Models.Input;
 using Wards.Application.UseCases.NewslettersCadastros.CriarNewsletterCadastro;
@@ -64,7 +65,7 @@ namespace NewsletterCadastros.API.Controllers
         }
 
         [HttpPost("importar")]
-        //[AuthorizeFilter(UsuarioRoleEnum.Administrador)]
+        [AuthorizeFilter(UsuarioRoleEnum.Administrador)]
         [RequestSizeLimit(SistemaConst.QtdLimiteMBsImport)]
         public async Task<ActionResult> Importar([FromForm] ImportCSVInput input)
         {
@@ -73,6 +74,7 @@ namespace NewsletterCadastros.API.Controllers
 
             input.UsuarioId = await ObterUsuarioId();
             input.ClasseAlvo = new NewsletterCadastro();
+            input.NomeDaTabelaAlvoParaBulkInsert = "NewslettersCadastros";
 
             await _importCSVService.ImportarCSV(input);
 

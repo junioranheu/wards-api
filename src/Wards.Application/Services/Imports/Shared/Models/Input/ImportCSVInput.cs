@@ -15,6 +15,9 @@ namespace Wards.Application.Services.Imports.Shared.Models.Input
         public object? ClasseAlvo { get; set; }
 
         [JsonIgnore]
+        public string? NomeDaTabelaAlvoParaBulkInsert { get; set; } = string.Empty;
+
+        [JsonIgnore]
         public int? UsuarioId { get; set; }
     }
 }
