@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
+using System.Reflection;
 using System.Text;
 using Wards.Application.Services.Imports.Shared.Models.Input;
+using static Wards.Utils.Fixtures.Get;
 
 namespace Wards.Application.Services.Imports.CSV
 {
@@ -13,7 +15,8 @@ namespace Wards.Application.Services.Imports.CSV
                 throw new Exception("O arquivo a ser importado é inválido e/ou está corrompido");
             }
 
-            string teste = LerCSV(input.FormFile);
+            string csv = LerCSV(input.FormFile);
+            List<object?> listaObjetoFinal = IterarConteudo(csv, input);
         }
 
         private static string LerCSV(IFormFile formFile)
@@ -61,6 +64,76 @@ namespace Wards.Application.Services.Imports.CSV
             }
 
             return Encoding.UTF8;
+        }
+
+        private static List<object?> IterarConteudo(string csv, ImportCSVInput input)
+        {
+            string[] linhas = csv.Split('\n');
+
+            Type tipo = input.ClasseAlvo!.GetType();
+            PropertyInfo[] propriedades = tipo.GetProperties();
+
+            List<object?> listaObjetoFinal = new();
+
+            int i = 0;
+            foreach (var linha in linhas)
+            {
+                if (input.IsPularCabecalho && i == 0)
+                {
+                    i++;
+                    continue;
+                }
+
+                string[] dados = linha.Split(input.Separador);
+                object novaInstanciaObjetoAlvo = Activator.CreateInstance(tipo)!;
+
+                int j = 0;
+                foreach (var prop in propriedades)
+                {
+                    if (j >= dados.Length)
+                    {
+                        break;
+                    }
+
+                    bool isKeyProperty = IsKey(prop);
+                    bool isForeignKey = IsForeignKey(prop);
+                    bool isNotMapped = IsNotMapped(prop);
+
+                    if (!prop.CanWrite || isKeyProperty || isForeignKey || isNotMapped)
+                    {
+                        continue;
+                    }
+
+                    object? dadoNormalizado = NormalizarDado(dados[j], prop.PropertyType);
+                    prop.SetValue(novaInstanciaObjetoAlvo, dadoNormalizado);
+                    j++;
+                }
+
+                listaObjetoFinal.Add(novaInstanciaObjetoAlvo);
+                i++;
+            }
+
+            return listaObjetoFinal;
+        }
+
+        private static object? NormalizarDado(object dado, Type tipo)
+        {
+            if (dado is null)
+            {
+                // Retornar um valor padrão para tipos por valor (int, double, etc.)
+                if (tipo.IsValueType)
+                {
+                    return Activator.CreateInstance(tipo)!;
+                }
+
+                // Se o tipo for uma classe, apenas retorna null
+                return null;
+            }
+
+            // Convertendo o objeto "dado" para o tipo especificado;
+            object resultado = Convert.ChangeType(dado, tipo);
+
+            return resultado;
         }
     }
 }

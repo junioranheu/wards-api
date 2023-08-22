@@ -1,6 +1,8 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data;
 using System.Reflection;
 using System.Text;
@@ -168,6 +170,34 @@ namespace Wards.Utils.Fixtures
             var clone = JsonConvert.DeserializeObject<T>(JsonConvert.SerializeObject(objeto), deserialize)!;
 
             return clone;
+        }
+
+        /// <summary>
+        /// Verifica se a propriedade é uma Key (principal);
+        /// </summary>
+        public static bool IsKey(PropertyInfo property)
+        {
+            return Attribute.IsDefined(property, typeof(KeyAttribute));
+        }
+
+        /// <summary>
+        /// Verifica se a propriedade é uma FK;
+        /// </summary>
+        public static bool IsForeignKey(PropertyInfo property)
+        {
+            var propertyType = property.PropertyType;
+            var isCollection = propertyType.IsGenericType && propertyType.GetGenericTypeDefinition() == typeof(ICollection<>);
+            var isClass = propertyType.IsClass && propertyType != typeof(string);
+
+            return isCollection || isClass;
+        }
+
+        /// <summary>
+        /// Verifica se a propriedade é uma propriedade não-mapeada;
+        /// </summary>
+        public static bool IsNotMapped(PropertyInfo property)
+        {
+            return Attribute.IsDefined(property, typeof(NotMappedAttribute));
         }
     }
 }
