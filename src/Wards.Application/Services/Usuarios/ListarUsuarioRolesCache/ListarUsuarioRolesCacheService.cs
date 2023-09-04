@@ -25,7 +25,7 @@ namespace Wards.Application.Services.Usuarios.ListarUsuarioRolesCache
                 return null;
             }
 
-            const string keyCache = "keyListarUsuarioRolesCache";
+            string keyCache = $"keyListarUsuarioRolesCache_{email}";
             if (!_memoryCache.TryGetValue(keyCache, out IEnumerable<UsuarioRoleOutput>? listaUsuarioRoles))
             {
                 listaUsuarioRoles = await _listarUsuarioRolelUseCase.Execute(email);

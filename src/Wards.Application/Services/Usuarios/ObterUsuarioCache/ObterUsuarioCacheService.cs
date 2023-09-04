@@ -24,7 +24,7 @@ namespace Wards.Application.Services.Usuarios.ObterUsuarioCache
                 return null;
             }
 
-            const string keyCache = "keyObterUsuarioCache";
+            string keyCache = $"keyObterUsuarioCache_{email}";
             if (!_memoryCache.TryGetValue(keyCache, out UsuarioOutput? usuario))
             {
                 usuario = await _obterUsuarioUseCase.Execute(email: email);
