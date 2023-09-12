@@ -227,5 +227,28 @@ namespace Wards.Utils.Fixtures
 
             return Encoding.UTF8;
         }
+
+        /// <summary>
+        /// Recebe uma lista e o número de chunks que essa lista deve ser splitada em chunks;
+        /// </summary>
+        public static List<List<T>> SepararListaEmChunks<T>(List<T> source, int numeroDeChunks)
+        {
+            if (numeroDeChunks <= 0)
+            {
+                throw new ArgumentException("O número de chunks deve ser maior que 0.", nameof(numeroDeChunks));
+            }
+
+            int chunkSize = (int)Math.Ceiling((double)source.Count / numeroDeChunks);
+            List<List<T>> chunks = new(numeroDeChunks);
+
+            for (int i = 0; i < numeroDeChunks; i++)
+            {
+                int startIndex = i * chunkSize;
+                int endIndex = Math.Min((i + 1) * chunkSize, source.Count);
+                chunks.Add(source.GetRange(startIndex, endIndex - startIndex));
+            }
+
+            return chunks;
+        }
     }
 }

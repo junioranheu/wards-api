@@ -57,6 +57,37 @@ namespace Wards.API.Controllers
         }
         #endregion
 
+        #region parallel_threads
+        /// <summary>
+        /// Exemplo de execução de threads paralelas com split de uma lista em chunks;
+        /// </summary>
+        [HttpGet("exemploParallelThread_E_ListaChunks")]
+        [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
+        public ActionResult<int> ExemploParallelThread_E_ListaChunks()
+        {
+            List<string> listaStrings = new() { "Naruto", "Sasuke", "Sakura", "Kakashi", "Rock Lee", "Neji", "Ten Ten", "Guy", "Kiba", "Shino", "Hinata", "Kurenai", "Shikamaru", "Chouji", "Ino", "Asuma" };
+            List<int> listaTesteLength = new();
+
+            var chunks = SepararListaEmChunks(listaStrings.ToList(), 3);
+
+            Parallel.ForEach(chunks, chunk =>
+            {
+                ExemploAdicionarLenghtLista(chunk, listaTesteLength);
+            });
+
+            return Ok(listaTesteLength.Sum());
+
+            static void ExemploAdicionarLenghtLista(List<string> listaStrings, List<int> listaTesteLength)
+            {
+                foreach (var item in listaStrings)
+                {
+                    listaTesteLength.Add(item.Length);
+                }
+            }
+        }
+        #endregion
+
         #region query
         /// <summary>
         /// Busca ao banco sem Entity Framework; utilizando SqlCommand & SqlDataReader, à moda antiga;
@@ -84,7 +115,8 @@ namespace Wards.API.Controllers
 
             List<WardOutput> listaOutput = new();
 
-            if (!reader.HasRows) {
+            if (!reader.HasRows)
+            {
                 return listaOutput;
             }
 
@@ -136,7 +168,8 @@ namespace Wards.API.Controllers
 
             List<WardOutput> listaOutput = new();
 
-            if (!reader.HasRows) {
+            if (!reader.HasRows)
+            {
                 return listaOutput;
             }
 
