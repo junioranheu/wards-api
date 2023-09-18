@@ -64,21 +64,16 @@ namespace Wards.API.Controllers
         [HttpGet("exemploCancellationToken")]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(bool))]
-        public async Task<ActionResult<string>> ExemploCancellationToken()
+        public async Task<ActionResult<string>> ExemploCancellationToken(CancellationToken cancellationToken)
         {
             try
             {
-                string resp = await WithCancellationToken(async token =>
-                {
-                    await Task.Delay(5000, token); // Simular requisição longa;
-                    return "Processo finalizado com sucesso";
-                });
-
-                return resp;
+                await Task.Delay(5000, cancellationToken); // Simular requisição longa;
+                return "Processo finalizado com sucesso";
             }
-            catch (TaskCanceledException ex)
+            catch (OperationCanceledException)
             {
-                return $"Processo cancelado: {ex.Message}";
+                return "Processo cancelado pelo usuário (CancellationToken)";
             }
         }
         #endregion
