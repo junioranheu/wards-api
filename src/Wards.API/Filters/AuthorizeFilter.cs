@@ -67,7 +67,11 @@ namespace Wards.API.Filters
 
             if (!isUsuarioTemAcesso)
             {
-                context.Result = new StatusCodeResult((int)HttpStatusCode.Forbidden);
+                context.Result = new ObjectResult("Você não tem permissão para acessar este recurso.")
+                {
+                    StatusCode = StatusCodes.Status403Forbidden
+                };
+
                 return false;
             }
 

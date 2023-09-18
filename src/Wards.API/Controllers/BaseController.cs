@@ -7,7 +7,12 @@ namespace Wards.API.Controllers
 {
     public abstract class BaseController<T> : Controller
     {
-        protected BaseController() { }
+        private readonly CancellationTokenSource _cancellationTokenSource;
+
+        protected BaseController()
+        {
+            _cancellationTokenSource = new CancellationTokenSource();
+        }
 
         protected string ObterUsuarioEmail()
         {
@@ -32,5 +37,28 @@ namespace Wards.API.Controllers
 
             return usuario is not null ? usuario.UsuarioId : 0;
         }
+
+        #region cancellationToken
+        protected CancellationToken CancellationToken => _cancellationTokenSource.Token;
+
+        protected void CancelarToken()
+        {
+            _cancellationTokenSource.Cancel();
+        }
+
+        protected async Task<TResult> WithCancellationToken<TResult>(Func<CancellationToken, Task<TResult>> operation)
+        {
+            using var linkedTokenSource = CancellationTokenSource.CreateLinkedTokenSource(CancellationToken);
+
+            try
+            {
+                return await operation(linkedTokenSource.Token);
+            }
+            catch (OperationCanceledException ex) when (ex.CancellationToken == CancellationToken)
+            {
+                throw new TaskCanceledException("Processo cancelado.", ex);
+            }
+        }
+        #endregion
     }
 }

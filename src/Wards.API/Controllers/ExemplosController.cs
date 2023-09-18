@@ -27,7 +27,7 @@ namespace Wards.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ExemplosController : Controller
+    public class ExemplosController : BaseController<ExemplosController>
     {
         #region constructor
         private readonly IWebHostEnvironment _webHostEnvironment;
@@ -54,6 +54,32 @@ namespace Wards.API.Controllers
             _listarUsuarioUseCase = listarUsuarioUseCase;
             _migrateDatabaseService = migrateDatabaseService;
             _bulkCopyCriarWardUseCase = bulkCopyCriarWardUseCase;
+        }
+        #endregion
+
+        #region cancellationToken
+        /// <summary>
+        /// Exemplo de requisição com cancellation token;
+        /// </summary>
+        [HttpGet("exemploCancellationToken")]
+        [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(bool))]
+        public async Task<ActionResult<string>> ExemploCancellationToken()
+        {
+            try
+            {
+                string resp = await WithCancellationToken(async token =>
+                {
+                    await Task.Delay(5000, token); // Simular requisição longa;
+                    return "Processo finalizado com sucesso";
+                });
+
+                return resp;
+            }
+            catch (TaskCanceledException ex)
+            {
+                return $"Processo cancelado: {ex.Message}";
+            }
         }
         #endregion
 
