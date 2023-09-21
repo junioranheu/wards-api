@@ -1,0 +1,214 @@
+ALTER PROCEDURE [dbo].[SP_FERIADOS_TEMP]
+AS BEGIN
+    
+	-- Ward: https://dirceuresende.com/blog/como-criar-uma-tabela-com-os-feriados-nacionais-estaduais-e-moveis-no-sql-server/
+
+    -------------------------------
+    -- Cria tabela temporária
+    -------------------------------
+
+    CREATE TABLE #TempTable (
+		FeriadoId INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
+        Data datetime2 NOT NULL,
+        IsNacional BIT NULL,
+        Descricao VARCHAR(100) NOT NULL,
+        UF CHAR(2) NOT NULL
+    )
+
+    TRUNCATE TABLE #TempTable
+ 
+    -------------------------------
+    -- Feriados nacionais
+    -------------------------------
+ 
+    INSERT INTO #TempTable
+    SELECT '0001-01-01 00:00:00', 1,'Confraternização Universal', ''
+    UNION
+    SELECT '0001-04-21 00:00:00', 1,'Tiradentes', ''
+    UNION
+    SELECT '0001-05-01 00:00:00', 1,'Dia do Trabalhador', ''
+    UNION
+    SELECT '0001-09-07 00:00:00', 1,'Independência do Brasil', ''
+    UNION
+    SELECT '0001-10-12 00:00:00', 1,'Nossa Senhora Aparecida', ''
+    UNION
+    SELECT '0001-11-02 00:00:00', 1,'Finados', ''
+    UNION
+    SELECT '0001-11-15 00:00:00', 1,'Proclamação da República', ''
+    UNION
+    SELECT '0001-12-25 00:00:00', 1,'Natal', ''
+ 
+    -------------------------------
+    -- Feriados estaduais
+    -------------------------------
+ 
+    -- Acre
+    INSERT INTO #TempTable
+    SELECT '0001-06-15 00:00:00', 0,'Aniversário do estado', 'AC'
+    UNION
+    SELECT '0001-09-05 00:00:00', 0,'Dia da Amazônia', 'AC'
+    UNION
+    SELECT '0001-11-17 00:00:00', 0,'Assinatura do Tratado de Petrópolis', 'AC'
+ 
+    -- Alagoas
+    INSERT INTO #TempTable
+    SELECT '0001-06-24 00:00:00', 0,'São João', 'AL'
+    UNION
+    SELECT '0001-06-29 00:00:00', 0,'São Pedro', 'AL'
+    UNION
+    SELECT '0001-09-16 00:00:00', 0,'Emancipação política', 'AL'
+    UNION
+    SELECT '0001-11-20 00:00:00', 0,'Morte de Zumbi dos Palmares', 'AL'
+ 
+    -- Amapá
+    INSERT INTO #TempTable
+    SELECT '0001-03-19 00:00:00', 0,'Dia de São José, santo padroeiro do Estado do Amapá', 'AP'
+    UNION
+    SELECT '0001-09-13 00:00:00', 0,'Criação do Território Federal (Data Magna do estado)', 'AP'
+    UNION
+    SELECT '0001-11-20 00:00:00', 0,'Dia da Consciência Negra', 'AP'
+ 
+    -- Amazonas
+    INSERT INTO #TempTable
+    SELECT '0001-09-05 00:00:00', 0,'Elevação do Amazonas à categoria de província', 'AM'
+    UNION
+    SELECT '0001-11-20 00:00:00', 0,'Dia da Consciência Negra', 'AM'
+ 
+    -- Bahia
+    INSERT INTO #TempTable
+    SELECT '0001-07-02 00:00:00', 0,'Independência da Bahia (Data magna do estado)', 'BA'
+ 
+    -- Ceará
+    INSERT INTO #TempTable
+    SELECT '0001-03-25 00:00:00', 0,'Data magna do estado (data da abolição da escravidão no Ceará)', 'CE'
+ 
+    -- Distrito Federal
+    INSERT INTO #TempTable
+    SELECT '0001-04-21 00:00:00', 0,'Fundação de Brasília', 'DF'
+    UNION
+    SELECT '0001-11-30 00:00:00', 0,'Dia do evangélico', 'DF'
+ 
+    -- Maranhão
+    INSERT INTO #TempTable
+    SELECT '0001-07-28 00:00:00', 0,'Adesão do Maranhão à independência do Brasil', 'MA'
+ 
+    -- Mato Grosso
+    INSERT INTO #TempTable
+    SELECT '0001-11-20 00:00:00', 0,'Dia da Consciência Negra', 'MT'
+ 
+    -- Mato Grosso do Sul
+    INSERT INTO #TempTable
+    SELECT '0001-10-11 00:00:00', 0,'Criação do estado', 'MS'
+ 
+    -- Minas Gerais
+    INSERT INTO #TempTable
+    SELECT '0001-04-21 00:00:00', 0,'Data magna do estado', 'MG'
+ 
+    -- Pará
+    INSERT INTO #TempTable
+    SELECT '0001-08-15 00:00:00', 0,'Adesão do Grão-Pará à independência do Brasil (data magna)', 'PA'
+ 
+    -- Paraíba
+    INSERT INTO #TempTable
+    SELECT '0001-08-05 00:00:00', 0,'Fundação do Estado em 1585', 'PB'
+ 
+    -- Piauí
+    INSERT INTO #TempTable
+    SELECT '0001-10-19 00:00:00', 0,'Dia do Piauí', 'PI'
+ 
+    -- Rio de Janeiro
+    INSERT INTO #TempTable
+    SELECT '0001-04-23 00:00:00', 0,'Dia de São Jorge', 'RJ'
+    UNION
+    SELECT '0001-11-20 00:00:00', 0,'Dia da Consciência Negra', 'RJ'
+ 
+    -- Rio Grande do Norte
+    INSERT INTO #TempTable
+    SELECT '0001-10-03 00:00:00', 0,'Mártires de Cunhaú e Uruaçu', 'RN'
+ 
+    -- Rio Grande do Sul
+    INSERT INTO #TempTable
+    SELECT '0001-09-20 00:00:00', 0,'Proclamação da República Rio-Grandense', 'RS'
+ 
+    -- Rondônia
+    INSERT INTO #TempTable
+    SELECT '0001-10-04 00:00:00', 0,'Criação do estado', 'RO'
+	UNION
+	SELECT '0001-06-18 00:00:00', 0,'Dia do evangélico', 'RO'
+
+    -- Roraima
+    INSERT INTO #TempTable
+    SELECT '0001-10-05 00:00:00', 0,'Criação do estado', 'RR'
+ 
+    -- São Paulo
+    INSERT INTO #TempTable
+    SELECT '0001-07-09 00:00:00', 0,'Revolução Constitucionalista de 1932', 'SP'
+	UNION
+    SELECT '0001-11-20 00:00:00', 0,'Dia da Consciência Negra', 'SP'
+ 
+    -- Sergipe
+    INSERT INTO #TempTable
+    SELECT '0001-07-08 00:00:00', 0,'Aniversário de Sergipe', 'SE'
+ 
+    -- Tocantins
+    INSERT INTO #TempTable
+    SELECT '0001-10-05 00:00:00', 0,'Criação do estado', 'TO'
+ 
+    -------------------------------
+    -- Feriados móveis
+    -------------------------------
+ 
+    DECLARE
+        @ano INT,
+        @seculo INT,
+        @G INT,
+        @K INT,
+        @I INT,
+        @H INT,
+        @J INT,
+        @L INT,
+        @MesDePascoa INT,
+        @DiaDePascoa INT,
+        @pascoa DATETIME 
+ 
+    DECLARE 
+        @Dt_Inicial DATETIME = '2019-01-01',
+        @Dt_Final DATETIME = '2033-01-01'
+ 
+    WHILE(@Dt_Inicial <= @Dt_Final)
+    BEGIN
+        
+        -- Calcula dinamicamente as datas para feriados móveis;    
+        SET @ano = YEAR(@Dt_Inicial)
+ 
+        SET @seculo = @ano / 100 
+        SET @G = @ano % 19
+        SET @K = ( @seculo - 17 ) / 25
+        SET @I = ( @seculo - CAST(@seculo / 4 AS int) - CAST(( @seculo - @K ) / 3 AS int) + 19 * @G + 15 ) % 30
+        SET @H = @I - CAST(@I / 28 AS int) * ( 1 * -CAST(@I / 28 AS int) * CAST(29 / ( @I + 1 ) AS int) ) * CAST(( ( 21 - @G ) / 11 ) AS int)
+        SET @J = ( @ano + CAST(@ano / 4 AS int) + @H + 2 - @seculo + CAST(@seculo / 4 AS int) ) % 7
+        SET @L = @H - @J
+        SET @MesDePascoa = 3 + CAST(( @L + 40 ) / 44 AS int)
+        SET @DiaDePascoa = @L + 28 - 31 * CAST(( @MesDePascoa / 4 ) AS int)
+        SET @pascoa = CONVERT(DATETIME, CONVERT(VARCHAR(2), @DiaDePascoa) + '/' + CONVERT(VARCHAR(2), @MesDePascoa) + '/' + CONVERT(VARCHAR(4), @ano), 103) + '00:00:00'
+ 
+        -- Insere os feriados móveis;    
+        INSERT INTO #TempTable
+        SELECT @pascoa, 1,'Paixão de Cristo', ''
+        
+        INSERT INTO #TempTable
+        SELECT DATEADD(DAY, -48, @pascoa), 1,'Carnaval', ''
+        
+        INSERT INTO #TempTable
+        SELECT DATEADD(DAY, -47, @pascoa), 1,'Carnaval', ''
+        
+        INSERT INTO #TempTable
+        SELECT DATEADD(DAY, 60, @pascoa), 1,'Corpus Christi', ''
+ 
+        SET @Dt_Inicial = DATEADD(YEAR, 1, @Dt_Inicial)
+    END
+
+	SELECT * FROM #TempTable;
+	DROP TABLE #TempTable;
+    
+END

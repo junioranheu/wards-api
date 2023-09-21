@@ -16,4 +16,8 @@
     <ProjectReference Include="..\Wards.Domain\Wards.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="StoredProcedures\MySQL\" />
+  </ItemGroup>
+
 </Project>
