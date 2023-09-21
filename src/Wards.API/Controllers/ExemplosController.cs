@@ -9,6 +9,7 @@ using Wards.Application.Services.Sistemas.ResetarBancoDados;
 using Wards.Application.UseCases.Logs.ListarLog;
 using Wards.Application.UseCases.Logs.Shared.Output;
 using Wards.Application.UseCases.Shared.Models.Input;
+using Wards.Application.UseCases.Shared.Models.Output;
 using Wards.Application.UseCases.Usuarios.ListarUsuario;
 using Wards.Application.UseCases.Usuarios.Shared.Output;
 using Wards.Application.UseCases.Wards.BulkCopyCriarWard;
@@ -298,6 +299,64 @@ namespace Wards.API.Controllers
         #endregion
 
         #region linq
+        /// <summary>
+        /// Exemplo de LINQ avançado, fazendo select com group by e inserir resultado em um Output;
+        /// </summary>
+        [HttpGet("exemploUnificarListasComSyntaxQuery")]
+        [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<LogAgrupadoOutput>))]
+        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(LogOutput))]
+        public async Task<ActionResult<List<LogAgrupadoOutput>>> ExemploUnificarListasComSyntaxQuery()
+        {
+            var lista = await _listarLogUseCase.Execute(new PaginacaoInput() { IsSelectAll = true });
+
+            if (!lista.Any())
+            {
+                throw new Exception(ObterDescricaoEnum(CodigoErroEnum.NaoEncontrado));
+            }
+
+            // Simular duas listas distintas (mals pelo exemplo bobo de par e impar);
+            var listaPares = lista.Where(x => x.LogId % 2 == 0).ToList();
+            var listaImpares = lista.Where(x => x.LogId % 2 != 0).ToList();
+
+            // Unificar listas e criar response;
+            var queryUnificado = from lista1 in listaPares
+                                 join lista2 in listaImpares
+
+                                 on new
+                                 {
+                                     Ano = lista1.Data.Year,
+                                     Mes = lista1.Data.Month,
+                                     Dia = lista1.Data.Day,
+                                     Hora = lista1.Data.Hour,
+                                     // Distribuidora = listaDistribuidoraId.Any(x => x == medicao.DistribuidoraId) // Exemplo real TRETA;
+                                 }
+                                 equals new
+                                 {
+                                     Ano = lista2.Data.Year,
+                                     Mes = lista2.Data.Month,
+                                     Dia = lista2.Data.Day,
+                                     Hora = lista2.Data.Hour,
+                                     // Distribuidora = listaDistribuidoraId.Any(y => listaDistribuidoraId.Any(x => x == y)) // Exemplo real TRETA;
+                                 }
+
+                                 into lista_join
+                                 from lista_join_nullable in lista_join.DefaultIfEmpty()
+
+                                 select new ExemploUnificarListasComSyntaxQuery_ExemploController_Output
+                                 {
+                                     Log = lista1,
+                                     Endpointjoin = lista_join_nullable?.Endpoint ?? string.Empty,
+                                     Exemplo1 = 0,
+                                     Exemplo2 = $"Fino eh {lista1.TipoRequisicao}",
+                                     Exemplo3 = lista1.StatusResposta == 200
+                                 };
+
+            List<ExemploUnificarListasComSyntaxQuery_ExemploController_Output> queryUnificado_list = queryUnificado.ToList();
+
+            return Ok(queryUnificado_list);
+        }
+
         /// <summary>
         /// Exemplo de LINQ avançado, fazendo select com group by e inserir resultado em um Output;
         /// </summary>
