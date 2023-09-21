@@ -316,41 +316,43 @@ namespace Wards.API.Controllers
             }
 
             // Simular duas listas distintas (mals pelo exemplo bobo de par e impar);
-            var listaPares = lista.Where(x => x.LogId % 2 == 0).ToList();
-            var listaImpares = lista.Where(x => x.LogId % 2 != 0).ToList();
+            var listaPares = lista.Where(x => x.LogId % 2 == 0).ToList().Take(2);
+            var listaImpares = lista.Where(x => x.LogId % 2 != 0).ToList().Take(2);
 
             // Unificar listas e criar response;
-            var queryUnificado = from lista1 in listaPares
-                                 join lista2 in listaImpares
+            var queryUnificado = (from lista1 in listaPares
+                                  join lista2 in listaImpares
 
-                                 on new
-                                 {
-                                     Ano = lista1.Data.Year,
-                                     Mes = lista1.Data.Month,
-                                     Dia = lista1.Data.Day,
-                                     Hora = lista1.Data.Hour,
-                                     // Distribuidora = listaDistribuidoraId.Any(x => x == medicao.DistribuidoraId) // Exemplo real TRETA;
-                                 }
-                                 equals new
-                                 {
-                                     Ano = lista2.Data.Year,
-                                     Mes = lista2.Data.Month,
-                                     Dia = lista2.Data.Day,
-                                     Hora = lista2.Data.Hour,
-                                     // Distribuidora = listaDistribuidoraId.Any(y => listaDistribuidoraId.Any(x => x == y)) // Exemplo real TRETA;
-                                 }
+                                  on new
+                                  {
+                                      Ano = lista1.Data.Year,
+                                      Mes = lista1.Data.Month,
+                                      Dia = lista1.Data.Day,
+                                      Hora = lista1.Data.Hour,
+                                      // Distribuidora = listaDistribuidoraId.Any(x => x == medicao.DistribuidoraId) // Exemplo real TRETA;
+                                  }
+                                  equals new
+                                  {
+                                      Ano = lista2.Data.Year,
+                                      Mes = lista2.Data.Month,
+                                      Dia = lista2.Data.Day,
+                                      Hora = lista2.Data.Hour,
+                                      // Distribuidora = listaDistribuidoraId.Any(y => listaDistribuidoraId.Any(x => x == y)) // Exemplo real TRETA;
+                                  }
 
-                                 into lista_join
-                                 from lista_join_nullable in lista_join.DefaultIfEmpty()
+                                  into lista_join
+                                  from lista_join_nullable in lista_join.DefaultIfEmpty()
 
-                                 select new ExemploUnificarListasComSyntaxQuery_ExemploController_Output
-                                 {
-                                     Log = lista1,
-                                     Endpointjoin = lista_join_nullable?.Endpoint ?? string.Empty,
-                                     Exemplo1 = 0,
-                                     Exemplo2 = $"Fino eh {lista1.TipoRequisicao}",
-                                     Exemplo3 = lista1.StatusResposta == 200
-                                 };
+                                  select new ExemploUnificarListasComSyntaxQuery_ExemploController_Output
+                                  {
+                                      Log = lista1,
+                                      LogId = lista_join_nullable?.LogId ?? null,
+                                      Data = lista_join_nullable?.Data ?? null,
+                                      Endpointjoin = lista_join_nullable?.Endpoint ?? string.Empty,
+                                      Exemplo1 = GerarNumeroAleatorio(1, 1000),
+                                      Exemplo2 = $"Fino eh {lista1.TipoRequisicao}",
+                                      Exemplo3 = lista1.StatusResposta == 200
+                                  }).Distinct();
 
             List<ExemploUnificarListasComSyntaxQuery_ExemploController_Output> queryUnificado_list = queryUnificado.ToList();
 

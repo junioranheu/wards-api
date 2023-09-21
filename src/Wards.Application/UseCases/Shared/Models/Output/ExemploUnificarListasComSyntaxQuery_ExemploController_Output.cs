@@ -6,6 +6,10 @@ namespace Wards.Application.UseCases.Shared.Models.Output
     {
         public LogOutput Log { get; set; } = new();
 
+        public int? LogId { get; set; }
+
+        public DateTime? Data { get; set; }
+
         public string? Endpointjoin { get; set; } = string.Empty;
 
         public double? Exemplo1 { get; set; } = 0;
