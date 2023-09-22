@@ -1,3 +1,10 @@
+USE [CPFL]
+GO
+/****** Object:  StoredProcedure [dbo].[SP_FERIADOS_TEMP]    Script Date: 22/09/2023 10:59:45 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
 ALTER PROCEDURE [dbo].[SP_FERIADOS_TEMP]
 AS BEGIN
     
@@ -32,7 +39,10 @@ AS BEGIN
 	INSERT INTO #TempEstados (EstadoId, Sigla) SELECT EstadoId, Sigla FROM Estados WHERE Status = 1;
 
 	-- Listar distribuidoras
-	INSERT INTO #TempDistribuidoras (DistribuidoraId, EstadoId) SELECT DistribuidoraId, EstadoId FROM Distribuidoras;
+	INSERT INTO #TempDistribuidoras (DistribuidoraId, EstadoId)
+	SELECT d.DistribuidoraId, de.EstadoId 
+	FROM Distribuidoras d 
+	INNER JOIN DistribuidorasEstados de ON de.DistribuidoraId = d.DistribuidoraId;
 
     ---------------------------------
     -- #2 - Feriados nacionais fixos
