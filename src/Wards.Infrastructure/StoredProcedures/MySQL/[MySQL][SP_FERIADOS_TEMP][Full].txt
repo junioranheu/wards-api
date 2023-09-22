@@ -1,0 +1,255 @@
+CREATE DEFINER=`wards`@`%` PROCEDURE `SP_FERIADOS`()
+BEGIN
+	    
+    DROP TEMPORARY TABLE IF EXISTS TempFeriados;
+	DROP TEMPORARY TABLE IF EXISTS TempEstados;
+    
+	-- #1 - Cria tabelas temporárias
+	CREATE TEMPORARY TABLE TempFeriados (
+	  TempFeriadosId INT AUTO_INCREMENT PRIMARY KEY,
+	  Data DATETIME NOT NULL,
+	  Tipo INT NULL,
+	  Descricao VARCHAR(100) NOT NULL,
+	  UF VARCHAR(2) NOT NULL
+	);
+    
+	CREATE TEMPORARY TABLE TempEstados (
+	  EstadoId INT,
+	  Sigla NVARCHAR(2)
+	);
+	
+	TRUNCATE TABLE TempEstados;
+	TRUNCATE TABLE TempFeriados;
+	
+	-- Listar estados
+	INSERT INTO TempEstados (EstadoId, Sigla) SELECT EstadoId, Sigla FROM Estados WHERE IsAtivo = 1;
+
+	-- #2 - Feriados nacionais fixos
+	INSERT INTO TempFeriados (Data, Tipo, Descricao, UF)
+	SELECT '0001-01-01 00:00:00', 1,'Confraternização Universal', ''
+	UNION
+	SELECT '0001-04-21 00:00:00', 1,'Tiradentes', ''
+	UNION
+	SELECT '0001-05-01 00:00:00', 1,'Dia do Trabalhador', ''
+	UNION
+	SELECT '0001-09-07 00:00:00', 1,'Independência do Brasil', ''
+	UNION
+	SELECT '0001-10-12 00:00:00', 1,'Nossa Senhora Aparecida', ''
+	UNION
+	SELECT '0001-11-02 00:00:00', 1,'Finados', ''
+	UNION
+	SELECT '0001-11-15 00:00:00', 1,'Proclamação da República', ''
+	UNION
+	SELECT '0001-12-25 00:00:00', 1,'Natal', ''
+	
+	-- #3 - Feriados estaduais fixos
+	-- Acre
+	UNION
+	SELECT '0001-06-15 00:00:00', 2,'Aniversário do estado', 'AC'
+	UNION
+	SELECT '0001-09-05 00:00:00', 2,'Dia da Amazônia', 'AC'
+	UNION
+	SELECT '0001-11-17 00:00:00', 2,'Assinatura do Tratado de Petrópolis', 'AC'
+	-- Alagoas
+	UNION
+	SELECT '0001-06-24 00:00:00', 2,'São João', 'AL'
+	UNION
+	SELECT '0001-06-29 00:00:00', 2,'São Pedro', 'AL'
+	UNION
+	SELECT '0001-09-16 00:00:00', 2,'Emancipação política', 'AL'
+	UNION
+	SELECT '0001-11-20 00:00:00', 2,'Morte de Zumbi dos Palmares', 'AL'
+	-- Amapá
+	UNION
+	SELECT '0001-03-19 00:00:00', 2,'Dia de São José, santo padroeiro do Estado do Amapá', 'AP'
+	UNION
+	SELECT '0001-09-13 00:00:00', 2,'Criação do Território Federal (Data Magna do estado)', 'AP'
+	UNION
+	SELECT '0001-11-20 00:00:00', 2,'Dia da Consciência Negra', 'AP'
+	-- Amazonas
+	UNION
+	SELECT '0001-09-05 00:00:00', 2,'Elevação do Amazonas à categoria de província', 'AM'
+	UNION
+	SELECT '0001-11-20 00:00:00', 2,'Dia da Consciência Negra', 'AM'
+	-- Bahia
+	UNION
+	SELECT '0001-07-02 00:00:00', 2,'Independência da Bahia (Data magna do estado)', 'BA'
+	-- Ceará
+	UNION
+	SELECT '0001-03-25 00:00:00', 2,'Data magna do estado (data da abolição da escravidão no Ceará)', 'CE'
+	-- Distrito Federal
+	UNION
+	SELECT '0001-04-21 00:00:00', 2,'Fundação de Brasília', 'DF'
+	UNION
+	SELECT '0001-11-30 00:00:00', 2,'Dia do evangélico', 'DF'
+	-- Maranhão
+	UNION
+	SELECT '0001-07-28 00:00:00', 2,'Adesão do Maranhão à independência do Brasil', 'MA'
+	-- Mato Grosso
+	UNION
+	SELECT '0001-11-20 00:00:00', 2,'Dia da Consciência Negra', 'MT'
+	-- Mato Grosso do Sul
+	UNION
+	SELECT '0001-10-11 00:00:00', 2,'Criação do estado', 'MS'
+	-- Minas Gerais
+	UNION
+	SELECT '0001-04-21 00:00:00', 2,'Data magna do estado', 'MG'
+	-- Pará
+	UNION
+	SELECT '0001-08-15 00:00:00', 2,'Adesão do Grão-Pará à independência do Brasil (data magna)', 'PA'
+	-- Paraíba
+	UNION
+	SELECT '0001-08-05 00:00:00', 2,'Fundação do Estado em 1585', 'PB'
+	-- Piauí
+	UNION
+	SELECT '0001-10-19 00:00:00', 2,'Dia do Piauí', 'PI'
+	-- Rio de Janeiro
+	UNION
+	SELECT '0001-04-23 00:00:00', 2,'Dia de São Jorge', 'RJ'
+	UNION
+	SELECT '0001-11-20 00:00:00', 2,'Dia da Consciência Negra', 'RJ'
+	-- Rio Grande do Norte
+	UNION
+	SELECT '0001-10-03 00:00:00', 2,'Mártires de Cunhaú e Uruaçu', 'RN'
+	-- Rio Grande do Sul
+	UNION
+	SELECT '0001-09-20 00:00:00', 2,'Proclamação da República Rio-Grandense', 'RS'
+	-- Rondônia
+	UNION
+	SELECT '0001-10-04 00:00:00', 2,'Criação do estado', 'RO'
+	UNION
+	SELECT '0001-06-18 00:00:00', 2,'Dia do evangélico', 'RO'
+	-- Roraima
+	UNION
+	SELECT '0001-10-05 00:00:00', 2,'Criação do estado', 'RR'
+	-- São Paulo
+	UNION
+	SELECT '0001-07-09 00:00:00', 2,'Revolução Constitucionalista de 1932', 'SP'
+	UNION
+	SELECT '0001-11-20 00:00:00', 2,'Dia da Consciência Negra', 'SP'
+	-- Sergipe
+	UNION
+	SELECT '0001-07-08 00:00:00', 2,'Aniversário de Sergipe', 'SE'
+	-- Tocantins
+	UNION
+	SELECT '0001-10-05 00:00:00', 2,'Criação do estado', 'TO';
+    
+	-- #3 - Feriados móveis
+	SET @Dt_Inicial = 2019;
+	SET @Dt_Final = 2023;
+    
+	WHILE @Dt_Inicial <= @Dt_Final DO
+		-- Calcula dinamicamente as datas para feriados móveis;    
+		SET @ano = @Dt_Inicial;
+		SET @G = @ano % 19;
+		SET @K = FLOOR((@seculo - 17) / 25);
+		SET @I = (@seculo - CAST(@seculo / 4 AS SIGNED) - CAST((@seculo - @K) / 3 AS SIGNED) + 19 * @G + 15) % 30;
+		SET @H = @I - CAST(@I / 28 AS SIGNED) * (1 * -CAST(@I / 28 AS SIGNED) * CAST(29 / (@I + 1) AS SIGNED)) * CAST((21 - @G) / 11 AS SIGNED);
+		SET @J = (@ano + CAST(@ano / 4 AS SIGNED) + @H + 2 - @seculo + CAST(@seculo / 4 AS SIGNED)) % 7;
+		SET @L = @H - @J;
+		SET @MesDePascoa = 3 + FLOOR((@L + 40) / 44);
+		SET @DiaDePascoa = @L + 28 - 31 * FLOOR(@MesDePascoa / 4);
+		SET @pascoa = STR_TO_DATE(CONCAT(LPAD(@DiaDePascoa, 2, '0'), '/', LPAD(@MesDePascoa, 2, '0'), '/', LPAD(@ano, 4, '0')),	'%d/%m/%Y') + INTERVAL 0 SECOND;
+
+		-- Insere os feriados móveis;    
+		INSERT INTO TempFeriados (Data, Tipo, Descricao, UF)
+		VALUES (@pascoa, 1,'Paixão de Cristo', '');
+
+		INSERT INTO TempFeriados (Data, Tipo, Descricao, UF)
+		VALUES (DATE_SUB(@pascoa, INTERVAL 48 DAY), 1,'Carnaval', '');
+
+		INSERT INTO TempFeriados (Data, Tipo, Descricao, UF)
+		VALUES (DATE_SUB(@pascoa, INTERVAL 47 DAY), 1,'Carnaval', '');
+
+		INSERT INTO TempFeriados (Data, Tipo, Descricao, UF)
+		VALUES (DATE_ADD(@pascoa, INTERVAL 60 DAY), 1,'Corpus Christi', '');
+
+		SET @Dt_Inicial = @Dt_Inicial + 1;
+	END WHILE;
+
+	-- #4 - Limpar tabelas e iterar tabela temporária
+    SET SQL_SAFE_UPDATES = 0;
+	DELETE FROM FeriadosDatas;
+	DELETE FROM FeriadosEstados;
+	DELETE FROM Feriados;
+
+	SET @F_DATA = CURRENT_DATE(); -- DATETIME;
+    SET @F_TIPO = 1; -- INT;
+    SET @F_NOME = ''; -- VARCHAR(100);
+    SET @F_UF = ''; -- VARCHAR(2);
+    SET @IS_MOVEL = ''; -- BIT;
+
+    SET @ID_CHECK_IS_FERIADO_JA_CADASTRADO = NULL; -- INT;
+    SET @ID_ULTIMO_FERIADO_CRIADO = NULL; -- INT;
+
+    SET @IS_EXISTE_ESTADO = NULL; -- INT;
+    SET @E_ESTADO_ID = NULL; -- INT;
+
+    SET @IS_EXISTE_DISTRIBUIDORA = NULL; -- INT;
+    SET @D_DISTRIBUIDORA_ID = NULL; -- INT;
+    
+   	SELECT COUNT(*) FROM TempFeriados INTO @QTD_LINHAS_FERIADOS;	
+    SET @ITERADOR_TEMP_FERIADOS = 0;
+   
+    -- Loop nos feriados
+	WHILE @ITERADOR_TEMP_FERIADOS < @QTD_LINHAS_FERIADOS DO 
+		SET @ITERADOR_TEMP_FERIADOS = @ITERADOR_TEMP_FERIADOS + 1;
+        SELECT Data, Tipo, Descricao, UF FROM TempFeriados WHERE TempFeriadosId = @ITERADOR_TEMP_FERIADOS LIMIT 1 INTO @F_DATA, @F_TIPO, @F_NOME, @F_UF;
+		-- SELECT CONCAT('TESTE: ', @F_NOME, @F_UF, @F_DATA);
+ 
+		-- Verificar se o feriado já foi cadastrado para evitar duplicidade...
+        -- Vários carnavais com varias datas ❌❌❌
+        -- 1 carnaval com multiplas datas ✅✅✅
+		SET @ID_CHECK_IS_FERIADO_JA_CADASTRADO = (SELECT FeriadoId FROM Feriados WHERE Nome = @F_NOME LIMIT 1);
+		
+        SET @IS_MOVEL = CASE WHEN @F_DATA LIKE '%0001%' THEN 0 ELSE 1 END;
+        
+		IF @ID_CHECK_IS_FERIADO_JA_CADASTRADO IS NULL THEN
+            -- #5.1.1 - Caso o feriado não exista, inserir dados na tabela Feriados e atualize a variável para utilizar nos outros inserts com o id mais recente
+            INSERT INTO Feriados (Tipo, Nome, IsMovel, IsAtivo, DataCriacao, UsuarioId, UsuarioIdMod)
+            VALUES (@F_TIPO, @F_NOME, @IS_MOVEL, 1, NOW(), 1, NULL);
+
+            -- Atribuir à uma variável o último ID criado;
+            SET @ID_ULTIMO_FERIADO_CRIADO = LAST_INSERT_ID();
+        ELSE
+            -- #5.1.2 - Caso o feriado já exista, atualize a variável para utilizar nos outros inserts
+            SET @ID_ULTIMO_FERIADO_CRIADO = @ID_CHECK_IS_FERIADO_JA_CADASTRADO;
+        END IF;
+
+        -- #5.2 - Inserir dados na tabela FeriadosDatas
+        INSERT INTO FeriadosDatas (Data, FeriadoId)
+        VALUES (@F_DATA, @ID_ULTIMO_FERIADO_CRIADO);
+        
+		-- #5.3 - Inserir dados na tabela FeriadosEstados
+		IF @F_TIPO = 1 THEN -- nacional
+			-- Se o feriado for nacional, insira apenas em seu estado
+            -- Declarar cursor para loop dos estados
+			SELECT COUNT(*) FROM TempEstados INTO @QTD_LINHAS_ESTADOS;	
+			SET @ITERADOR_TEMP_ESTADOS = 0;
+    
+            WHILE @ITERADOR_TEMP_ESTADOS < @QTD_LINHAS_ESTADOS DO 
+				SET @ITERADOR_TEMP_ESTADOS = @ITERADOR_TEMP_ESTADOS + 1;
+                SELECT EstadoId FROM TempEstados WHERE EstadoId = @ITERADOR_TEMP_ESTADOS LIMIT 1 INTO @E_ESTADO_ID;
+				SET @IS_EXISTE_ESTADO = (SELECT 1 FROM FeriadosEstados WHERE EstadoId = @E_ESTADO_ID AND FeriadoId = @ID_ULTIMO_FERIADO_CRIADO LIMIT 1);
+
+                IF @IS_EXISTE_ESTADO IS NULL THEN
+                    -- Se o feriado for nacional, insira em todos os estados
+                    INSERT INTO FeriadosEstados (EstadoId, FeriadoId)
+                    VALUES (@E_ESTADO_ID, @ID_ULTIMO_FERIADO_CRIADO);
+                END IF;
+            END WHILE;
+		ELSE
+			-- Se o feriado for estadual, insira apenas em seu estado
+			SET @E_ESTADO_ID = (SELECT EstadoId FROM TempEstados WHERE Sigla = @F_UF LIMIT 1);
+
+			INSERT INTO FeriadosEstados (EstadoId, FeriadoId)
+			VALUES (@E_ESTADO_ID, @ID_ULTIMO_FERIADO_CRIADO);
+		END IF;
+	END WHILE;
+    
+	-- #5 - Garbage collector
+	SELECT * FROM TempFeriados;
+	DROP TEMPORARY TABLE TempFeriados;
+	DROP TEMPORARY TABLE TempEstados;
+
+END
