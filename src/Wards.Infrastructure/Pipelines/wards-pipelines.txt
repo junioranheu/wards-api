@@ -1,0 +1,124 @@
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+// É necessário criar um arquivo .yml na raíz do projeto, junto do src, .gitignore, README.md
+
+// Exemplo de nomes:
+// azure-pipelines.yml
+// azure-pipelines-qa.yml
+// azure-pipelines-prod.yml
+
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+// Arquivo .yml para o back-end
+// PS: É necessário alterar os 4 #parametros para o funcionamento da Pipe
+
+name: $(Build.SourceBranchName)_$(Date:yyyyMMdd)$(Rev:.rr)
+
+trigger:
+- develop [#1-NOME_DA_BRANCH_AQUI]
+
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+  solution: '**/*.sln'
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+
+steps:
+- task: UseDotNet@2
+  displayName: "Use .NET Core sdk"
+  inputs:
+    packageType: sdk
+    version: 6.x [#2-PROVAVELMENTE-TEM-QUE-MUDAR-DE-6-PRA-VERSAO-REAL]
+    installationPath: $(Agent.ToolsDirectory)/dotnet
+
+- task: DotNetCoreCLI@2
+  displayName: "Publish API"
+  inputs:
+    command: "publish"
+    projects: $(Build.SourcesDirectory)\src\CPFL.CargaVerificada\CPFL.CargaVerificada.API\CPFL.CargaVerificada.API.csproj
+    zipAfterPublish: false
+    publishWebPProjects: true
+    arguments: "-o $(Build.ArtifactStagingDirectory)/CargaVerificada/"
+    modifyOutputPath: true
+
+- task: ArchiveFiles@2
+  displayName: "ZIP package"
+  inputs:
+    rootFolderOrFile: '$(Build.ArtifactStagingDirectory)/CargaVerificada/CPFL.CargaVerificada.API/'
+    includeRootFolder: false
+    archiveType: 'zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+    replaceExistingArchive: true
+
+- task: PublishBuildArtifacts@1
+  displayName: "Publish build results"
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+    ArtifactName: "Package"
+
+- task: AzureRmWebAppDeployment@4
+  inputs:
+    ConnectionType: 'AzureRM'
+    azureSubscription: 'serviceconn-xxx-dev' [#3-AQUI-VAI-O-NOME-DA-SUBSCRICAO-DA-AZURE]
+    appType: 'webAppLinux'
+    WebAppName: 'app-dist-dev-xxx-be' [#4-AQUI-VAI-O-NOME-DA-APLICACAO-DO-RESOURCE-GROUP-DA-AZURE]
+    packageForLinux: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+// Arquivo .yml para o front-end
+// PS: É necessário alterar os 4 #parametros para o funcionamento da Pipe
+
+name: $(Build.SourceBranchName)_$(Date:yyyyMMdd)$(Rev:.rr)
+
+trigger:
+- develop [#1-NOME_DA_BRANCH_AQUI]
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+stages:
+- stage: Build
+  displayName: Build stage
+  jobs:
+  - job: Build
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+      - task: NodeTool@0
+        inputs:
+          versionSpec: '16.x' [#2-PROVAVELMENTE-TEM-QUE-MUDAR-DE-16-PRA-VERSAO-REAL]
+        displayName: 'Install Node.js 16.x'
+
+      - script: |
+          cd AngularWithAzure/
+          npm install -g @angular/cli
+          npm install
+          npm run build --prod
+        displayName: 'npm install and build'
+        workingDirectory: '$(Build.SourcesDirectory)'
+
+      - task: ArchiveFiles@2
+        displayName: 'Archive files'
+        inputs:
+          rootFolderOrFile: '$(System.DefaultWorkingDirectory)/dist/cpfl/'
+          includeRootFolder: false
+          archiveType: zip
+          archiveFile: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
+          replaceExistingArchive: true
+
+      - task: PublishBuildArtifacts@1
+        inputs:
+          PathtoPublish: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+          ArtifactName: 'drop'
+          publishLocation: 'Container'
+
+      - task: AzureRmWebAppDeployment@4
+        inputs:
+          ConnectionType: 'AzureRM'
+          azureSubscription: 'serviceconn-xxx-dev' [#3-AQUI-VAI-O-NOME-DA-SUBSCRICAO-DA-AZURE]
+          appType: 'webAppLinux'
+          WebAppName: 'app-dist-dev-xxx-fe' [#4-AQUI-VAI-O-NOME-DA-APLICACAO-DO-RESOURCE-GROUP-DA-AZURE]
+          packageForLinux: '$(Build.ArtifactStagingDirectory)/**/*.zip'

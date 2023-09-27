@@ -1,0 +1,13 @@
+---------------------- FRONT-END ----------------------
+git clone --bare https://xxx/xxx/xxx/_git/CPFL.CargaVerificada.Frontend [URL_DO_REPOSITORIO_QUE_VAI_SER_COPIADO_E_TRANSFERIDO_AQUI] -b develop
+
+cd CPFL.CargaVerificada.Frontend.git [ALTERAR PRO NOME DO PROJETO EM QUESTÃO]
+
+git push --mirror https://xxx/xxx/xxx/_git/CPFL.CargaVerificada.Frontend [URL_DO_REPOSITORIO_QUE_VAI_RECEBER_AQUI]
+
+---------------------- BACK-END ----------------------
+git clone --bare https://xxx/xxx/xxx/_git/CPFL.CargaVerificada.Api [URL_DO_REPOSITORIO_QUE_VAI_SER_COPIADO_E_TRANSFERIDO_AQUI] -b develop
+
+cd CPFL.CargaVerificada.Api.git [ALTERAR PRO NOME DO PROJETO EM QUESTÃO]
+
+git push --mirror https://xxx/xxx/xxx/_git/CPFL.CargaVerificada.Api [URL_DO_REPOSITORIO_QUE_VAI_RECEBER_AQUI]
