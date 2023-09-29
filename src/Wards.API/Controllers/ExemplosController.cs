@@ -91,10 +91,10 @@ namespace Wards.API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(StatusCodes))]
         public async Task<ActionResult<(Usuario, UsuarioOutput)>> ExemploGenericRepositoryObter_Where_Include(string nome)
         {
-            Usuario? linq = await _genericUsuarioRepository.Obter(where: x => x.NomeCompleto.Contains(nome),
+            Usuario? linq = await _genericUsuarioRepository.Obter(where: x => x.NomeCompleto == nome,
                                                                   include: new List<Expression<Func<Usuario, object>>> { x => x.UsuarioRoles! });
 
-            UsuarioOutput? linqAutoMapper = await _genericUsuarioRepository.Obter<UsuarioOutput>(where: x => x.NomeCompleto.Contains(nome),
+            UsuarioOutput? linqAutoMapper = await _genericUsuarioRepository.Obter<UsuarioOutput>(where: x => x.NomeCompleto == nome,
                                                                             include: new List<Expression<Func<Usuario, object>>> { x => x.UsuarioRoles! });
 
             if (linq is null)
