@@ -67,13 +67,13 @@ namespace Wards.API.Controllers
         /// <summary>
         /// Exemplos de utilização do genericRepository do Chalecão;
         /// </summary>
-        [HttpGet("exemploGenericRepositoryObterComId")]
+        [HttpGet("exemploGenericRepositoryObter_Id")]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Usuario))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(StatusCodes))]
-        public async Task<ActionResult<string>> ExemploGenericRepositoryObterComId(int id)
+        public async Task<ActionResult<string>> ExemploGenericRepositoryObter_Id(int id)
         {
-            Usuario? linq = await _genericUsuarioRepository.ObterComId(id);
+            Usuario? linq = await _genericUsuarioRepository.Obter(id);
 
             if (linq is null)
             {
@@ -83,15 +83,16 @@ namespace Wards.API.Controllers
             return Ok(linq);
         }
 
-        [HttpGet("exemploGenericRepositoryListarTudo")]
+        [HttpGet("exemploGenericRepositoryObter_Where_Include")]
         [AllowAnonymous]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<Usuario>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Usuario))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(StatusCodes))]
-        public async Task<ActionResult<string>> ExemploGenericRepositoryListar()
+        public async Task<ActionResult<string>> ExemploGenericRepositoryObter_Where_Include(string nome)
         {
-            List<Usuario>? linq = await _genericUsuarioRepository.ListarTudo();
+            Usuario? linq = await _genericUsuarioRepository.Obter(where: x => x.NomeCompleto.Contains(nome),
+                                                                  include: new List<Expression<Func<Usuario, object>>> { x => x.UsuarioRoles! });
 
-            if (!linq.Any())
+            if (linq is null)
             {
                 return StatusCode(StatusCodes.Status404NotFound);
             }
@@ -99,30 +100,15 @@ namespace Wards.API.Controllers
             return Ok(linq);
         }
 
-        [HttpGet("exemploGenericRepositoryListar_Where")]
+        [HttpGet("exemploGenericRepositoryListar_Tudo")]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<Usuario>))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(StatusCodes))]
-        public async Task<ActionResult<string>> ExemploGenericRepositoryListar1(string nome)
+        public async Task<ActionResult<string>> ExemploGenericRepositoryListar_Tudo()
         {
-            List<Usuario> linq = await _genericUsuarioRepository.Listar(where: x => x.NomeCompleto.Contains(nome));
-
-            if (!linq.Any())
-            {
-                return StatusCode(StatusCodes.Status404NotFound);
-            }
-
-            return Ok(linq);
-        }
-
-        [HttpGet("exemploGenericRepositoryListar_Where_Orderby")]
-        [AllowAnonymous]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<Usuario>))]
-        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(StatusCodes))]
-        public async Task<ActionResult<List<Usuario>>> ExemploGenericRepositoryListar2(string nome)
-        {
-            List<Usuario> linq = await _genericUsuarioRepository.Listar(where: x => x.NomeCompleto.Contains(nome),
-                                                                        orderBy: x => x.OrderByDescending(y => y.UsuarioId));
+            List<Usuario> linq = await _genericUsuarioRepository.Listar(where: null, // Listar tudo;
+                                                                        orderBy: x => x.OrderByDescending(y => y.UsuarioId),
+                                                                        include: new List<Expression<Func<Usuario, object>>> { x => x.UsuarioRoles! });
 
             if (!linq.Any())
             {
@@ -136,7 +122,7 @@ namespace Wards.API.Controllers
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<Usuario>))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(StatusCodes))]
-        public async Task<ActionResult<List<Usuario>>> ExemploGenericRepositoryListar3(string nome)
+        public async Task<ActionResult<List<Usuario>>> ExemploGenericRepositoryListar_Where_Orderby_Include(string nome)
         {
             List<Usuario> linq = await _genericUsuarioRepository.Listar(where: x => x.NomeCompleto.Contains(nome),
                                                                         orderBy: x => x.OrderByDescending(y => y.UsuarioId),
@@ -156,7 +142,7 @@ namespace Wards.API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(StatusCodes))]
         public async Task<ActionResult<string>> ExemploGenericRepositoryAtualizar(int id, string novoChamado)
         {
-            Usuario? linq = await _genericUsuarioRepository.ObterComId(id);
+            Usuario? linq = await _genericUsuarioRepository.Obter(id);
 
             if (linq is null)
             {
@@ -165,7 +151,7 @@ namespace Wards.API.Controllers
 
             linq.Chamado = novoChamado;
             await _genericUsuarioRepository.Atualizar(linq);
-            Usuario? novoLinq = await _genericUsuarioRepository.ObterComId(id);
+            Usuario? novoLinq = await _genericUsuarioRepository.Obter(id);
 
             return Ok($"Novo chamado: {novoLinq!.Chamado}");
         }

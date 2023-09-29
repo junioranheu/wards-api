@@ -13,7 +13,7 @@ namespace Wards.Infrastructure.UnitOfWork.Generic
             _context = context;
         }
 
-        public async Task<List<T>> ListarTudo(bool disableTracking = true)
+        public async Task<List<T>> Listar(Expression<Func<T, bool>>? where = null, Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null, List<Expression<Func<T, object>>>? include = null, bool disableTracking = true)
         {
             IQueryable<T> query = _context.Set<T>();
 
@@ -22,26 +22,14 @@ namespace Wards.Infrastructure.UnitOfWork.Generic
                 query = query.AsNoTracking();
             }
 
-            return await query.ToListAsync();
-        }
-
-        public async Task<List<T>> Listar(Expression<Func<T, bool>>? predicate = null, Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null, List<Expression<Func<T, object>>>? includes = null, bool disableTracking = true)
-        {
-            IQueryable<T> query = _context.Set<T>();
-
-            if (disableTracking)
+            if (include is not null)
             {
-                query = query.AsNoTracking();
+                query = include.Aggregate(query, (current, inc) => current.Include(inc));
             }
 
-            if (includes is not null)
+            if (where is not null)
             {
-                query = includes.Aggregate(query, (current, include) => current.Include(include));
-            }
-
-            if (predicate is not null)
-            {
-                query = query.Where(predicate);
+                query = query.Where(where);
             }
 
             if (orderBy is not null)
@@ -52,9 +40,31 @@ namespace Wards.Infrastructure.UnitOfWork.Generic
             return await query.ToListAsync();
         }
 
-        public virtual async Task<T?> ObterComId(int id)
+        public virtual async Task<T?> Obter(int id)
         {
             return await _context.Set<T>().FindAsync(id);
+        }
+
+        public virtual async Task<T?> Obter(Expression<Func<T, bool>>? where = null, List<Expression<Func<T, object>>>? include = null, bool disableTracking = true)
+        {
+            IQueryable<T> query = _context.Set<T>();
+
+            if (disableTracking)
+            {
+                query = query.AsNoTracking();
+            }
+
+            if (include is not null)
+            {
+                query = include.Aggregate(query, (current, inc) => current.Include(inc));
+            }
+
+            if (where is not null)
+            {
+                query = query.Where(where);
+            }
+
+            return await query.FirstOrDefaultAsync();
         }
 
         public async Task<T> Criar(T entity)
