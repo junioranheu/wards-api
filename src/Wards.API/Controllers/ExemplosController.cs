@@ -64,22 +64,38 @@ namespace Wards.API.Controllers
 
         #region genericRepository
         /// <summary>
-        /// Exemplo de utilização do genericRepository do Chalecão;
+        /// Exemplos de utilização do genericRepository do Chalecão;
         /// </summary>
-        [HttpGet("exemploGenericRepository")]
+        [HttpGet("exemploGenericRepositoryObterComId")]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(StatusCodes))]
-        public async Task<ActionResult<string>> ExemploGenericRepository(int id)
+        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(StatusCodes))]
+        public async Task<ActionResult<string>> ExemploGenericRepositoryObterComId(int id)
         {
             Usuario? linq = await _genericUsuarioRepository.ObterComId(id);
 
             if (linq is null)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return StatusCode(StatusCodes.Status404NotFound);
             }
 
             return Ok(linq.NomeCompleto);
+        }
+
+        [HttpGet("exemploGenericRepositoryListar")]
+        [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
+        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(StatusCodes))]
+        public async Task<ActionResult<string>> ExemploGenericRepositoryListar()
+        {
+            List<Usuario>? linq = await _genericUsuarioRepository.Listar();
+
+            if (!linq.Any())
+            {
+                return StatusCode(StatusCodes.Status404NotFound);
+            }
+
+            return Ok(linq.FirstOrDefault()!.NomeCompleto);
         }
         #endregion
 
