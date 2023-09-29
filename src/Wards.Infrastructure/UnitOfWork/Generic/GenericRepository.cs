@@ -13,14 +13,28 @@ namespace Wards.Infrastructure.UnitOfWork.Generic
             _context = context;
         }
 
-        public async Task<List<T>> Listar()
+        public async Task<List<T>> Listar(bool disableTracking = true)
         {
-            return await _context.Set<T>().ToListAsync();
+            IQueryable<T> query = _context.Set<T>();
+
+            if (disableTracking)
+            {
+                query = query.AsNoTracking();
+            }
+
+            return await query.ToListAsync();
         }
 
-        public async Task<List<T>> Obter(Expression<Func<T, bool>> predicate)
+        public async Task<List<T>> Obter(Expression<Func<T, bool>> predicate, bool disableTracking = true)
         {
-            return await _context.Set<T>().Where(predicate).ToListAsync();
+            IQueryable<T> query = _context.Set<T>();
+
+            if (disableTracking)
+            {
+                query = query.AsNoTracking();
+            }
+
+            return await query.Where(predicate).ToListAsync();
         }
 
         public async Task<List<T>> Obter(Expression<Func<T, bool>>? predicate = null, Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null, string? includeString = null, bool disableTracking = true)

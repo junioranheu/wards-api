@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using DocumentFormat.OpenXml.Office2010.Excel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MySqlConnector;
 using System.Data.SqlClient;
@@ -96,6 +97,26 @@ namespace Wards.API.Controllers
             }
 
             return Ok(linq.FirstOrDefault()!.NomeCompleto);
+        }
+
+        [HttpGet("exemploGenericRepositoryAtualizar")]
+        [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
+        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(StatusCodes))]
+        public async Task<ActionResult<string>> ExemploGenericRepositoryAtualizar(int id, string novoChamado)
+        {
+            Usuario? linq = await _genericUsuarioRepository.ObterComId(id);
+
+            if (linq is null)
+            {
+                return StatusCode(StatusCodes.Status404NotFound);
+            }
+
+            linq.Chamado = novoChamado;
+            await _genericUsuarioRepository.Atualizar(linq);
+            Usuario? novoLinq = await _genericUsuarioRepository.ObterComId(id);
+
+            return Ok($"Novo chamado: {novoLinq!.Chamado}");
         }
         #endregion
 
