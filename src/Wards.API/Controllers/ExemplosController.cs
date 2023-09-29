@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using DocumentFormat.OpenXml.Office2010.Excel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MySqlConnector;
 using System.Data.SqlClient;
@@ -69,71 +70,83 @@ namespace Wards.API.Controllers
         /// </summary>
         [HttpGet("exemploGenericRepositoryObter_Id")]
         [AllowAnonymous]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Usuario))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof((Usuario, UsuarioOutput)))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(StatusCodes))]
-        public async Task<ActionResult<string>> ExemploGenericRepositoryObter_Id(int id)
+        public async Task<ActionResult<(Usuario, UsuarioOutput)>> ExemploGenericRepositoryObter_Id(int id)
         {
             Usuario? linq = await _genericUsuarioRepository.Obter(id);
+            UsuarioOutput? linqAutoMapper = await _genericUsuarioRepository.Obter<UsuarioOutput>(id);
 
             if (linq is null)
             {
                 return StatusCode(StatusCodes.Status404NotFound);
             }
 
-            return Ok(linq);
+            return Ok(new { linq, linqAutoMapper });
         }
 
         [HttpGet("exemploGenericRepositoryObter_Where_Include")]
         [AllowAnonymous]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Usuario))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof((Usuario, UsuarioOutput)))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(StatusCodes))]
-        public async Task<ActionResult<string>> ExemploGenericRepositoryObter_Where_Include(string nome)
+        public async Task<ActionResult<(Usuario, UsuarioOutput)>> ExemploGenericRepositoryObter_Where_Include(string nome)
         {
             Usuario? linq = await _genericUsuarioRepository.Obter(where: x => x.NomeCompleto.Contains(nome),
                                                                   include: new List<Expression<Func<Usuario, object>>> { x => x.UsuarioRoles! });
+
+            UsuarioOutput? linqAutoMapper = await _genericUsuarioRepository.Obter<UsuarioOutput>(where: x => x.NomeCompleto.Contains(nome),
+                                                                            include: new List<Expression<Func<Usuario, object>>> { x => x.UsuarioRoles! });
 
             if (linq is null)
             {
                 return StatusCode(StatusCodes.Status404NotFound);
             }
 
-            return Ok(linq);
+            return Ok(new { linq, linqAutoMapper });
         }
 
         [HttpGet("exemploGenericRepositoryListar_Tudo")]
         [AllowAnonymous]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<Usuario>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof((List<Usuario>, List<UsuarioOutput>)))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(StatusCodes))]
-        public async Task<ActionResult<string>> ExemploGenericRepositoryListar_Tudo()
+        public async Task<ActionResult<(List<Usuario>, List<UsuarioOutput>)>> ExemploGenericRepositoryListar_Tudo()
         {
             List<Usuario> linq = await _genericUsuarioRepository.Listar(where: null, // Listar tudo;
                                                                         orderBy: x => x.OrderByDescending(y => y.UsuarioId),
                                                                         include: new List<Expression<Func<Usuario, object>>> { x => x.UsuarioRoles! });
 
+            List<UsuarioOutput> linqAutoMapper = await _genericUsuarioRepository.Listar<UsuarioOutput>(where: null, // Listar tudo;
+                                                                                 orderBy: x => x.OrderByDescending(y => y.UsuarioId),
+                                                                                 include: new List<Expression<Func<Usuario, object>>> { x => x.UsuarioRoles! });
+
             if (!linq.Any())
             {
                 return StatusCode(StatusCodes.Status404NotFound);
             }
 
-            return Ok(linq);
+            return Ok(new { linq, linqAutoMapper });
         }
 
         [HttpGet("exemploGenericRepositoryListar_Where_Orderby_Include")]
         [AllowAnonymous]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<Usuario>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof((List<Usuario>, List<UsuarioOutput>)))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(StatusCodes))]
-        public async Task<ActionResult<List<Usuario>>> ExemploGenericRepositoryListar_Where_Orderby_Include(string nome)
+        public async Task<ActionResult<(List<Usuario>, List<UsuarioOutput>)>> ExemploGenericRepositoryListar_Where_Orderby_Include(string nome)
         {
             List<Usuario> linq = await _genericUsuarioRepository.Listar(where: x => x.NomeCompleto.Contains(nome),
                                                                         orderBy: x => x.OrderByDescending(y => y.UsuarioId),
                                                                         include: new List<Expression<Func<Usuario, object>>> { x => x.UsuarioRoles! });
 
+            List<UsuarioOutput> linqAutoMapper = await _genericUsuarioRepository.Listar<UsuarioOutput>(where: x => x.NomeCompleto.Contains(nome),
+                                                                                 orderBy: x => x.OrderByDescending(y => y.UsuarioId),
+                                                                                 include: new List<Expression<Func<Usuario, object>>> { x => x.UsuarioRoles! });
+
             if (!linq.Any())
             {
                 return StatusCode(StatusCodes.Status404NotFound);
             }
 
-            return Ok(linq);
+            return Ok(new { linq, linqAutoMapper });
         }
 
         [HttpGet("exemploGenericRepositoryAtualizar")]
