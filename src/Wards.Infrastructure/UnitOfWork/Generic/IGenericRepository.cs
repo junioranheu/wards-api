@@ -7,10 +7,8 @@ namespace Wards.Infrastructure.UnitOfWork.Generic
         Task<T> Atualizar(T entity);
         Task<T> Criar(T entity);
         Task Deletar(T entity);
-        Task<List<T>> Listar(bool disableTracking = true);
-        Task<List<T>> Obter(Expression<Func<T, bool>>? predicate = null, Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null, List<Expression<Func<T, object>>>? includes = null, bool disableTracking = true);
-        Task<List<T>> Obter(Expression<Func<T, bool>>? predicate = null, Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null, string? includeString = null, bool disableTracking = true);
-        Task<List<T>> Obter(Expression<Func<T, bool>> predicate, bool disableTracking = true);
+        Task<List<T>> ListarTudo(bool disableTracking = true);
+        Task<List<T>> Listar(Expression<Func<T, bool>>? where = null, Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null, List<Expression<Func<T, object>>>? include = null, bool disableTracking = true);
         Task<T?> ObterComId(int id);
     }
 }

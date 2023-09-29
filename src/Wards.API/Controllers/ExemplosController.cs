@@ -1,9 +1,9 @@
-﻿using DocumentFormat.OpenXml.Office2010.Excel;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MySqlConnector;
 using System.Data.SqlClient;
 using System.Globalization;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using Wards.Application.Services.Sistemas.ResetarBancoDados;
@@ -69,7 +69,7 @@ namespace Wards.API.Controllers
         /// </summary>
         [HttpGet("exemploGenericRepositoryObterComId")]
         [AllowAnonymous]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Usuario))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(StatusCodes))]
         public async Task<ActionResult<string>> ExemploGenericRepositoryObterComId(int id)
         {
@@ -80,23 +80,74 @@ namespace Wards.API.Controllers
                 return StatusCode(StatusCodes.Status404NotFound);
             }
 
-            return Ok(linq.NomeCompleto);
+            return Ok(linq);
         }
 
-        [HttpGet("exemploGenericRepositoryListar")]
+        [HttpGet("exemploGenericRepositoryListarTudo")]
         [AllowAnonymous]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<Usuario>))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(StatusCodes))]
         public async Task<ActionResult<string>> ExemploGenericRepositoryListar()
         {
-            List<Usuario>? linq = await _genericUsuarioRepository.Listar();
+            List<Usuario>? linq = await _genericUsuarioRepository.ListarTudo();
 
             if (!linq.Any())
             {
                 return StatusCode(StatusCodes.Status404NotFound);
             }
 
-            return Ok(linq.FirstOrDefault()!.NomeCompleto);
+            return Ok(linq);
+        }
+
+        [HttpGet("exemploGenericRepositoryListar_Where")]
+        [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<Usuario>))]
+        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(StatusCodes))]
+        public async Task<ActionResult<string>> ExemploGenericRepositoryListar1(string nome)
+        {
+            List<Usuario> linq = await _genericUsuarioRepository.Listar(where: x => x.NomeCompleto.Contains(nome));
+
+            if (!linq.Any())
+            {
+                return StatusCode(StatusCodes.Status404NotFound);
+            }
+
+            return Ok(linq);
+        }
+
+        [HttpGet("exemploGenericRepositoryListar_Where_Orderby")]
+        [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<Usuario>))]
+        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(StatusCodes))]
+        public async Task<ActionResult<List<Usuario>>> ExemploGenericRepositoryListar2(string nome)
+        {
+            List<Usuario> linq = await _genericUsuarioRepository.Listar(where: x => x.NomeCompleto.Contains(nome),
+                                                                        orderBy: x => x.OrderByDescending(y => y.UsuarioId));
+
+            if (!linq.Any())
+            {
+                return StatusCode(StatusCodes.Status404NotFound);
+            }
+
+            return Ok(linq);
+        }
+
+        [HttpGet("exemploGenericRepositoryListar_Where_Orderby_Include")]
+        [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<Usuario>))]
+        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(StatusCodes))]
+        public async Task<ActionResult<List<Usuario>>> ExemploGenericRepositoryListar3(string nome)
+        {
+            List<Usuario> linq = await _genericUsuarioRepository.Listar(where: x => x.NomeCompleto.Contains(nome),
+                                                                        orderBy: x => x.OrderByDescending(y => y.UsuarioId),
+                                                                        include: new List<Expression<Func<Usuario, object>>> { x => x.UsuarioRoles! });
+
+            if (!linq.Any())
+            {
+                return StatusCode(StatusCodes.Status404NotFound);
+            }
+
+            return Ok(linq);
         }
 
         [HttpGet("exemploGenericRepositoryAtualizar")]

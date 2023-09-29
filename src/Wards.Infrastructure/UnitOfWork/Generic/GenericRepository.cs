@@ -13,7 +13,7 @@ namespace Wards.Infrastructure.UnitOfWork.Generic
             _context = context;
         }
 
-        public async Task<List<T>> Listar(bool disableTracking = true)
+        public async Task<List<T>> ListarTudo(bool disableTracking = true)
         {
             IQueryable<T> query = _context.Set<T>();
 
@@ -25,46 +25,7 @@ namespace Wards.Infrastructure.UnitOfWork.Generic
             return await query.ToListAsync();
         }
 
-        public async Task<List<T>> Obter(Expression<Func<T, bool>> predicate, bool disableTracking = true)
-        {
-            IQueryable<T> query = _context.Set<T>();
-
-            if (disableTracking)
-            {
-                query = query.AsNoTracking();
-            }
-
-            return await query.Where(predicate).ToListAsync();
-        }
-
-        public async Task<List<T>> Obter(Expression<Func<T, bool>>? predicate = null, Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null, string? includeString = null, bool disableTracking = true)
-        {
-            IQueryable<T> query = _context.Set<T>();
-
-            if (disableTracking)
-            {
-                query = query.AsNoTracking();
-            }
-
-            if (!string.IsNullOrWhiteSpace(includeString))
-            {
-                query = query.Include(includeString);
-            }
-
-            if (predicate is not null)
-            {
-                query = query.Where(predicate);
-            }
-
-            if (orderBy is not null)
-            {
-                return await orderBy(query).ToListAsync();
-            }
-
-            return await query.ToListAsync();
-        }
-
-        public async Task<List<T>> Obter(Expression<Func<T, bool>>? predicate = null, Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null, List<Expression<Func<T, object>>>? includes = null, bool disableTracking = true)
+        public async Task<List<T>> Listar(Expression<Func<T, bool>>? predicate = null, Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null, List<Expression<Func<T, object>>>? includes = null, bool disableTracking = true)
         {
             IQueryable<T> query = _context.Set<T>();
 
