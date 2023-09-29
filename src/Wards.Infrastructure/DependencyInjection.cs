@@ -13,6 +13,7 @@ using Wards.Infrastructure.Auth.Models;
 using Wards.Infrastructure.Auth.Token;
 using Wards.Infrastructure.Data;
 using Wards.Infrastructure.Factory.ConnectionFactory;
+using Wards.Infrastructure.UnitOfWork;
 
 namespace Wards.Infrastructure
 {
@@ -34,6 +35,8 @@ namespace Wards.Infrastructure
         {
             services.AddSingleton<IJwtTokenGenerator, JwtTokenGenerator>();
             services.Configure<JwtSettings>(builder.Configuration.GetSection(JwtSettings.SectionName));
+
+            services.AddUnityOfWorkService();
         }
 
         private static void AddAuth(IServiceCollection services, WebApplicationBuilder builder)

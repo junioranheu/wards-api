@@ -19,6 +19,7 @@ using Wards.Domain.Consts;
 using Wards.Domain.Entities;
 using Wards.Domain.Enums;
 using Wards.Infrastructure.Factory.ConnectionFactory;
+using Wards.Infrastructure.UnitOfWork.Generic;
 using Wards.Utils.Entities.Output;
 using static Wards.Utils.Fixtures.Convert;
 using static Wards.Utils.Fixtures.Get;
@@ -37,6 +38,7 @@ namespace Wards.API.Controllers
         private readonly IListarUsuarioUseCase _listarUsuarioUseCase;
         private readonly IMigrateDatabaseService _migrateDatabaseService;
         private readonly IBulkCopyCriarWardUseCase _bulkCopyCriarWardUseCase;
+        private readonly IGenericRepository<Usuario> _genericUsuarioRepository;
 
         /// <summary>
         /// Controller para testes e exemplos aleatórios e possivelmente úteis;
@@ -47,7 +49,8 @@ namespace Wards.API.Controllers
             IListarLogUseCase listarLogUseCase,
             IListarUsuarioUseCase listarUsuarioUseCase,
             IMigrateDatabaseService migrateDatabaseService,
-            IBulkCopyCriarWardUseCase bulkCopyCriarWardUseCase)
+            IBulkCopyCriarWardUseCase bulkCopyCriarWardUseCase,
+            IGenericRepository<Usuario> genericUsuarioRepository)
         {
             _webHostEnvironment = webHostEnvironment;
             _connectionFactory = connectionFactory;
@@ -55,6 +58,28 @@ namespace Wards.API.Controllers
             _listarUsuarioUseCase = listarUsuarioUseCase;
             _migrateDatabaseService = migrateDatabaseService;
             _bulkCopyCriarWardUseCase = bulkCopyCriarWardUseCase;
+            _genericUsuarioRepository = genericUsuarioRepository;
+        }
+        #endregion
+
+        #region genericRepository
+        /// <summary>
+        /// Exemplo de utilização do genericRepository do Chalecão;
+        /// </summary>
+        [HttpGet("exemploGenericRepository")]
+        [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(StatusCodes))]
+        public async Task<ActionResult<string>> ExemploGenericRepository(int id)
+        {
+            Usuario? linq = await _genericUsuarioRepository.ObterComId(id);
+
+            if (linq is null)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+
+            return Ok(linq.NomeCompleto);
         }
         #endregion
 
@@ -446,7 +471,7 @@ namespace Wards.API.Controllers
             PropertyInfo? reflection = exemplo!.GetType().GetProperty(nomePropriedade);
             object? valor_forma_2 = reflection!.GetValue(exemplo, null);
 
-            return valor;
+            return Ok(valor);
         }
 
         /// <summary>
@@ -563,7 +588,9 @@ namespace Wards.API.Controllers
         public async Task<ActionResult<bool>> MigrateDatabase(int minuto)
         {
             if (GerarHorarioBrasilia().Minute != minuto)
+            {
                 return StatusCode(StatusCodes.Status403Forbidden, false);
+            }
 
             await _migrateDatabaseService.Execute(isAplicarMigrations: true);
 
