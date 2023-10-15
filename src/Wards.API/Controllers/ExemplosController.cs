@@ -1,11 +1,14 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MySqlConnector;
+using RabbitMQ.Client;
+using RabbitMQ.Client.Events;
 using System.Data.SqlClient;
 using System.Globalization;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Text;
 using Wards.Application.Services.Sistemas.ResetarBancoDados;
 using Wards.Application.UseCases.Logs.ListarLog;
 using Wards.Application.UseCases.Logs.Shared.Output;
@@ -19,13 +22,15 @@ using Wards.Application.UseCases.Wards.Shared.Output;
 using Wards.Domain.Consts;
 using Wards.Domain.Entities;
 using Wards.Domain.Enums;
-using Wards.Infrastructure.Factory.ConnectionFactory;
 using Wards.Infrastructure.UnitOfWork.Generic;
 using Wards.Utils.Entities.Output;
 using static Wards.Utils.Fixtures.Convert;
 using static Wards.Utils.Fixtures.Get;
 using static Wards.Utils.Fixtures.Post;
 
+/// <summary>
+/// Sim, este Controller está propositalmente uma bagunça;
+/// </summary>
 namespace Wards.API.Controllers
 {
     [Route("api/[controller]")]
@@ -34,19 +39,22 @@ namespace Wards.API.Controllers
     {
         #region constructor
         private readonly IWebHostEnvironment _webHostEnvironment;
-        private readonly IConnectionFactory _connectionFactory;
+        private readonly Infrastructure.Factory.ConnectionFactory.IConnectionFactory _connectionFactory;
         private readonly IListarLogUseCase _listarLogUseCase;
         private readonly IListarUsuarioUseCase _listarUsuarioUseCase;
         private readonly IMigrateDatabaseService _migrateDatabaseService;
         private readonly IBulkCopyCriarWardUseCase _bulkCopyCriarWardUseCase;
         private readonly IGenericRepository<Usuario> _genericUsuarioRepository;
+        private readonly IConnectionFactory _rabbitMQConectionFactory;
+        private readonly IConnection _rabbitMQConnection;
+        private readonly IModel _rabbitMQChannel;
 
         /// <summary>
         /// Controller para testes e exemplos aleatórios e possivelmente úteis;
         /// </summary>
         public ExemplosController(
             IWebHostEnvironment webHostEnvironment,
-            IConnectionFactory connectionFactory,
+            Infrastructure.Factory.ConnectionFactory.IConnectionFactory connectionFactory,
             IListarLogUseCase listarLogUseCase,
             IListarUsuarioUseCase listarUsuarioUseCase,
             IMigrateDatabaseService migrateDatabaseService,
@@ -60,6 +68,70 @@ namespace Wards.API.Controllers
             _migrateDatabaseService = migrateDatabaseService;
             _bulkCopyCriarWardUseCase = bulkCopyCriarWardUseCase;
             _genericUsuarioRepository = genericUsuarioRepository;
+
+            _rabbitMQConectionFactory = new ConnectionFactory() { HostName = "localhost" };
+            _rabbitMQConnection = _rabbitMQConectionFactory.CreateConnection();
+            _rabbitMQChannel = _rabbitMQConnection.CreateModel();
+            _rabbitMQChannel.QueueDeclare(queue: ObterDescricaoEnum(RabbitMQChannelEnum.TESTE), durable: false, exclusive: false, autoDelete: false, arguments: null);
+        }
+
+        ~ExemplosController()
+        {
+            _rabbitMQChannel.Close();
+            _rabbitMQConnection.Close();
+        }
+        #endregion
+
+        #region rabbitMQ
+        /// <wards>
+        /// tutorial: https://www.youtube.com/watch?v=V9DWKbalbWQ&ab_channel=TechnicalBabaji
+        /// url padrão: http://localhost:15672
+        /// parar serviço: rabbitmq-service stop
+        /// iniciar serviço: rabbitmq-service start
+        /// </wards>
+
+        /// <summary>
+        /// Exemplo básico de envio utilizando RabbitMQ;
+        /// </summary>
+        [HttpPost("exemploSenderRabbitMQ")]
+        [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(void))]
+        public async Task<ActionResult<string>> ExemploSenderRabbitMQ()
+        {
+            Usuario? linq = await _genericUsuarioRepository.Obter(1);
+            int x = GerarNumeroAleatorio(1, 99);
+
+            for (int i = 0; i < x; i++)
+            {
+                string msg = $"{linq?.NomeUsuarioSistema}_{Guid.NewGuid()}";
+                byte[]? body = Encoding.UTF8.GetBytes(msg);
+                _rabbitMQChannel.BasicPublish(exchange: string.Empty, routingKey: ObterDescricaoEnum(RabbitMQChannelEnum.TESTE), basicProperties: null, body);
+            }
+
+            return Ok($"{x} {(x == 1 ? "nova mensagem foi enviada" : "novas mensagens foram enviadas")}");
+        }
+
+        /// <summary>
+        /// Exemplo básico de consumo utilizando RabbitMQ;
+        /// </summary>
+        [HttpGet("exemploReceiverRabbitMQ")]
+        [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
+        public ActionResult<List<string>> ExemploReceiverRabbitMQ()
+        {
+            List<string> resp = new();
+            EventingBasicConsumer consumer = new(_rabbitMQChannel);
+
+            consumer.Received += (model, ea) =>
+            {
+                byte[] body = ea.Body.ToArray();
+                string msg = Encoding.UTF8.GetString(body);
+                resp.Add(msg);
+            };
+
+            _rabbitMQChannel.BasicConsume(queue: ObterDescricaoEnum(RabbitMQChannelEnum.TESTE), autoAck: true, consumer);
+
+            return Ok(resp);
         }
         #endregion
 

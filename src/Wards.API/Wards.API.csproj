@@ -10,6 +10,7 @@
 	<ItemGroup>
 		<PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
 		<PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="7.0.12" />
+		<PackageReference Include="RabbitMQ.Client" Version="6.6.0" />
 	</ItemGroup>
 
 	<ItemGroup>
