@@ -51,6 +51,7 @@ namespace Wards.API.Controllers
 
         /// <summary>
         /// Controller para testes e exemplos aleatórios e possivelmente úteis;
+        /// Sim, este Controller está propositalmente uma bagunça;
         /// </summary>
         public ExemplosController(
             IWebHostEnvironment webHostEnvironment,
@@ -85,6 +86,8 @@ namespace Wards.API.Controllers
         #region rabbitMQ
         /// <wards>
         /// tutorial: https://www.youtube.com/watch?v=V9DWKbalbWQ&ab_channel=TechnicalBabaji
+        /// installer do rabbitMQ: https://www.rabbitmq.com/install-windows.html#installer
+        /// installer do Erlang: https://www.erlang.org/downloads
         /// url padrão: http://localhost:15672
         /// parar serviço: rabbitmq-service stop
         /// iniciar serviço: rabbitmq-service start
@@ -100,12 +103,21 @@ namespace Wards.API.Controllers
         {
             Usuario? linq = await _genericUsuarioRepository.Obter(1);
             int x = GerarNumeroAleatorio(1, 99);
+            DateTime hora = GerarHorarioBrasilia();
 
             for (int i = 0; i < x; i++)
             {
-                string msg = $"{linq?.NomeUsuarioSistema}_{Guid.NewGuid()}";
+                string msg = $"{linq?.NomeUsuarioSistema}_{Guid.NewGuid()}_{hora.AddMinutes(i)}";
                 byte[]? body = Encoding.UTF8.GetBytes(msg);
-                _rabbitMQChannel.BasicPublish(exchange: string.Empty, routingKey: ObterDescricaoEnum(RabbitMQChannelEnum.TESTE), basicProperties: null, body);
+
+                try
+                {
+                    _rabbitMQChannel.BasicPublish(exchange: string.Empty, routingKey: ObterDescricaoEnum(RabbitMQChannelEnum.TESTE), basicProperties: null, body);
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception($"Houve uma falha ao publicar mensagem: {ex.Message}");
+                }
             }
 
             return Ok($"{x} {(x == 1 ? "nova mensagem foi enviada" : "novas mensagens foram enviadas")}");
@@ -117,21 +129,37 @@ namespace Wards.API.Controllers
         [HttpGet("exemploReceiverRabbitMQ")]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
-        public ActionResult<List<string>> ExemploReceiverRabbitMQ()
+        public ActionResult<List<string>> ExemploReceiverRabbitMQ(bool isConsumirFilaInteira)
         {
-            List<string> resp = new();
-            EventingBasicConsumer consumer = new(_rabbitMQChannel);
+            List<string> listaQueues = new();
 
-            consumer.Received += (model, ea) =>
+            if (isConsumirFilaInteira)
             {
-                byte[] body = ea.Body.ToArray();
-                string msg = Encoding.UTF8.GetString(body);
-                resp.Add(msg);
-            };
+                while (true)
+                {
+                    BasicGetResult? resp = _rabbitMQChannel.BasicGet(queue: ObterDescricaoEnum(RabbitMQChannelEnum.TESTE), autoAck: true);
 
-            _rabbitMQChannel.BasicConsume(queue: ObterDescricaoEnum(RabbitMQChannelEnum.TESTE), autoAck: true, consumer);
+                    if (resp is null)
+                    {
+                        break;
+                    }
 
-            return Ok(resp);
+                    string msg = Encoding.UTF8.GetString(resp.Body.ToArray());
+                    listaQueues.Add(msg);
+                }
+            }
+            else
+            {
+                BasicGetResult? resp = _rabbitMQChannel.BasicGet(queue: ObterDescricaoEnum(RabbitMQChannelEnum.TESTE), autoAck: true);
+
+                if (resp is not null)
+                {
+                    string msg = Encoding.UTF8.GetString(resp.Body.ToArray());
+                    listaQueues.Add(msg);
+                }
+            }
+
+            return Ok(listaQueues);
         }
         #endregion
 
@@ -456,7 +484,7 @@ namespace Wards.API.Controllers
         /// <summary>
         /// Exemplo de insert com BulkCopy e DataTable;
         /// </summary>
-        [HttpGet("exemploBulkCopy")]
+        [HttpPost("exemploBulkCopy")]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(bool))]
         public async Task<ActionResult<List<Ward>>> ExemploBulkCopy()
@@ -739,7 +767,7 @@ namespace Wards.API.Controllers
         #endregion
 
         #region migrate
-        [HttpGet("migrateDatabase")]
+        [HttpPost("migrateDatabase")]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(bool))]
         [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(bool))]
