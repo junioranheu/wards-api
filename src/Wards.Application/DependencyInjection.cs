@@ -9,6 +9,7 @@ using Wards.Application.Services.Imports;
 using Wards.Application.Services.Sistemas;
 using Wards.Application.Services.Usuarios;
 using Wards.Application.UseCases.Auxiliares;
+using Wards.Application.UseCases.ChatGPT;
 using Wards.Application.UseCases.Feriados;
 using Wards.Application.UseCases.FeriadosDatas;
 using Wards.Application.UseCases.FeriadosEstados;
@@ -66,6 +67,7 @@ namespace Wards.Application
             services.AddFeriadosDatasApplication();
             services.AddFeriadosEstadosApplication();
             services.AddNewslettersCadastrosApplication();
+            services.AddChatGPTApplication();
         }
 
         private static void AddServices(IServiceCollection services)

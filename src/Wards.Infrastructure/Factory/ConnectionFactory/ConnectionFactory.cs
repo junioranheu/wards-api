@@ -15,11 +15,11 @@ namespace Wards.Infrastructure.Factory.ConnectionFactory
 
         public string ObterStringConnection()
         {
-            var secretSenhaBancoDados = _configuration["SecretSenhaBancoDados"]; // secrets.json;
-            string con = _configuration.GetConnectionString(_configuration["SystemSettings:NomeConnectionString"]!)!;
-            con = con.Replace("[SecretSenhaBancoDados]", secretSenhaBancoDados);
+            string? secretSenhaBancoDados = _configuration["SecretSenhaBancoDados"]; // secrets.json;
+            string? con = _configuration.GetConnectionString(_configuration["SystemSettings:NomeConnectionString"] ?? string.Empty);
+            con = con?.Replace("[SecretSenhaBancoDados]", secretSenhaBancoDados);
 
-            return con;
+            return con ?? string.Empty;
         }
 
         public SqlConnection ObterSqlServerConnection()
