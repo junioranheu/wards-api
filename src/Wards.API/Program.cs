@@ -6,6 +6,7 @@ using Newtonsoft.Json.Linq;
 using Swashbuckle.AspNetCore.SwaggerUI;
 using Wards.API;
 using Wards.Application;
+using Wards.Application.Hubs.ChatHub;
 using Wards.Domain.Consts;
 using Wards.Infrastructure;
 using Wards.Infrastructure.Data;
@@ -62,6 +63,8 @@ WebApplication app = builder.Build();
     app.UseAuthentication();
     app.UseAuthorization();
     app.MapControllers();
+
+    app.MapHub<ChatHub>("/chathub");
 
     AddHealthCheck(app);
     AddStaticFiles(app);

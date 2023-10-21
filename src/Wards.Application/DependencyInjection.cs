@@ -29,6 +29,7 @@ namespace Wards.Application
         {
             AddAutoMapper(services);
             AddLogger(builder);
+            AddSignalR(services);
 
             AddUseCases(services);
             AddServices(services);
@@ -51,6 +52,11 @@ namespace Wards.Application
         {
             builder.Logging.ClearProviders();
             builder.Logging.AddConsole();
+        }
+
+        private static void AddSignalR(IServiceCollection services)
+        {
+            services.AddSignalR();
         }
 
         private static void AddUseCases(IServiceCollection services)
