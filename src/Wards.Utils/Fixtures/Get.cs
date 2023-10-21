@@ -261,20 +261,13 @@ namespace Wards.Utils.Fixtures
             try
             {
                 ServiceController[]? listaServicos = ServiceController.GetServices();
+                bool isServicoInstaladoNaMaquina = listaServicos.Any(s => s.ServiceName.Equals(servico, StringComparison.OrdinalIgnoreCase));
 
-                foreach (ServiceController s in listaServicos)
-                {
-                    if (s.ServiceName.Equals(servico, StringComparison.OrdinalIgnoreCase))
-                    {
-                        return true;
-                    }
-                }
-
-                return false;
+                return isServicoInstaladoNaMaquina;
             }
             catch (Exception)
             {
-                throw;
+                return false;
             }
         }
     }
