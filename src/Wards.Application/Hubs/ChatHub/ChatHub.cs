@@ -7,25 +7,30 @@ namespace Wards.Application.Hubs.ChatHub
     [Authorize]
     public sealed class ChatHub : Hub
     {
+        readonly string _usuario;
+
+        public ChatHub()
+        {
+            _usuario = Context.User?.FindFirst(ClaimTypes.Email)?.Value ?? string.Empty;
+        }
+
         public async Task EnviarMensagem(string mensagem)
         {
-            string usuario = Context.User?.FindFirst(ClaimTypes.Email)?.Value ?? string.Empty;
-            await Clients.All.SendAsync("AEA_PE", usuario, mensagem);
+            await Clients.All.SendAsync("AEA_PE", _usuario, mensagem);
         }
 
         public async Task EnviarMensagemPrivada(string toUserId, string mensagem)
         {
-            string usuario = Context.User?.FindFirst(ClaimTypes.Email)?.Value ?? string.Empty;
-            await Clients.User(toUserId).SendAsync("AEA_PE_2", usuario, mensagem);
+            await Clients.User(toUserId).SendAsync("AEA_PE_2", _usuario, mensagem);
         }
 
         public override async Task OnConnectedAsync()
         {
-            var userId = Context.User?.Identity?.Name;
+            string? usuario = Context.User?.Identity?.Name ?? null;
 
-            if (!string.IsNullOrEmpty(userId))
+            if (usuario is not null)
             {
-                await Groups.AddToGroupAsync(Context.ConnectionId, userId);
+                await Groups.AddToGroupAsync(Context.ConnectionId, usuario);
             }
 
             await base.OnConnectedAsync();
