@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using MySqlConnector;
 using RabbitMQ.Client;
-using RabbitMQ.Client.Events;
 using System.Data.SqlClient;
 using System.Globalization;
 using System.Linq.Expressions;
@@ -45,9 +44,9 @@ namespace Wards.API.Controllers
         private readonly IMigrateDatabaseService _migrateDatabaseService;
         private readonly IBulkCopyCriarWardUseCase _bulkCopyCriarWardUseCase;
         private readonly IGenericRepository<Usuario> _genericUsuarioRepository;
-        private readonly IConnectionFactory _rabbitMQConectionFactory;
-        private readonly IConnection _rabbitMQConnection;
-        private readonly IModel _rabbitMQChannel;
+        // private readonly IConnectionFactory _rabbitMQConectionFactory;
+        // private readonly IConnection _rabbitMQConnection;
+        // private readonly IModel _rabbitMQChannel;
 
         /// <summary>
         /// Controller para testes e exemplos aleatórios e possivelmente úteis;
@@ -70,16 +69,31 @@ namespace Wards.API.Controllers
             _bulkCopyCriarWardUseCase = bulkCopyCriarWardUseCase;
             _genericUsuarioRepository = genericUsuarioRepository;
 
-            _rabbitMQConectionFactory = new ConnectionFactory() { HostName = "localhost" };
-            _rabbitMQConnection = _rabbitMQConectionFactory.CreateConnection();
-            _rabbitMQChannel = _rabbitMQConnection.CreateModel();
-            _rabbitMQChannel.QueueDeclare(queue: ObterDescricaoEnum(RabbitMQChannelEnum.TESTE), durable: false, exclusive: false, autoDelete: false, arguments: null);
+            // if (IsServicoInstaladoNaMaquina("RabbitMQ"))
+            // {
+            //     _rabbitMQConectionFactory = new ConnectionFactory() { HostName = "localhost" };
+            //     _rabbitMQConnection = _rabbitMQConectionFactory.CreateConnection();
+            //     _rabbitMQChannel = _rabbitMQConnection.CreateModel();
+            //     _rabbitMQChannel.QueueDeclare(queue: ObterDescricaoEnum(RabbitMQChannelEnum.TESTE), durable: false, exclusive: false, autoDelete: false, arguments: null);
+            // }
         }
 
         ~ExemplosController()
         {
-            _rabbitMQChannel.Close();
-            _rabbitMQConnection.Close();
+            // _rabbitMQChannel.Close();
+            // _rabbitMQConnection.Close();
+        }
+        #endregion
+
+        #region miscellaneous
+        [HttpPost("convertTextoParaEmoji")]
+        [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
+        [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(StatusCodes))]
+        public ActionResult<string> ConvertTextoParaEmoji(string texto)
+        {
+            var aea = GerarNumeroAleatorio(1, 2);
+            return Ok(aea);
         }
         #endregion
 

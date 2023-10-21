@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data;
 using System.Reflection;
+using System.ServiceProcess;
 using System.Text;
 using TimeZoneConverter;
 using static Wards.Utils.Fixtures.Encrypt;
@@ -249,6 +250,32 @@ namespace Wards.Utils.Fixtures
             }
 
             return chunks;
+        }
+
+        /// <summary>
+        /// Verificar se um serviço em questão, passado por parâmetro, está ou não instalado na máquina;
+        /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Validar a compatibilidade da plataforma", Justification = "<Pendente>")]
+        public static bool IsServicoInstaladoNaMaquina(string servico)
+        {
+            try
+            {
+                ServiceController[]? listaServicos = ServiceController.GetServices();
+
+                foreach (ServiceController s in listaServicos)
+                {
+                    if (s.ServiceName.Equals(servico, StringComparison.OrdinalIgnoreCase))
+                    {
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }
