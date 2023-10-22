@@ -17,5 +17,7 @@ namespace Wards.Application.Hubs.Shared.Models.Output
         public string? UsuarioIdDestinatario { get; set; } = string.Empty;
 
         public DateTime Timestamp { get; set; } = GerarHorarioBrasilia();
+
+        public bool IsSistema { get; set; } = false;
     }
 }
