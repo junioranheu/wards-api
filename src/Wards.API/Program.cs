@@ -64,7 +64,7 @@ WebApplication app = builder.Build();
     app.UseAuthorization();
     app.MapControllers();
 
-    app.MapHub<ChatHub>("/chathub");
+    app.MapHub<ChatHub>("/chatHub");
 
     AddHealthCheck(app);
     AddStaticFiles(app);

@@ -139,10 +139,10 @@ namespace Wards.Infrastructure
             services.AddCors(x =>
                 x.AddPolicy(name: builder.Configuration["CORSSettings:Cors"] ?? string.Empty, builder =>
                 {
-                    builder.AllowAnyHeader()
-                        .AllowAnyMethod()
-                        .SetIsOriginAllowed((host) => true)
-                        .AllowCredentials();
+                    builder.AllowAnyHeader().
+                            AllowAnyMethod().
+                            SetIsOriginAllowed((host) => true).
+                            AllowCredentials();
                 })
             );
         }

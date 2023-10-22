@@ -1,39 +1,61 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SignalR;
-using System.Security.Claims;
+using Wards.Application.Hubs.Shared.Models.Output;
 
 namespace Wards.Application.Hubs.ChatHub
 {
-    [Authorize]
     public sealed class ChatHub : Hub
     {
-        readonly string _usuario;
+        const string usuario = "usuario";
+        const string usuarioId = "usuarioId";
 
-        public ChatHub()
+        public override async Task OnConnectedAsync()
         {
-            _usuario = Context.User?.FindFirst(ClaimTypes.Email)?.Value ?? string.Empty;
+            HttpRequest? request = Context.GetHttpContext()?.Request;
+
+            if (request is null)
+            {
+                throw new ArgumentNullException($"Houve um erro ao estabelecer conexão com o {nameof(ChatHub)} do SignalR.");
+            }
+
+            Context.Items[usuario] = request?.Query[usuario];
+            Context.Items[usuarioId] = request?.Query[usuarioId];
+
+            if (Context.Items[usuarioId] is not null)
+            {
+                await Groups.AddToGroupAsync(Context.ConnectionId, ConverterObjetoParaString(Context.Items[usuarioId]));
+            }
+
+            await base.OnConnectedAsync();
         }
 
         public async Task EnviarMensagem(string mensagem)
         {
-            await Clients.All.SendAsync("AEA_PE", _usuario, mensagem);
+            ChatHubResponse data = new()
+            {
+                Mensagem = mensagem,
+                UsuarioNome = ConverterObjetoParaString(Context.Items[usuario]),
+                UsuarioId = ConverterObjetoParaString(Context.Items[usuarioId])
+            };
+
+            await Clients.All.SendAsync("EnviarMensagem", data);
         }
 
         public async Task EnviarMensagemPrivada(string toUserId, string mensagem)
         {
-            await Clients.User(toUserId).SendAsync("AEA_PE_2", _usuario, mensagem);
+            await Clients.User(toUserId).SendAsync("EnviarMensagemPrivada", Context.Items[usuario], mensagem);
         }
 
-        public override async Task OnConnectedAsync()
+        private static string ConverterObjetoParaString(object? item)
         {
-            string? usuario = Context.User?.Identity?.Name ?? null;
-
-            if (usuario is not null)
+            try
             {
-                await Groups.AddToGroupAsync(Context.ConnectionId, usuario);
+                return item?.ToString() ?? string.Empty;
             }
-
-            await base.OnConnectedAsync();
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }
