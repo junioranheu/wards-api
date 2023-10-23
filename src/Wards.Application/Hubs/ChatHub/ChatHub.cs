@@ -1,40 +1,45 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
+using System.Security.Claims;
 using Wards.Application.Hubs.Shared.Models.Output;
 using Wards.Application.Hubs.Shared.Utils;
 
 namespace Wards.Application.Hubs.ChatHub
 {
+    [Authorize]
     public sealed class ChatHub : Hub
     {
-        const string usuario = "usuario";
-        const string usuarioId = "usuarioId";
         const string grupo = "_online";
-        private static readonly List<string> listaControladaDeUsuariosOnline = new();
+        private static readonly List<UsuarioOnlineResponse> listaUsuarioOnline = new();
 
         public override async Task OnConnectedAsync()
         {
-            HttpRequest? request = (Context.GetHttpContext()?.Request) ?? throw new ArgumentNullException($"Houve um erro ao estabelecer conexão com o {nameof(ChatHub)} do SignalR.");
-
-            if (!Misc.IsObjetoValido(request?.Query[usuario]) || !Misc.IsObjetoValido(request?.Query[usuarioId]))
+            if (!Context.User!.Identity!.IsAuthenticated)
             {
-                throw new Exception($"O parâmetro de usuário é inválido");
+                throw new Exception($"Usuário não autenticado");
             }
 
-            // Salvar no contexto do Hub;
-            Context.Items[usuario] = request?.Query[usuario];
-            Context.Items[usuarioId] = request?.Query[usuarioId];
+            string usuarioNome = Misc.ConverterObjetoParaString(Context.User.FindFirst(ClaimTypes.Name)?.Value);
+            string usuarioId = Misc.ConverterObjetoParaString(Context.User.FindFirst(ClaimTypes.Email)?.Value);
+            string signalR_ConnectionId = Misc.ConverterObjetoParaString(Context.ConnectionId);
 
-            // Adicionar o usuário no grupo (IGroupManager, nativo do SignalR);
-            await Groups.AddToGroupAsync(Context.ConnectionId, grupo);
+            // Adicionar o usuário (signalR_ConnectionId) no grupo (IGroupManager, nativo do SignalR);
+            await Groups.AddToGroupAsync(signalR_ConnectionId, grupo);
 
-            // Adicionar o usuário na lista de controle manual (diferentemente da lista nativa do SignalR acima; esse caso é para exibir os usuários on-line posteriormente);
-            if (!listaControladaDeUsuariosOnline.Contains(Misc.ConverterObjetoParaString(Context.Items[usuarioId])))
+            // Adicionar o usuário na lista de controle manual;
+            if (!listaUsuarioOnline.Any(x => x.ConnectionId == signalR_ConnectionId))
             {
-                listaControladaDeUsuariosOnline.Add(Misc.ConverterObjetoParaString(Context.Items[usuarioId]));
+                UsuarioOnlineResponse u = new()
+                {
+                    UsuarioNome = usuarioNome,
+                    UsuarioId = usuarioId,
+                    ConnectionId = signalR_ConnectionId
+                };
+
+                listaUsuarioOnline.Add(u);
             }
 
-            await EnviarMensagem(mensagem: $"O usuário {Context.Items[usuario]} entrou no chat", isAvisoSistema: true);
+            await EnviarMensagem(mensagem: $"O usuário {usuarioNome} entrou no chat", isAvisoSistema: true);
             await ObterListaUsuariosOnline();
 
             await base.OnConnectedAsync();
@@ -42,11 +47,15 @@ namespace Wards.Application.Hubs.ChatHub
 
         public override async Task OnDisconnectedAsync(Exception? exception)
         {
-            if (!string.IsNullOrEmpty(Misc.ConverterObjetoParaString(Context.Items[usuarioId])))
+            string signalR_ConnectionId = Misc.ConverterObjetoParaString(Context.ConnectionId);
+            UsuarioOnlineResponse? checkUsuario = listaUsuarioOnline.FirstOrDefault(x => x.ConnectionId == signalR_ConnectionId);
+
+            if (checkUsuario is not null)
             {
-                await Groups.RemoveFromGroupAsync(Context.ConnectionId, grupo);
-                listaControladaDeUsuariosOnline.Remove(Misc.ConverterObjetoParaString(Context.Items[usuarioId]));
-                await EnviarMensagem(mensagem: $"O usuário {Context.Items[usuario]} saiu do chat", isAvisoSistema: true);
+                await Groups.RemoveFromGroupAsync(signalR_ConnectionId, grupo);
+
+                await EnviarMensagem(mensagem: $"O usuário {checkUsuario?.UsuarioNome} saiu do chat", isAvisoSistema: true);
+                listaUsuarioOnline.Remove(checkUsuario!);
             }
 
             await ObterListaUsuariosOnline();
@@ -55,25 +64,21 @@ namespace Wards.Application.Hubs.ChatHub
 
         public async Task EnviarMensagem(string mensagem, bool? isAvisoSistema = false)
         {
-            ChatHubResponse data = new()
-            {
-                Mensagem = mensagem,
-                UsuarioNome = isAvisoSistema.GetValueOrDefault() ? string.Empty : Misc.ConverterObjetoParaString(Context.Items[usuario]),
-                UsuarioId = isAvisoSistema.GetValueOrDefault() ? string.Empty : Misc.ConverterObjetoParaString(Context.Items[usuarioId]),
-                IsSistema = isAvisoSistema.GetValueOrDefault()
-            };
-
-            await Clients.Group(grupo).SendAsync("EnviarMensagem", data);
+            ChatHubResponse response = Misc.MontarChatHubResponse(Context.User, mensagem, isAvisoSistema.GetValueOrDefault());
+            await Clients.Group(grupo).SendAsync("EnviarMensagem", response);
         }
 
-        public async Task EnviarMensagemPrivada(string toUserId, string mensagem)
+        public async Task EnviarMensagemPrivada(string usuarioIdDestinatario, string mensagem, bool? isAvisoSistema = false)
         {
-            await Clients.User(toUserId).SendAsync("EnviarMensagemPrivada", Context.Items[usuario], mensagem);
+            UsuarioOnlineResponse? checkUsuarioDestinatario = listaUsuarioOnline.FirstOrDefault(x => x.UsuarioId == usuarioIdDestinatario) ?? throw new Exception($"Usuário não encontrado");
+
+            ChatHubResponse response = Misc.MontarChatHubResponse(Context.User, mensagem, isAvisoSistema.GetValueOrDefault(), usuarioIdDestinatario);
+            await Clients.User(checkUsuarioDestinatario?.ConnectionId!).SendAsync("EnviarMensagemPrivada", response);
         }
 
         public async Task ObterListaUsuariosOnline()
         {
-            await Clients.Group(grupo).SendAsync("ObterListaUsuariosOnline", listaControladaDeUsuariosOnline);
+            await Clients.Group(grupo).SendAsync("ObterListaUsuariosOnline", listaUsuarioOnline);
         }
     }
 }

@@ -12,8 +12,6 @@ namespace Wards.Application.Hubs.Shared.Models.Output
 
         public string? UsuarioId { get; set; } = string.Empty;
 
-        public string? UsuarioNomeDestinatario { get; set; } = string.Empty;
-
         public string? UsuarioIdDestinatario { get; set; } = string.Empty;
 
         public DateTime Timestamp { get; set; } = GerarHorarioBrasilia();

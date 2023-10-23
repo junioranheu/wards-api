@@ -61,7 +61,7 @@ namespace Wards.Infrastructure
                          ValidAudience = builder.Configuration["JwtSettings:Audience"],
                          ValidateLifetime = true,
                          ClockSkew = TimeSpan.Zero
-                     };
+                     }; 
                  });
         }
 
