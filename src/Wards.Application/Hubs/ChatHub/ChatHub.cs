@@ -80,6 +80,7 @@ namespace Wards.Application.Hubs.ChatHub
             UsuarioOnlineResponse? checkUsuarioDestinatario = listaUsuarioOnline.FirstOrDefault(x => x.UsuarioId == usuarioIdDestinatario) ?? throw new Exception($"Usuário não encontrado");
 
             ChatHubResponse response = Misc.MontarChatHubResponse(Context.ConnectionId, listaUsuarioOnline, Context.User, mensagem, isAvisoSistema.GetValueOrDefault(), usuarioIdDestinatario);
+            await Clients.Client(Context.ConnectionId).SendAsync("EnviarMensagemPrivada", response);
             await Clients.Client(checkUsuarioDestinatario?.ConnectionId!).SendAsync("EnviarMensagemPrivada", response);
         }
 
