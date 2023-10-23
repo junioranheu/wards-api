@@ -34,8 +34,13 @@ namespace Wards.Application.Hubs.Shared.Utils
             }
         }
 
-        internal static ChatHubResponse MontarChatHubResponse(ClaimsPrincipal? claims, string mensagem, bool? isAvisoSistema = false, string? usuarioIdDestinatario = null)
+        internal static ChatHubResponse MontarChatHubResponse(string connectionId, List<UsuarioOnlineResponse> listaUsuarioOnline, ClaimsPrincipal? claims, string mensagem, bool? isAvisoSistema = false, string? usuarioIdDestinatario = null)
         {
+            if (!isAvisoSistema.GetValueOrDefault() && !listaUsuarioOnline.Any(x => x.ConnectionId == connectionId))
+            {
+                throw new Exception($"ConnectionId inválido"); // Quando por exemplo, um usuário entra em uma nova aba, ele inválida a sessão (ConnectionId);
+            }
+
             string usuarioNome = ConverterObjetoParaString(claims?.FindFirst(ClaimTypes.Name)?.Value);
             string usuarioId = ConverterObjetoParaString(claims?.FindFirst(ClaimTypes.Email)?.Value);
 

@@ -26,8 +26,10 @@ namespace Wards.Application.Hubs.ChatHub
             // Adicionar o usuário (signalR_ConnectionId) no grupo (IGroupManager, nativo do SignalR);
             await Groups.AddToGroupAsync(signalR_ConnectionId, grupo);
 
-            // Adicionar o usuário na lista de controle manual;
-            if (!listaUsuarioOnline.Any(x => x.ConnectionId == signalR_ConnectionId))
+            // Adicionar/atualizar usuário na lista de controle manual;
+            UsuarioOnlineResponse? checkUsuarioOnline = listaUsuarioOnline.Where(x => x.UsuarioId == usuarioId).FirstOrDefault();
+
+            if (checkUsuarioOnline is null)
             {
                 UsuarioOnlineResponse u = new()
                 {
@@ -37,9 +39,14 @@ namespace Wards.Application.Hubs.ChatHub
                 };
 
                 listaUsuarioOnline.Add(u);
+                await EnviarMensagem(mensagem: $"O usuário {usuarioNome} entrou no chat", isAvisoSistema: true);
+            }
+            else
+            {
+                await Groups.RemoveFromGroupAsync(checkUsuarioOnline.ConnectionId, grupo); // Remover ConnectionId antigo;
+                checkUsuarioOnline.ConnectionId = signalR_ConnectionId;
             }
 
-            await EnviarMensagem(mensagem: $"O usuário {usuarioNome} entrou no chat", isAvisoSistema: true);
             await ObterListaUsuariosOnline();
 
             await base.OnConnectedAsync();
@@ -64,7 +71,7 @@ namespace Wards.Application.Hubs.ChatHub
 
         public async Task EnviarMensagem(string mensagem, bool? isAvisoSistema = false)
         {
-            ChatHubResponse response = Misc.MontarChatHubResponse(Context.User, mensagem, isAvisoSistema.GetValueOrDefault());
+            ChatHubResponse response = Misc.MontarChatHubResponse(Context.ConnectionId, listaUsuarioOnline, Context.User, mensagem, isAvisoSistema.GetValueOrDefault());
             await Clients.Group(grupo).SendAsync("EnviarMensagem", response);
         }
 
@@ -72,7 +79,7 @@ namespace Wards.Application.Hubs.ChatHub
         {
             UsuarioOnlineResponse? checkUsuarioDestinatario = listaUsuarioOnline.FirstOrDefault(x => x.UsuarioId == usuarioIdDestinatario) ?? throw new Exception($"Usuário não encontrado");
 
-            ChatHubResponse response = Misc.MontarChatHubResponse(Context.User, mensagem, isAvisoSistema.GetValueOrDefault(), usuarioIdDestinatario);
+            ChatHubResponse response = Misc.MontarChatHubResponse(Context.ConnectionId, listaUsuarioOnline, Context.User, mensagem, isAvisoSistema.GetValueOrDefault(), usuarioIdDestinatario);
             await Clients.Client(checkUsuarioDestinatario?.ConnectionId!).SendAsync("EnviarMensagemPrivada", response);
         }
 
