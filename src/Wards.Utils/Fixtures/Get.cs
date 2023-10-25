@@ -18,8 +18,9 @@ namespace Wards.Utils.Fixtures
         /// Pegar informações do appsettings;
         /// stackoverflow.com/a/58432834 (Necessário instalar o pacote "Microsoft.Extensions.Configuration.Json");
         /// </summary>
-        static readonly string _urlFrontDev = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build().GetSection("URLSettings")["FrontDev"] ?? string.Empty;
-        static readonly string _urlFrontProd = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build().GetSection("URLSettings")["FrontProd"] ?? string.Empty;
+        static readonly IConfigurationRoot builder = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
+        static readonly string _urlFrontDev = builder.GetSection("URLSettings")["FrontDev"] ?? string.Empty;
+        static readonly string _urlFrontProd = builder.GetSection("URLSettings")["FrontProd"] ?? string.Empty;
 
         /// <summary>
         /// Converter para o horário de Brasilia;

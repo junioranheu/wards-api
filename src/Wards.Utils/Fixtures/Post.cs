@@ -14,11 +14,12 @@ namespace Wards.Utils.Fixtures
         /// Pegar informações do appsettings;
         /// stackoverflow.com/a/58432834 (Necessário instalar o pacote "Microsoft.Extensions.Configuration.Json");
         /// </summary>
-        static readonly string _emailDominio = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build().GetSection("EmailSettings")["Domain"] ?? string.Empty;
-        static readonly string _emailPorta = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build().GetSection("EmailSettings")["Port"] ?? string.Empty;
-        static readonly string _emailEmail = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build().GetSection("EmailSettings")["Email"] ?? string.Empty;
-        static readonly string _emailChave = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build().GetSection("EmailSettings")["Key"] ?? string.Empty;
-        static readonly string _emailRemetente = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build().GetSection("EmailSettings")["Name"] ?? string.Empty;
+        static readonly IConfigurationRoot builder = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
+        static readonly string _emailDominio = builder.GetSection("EmailSettings")["Domain"] ?? string.Empty;
+        static readonly string _emailPorta = builder.GetSection("EmailSettings")["Port"] ?? string.Empty;
+        static readonly string _emailEmail = builder.GetSection("EmailSettings")["Email"] ?? string.Empty;
+        static readonly string _emailChave = builder.GetSection("EmailSettings")["Key"] ?? string.Empty;
+        static readonly string _emailRemetente = builder.GetSection("EmailSettings")["Name"] ?? string.Empty;
 
         /// <summary>
         /// Enviar e-mail (SMTP) via Gmail;
