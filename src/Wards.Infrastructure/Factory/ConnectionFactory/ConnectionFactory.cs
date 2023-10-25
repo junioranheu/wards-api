@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using MySqlConnector;
 using System.Data.SqlClient;
+using System.Diagnostics;
 
 namespace Wards.Infrastructure.Factory.ConnectionFactory
 {
@@ -15,16 +16,22 @@ namespace Wards.Infrastructure.Factory.ConnectionFactory
 
         public string ObterStringConnection()
         {
-            string? secretSenhaBancoDados = _configuration["SecretSenhaBancoDados"]; // secrets.json;
-            string? con = _configuration.GetConnectionString(_configuration["SystemSettings:NomeConnectionString"] ?? string.Empty);
-            con = con?.Replace("[SecretSenhaBancoDados]", secretSenhaBancoDados);
+            string nomeConnectionString = _configuration["SystemSettings:NomeConnectionString"] ?? string.Empty;
 
-            return con ?? string.Empty;
+            if (Debugger.IsAttached)
+            {
+                string? connectionString_secrets = _configuration[nomeConnectionString] ?? string.Empty; // secrets.json;
+                return connectionString_secrets;
+            }
+
+            string connectionString = _configuration.GetConnectionString(nomeConnectionString) ?? string.Empty;
+
+            return connectionString;
         }
 
         public SqlConnection ObterSqlServerConnection()
         {
-            return new SqlConnection(_configuration.GetConnectionString("con"));
+            return new SqlConnection(ObterStringConnection());
         }
 
         public MySqlConnection ObterMySqlConnection()
