@@ -7,6 +7,7 @@ using Swashbuckle.AspNetCore.SwaggerUI;
 using Wards.API;
 using Wards.Application;
 using Wards.Application.Hubs.ChatHub;
+using Wards.Application.Hubs.RequestFilterHub;
 using Wards.Domain.Consts;
 using Wards.Infrastructure;
 using Wards.Infrastructure.Data;
@@ -65,6 +66,7 @@ WebApplication app = builder.Build();
     app.MapControllers();
 
     app.MapHub<ChatHub>("/chatHub");
+    app.MapHub<RequestFilterHub>("/requestFilterHub");
 
     AddHealthCheck(app);
     AddStaticFiles(app);

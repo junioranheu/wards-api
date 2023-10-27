@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.AspNetCore.SignalR;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Wards.API.Filters.Base;
+using Wards.Application.Hubs.RequestFilterHub;
 using Wards.Application.UseCases.Logs.CriarLog;
 using Wards.Application.UseCases.Logs.Shared.Input;
 
@@ -10,10 +12,12 @@ namespace Wards.API.Filters
 {
     public sealed class RequestFilter : ActionFilterAttribute
     {
+        private readonly IHubContext<RequestFilterHub> _hubContext;
         private readonly ICriarLogUseCase _criarLogUseCase;
 
-        public RequestFilter(ICriarLogUseCase criarLogUseCase)
+        public RequestFilter(IHubContext<RequestFilterHub> hubContext, ICriarLogUseCase criarLogUseCase)
         {
+            _hubContext = hubContext;
             _criarLogUseCase = criarLogUseCase;
         }
 
@@ -43,6 +47,7 @@ namespace Wards.API.Filters
                 UsuarioId = usuarioId > 0 ? usuarioId : null
             };
 
+            await _hubContext.Clients.All.SendAsync("ExibirNovoRequest", log);
             await _criarLogUseCase.Execute(log);
         }
 

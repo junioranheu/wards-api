@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.SignalR;
+using Wards.Application.UseCases.Logs.Shared.Input;
 
 namespace Wards.Application.Hubs.RequestFilterHub
 {
@@ -14,9 +15,9 @@ namespace Wards.Application.Hubs.RequestFilterHub
             await base.OnDisconnectedAsync(exception);
         }
 
-        public async Task ExibirNovoRequest(string mensagem)
+        public async Task ExibirNovoRequest(LogInput log)
         {
-            await Clients.All.SendAsync("ExibirNovoRequest", mensagem);
+            await Clients.All.SendAsync("ExibirNovoRequest", log);
         }
     }
 }
