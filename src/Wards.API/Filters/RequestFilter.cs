@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Wards.API.Filters.Base;
 using Wards.Application.UseCases.Logs.CriarLog;
 using Wards.Application.UseCases.Logs.Shared.Input;
@@ -30,12 +31,13 @@ namespace Wards.API.Filters
 
             int usuarioId = await new BaseFilter().BaseObterUsuarioId(filterContextExecuted);
             string parametros = ObterParametrosRequisicao(filterContextExecuting);
+            string parametrosNormalizados = NormalizarParametros(parametros);
 
             LogInput log = new()
             {
                 TipoRequisicao = request.Method ?? string.Empty,
                 Endpoint = request.Path.Value ?? string.Empty,
-                Parametros = parametros.Contains("Senha") ? string.Empty : parametros,
+                Parametros = parametrosNormalizados,
                 Descricao = string.Empty,
                 StatusResposta = statusResposta > 0 ? (int)statusResposta : StatusCodes.Status500InternalServerError,
                 UsuarioId = usuarioId > 0 ? usuarioId : null
@@ -56,6 +58,51 @@ namespace Wards.API.Filters
             catch (Exception)
             {
                 return string.Empty;
+            }
+        }
+
+        private static string NormalizarParametros(string parametros)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(parametros))
+                {
+                    string[] _listaKeysParaOcultarLog = new[] { "Senha", "Password" };
+                    bool isNecessitaOcultarKeys = _listaKeysParaOcultarLog.Any(x => parametros.Contains("\"" + x + "\":", StringComparison.OrdinalIgnoreCase));
+
+                    if (isNecessitaOcultarKeys)
+                    {
+                        JObject? parametrosJson = JsonConvert.DeserializeObject<JObject>(parametros);
+
+                        foreach (var item in _listaKeysParaOcultarLog)
+                        {
+                            OcultarKeyEmParametro(parametrosJson, item);
+                        }
+
+                        string? parametrosJsonStr = parametrosJson?.ToString(Formatting.Indented);
+
+                        if (string.IsNullOrEmpty(parametrosJsonStr))
+                        {
+                            return string.Empty;
+                        }
+
+                        return parametrosJsonStr.Replace("\r\n", "") ?? string.Empty;
+                    }
+                }
+
+                return parametros;
+            }
+            catch (Exception)
+            {
+                return string.Empty;
+            }
+        }
+
+        private static void OcultarKeyEmParametro(JObject? parametroJson, string key)
+        {
+            if (parametroJson is not null && parametroJson[key] is not null)
+            {
+                parametroJson?.Property(key)?.Remove();
             }
         }
     }
