@@ -12,6 +12,8 @@ namespace Wards.Application.Hubs.ChatHub.Models.Output
 
         public string? UsuarioId { get; set; } = string.Empty;
 
+        public string? UsuarioNomeDestinatario { get; set; } = string.Empty;
+
         public string? UsuarioIdDestinatario { get; set; } = string.Empty;
 
         public DateTime Timestamp { get; set; } = GerarHorarioBrasilia();

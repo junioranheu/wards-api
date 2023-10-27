@@ -102,12 +102,15 @@ namespace Wards.Application.Hubs.ChatHub
             string usuarioNome = Misc.ConverterObjetoParaString(claims?.FindFirst(ClaimTypes.Name)?.Value);
             string usuarioId = Misc.ConverterObjetoParaString(claims?.FindFirst(ClaimTypes.Email)?.Value);
 
+            string? usuarioNomeDestinatario = usuarioIdDestinatario is null ? null : (listaUsuarioOnline.Where(x => x.UsuarioId == usuarioIdDestinatario).FirstOrDefault()?.UsuarioNome ?? string.Empty);
+
             ChatHubResponse response = new()
             {
                 Mensagem = mensagem,
                 UsuarioNome = isAvisoSistema.GetValueOrDefault() ? null : usuarioNome,
                 UsuarioId = isAvisoSistema.GetValueOrDefault() ? null : usuarioId,
                 IsSistema = isAvisoSistema.GetValueOrDefault(),
+                UsuarioNomeDestinatario = usuarioNomeDestinatario,
                 UsuarioIdDestinatario = usuarioIdDestinatario
             };
 
