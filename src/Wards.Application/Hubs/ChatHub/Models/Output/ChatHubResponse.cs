@@ -1,6 +1,6 @@
 ﻿using static Wards.Utils.Fixtures.Get;
 
-namespace Wards.Application.Hubs.Shared.Models.Output
+namespace Wards.Application.Hubs.ChatHub.Models.Output
 {
     public sealed class ChatHubResponse
     {

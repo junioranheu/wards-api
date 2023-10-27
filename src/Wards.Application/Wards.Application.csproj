@@ -25,4 +25,8 @@
     <ProjectReference Include="..\Wards.Infrastructure\Wards.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Hubs\RequestFilterHub\Models\" />
+  </ItemGroup>
+
 </Project>
