@@ -3,7 +3,7 @@
     public static class Format
     {
         /// <summary>
-        /// Formatar bytes para B, KB, MB, etc;
+        /// Formata bytes para B, KB, MB, etc;
         /// </summary>
         public static string FormatarBytes(long bytes)
         {

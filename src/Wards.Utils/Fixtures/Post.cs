@@ -11,7 +11,7 @@ namespace Wards.Utils.Fixtures
     public static class Post
     {
         /// <summary>
-        /// Pegar informações do appsettings;
+        /// Pega as informações do appsettings;
         /// stackoverflow.com/a/58432834 (Necessário instalar o pacote "Microsoft.Extensions.Configuration.Json");
         /// </summary>
         static readonly IConfigurationRoot builder = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
@@ -22,7 +22,7 @@ namespace Wards.Utils.Fixtures
         static readonly string _emailRemetente = builder.GetSection("EmailSettings")["Name"] ?? string.Empty;
 
         /// <summary>
-        /// Enviar e-mail (SMTP) via Gmail;
+        /// Envia um e-mail (SMTP) via Gmail;
         /// www.youtube.com/watch?v=FZfneLNyE4o&ab_channel=AWPLife 
         /// </summary>
         public static async Task<bool> EnviarEmail(string emailTo, string assunto, string nomeArquivo, List<EmailDadosReplaceOutput> listaDadosReplace)

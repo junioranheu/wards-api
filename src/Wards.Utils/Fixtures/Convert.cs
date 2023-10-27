@@ -6,7 +6,7 @@ namespace Wards.Utils.Fixtures
     public static class Convert
     {
         /// <summary>
-        /// Converter IFormFile para bytes[];
+        /// Converte IFormFile para bytes[];
         /// https://stackoverflow.com/questions/36432028/how-to-convert-a-file-into-byte-array-in-memory;
         /// </summary>
         public static async Task<byte[]> ConverterIFormFileParaBytes(IFormFile formFile)
@@ -18,7 +18,7 @@ namespace Wards.Utils.Fixtures
         }
 
         /// <summary>
-        /// Converter bytes[] para IFormFile;
+        /// Converte bytes[] para IFormFile;
         /// </summary>
         public static IFormFile ConverterBytesParaIFormFile(byte[] bytes)
         {
@@ -33,7 +33,7 @@ namespace Wards.Utils.Fixtures
         }
 
         /// <summary>
-        /// Converter Base64 para arquivo;
+        /// Converte Base64 para arquivo;
         /// </summary>
         public static IFormFile ConverterBase64ParaFile(string base64)
         {
@@ -56,7 +56,7 @@ namespace Wards.Utils.Fixtures
         }
 
         /// <summary>
-        /// Converter bytes[] para Base64;
+        /// Converte bytes[] para Base64;
         /// </summary>
         public static string ConverterBytesParaBase64(byte[] bytes)
         {
@@ -64,7 +64,7 @@ namespace Wards.Utils.Fixtures
         }
 
         /// <summary>
-        /// Converter Base64 para bytes[];
+        /// Converte Base64 para bytes[];
         /// </summary>
         public static byte[] ConverterBasePara64Bytes(string base64)
         {
@@ -72,7 +72,7 @@ namespace Wards.Utils.Fixtures
         }
 
         /// <summary>
-        /// Converter Base64 para imagem;
+        /// Converte Base64 para imagem;
         /// </summary>
         public static IFormFile ConverterBase64ParaImagem(string base64)
         {
@@ -90,7 +90,7 @@ namespace Wards.Utils.Fixtures
         }
 
         /// <summary>
-        /// Converter path de um arquivo para arquivo com base em "tipoConteudo";
+        /// Converte path de um arquivo para arquivo com base em "tipoConteudo";
         /// </summary>
         public static IFormFile ConverterPathParaFile(string path, string nomeArquivo, string tipoConteudo)
         {
@@ -116,7 +116,7 @@ namespace Wards.Utils.Fixtures
         }
 
         /// <summary>
-        /// Converter caminho de um arquivo para stream;
+        /// Converte caminho de um arquivo para stream;
         /// </summary>
         public static async Task<Stream?> ConverterPathParaStream(string path, long? chunkSize = 4096)
         {
@@ -142,7 +142,7 @@ namespace Wards.Utils.Fixtures
         }
 
         /// <summary>
-        /// Normalizar valor que é lido por um "SqlDataReader", que muitas vezes vem quebrado;
+        /// Normaliza valor que é lido por um "SqlDataReader", que muitas vezes vem quebrado;
         /// stackoverflow.com/a/870771;
         /// </summary>
         public static T? NormalizarSqlDataReader<T>(object obj)

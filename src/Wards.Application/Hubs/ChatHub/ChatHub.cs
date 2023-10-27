@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.SignalR;
 using System.Security.Claims;
 using Wards.Application.Hubs.ChatHub.Models.Output;
 using Wards.Application.Hubs.Shared.Utils;
+using static Wards.Utils.Fixtures.Get;
 
 namespace Wards.Application.Hubs.ChatHub
 {
@@ -72,7 +73,7 @@ namespace Wards.Application.Hubs.ChatHub
         public async Task EnviarMensagem(string mensagem, bool? isAvisoSistema = false)
         {
             ChatHubResponse response = CriarResponse(Context.ConnectionId, listaUsuarioOnline, Context.User, mensagem, isAvisoSistema.GetValueOrDefault());
-            await Clients.Group(grupo).SendAsync("EnviarMensagem", response);
+            await Clients.Group(grupo).SendAsync(ObterNomeDoMetodo(), response);
         }
 
         public async Task EnviarMensagemPrivada(string usuarioIdDestinatario, string mensagem, bool? isAvisoSistema = false)
@@ -80,13 +81,15 @@ namespace Wards.Application.Hubs.ChatHub
             UsuarioOnlineResponse? checkUsuarioDestinatario = listaUsuarioOnline.FirstOrDefault(x => x.UsuarioId == usuarioIdDestinatario) ?? throw new Exception($"Usuário não encontrado");
 
             ChatHubResponse response = CriarResponse(Context.ConnectionId, listaUsuarioOnline, Context.User, mensagem, isAvisoSistema.GetValueOrDefault(), usuarioIdDestinatario);
-            await Clients.Client(Context.ConnectionId).SendAsync("EnviarMensagemPrivada", response);
-            await Clients.Client(checkUsuarioDestinatario?.ConnectionId!).SendAsync("EnviarMensagemPrivada", response);
+
+            string nomeMetodoAtual = ObterNomeDoMetodo();
+            await Clients.Client(Context.ConnectionId).SendAsync(nomeMetodoAtual, response);
+            await Clients.Client(checkUsuarioDestinatario?.ConnectionId!).SendAsync(nomeMetodoAtual, response);
         }
 
         public async Task ObterListaUsuariosOnline()
         {
-            await Clients.Group(grupo).SendAsync("ObterListaUsuariosOnline", listaUsuarioOnline);
+            await Clients.Group(grupo).SendAsync(ObterNomeDoMetodo(), listaUsuarioOnline);
         }
 
         private static ChatHubResponse CriarResponse(string connectionId, List<UsuarioOnlineResponse> listaUsuarioOnline, ClaimsPrincipal? claims, string mensagem, bool? isAvisoSistema = false, string? usuarioIdDestinatario = null)

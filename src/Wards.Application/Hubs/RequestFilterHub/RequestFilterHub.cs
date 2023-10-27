@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using Wards.Application.UseCases.Logs.Shared.Input;
+using static Wards.Utils.Fixtures.Get;
 
 namespace Wards.Application.Hubs.RequestFilterHub
 {
@@ -17,7 +18,7 @@ namespace Wards.Application.Hubs.RequestFilterHub
 
         public async Task ExibirNovoRequest(LogInput log)
         {
-            await Clients.All.SendAsync("ExibirNovoRequest", log);
+            await Clients.All.SendAsync(ObterNomeDoMetodo(), log);
         }
     }
 }
