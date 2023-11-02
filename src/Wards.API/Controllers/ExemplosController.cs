@@ -872,5 +872,32 @@ namespace Wards.API.Controllers
             return Ok($"Update-Database finalizado com sucesso às {GerarHorarioBrasilia()}");
         }
         #endregion
+
+        #region random
+        [HttpGet("exemploListarTodosMetodosAPI")]
+        [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(StringBuilder))]
+        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(StatusCodes))]
+        public ActionResult<StringBuilder> ExemploListarTodosMetodosAPI()
+        {
+            StringBuilder sb = new();
+            Assembly? assembly = Assembly.GetExecutingAssembly();
+            List<Type>? controllers = assembly.GetTypes().Where(x => typeof(ControllerBase).IsAssignableFrom(x)).ToList();
+
+            foreach (Type? controller in controllers)
+            {
+                List<MethodInfo>? metodos = controller.GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly).Where(x => !x.IsSpecialName).ToList();
+
+                sb.Append($"\n\n{ObterStringAposDelimitador(str: controller.FullName, delimitador: '.')}: ");
+
+                foreach (var metodo in metodos)
+                {
+                    sb.Append($"\n{metodo.Name}");
+                }
+            }
+
+            return Ok(sb.ToString());
+        }
+        #endregion
     }
 }
