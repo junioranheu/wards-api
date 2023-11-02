@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MySqlConnector;
+using Newtonsoft.Json;
 using RabbitMQ.Client;
 using System.Data.SqlClient;
+using System.Dynamic;
 using System.Globalization;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -93,14 +95,14 @@ namespace Wards.API.Controllers
         #endregion
 
         #region channels
-        [HttpGet("exemploChannel_ClasseReal")]
+        [HttpGet("channel-classeReal")]
         [AllowAnonymous]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(StringBuilder))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(StatusCodes))]
-        public async Task<ActionResult<StringBuilder>> ExemploChannelInt()
+        public async Task<ActionResult<StringBuilder>> ExemploChannel_ClasseReal()
         {
             Channel<LogOutput> channel = Channel.CreateUnbounded<LogOutput>();
-            StringBuilder sb = new();
+            List<dynamic> listaDinamica = new();
 
             // Producer;
             Task? producerTask = Task.Run(async () =>
@@ -122,17 +124,21 @@ namespace Wards.API.Controllers
                 await foreach (var item in channel.Reader.ReadAllAsync())
                 {
                     // Console.WriteLine($"Consumindo: {item}");
-                    sb.Append($" • {item.Endpoint}");
+                    dynamic objetoDinamico = new ExpandoObject();
+                    objetoDinamico.logId = item.LogId;
+                    objetoDinamico.endpoint = item.Endpoint;
+                    listaDinamica.Add(objetoDinamico);
                 }
             });
 
             // Aguardar Producer e Consumer finalizarem;
             await Task.WhenAll(producerTask, consumerTask);
 
-            return Ok($"{ObterNomeDoMetodo()} finalizado com sucesso | Total: {channel.Reader.Count} | {sb}");
+            string jsonArray = JsonConvert.SerializeObject(listaDinamica, Formatting.Indented);
+            return Ok(jsonArray);
         }
 
-        [HttpGet("exemploChannel_Int")]
+        [HttpGet("channel-int")]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(StringBuilder))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(StatusCodes))]
@@ -184,7 +190,7 @@ namespace Wards.API.Controllers
         /// <summary>
         /// Exemplo básico de envio utilizando RabbitMQ;
         /// </summary>
-        [HttpPost("exemploSenderRabbitMQ")]
+        [HttpPost("senderRabbitMQ")]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(void))]
         public async Task<ActionResult<string>> ExemploSenderRabbitMQ()
@@ -214,7 +220,7 @@ namespace Wards.API.Controllers
         /// <summary>
         /// Exemplo básico de consumo utilizando RabbitMQ;
         /// </summary>
-        [HttpGet("exemploReceiverRabbitMQ")]
+        [HttpGet("receiverRabbitMQ")]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
         public ActionResult<List<string>> ExemploReceiverRabbitMQ(bool isConsumirFilaInteira)
@@ -255,7 +261,7 @@ namespace Wards.API.Controllers
         /// <summary>
         /// Exemplos de utilização do genericRepository do Chalecão;
         /// </summary>
-        [HttpGet("exemploGenericRepositoryObter_Id")]
+        [HttpGet("genericRepositoryObter-id")]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof((Usuario, UsuarioOutput)))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(StatusCodes))]
@@ -272,7 +278,7 @@ namespace Wards.API.Controllers
             return Ok(new { linq, linqAutoMapper });
         }
 
-        [HttpGet("exemploGenericRepositoryObter_Where_Include")]
+        [HttpGet("genericRepositoryObter-where-include")]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof((Usuario, UsuarioOutput)))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(StatusCodes))]
@@ -292,7 +298,7 @@ namespace Wards.API.Controllers
             return Ok(new { linq, linqAutoMapper });
         }
 
-        [HttpGet("exemploGenericRepositoryListar_Tudo")]
+        [HttpGet("genericRepositoryListar-tudo")]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof((List<Usuario>, List<UsuarioOutput>)))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(StatusCodes))]
@@ -314,7 +320,7 @@ namespace Wards.API.Controllers
             return Ok(new { linq, linqAutoMapper });
         }
 
-        [HttpGet("exemploGenericRepositoryListar_Where_Orderby_Include")]
+        [HttpGet("genericRepositoryListar-where-orderby-include")]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof((List<Usuario>, List<UsuarioOutput>)))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(StatusCodes))]
@@ -336,7 +342,7 @@ namespace Wards.API.Controllers
             return Ok(new { linq, linqAutoMapper });
         }
 
-        [HttpGet("exemploGenericRepositoryAtualizar")]
+        [HttpGet("genericRepositoryAtualizar")]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(StatusCodes))]
@@ -361,7 +367,7 @@ namespace Wards.API.Controllers
         /// <summary>
         /// Exemplo de requisição com cancellation token;
         /// </summary>
-        [HttpGet("exemploCancellationToken")]
+        [HttpGet("cancellationToken")]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(bool))]
         public async Task<ActionResult<string>> ExemploCancellationToken(CancellationToken cancellationToken)
@@ -382,7 +388,7 @@ namespace Wards.API.Controllers
         /// <summary>
         /// Exemplo de execução de threads paralelas com split de uma lista em chunks;
         /// </summary>
-        [HttpGet("exemploParallelThread_E_ListaChunks")]
+        [HttpGet("parallelThread-e-listaChunks")]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
         public ActionResult<int> ExemploParallelThread_E_ListaChunks()
@@ -414,7 +420,7 @@ namespace Wards.API.Controllers
         /// Busca ao banco sem Entity Framework; utilizando SqlCommand & SqlDataReader, à moda antiga;
         /// Exemplo para MySQL;
         /// </summary>
-        [HttpGet("exemploQuerySqlCommand_MySQL")]
+        [HttpGet("querySqlCommand-MySQL")]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<WardOutput>))]
         public async Task<ActionResult<List<WardOutput>>> ExemploQuerySqlCommand_MySQL(string parametroNome)
@@ -467,7 +473,7 @@ namespace Wards.API.Controllers
         /// Busca ao banco sem Entity Framework; utilizando SqlCommand & SqlDataReader, à moda antiga;
         /// Exemplo para SQL Server;
         /// </summary>
-        [HttpGet("exemploQuerySqlCommand_SQLServer")]
+        [HttpGet("querySqlCommand-SQLServer")]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<WardOutput>))]
         public async Task<ActionResult<List<WardOutput>>> ExemploQuerySqlCommand_SQLServer(string parametroNome)
@@ -523,7 +529,7 @@ namespace Wards.API.Controllers
         /// Base64 to .mp4: base64.guru/converter/decode/video;
         /// Base64 to .jpg: onlinejpgtools.com/convert-base64-to-jpg;
         /// </summary>
-        [HttpGet("exemploStreamingFileEmChunks")]
+        [HttpGet("streamingFileEmChunks")]
         [AllowAnonymous]
         public async IAsyncEnumerable<StreamingFileOutput> ExemploStreamingFileEmChunks([EnumeratorCancellation] CancellationToken cancellationToken, string? nomeArquivo = "background.jpg", long? chunkSizeBytes = 1048576)
         {
@@ -546,7 +552,7 @@ namespace Wards.API.Controllers
         /// <summary>
         /// Exemplo de (simulação) streaming (com yield) de um texto simples;
         /// </summary>
-        [HttpGet("exemploSimularStreamingYieldTextoSimples")]
+        [HttpGet("simularStreamingYieldTextoSimples")]
         [ResponseCache(Duration = TemposConst.UmMinutoEmSegundos)]
         [AllowAnonymous]
         public async IAsyncEnumerable<Ward> ExemploSimularStreamingYieldTextoSimples([EnumeratorCancellation] CancellationToken cancellationToken)
@@ -572,7 +578,7 @@ namespace Wards.API.Controllers
         /// <summary>
         /// Exemplo de insert com BulkCopy e DataTable;
         /// </summary>
-        [HttpPost("exemploBulkCopy")]
+        [HttpPost("bulkCopy")]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(bool))]
         public async Task<ActionResult<List<Ward>>> ExemploBulkCopy()
@@ -601,7 +607,7 @@ namespace Wards.API.Controllers
         /// <summary>
         /// Exemplo de LINQ avançado, fazendo select com group by e inserir resultado em um Output;
         /// </summary>
-        [HttpGet("exemploUnificarListasComSyntaxQuery")]
+        [HttpGet("unificarListasComSyntaxQuery")]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<LogAgrupadoOutput>))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(StatusCodes))]
@@ -874,13 +880,13 @@ namespace Wards.API.Controllers
         #endregion
 
         #region random
-        [HttpGet("exemploListarTodosMetodosAPI")]
+        [HttpGet("listarTodosMetodosAPI")]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(StringBuilder))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(StatusCodes))]
         public ActionResult<StringBuilder> ExemploListarTodosMetodosAPI()
         {
-            StringBuilder sb = new();
+            List<dynamic> listaDinamica = new();
             Assembly? assembly = Assembly.GetExecutingAssembly();
             List<Type>? controllers = assembly.GetTypes().Where(x => typeof(ControllerBase).IsAssignableFrom(x)).ToList();
 
@@ -888,15 +894,25 @@ namespace Wards.API.Controllers
             {
                 List<MethodInfo>? metodos = controller.GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly).Where(x => !x.IsSpecialName).ToList();
 
-                sb.Append($"\n\n{ObterStringAposDelimitador(str: controller.FullName, delimitador: '.')}: ");
+                if (!metodos.Any())
+                {
+                    continue;
+                }
+
+                dynamic objetoDinamico = new ExpandoObject();
+                objetoDinamico.controller = ObterStringAposDelimitador(str: controller.FullName, delimitador: '.', isEstourarException: false);
+                objetoDinamico.metodos = new List<string>();
 
                 foreach (var metodo in metodos)
                 {
-                    sb.Append($"\n{metodo.Name}");
+                    objetoDinamico.metodos.Add(metodo.Name);
                 }
+
+                listaDinamica.Add(objetoDinamico);
             }
 
-            return Ok(sb.ToString());
+            string jsonArray = JsonConvert.SerializeObject(listaDinamica, Formatting.Indented);
+            return Ok(jsonArray);
         }
         #endregion
     }
