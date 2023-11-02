@@ -8,6 +8,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Threading.Channels;
 using Wards.Application.Services.Sistemas.ResetarBancoDados;
 using Wards.Application.UseCases.Logs.ListarLog;
 using Wards.Application.UseCases.Logs.Shared.Output;
@@ -88,6 +89,85 @@ namespace Wards.API.Controllers
         {
             _rabbitMQChannel.Close();
             _rabbitMQConnection.Close();
+        }
+        #endregion
+
+        #region channels
+        [HttpGet("exemploChannel_ClasseReal")]
+        [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(StringBuilder))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(StatusCodes))]
+        public async Task<ActionResult<StringBuilder>> ExemploChannelInt()
+        {
+            Channel<LogOutput> channel = Channel.CreateUnbounded<LogOutput>();
+            StringBuilder sb = new();
+
+            // Producer;
+            Task? producerTask = Task.Run(async () =>
+            {
+                PaginacaoInput input = new() { IsSelectAll = true };
+                var lista = await _listarLogUseCase.Execute(input);
+
+                foreach (var item in lista)
+                {
+                    await channel.Writer.WriteAsync(item);
+                }
+
+                channel.Writer.Complete();
+            });
+
+            // Consumer;
+            Task? consumerTask = Task.Run(async () =>
+            {
+                await foreach (var item in channel.Reader.ReadAllAsync())
+                {
+                    // Console.WriteLine($"Consumindo: {item}");
+                    sb.Append($" • {item.Endpoint}");
+                }
+            });
+
+            // Aguardar Producer e Consumer finalizarem;
+            await Task.WhenAll(producerTask, consumerTask);
+
+            return Ok($"{ObterNomeDoMetodo()} finalizado com sucesso | Total: {channel.Reader.Count} | {sb}");
+        }
+
+        [HttpGet("exemploChannel_Int")]
+        [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(StringBuilder))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(StatusCodes))]
+        public async Task<ActionResult<StringBuilder>> ExemploChannel_Int()
+        {
+            Channel<int> channel = Channel.CreateUnbounded<int>();
+            StringBuilder sb = new();
+
+            // Producer;
+            Task? producerTask = Task.Run(async () =>
+            {
+                for (int i = 0; i < 10; i++)
+                {
+                    // Console.WriteLine($"Produzindo: {i}");
+                    await channel.Writer.WriteAsync(i);
+                    await Task.Delay(100); // Simular processamento;
+                }
+
+                channel.Writer.Complete();
+            });
+
+            // Consumer;
+            Task? consumerTask = Task.Run(async () =>
+            {
+                await foreach (var item in channel.Reader.ReadAllAsync())
+                {
+                    // Console.WriteLine($"Consumindo: {item}");
+                    sb.Append($" • {item}");
+                }
+            });
+
+            // Aguardar Producer e Consumer finalizarem;
+            await Task.WhenAll(producerTask, consumerTask);
+
+            return Ok($"{ObterNomeDoMetodo()} finalizado com sucesso: {sb}");
         }
         #endregion
 
@@ -186,7 +266,7 @@ namespace Wards.API.Controllers
 
             if (linq is null)
             {
-                return StatusCode(StatusCodes.Status404NotFound);
+                throw new Exception(ObterDescricaoEnum(CodigoErroEnum.NaoEncontrado));
             }
 
             return Ok(new { linq, linqAutoMapper });
@@ -206,7 +286,7 @@ namespace Wards.API.Controllers
 
             if (linq is null)
             {
-                return StatusCode(StatusCodes.Status404NotFound);
+                throw new Exception(ObterDescricaoEnum(CodigoErroEnum.NaoEncontrado));
             }
 
             return Ok(new { linq, linqAutoMapper });
@@ -228,7 +308,7 @@ namespace Wards.API.Controllers
 
             if (!linq.Any())
             {
-                return StatusCode(StatusCodes.Status404NotFound);
+                throw new Exception(ObterDescricaoEnum(CodigoErroEnum.NaoEncontrado));
             }
 
             return Ok(new { linq, linqAutoMapper });
@@ -250,7 +330,7 @@ namespace Wards.API.Controllers
 
             if (!linq.Any())
             {
-                return StatusCode(StatusCodes.Status404NotFound);
+                throw new Exception(ObterDescricaoEnum(CodigoErroEnum.NaoEncontrado));
             }
 
             return Ok(new { linq, linqAutoMapper });
@@ -266,7 +346,7 @@ namespace Wards.API.Controllers
 
             if (linq is null)
             {
-                return StatusCode(StatusCodes.Status404NotFound);
+                throw new Exception(ObterDescricaoEnum(CodigoErroEnum.NaoEncontrado));
             }
 
             linq.Chamado = novoChamado;
@@ -524,7 +604,7 @@ namespace Wards.API.Controllers
         [HttpGet("exemploUnificarListasComSyntaxQuery")]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<LogAgrupadoOutput>))]
-        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(LogOutput))]
+        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(StatusCodes))]
         public async Task<ActionResult<List<LogAgrupadoOutput>>> ExemploUnificarListasComSyntaxQuery()
         {
             var lista = await _listarLogUseCase.Execute(new PaginacaoInput() { IsSelectAll = true });
@@ -584,7 +664,7 @@ namespace Wards.API.Controllers
         [HttpGet("exemploLINQGroupBy")]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<LogAgrupadoOutput>))]
-        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(LogOutput))]
+        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(StatusCodes))]
         public async Task<ActionResult<List<LogAgrupadoOutput>>> ExemploLINQGroupBy()
         {
             var lista = await _listarLogUseCase.Execute(new PaginacaoInput() { IsSelectAll = true });
@@ -626,14 +706,15 @@ namespace Wards.API.Controllers
         [HttpGet("exemploLINQComSelectDinamico")]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
-        [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(string))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(StatusCodes))]
+        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(StatusCodes))]
         public async Task<ActionResult<string>> ExemploLINQComSelectDinamico(string nomePropriedade)
         {
             // Ward: caso seja necessário passar como parâmetro "nomePropriedade" uma classe...
             // Na chamada do end-point/método, pode ser utilizado o "nameof(xxx)";
             if (string.IsNullOrEmpty(nomePropriedade))
             {
-                return StatusCode(StatusCodes.Status403Forbidden, string.Empty);
+                return StatusCode(StatusCodes.Status400BadRequest, string.Empty);
             }
 
             IEnumerable<UsuarioOutput>? lista = await _listarUsuarioUseCase.Execute(new PaginacaoInput() { IsSelectAll = true });
