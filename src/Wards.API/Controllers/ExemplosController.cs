@@ -94,6 +94,21 @@ namespace Wards.API.Controllers
         }
         #endregion
 
+        #region IFormFile
+        [HttpGet("iFormFile")]
+        [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IFormFile))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(StatusCodes))]
+        public  ActionResult<IFormFile> ExemploIFormFile()
+        {
+            string filePath = $"{_webHostEnvironment.ContentRootPath}/Uploads/Usuarios/Perfil/Imagem/1AAAAA.jpg";
+            string fileName = Path.GetFileName(filePath);
+            FileStream fileStream = new(filePath, FileMode.Open, FileAccess.Read);
+
+            return File(fileStream, "application/octet-stream", fileName);
+        }
+        #endregion
+
         #region channels
         [HttpGet("channel-classeReal")]
         [AllowAnonymous]
