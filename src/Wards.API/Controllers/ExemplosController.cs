@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.StaticFiles;
 using MySqlConnector;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
@@ -101,11 +102,17 @@ namespace Wards.API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(StatusCodes))]
         public  ActionResult<IFormFile> ExemploIFormFile()
         {
-            string filePath = $"{_webHostEnvironment.ContentRootPath}/Uploads/Usuarios/Perfil/Imagem/1AAAAA.jpg";
-            string fileName = Path.GetFileName(filePath);
-            FileStream fileStream = new(filePath, FileMode.Open, FileAccess.Read);
+            string arquivo = $"{_webHostEnvironment.ContentRootPath}/Uploads/Usuarios/Perfil/Imagem/1AAAAA.jpg";
+            string nome = Path.GetFileName(arquivo);
+            FileStream fileStream = new(arquivo, FileMode.Open, FileAccess.Read);
 
-            return File(fileStream, "application/octet-stream", fileName);
+            FileExtensionContentTypeProvider p = new();
+            if (!p.TryGetContentType(nome, out string? tipo))
+            {
+                tipo = "application/octet-stream";
+            }
+
+            return File(fileStream, tipo, nome);
         }
         #endregion
 
