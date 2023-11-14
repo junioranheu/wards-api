@@ -223,9 +223,11 @@ else
 
 <br/>
 <h2>Passo 1: Instalação do Pacote</h2>
-<p>Antes de começar, certifique-se de que você tem o Entity Framework Core instalado no seu projeto .NET 7. Se não estiver instalado, você pode adicionar o pacote NuGet através do seguinte comando:</p>
+<p>Antes de começar, certifique-se de que você tem os pacotes necessários instalados em seu projeto .NET (todos na mesma versão!). Se não estiver instalado, você pode adicionar o pacote NuGet através do seguinte comando:</p>
 <blockquote>
-    <p><i>dotnet add package Microsoft.EntityFrameworkCore.Design</i></p>
+    <p><i>dotnet add package Microsoft.EntityFrameworkCore</i> (camadas Domain e Infrastructure)</p>
+    <p><i>dotnet add package Microsoft.EntityFrameworkCore.Design</i> (camada API)</p>
+    <p><i>dotnet add package Microsoft.EntityFrameworkCore.Tools</i> (camada API)</p>
 </blockquote>
 
 <br/>
