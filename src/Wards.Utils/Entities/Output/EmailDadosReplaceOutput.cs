@@ -1,6 +1,6 @@
 ﻿namespace Wards.Utils.Entities.Output
 {
-    public class EmailDadosReplaceOutput
+    public sealed class EmailDadosReplaceOutput
     {
         public string? Key { get; set; } = string.Empty;
 
