@@ -98,7 +98,7 @@ namespace Wards.Application.UseCases.Usuarios
                     return string.Empty;
                 }
 
-                return await UparImagem(arquivo, nomeFoto, ObterDescricaoEnum(CaminhoUploadEnum.FotoPerfilUsuario), string.Empty, _webHostEnvironment.ContentRootPath); ;
+                return await SubirArquivoEmPasta(arquivo, nomeArquivoSemExtensao: nomeFoto, extensao: ObterExtensao(arquivo), path: ObterDescricaoEnum(CaminhoUploadEnum.FotoPerfilUsuario), nomeArquivoAnterior: string.Empty, webRootPath: _webHostEnvironment.ContentRootPath);
             }
             catch (Exception)
             {
@@ -107,7 +107,7 @@ namespace Wards.Application.UseCases.Usuarios
 
             static string GerarNomeFoto(int usuarioId)
             {
-                return $"{usuarioId}{GerarStringAleatoria(5, true)}.jpg";
+                return $"{usuarioId}{GerarStringAleatoria(5, true)}";
             }
         }
     }

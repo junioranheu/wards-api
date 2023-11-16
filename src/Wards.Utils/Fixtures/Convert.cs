@@ -94,23 +94,13 @@ namespace Wards.Utils.Fixtures
         /// </summary>
         public static IFormFile ConverterPathParaFile(string path, string nomeArquivo, string tipoConteudo)
         {
-            FileStream? fileStream = null;
-            FormFile? formFile = null;
+            FileStream? fileStream = new(path, FileMode.Open);
 
-            try
+            FormFile? formFile = new(fileStream, 0, fileStream.Length, nomeArquivo, nomeArquivo)
             {
-                fileStream = new FileStream(path, FileMode.Open);
-
-                formFile = new(fileStream, 0, fileStream.Length, nomeArquivo, nomeArquivo)
-                {
-                    Headers = new HeaderDictionary(),
-                    ContentType = tipoConteudo
-                };
-            }
-            finally
-            {
-                fileStream?.Dispose();
-            }
+                Headers = new HeaderDictionary(),
+                ContentType = tipoConteudo
+            };
 
             return formFile;
         }

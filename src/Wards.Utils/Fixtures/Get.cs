@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -322,6 +323,22 @@ namespace Wards.Utils.Fixtures
                        string desc = info!.GetCustomAttributes(typeof(DescriptionAttribute), false).FirstOrDefault() is DescriptionAttribute descriptionAttribute ? descriptionAttribute.Description : x.ToString();
                        return new EnumOutput { Id = (int)(object)x, Item = info.Name, Desc = desc };
                    }).ToList();
+        }
+
+        /// <summary>
+        /// Obtém a extensão de um arquivo IFormFile;
+        /// </summary>
+        public static string ObterExtensao(IFormFile file)
+        {
+            if (file is null || file.Length == 0)
+            {
+                return string.Empty;
+            }
+
+            string nome = file.FileName;
+            string extensao = Path.GetExtension(nome);
+
+            return extensao;
         }
     }
 }
