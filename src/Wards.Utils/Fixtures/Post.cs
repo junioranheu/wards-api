@@ -137,8 +137,11 @@ namespace Wards.Utils.Fixtures
 
             try
             {
-                using FileStream fs = File.Create(fullPathComExtensao);
-                await arquivo.CopyToAsync(fs);
+                using FileStream fs = new(fullPathComExtensao, FileMode.Create);
+                MemoryStream memoryStream = new();
+                await arquivo.CopyToAsync(memoryStream);
+                memoryStream.Seek(0, SeekOrigin.Begin);
+                await memoryStream.CopyToAsync(fs);
             }
             catch (Exception ex)
             {
