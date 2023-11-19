@@ -84,7 +84,7 @@ namespace Wards.Application.UseCases.Usuarios
                 return null;
             }
 
-            return ConverterPathParaFile(arquivoAleatorio, Path.GetFileName(arquivoAleatorio), "image/jpg");
+            return ConverterPathParaIFormFile(arquivoAleatorio, Path.GetFileName(arquivoAleatorio), "image/jpg");
         }
 
         internal static async Task<string?> VerificarParametrosDepoisUparFoto(IWebHostEnvironment _webHostEnvironment, int usuarioId, IFormFile? arquivo)

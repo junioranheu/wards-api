@@ -7,37 +7,36 @@ namespace Wards.Utils.Fixtures
     {
         /// <summary>
         /// Converte IFormFile para bytes[];
-        /// https://stackoverflow.com/questions/36432028/how-to-convert-a-file-into-byte-array-in-memory;
         /// </summary>
         public static async Task<byte[]> ConverterIFormFileParaBytes(IFormFile formFile)
         {
-            await using var memoryStream = new MemoryStream();
+            MemoryStream memoryStream = new();
+            memoryStream.Seek(0, SeekOrigin.Begin);
             await formFile.CopyToAsync(memoryStream);
 
             return memoryStream.ToArray();
         }
 
         /// <summary>
-        /// Converte bytes[] para IFormFile;
+        /// Converte IFormFile para Base64;
         /// </summary>
-        public static IFormFile ConverterBytesParaIFormFile(byte[] bytes)
+        public static string ConverterIFormFileParaBase64(IFormFile formFile)
         {
-            using var memoryStream = new MemoryStream(bytes);
-            string strRandom = GerarStringAleatoria(5, false);
-            FormFile formFile = new(memoryStream, 0, bytes.Length, strRandom, strRandom)
-            {
-                Headers = new HeaderDictionary()
-            };
+            MemoryStream memoryStream = new();
+            memoryStream.Seek(0, SeekOrigin.Begin);
+            formFile.CopyTo(memoryStream);
 
-            return formFile;
+            byte[] fileBytes = memoryStream.ToArray();
+            string base64String = System.Convert.ToBase64String(fileBytes);
+
+            return base64String;
         }
 
         /// <summary>
         /// Converte Base64 para arquivo;
         /// </summary>
-        public static IFormFile ConverterBase64ParaFile(string base64)
+        public static IFormFile ConverterBase64ParaIFormFile(string base64)
         {
-            List<IFormFile> formFiles = new();
             string split = ";base64,";
             string normalizarBase64 = base64;
 
@@ -47,12 +46,37 @@ namespace Wards.Utils.Fixtures
             }
 
             byte[] bytes = System.Convert.FromBase64String(normalizarBase64);
-            MemoryStream stream = new(bytes);
+            MemoryStream memoryStream = new(bytes);
+            memoryStream.Seek(0, SeekOrigin.Begin);
 
-            IFormFile file = new FormFile(stream, 0, bytes.Length, Guid.NewGuid().ToString(), Guid.NewGuid().ToString());
-            formFiles.Add(file);
+            IFormFile file = new FormFile(memoryStream, 0, bytes.Length, Guid.NewGuid().ToString(), Guid.NewGuid().ToString());
 
-            return formFiles[0];
+            return file;
+        }
+
+        /// <summary>
+        /// Converte Base64 para bytes[];
+        /// </summary>
+        public static byte[] ConverterBase64ParaBytes(string base64)
+        {
+            return System.Convert.FromBase64String(base64);
+        }
+
+        /// <summary>
+        /// Converte bytes[] para IFormFile;
+        /// </summary>
+        public static IFormFile ConverterBytesParaIFormFile(byte[] bytes)
+        {
+            MemoryStream memoryStream = new (bytes);
+            memoryStream.Seek(0, SeekOrigin.Begin);
+            string strRandom = GerarStringAleatoria(5, false); 
+
+            FormFile formFile = new(memoryStream, 0, bytes.Length, strRandom, strRandom)
+            {
+                Headers = new HeaderDictionary()
+            };
+
+            return formFile;
         }
 
         /// <summary>
@@ -64,35 +88,9 @@ namespace Wards.Utils.Fixtures
         }
 
         /// <summary>
-        /// Converte Base64 para bytes[];
-        /// </summary>
-        public static byte[] ConverterBasePara64Bytes(string base64)
-        {
-            return System.Convert.FromBase64String(base64);
-        }
-
-        /// <summary>
-        /// Converte Base64 para imagem;
-        /// </summary>
-        public static IFormFile ConverterBase64ParaImagem(string base64)
-        {
-            List<IFormFile> formFiles = new();
-
-            string split = ";base64,";
-            string normalizarBase64 = base64[(base64.IndexOf(split) + split.Length)..];
-            byte[] bytes = System.Convert.FromBase64String(normalizarBase64);
-            MemoryStream stream = new(bytes);
-
-            IFormFile file = new FormFile(stream, 0, bytes.Length, Guid.NewGuid().ToString(), Guid.NewGuid().ToString());
-            formFiles.Add(file);
-
-            return formFiles[0];
-        }
-
-        /// <summary>
         /// Converte path de um arquivo para arquivo com base em "tipoConteudo";
         /// </summary>
-        public static IFormFile ConverterPathParaFile(string path, string nomeArquivo, string tipoConteudo)
+        public static IFormFile ConverterPathParaIFormFile(string path, string nomeArquivo, string tipoConteudo)
         {
             FileStream? fileStream = new(path, FileMode.Open);
 
