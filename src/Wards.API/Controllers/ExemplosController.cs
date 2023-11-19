@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
+using Microsoft.EntityFrameworkCore;
 using MySqlConnector;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
@@ -11,7 +12,6 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
-using System.Text.Json.Nodes;
 using System.Threading.Channels;
 using Wards.Application.Services.Sistemas.ResetarBancoDados;
 using Wards.Application.UseCases.Logs.ListarLog;
@@ -26,6 +26,7 @@ using Wards.Application.UseCases.Wards.Shared.Output;
 using Wards.Domain.Consts;
 using Wards.Domain.Entities;
 using Wards.Domain.Enums;
+using Wards.Infrastructure.Data;
 using Wards.Infrastructure.UnitOfWork.Generic;
 using Wards.Utils.Entities.Output;
 using static Wards.Utils.Fixtures.Convert;
@@ -43,6 +44,7 @@ namespace Wards.API.Controllers
     public class ExemplosController : BaseController<ExemplosController>
     {
         #region constructor
+        private readonly WardsContext _context;
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly Infrastructure.Factory.ConnectionFactory.IConnectionFactory _connectionFactory;
         private readonly IListarLogUseCase _listarLogUseCase;
@@ -59,6 +61,7 @@ namespace Wards.API.Controllers
         /// Sim, este Controller está propositalmente uma bagunça;
         /// </summary>
         public ExemplosController(
+            WardsContext context,
             IWebHostEnvironment webHostEnvironment,
             Infrastructure.Factory.ConnectionFactory.IConnectionFactory connectionFactory,
             IListarLogUseCase listarLogUseCase,
@@ -67,6 +70,7 @@ namespace Wards.API.Controllers
             IBulkCopyCriarWardUseCase bulkCopyCriarWardUseCase,
             IGenericRepository<Usuario> genericUsuarioRepository)
         {
+            _context = context;
             _webHostEnvironment = webHostEnvironment;
             _connectionFactory = connectionFactory;
             _listarLogUseCase = listarLogUseCase;
@@ -93,6 +97,24 @@ namespace Wards.API.Controllers
         {
             _rabbitMQChannel.Close();
             _rabbitMQConnection.Close();
+        }
+        #endregion
+
+        #region linq_com_EF.Functions
+        [HttpGet("linq-EF-functions-datadiff")]
+        [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Usuario))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(StatusCodes))]
+        public async Task<ActionResult<List<Usuario>>> ExemploEFFunctions_DataDiff()
+        {
+            const int offsetEmHoras = 24;
+
+            List<Usuario>? lista = await _context.Usuarios.
+                                   Include(ur => ur.UsuarioRoles)!.ThenInclude(r => r.Roles).
+                                   Where(u => EF.Functions.DateDiffHour(u.Data, GerarHorarioBrasilia()) > offsetEmHoras).
+                                   AsNoTracking().ToListAsync();
+ 
+            return Ok(lista);
         }
         #endregion
 
