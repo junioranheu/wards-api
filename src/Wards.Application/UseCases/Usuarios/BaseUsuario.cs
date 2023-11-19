@@ -98,7 +98,7 @@ namespace Wards.Application.UseCases.Usuarios
                     return string.Empty;
                 }
 
-                return await SubirArquivoEmPasta(arquivo, nomeArquivoSemExtensao: nomeFoto, extensao: ObterExtensao(arquivo), path: ObterDescricaoEnum(CaminhoUploadEnum.FotoPerfilUsuario), nomeArquivoAnterior: string.Empty, webRootPath: _webHostEnvironment.ContentRootPath);
+                return await SubirArquivoEmPasta(arquivo, nomeArquivoSemExtensao: nomeFoto, extensao: ObterExtensao(arquivo), path: ObterDescricaoEnum(CaminhoUploadEnum.FotoPerfilUsuario), nomeArquivoAnteriorSemExtensao: string.Empty, webRootPath: _webHostEnvironment.ContentRootPath);
             }
             catch (Exception)
             {
