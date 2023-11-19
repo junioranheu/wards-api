@@ -100,7 +100,7 @@ namespace Wards.Utils.Fixtures
         /// nomeArquivoSemExtensao = o nome do novo objeto em questão;
         /// extensao = por exemplo: ".jpg";
         /// path = nome do caminho do arquivo, da pasta. Por exemplo: "/Uploads/Usuarios/";
-        /// nomeArquivoAnterior = o nome do arquivo que constava anterior, caso exista;
+        /// nomeArquivoAnteriorSemExtensao = o nome do arquivo que constava anterior, caso exista;
         /// hostingEnvironment = o caminho até o wwwroot;
         /// </summary>
         public static async Task<string?> SubirArquivoEmPasta(IFormFile arquivo, string nomeArquivoSemExtensao, string extensao, string path, string? nomeArquivoAnteriorSemExtensao, string webRootPath)
