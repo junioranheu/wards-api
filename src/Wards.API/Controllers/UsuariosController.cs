@@ -22,6 +22,7 @@ namespace Wards.API.Controllers
     [ApiController]
     public class UsuariosController : BaseController<UsuariosController>
     {
+        private readonly IWebHostEnvironment _environment;
         private readonly IAutenticarUsuarioUseCase _autenticarUseCase;
         private readonly ICriarRefreshTokenUsuarioUseCase _criarRefreshTokenUsuarioUseCase;
         private readonly ICriarUsuarioUseCase _criarUseCase;
@@ -32,6 +33,7 @@ namespace Wards.API.Controllers
         private readonly IVerificarContaUsuarioUseCase _verificarContaUsuarioUseCase;
 
         public UsuariosController(
+            IWebHostEnvironment environment,
             IAutenticarUsuarioUseCase autenticarUseCase,
             ICriarUsuarioUseCase criarUseCase,
             ICriarUsuarioRoleUseCase criarUsuarioRoleUseCase,
@@ -41,6 +43,7 @@ namespace Wards.API.Controllers
             ISolicitarVerificacaoContaUsuarioUseCase solicitarVerificacaoContaUsuarioUseCase,
             IVerificarContaUsuarioUseCase verificarContaUsuarioUseCase)
         {
+            _environment = environment;
             _autenticarUseCase = autenticarUseCase;
             _criarRefreshTokenUsuarioUseCase = criarRefreshTokenUsuarioUseCase;
             _criarUseCase = criarUseCase;
@@ -51,16 +54,16 @@ namespace Wards.API.Controllers
             _verificarContaUsuarioUseCase = verificarContaUsuarioUseCase;
         }
 
-        [ApiExplorerSettings(IgnoreApi = false)] // ***
+        [ApiExplorerSettings(IgnoreApi = false)]
         [HttpPost("autenticarLazy")]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
         [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(AutenticarUsuarioOutput))]
-        public async Task<ActionResult<AutenticarUsuarioOutput>> AutenticarLazy()
+        public async Task<ActionResult<string>> AutenticarLazy()
         {
-            if (User.Identity!.IsAuthenticated)
+            if (_environment.IsProduction())
             {
-                throw new Exception(ObterDescricaoEnum(CodigoErroEnum.UsuarioJaAutenticado));
+                return Ok(string.Empty);
             }
 
             var resp = await _autenticarUseCase.Execute(new AutenticarUsuarioInput() { Login = "adm", Senha = "123" });
