@@ -75,7 +75,8 @@ namespace Wards.API
                         Codigo = StatusCodes.Status400BadRequest,
                         Data = ObterDetalhesDataHora(),
                         Caminho = actionContext.HttpContext.Request.Path,
-                        Mensagens = actionContext.ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage)
+                        Mensagens = actionContext.ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage),
+                        IsErro = true
                     };
 
                     return new JsonResult(obj);
