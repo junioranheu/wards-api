@@ -1,6 +1,6 @@
 USE [CPFL]
 GO
-/****** Object:  StoredProcedure [dbo].[SP_FERIADOS_TEMP]    Script Date: 22/09/2023 10:59:45 ******/
+/****** Object:  StoredProcedure [dbo].[SP_FERIADOS_TEMP]    Script Date: 27/11/2023 15:17:20 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -223,8 +223,8 @@ AS BEGIN
         INSERT INTO #TempFeriados
         SELECT @pascoa, 1,'Paixão de Cristo', ''
         
-        INSERT INTO #TempFeriados
-        SELECT DATEADD(DAY, -48, @pascoa), 1,'Carnaval', ''
+        -- INSERT INTO #TempFeriados
+        -- SELECT DATEADD(DAY, -48, @pascoa), 1,'Carnaval', ''
         
         INSERT INTO #TempFeriados
         SELECT DATEADD(DAY, -47, @pascoa), 1,'Carnaval', ''

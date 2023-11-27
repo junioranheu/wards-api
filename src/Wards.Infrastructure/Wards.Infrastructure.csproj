@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="StoredProcedures\**" />
+    <EmbeddedResource Remove="StoredProcedures\**" />
+    <None Remove="StoredProcedures\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="12.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.13" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="7.0.0" />
@@ -19,7 +25,6 @@
 
   <ItemGroup>
     <Folder Include="Pipelines\" />
-    <Folder Include="StoredProcedures\MySQL\" />
   </ItemGroup>
 
 </Project>
