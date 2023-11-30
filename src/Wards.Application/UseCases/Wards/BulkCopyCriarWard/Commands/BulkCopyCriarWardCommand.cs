@@ -15,7 +15,7 @@ namespace Wards.Application.UseCases.Wards.BulkCopyCriarWard.Commands
 
         public async Task Execute(List<Ward> input)
         {
-            await BulkInsert(input, _context, "Wards");
+            await BulkInsert(input, _context, "Wards", isExceptionInPortuguese: true);
         }
     }
 }

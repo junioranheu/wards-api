@@ -113,7 +113,7 @@ namespace Wards.API.Controllers
                                    Include(ur => ur.UsuarioRoles)!.ThenInclude(r => r.Roles).
                                    Where(u => EF.Functions.DateDiffHour(u.Data, GerarHorarioBrasilia()) > offsetEmHoras).
                                    AsNoTracking().ToListAsync();
- 
+
             return Ok(lista);
         }
         #endregion
@@ -820,8 +820,8 @@ namespace Wards.API.Controllers
 
                     FeriadosEstados = new List<FeriadoEstado>()
                     {
-                        new FeriadoEstado() { Estados = new Estado() { Nome = "São Paulo" } },
-                        new FeriadoEstado() { Estados = new Estado() { Nome = "Rio de Janeiro" } }
+                        new() { Estados = new Estado() { Nome = "São Paulo" } },
+                        new() { Estados = new Estado() { Nome = "Rio de Janeiro" } }
                     }
                 },
 
@@ -830,8 +830,8 @@ namespace Wards.API.Controllers
 
                     FeriadosEstados = new List<FeriadoEstado>()
                     {
-                        new FeriadoEstado() { Estados = new Estado() { Nome = "Minas Gerais" } },
-                        new FeriadoEstado() { Estados = new Estado() { Nome = "São Paulo" } }
+                        new() { Estados = new Estado() { Nome = "Minas Gerais" } },
+                        new() { Estados = new Estado() { Nome = "São Paulo" } }
                     }
                 },
             };
