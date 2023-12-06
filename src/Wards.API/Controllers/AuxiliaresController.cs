@@ -1,7 +1,5 @@
-﻿using DocumentFormat.OpenXml.Vml;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Wards.Application.UseCases.Auxiliares.ListarEstado;
 using Wards.Application.UseCases.Auxiliares.ListarEstado.Shared.Output;
 using Wards.Application.UseCases.Shared.Models.Input;

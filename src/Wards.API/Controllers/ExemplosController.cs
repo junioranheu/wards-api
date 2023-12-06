@@ -13,9 +13,14 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Channels;
+using Wards.API.Filters;
+using Wards.Application.Services.GenericReadExcel;
+using Wards.Application.Services.GenericReadExcel.Models.Input;
+using Wards.Application.Services.Imports.Shared.Models.Input;
 using Wards.Application.Services.Sistemas.ResetarBancoDados;
 using Wards.Application.UseCases.Logs.ListarLog;
 using Wards.Application.UseCases.Logs.Shared.Output;
+using Wards.Application.UseCases.NewslettersCadastros.Shared.Output;
 using Wards.Application.UseCases.Shared.Models.Input;
 using Wards.Application.UseCases.Shared.Models.Output;
 using Wards.Application.UseCases.Usuarios.ListarUsuario;
@@ -136,6 +141,27 @@ namespace Wards.API.Controllers
             }
 
             return File(fileStream, tipo, nome);
+        }
+
+        [HttpPost("lerExcelNewsletterCadastroOutput")]
+        [AllowAnonymous]
+        [RequestSizeLimit(SistemaConst.QtdLimiteMBsImport)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<NewsletterCadastroOutput>))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(StatusCodes))]
+        public ActionResult<List<NewsletterCadastroOutput>> ExemploLerExcelNewsletterCadastroOutput([FromForm] FileInput input)
+        {
+            if (input.FormFile is null || !input.FormFile!.FileName.EndsWith(".xlsx"))
+            {
+                throw new Exception(ObterDescricaoEnum(CodigoErroEnum.ArquivoImportFormatoInvalido));
+            }
+
+            List<NewsletterCadastroOutput>? excel = GenericReadExcel.ReadExcel<NewsletterCadastroOutput>(file: input.FormFile, skipRow: 1);
+
+            // Depois de ler o excel, é possível fazer um Bulk Insert;
+            // var result = _mapper.Map<List<NewsletterCadastro>>(response);
+            // await BulkCopy.BulkInsert(result, _context, nomeTabelaAlvo);
+
+            return Ok(excel);
         }
         #endregion
 

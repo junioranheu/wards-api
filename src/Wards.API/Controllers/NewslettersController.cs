@@ -26,8 +26,7 @@ namespace NewsletterCadastros.API.Controllers
         public NewslettersController(
             ICriarNewsletterCadastroUseCase criarUseCase,
             IListarNewsletterCadastroUseCase listarUseCase,
-            IImportCSVService importCSVService
-            )
+            IImportCSVService importCSVService)
         {
             _criarUseCase = criarUseCase;
             _listarUseCase = listarUseCase;
@@ -70,7 +69,9 @@ namespace NewsletterCadastros.API.Controllers
         public async Task<ActionResult> Importar([FromForm] ImportCSVInput input)
         {
             if (input.FormFile is null || !input.FormFile!.FileName.EndsWith(".csv"))
+            {
                 throw new Exception(ObterDescricaoEnum(CodigoErroEnum.ArquivoImportFormatoInvalido));
+            }
 
             input.UsuarioId = await ObterUsuarioId();
             input.ClasseAlvo = new NewsletterCadastro();
