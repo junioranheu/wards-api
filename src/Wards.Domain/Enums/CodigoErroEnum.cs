@@ -23,7 +23,7 @@ namespace Wards.Domain.Enums
         [Description("E-mail inválido")]
         EmailInvalido = 906,
 
-        [Description("O usuário ou senha estão incorretos")]
+        [Description("Usuário ou senha estão incorretos")]
         UsuarioSenhaIncorretos = 907,
 
         [Description("Esta conta está desativada")]
