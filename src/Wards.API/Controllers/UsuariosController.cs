@@ -103,7 +103,6 @@ namespace Wards.API.Controllers
         }
 
         [HttpPost]
-        [AuthorizeFilter(UsuarioRoleEnum.Administrador, UsuarioRoleEnum.Suporte)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AutenticarUsuarioOutput))]
         [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(AutenticarUsuarioOutput))]
         public async Task<ActionResult<AutenticarUsuarioOutput>> Criar(CriarUsuarioInput input)
