@@ -39,7 +39,7 @@ using static Wards.Utils.Fixtures.Get;
 using static Wards.Utils.Fixtures.Post;
 
 /// <summary>
-/// Sim, este Controller está propositalmente uma bagunça;
+/// Este Controller está propositalmente uma bagunça!!!;
 /// NÃO LEVE EM CONSIDERAÇÃO ESSE CONTROLLER EM GERAL COMO PARÂMETRO DE QUALIDADE: ELE ESTÁ RUIM PROPOSITALMENTE;
 /// </summary>
 namespace Wards.API.Controllers
@@ -106,6 +106,21 @@ namespace Wards.API.Controllers
         #endregion
 
         #region linq_com_EF.Functions
+        [HttpGet("linq-EF-functions-manipular-data-diretamente-LINQ")]
+        [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Usuario))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(StatusCodes))]
+        public async Task<ActionResult<List<Usuario>>> ExemploEFFunctions_ManipularDataDiretamenteLINQ()
+        {
+            DateTime dataTeste = DateTime.Now;
+
+            List<Usuario>? lista = await _context.Usuarios.
+                                   Where(x => EF.Property<DateTime>(x, "Data").Year <= dataTeste.Year).
+                                   AsNoTracking().ToListAsync();
+
+            return Ok(lista);
+        }
+
         [HttpGet("linq-EF-functions-datadiff")]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Usuario))]
