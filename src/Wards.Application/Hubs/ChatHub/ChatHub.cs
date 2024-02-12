@@ -72,12 +72,22 @@ namespace Wards.Application.Hubs.ChatHub
 
         public async Task EnviarMensagem(string mensagem, bool? isAvisoSistema = false)
         {
+            if (Context is null)
+            {
+                return;
+            }
+
             ChatHubResponse response = CriarResponse(Context.ConnectionId, listaUsuarioOnline, Context.User, mensagem, isAvisoSistema.GetValueOrDefault());
             await Clients.Group(grupo).SendAsync(ObterNomeDoMetodo(), response);
         }
 
         public async Task EnviarMensagemPrivada(string usuarioIdDestinatario, string mensagem, bool? isAvisoSistema = false)
         {
+            if (Context is null)
+            {
+                return;
+            }
+
             UsuarioOnlineResponse? checkUsuarioDestinatario = listaUsuarioOnline.FirstOrDefault(x => x.UsuarioId == usuarioIdDestinatario) ?? throw new Exception($"Usuário não encontrado");
 
             ChatHubResponse response = CriarResponse(Context.ConnectionId, listaUsuarioOnline, Context.User, mensagem, isAvisoSistema.GetValueOrDefault(), usuarioIdDestinatario);
