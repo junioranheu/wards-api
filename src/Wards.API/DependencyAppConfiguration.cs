@@ -7,8 +7,10 @@ using Swashbuckle.AspNetCore.SwaggerUI;
 using Wards.Application.Hubs.ChatHub;
 using Wards.Application.Hubs.RequestFilterHub;
 using Wards.Domain.Consts;
+using Wards.Domain.Enums;
 using Wards.Infrastructure.Data;
 using Wards.Infrastructure.Seed;
+using static Wards.Utils.Fixtures.Get;
 
 namespace Wards.API
 {
@@ -51,7 +53,8 @@ namespace Wards.API
             }
             catch (Exception ex)
             {
-                app.Logger.LogError(ex, "{detalhes}", "Houve um problema ao resetar a base de dados");
+                app.Logger.LogError(ex, "{detalhes}", ObterDescricaoEnum(CodigoErroEnum.ErroDBInitialize));
+                throw new Exception($"{ObterDescricaoEnum(CodigoErroEnum.ErroDBInitialize)}: {ex.Message}");
             }
         }
 
