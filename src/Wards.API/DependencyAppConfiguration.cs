@@ -49,7 +49,7 @@ namespace Wards.API
             try
             {
                 WardsContext context = services.GetRequiredService<WardsContext>();
-                await DbInitializer.Initialize(context, isAplicarMigrations: false, isResetar: true);
+                await DbInitializer.Initialize(context, isAplicarMigrations: false, isAplicarSeed: true);
             }
             catch (Exception ex)
             {

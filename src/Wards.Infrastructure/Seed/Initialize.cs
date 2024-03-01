@@ -11,7 +11,7 @@ namespace Wards.Infrastructure.Seed
 {
     public static class DbInitializer
     {
-        public static async Task Initialize(WardsContext context, bool isAplicarMigrations, bool isResetar)
+        public static async Task Initialize(WardsContext context, bool isAplicarMigrations, bool isAplicarSeed)
         {
             context.Database.SetCommandTimeout(600);
             // string script = context.Database.GenerateCreateScript();
@@ -20,13 +20,13 @@ namespace Wards.Infrastructure.Seed
             {
                 await context.Database.MigrateAsync();
             }
-            else if (isResetar)
-            {
-                await context.Database.EnsureDeletedAsync();
-                await context.Database.EnsureCreatedAsync();
-            }
+            //else if (isResetar)
+            //{
+            //    await context.Database.EnsureDeletedAsync();
+            //    await context.Database.EnsureCreatedAsync();
+            //}
 
-            if (isAplicarMigrations || isResetar)
+            if (isAplicarSeed)
             {
                 await Seed(context, GerarHorarioBrasilia());
             }
