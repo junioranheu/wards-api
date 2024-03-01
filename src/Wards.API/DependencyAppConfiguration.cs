@@ -54,7 +54,7 @@ namespace Wards.API
             catch (Exception ex)
             {
                 app.Logger.LogError(ex, "{detalhes}", ObterDescricaoEnum(CodigoErroEnum.ErroDBInitialize));
-                throw new Exception($"{ObterDescricaoEnum(CodigoErroEnum.ErroDBInitialize)}: {ex.Message}");
+                throw new Exception($"{ObterDescricaoEnum(CodigoErroEnum.ErroDBInitialize)}: {ex.InnerException?.ToString() ?? ex.Message}");
             }
         }
 
