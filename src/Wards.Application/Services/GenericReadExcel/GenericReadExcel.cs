@@ -27,7 +27,7 @@ namespace Wards.Application.Services.GenericReadExcel
 
             if (IsXlsFile(file.FileName))
             {
-                //// Converte XLS para XLSX;
+                //// Converter XLS para XLSX;
                 //stream.Seek(0, SeekOrigin.Begin);
                 //var xlsxStream = ConverterXlsParaXlsx(stream);
                 //stream.Dispose();
