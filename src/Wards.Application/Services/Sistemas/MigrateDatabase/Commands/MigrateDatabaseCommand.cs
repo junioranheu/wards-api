@@ -14,7 +14,7 @@ namespace Wards.Application.Services.Sistemas.ResetarBancoDados.Commands
 
         public async Task Execute(bool isAplicarMigrations)
         {
-            await DbInitializer.Initialize(_context, isAplicarMigrations: isAplicarMigrations, isResetar: false);
+            await DbInitializer.Initialize(_context, isAplicarMigrations: isAplicarMigrations, isAplicarSeed: false);
         }
     }
 }

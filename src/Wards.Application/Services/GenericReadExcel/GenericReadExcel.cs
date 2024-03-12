@@ -7,7 +7,10 @@ using System.Text.RegularExpressions;
 
 namespace Wards.Application.Services.GenericReadExcel
 {
-    public sealed class GenericReadExcel
+    /// <summary>
+    /// GenericReadExcel funciona - no momento - apenas para arquivos .XLSX;
+    /// </summary>
+    public sealed partial class GenericReadExcel
     {
         public static List<T> ReadExcel<T>(IFormFile? file, int sheetIndex = 0, int skipRow = 1, bool cleanEmptyItems = true) where T : new()
         {
@@ -21,6 +24,18 @@ namespace Wards.Application.Services.GenericReadExcel
             using var stream = new MemoryStream();
             file!.CopyTo(stream);
             var properties = typeof(T).GetProperties();
+
+            if (IsXlsFile(file.FileName))
+            {
+                //// Converte XLS para XLSX;
+                //stream.Seek(0, SeekOrigin.Begin);
+                //var xlsxStream = ConverterXlsParaXlsx(stream);
+                //stream.Dispose();
+                //stream.SetLength(0);
+                //xlsxStream.CopyTo(stream);
+                //xlsxStream.Dispose();
+                //stream.Seek(0, SeekOrigin.Begin);
+            }
 
             using (var spreadsheetDocument = SpreadsheetDocument.Open(stream, false))
             {
@@ -59,7 +74,7 @@ namespace Wards.Application.Services.GenericReadExcel
 
             foreach (var item in result.ToList())
             {
-                bool isAllEmpty = CheckAreAllPropertiesNullOrDefault<T>(item);
+                bool isAllEmpty = CheckAreAllPropertiesNullOrDefault(item);
 
                 if (!isAllEmpty)
                 {
@@ -70,6 +85,10 @@ namespace Wards.Application.Services.GenericReadExcel
             }
 
             return result;
+        }
+        private static bool IsXlsFile(string arquivo)
+        {
+            return arquivo.EndsWith(".xls", StringComparison.OrdinalIgnoreCase);
         }
 
         private static string GetCellValue(WorkbookPart workbookPart, Cell cell)
@@ -90,7 +109,7 @@ namespace Wards.Application.Services.GenericReadExcel
 
         private static string GetPropertyName(PropertyInfo property)
         {
-            var invalidCharsRegex = new Regex("[^a-zA-Z0-9]");
+            var invalidCharsRegex = RegexPropertyName();
             var cleanedName = invalidCharsRegex.Replace(property.Name, "_");
 
             return cleanedName.ToLower();
@@ -136,6 +155,17 @@ namespace Wards.Application.Services.GenericReadExcel
                         }
 
                         return Convert.ToDouble(value, CultureInfo.InvariantCulture);
+                    }
+                    else if (targetType == typeof(DateTime) || targetType == typeof(DateTime?))
+                    {
+                        if (DateTime.TryParse(value?.ToString(), out DateTime result))
+                        {
+                            return result;
+                        }
+                        else
+                        {
+                            return null;
+                        }
                     }
                     else
                     {
@@ -196,8 +226,11 @@ namespace Wards.Application.Services.GenericReadExcel
 
             static bool IsNumericType(Type type)
             {
-                return type.IsPrimitive && (type != typeof(char) && type != typeof(bool) && type != typeof(IntPtr) && type != typeof(UIntPtr));
+                return type.IsPrimitive && type != typeof(char) && type != typeof(bool) && type != typeof(nint) && type != typeof(nuint);
             }
         }
+
+        [GeneratedRegex("[^a-zA-Z0-9]")]
+        private static partial Regex RegexPropertyName();
     }
 }

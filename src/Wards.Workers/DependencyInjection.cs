@@ -9,6 +9,7 @@ namespace Wards.WorkersServices
 {
     public static class DependencyInjection
     {
+        [Obsolete]
         public static IServiceCollection AddDependencyInjectionWorkersServices(this IServiceCollection services, WebApplicationBuilder builder)
         {
             AddQuartz(services, builder);
@@ -16,6 +17,7 @@ namespace Wards.WorkersServices
             return services;
         }
 
+        [Obsolete]
         private static void AddQuartz(IServiceCollection services, WebApplicationBuilder builder)
         {
             services.AddQuartz(x =>
