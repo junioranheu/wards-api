@@ -5,7 +5,9 @@ using Microsoft.EntityFrameworkCore;
 using MySqlConnector;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
+using System.Collections.Concurrent;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Dynamic;
 using System.Globalization;
 using System.Linq.Expressions;
@@ -474,26 +476,40 @@ namespace Wards.API.Controllers
         /// </summary>
         [HttpGet("parallelThread-e-listaChunks")]
         [AllowAnonymous]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
-        public ActionResult<int> ExemploParallelThread_E_ListaChunks()
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public ActionResult ExemploParallelThread_E_ListaChunks()
         {
-            List<string> listaStrings = new() { "Naruto", "Sasuke", "Sakura", "Kakashi", "Rock Lee", "Neji", "Ten Ten", "Guy", "Kiba", "Shino", "Hinata", "Kurenai", "Shikamaru", "Chouji", "Ino", "Asuma" };
-            List<int> listaTesteLength = new();
+            Stopwatch stopwatch = Stopwatch.StartNew();
+            List<string> listaStrings = new();
+            const int numLoops = 2_000_000;
 
-            var chunks = SepararListaEmChunks(listaStrings.ToList(), 3);
+            for (int i = 0; i < numLoops; i++)
+            {
+                listaStrings.Add(GerarStringAleatoria(100, true));
+            }
+
+            // ConcurrentBag é uma coleção thread-safe (alternativa de List) que permite adicionar e remover elementos de várias threads sem a necessidade de sincronização explícita;
+            ConcurrentBag<int> listaTesteLength = new();
+            ConcurrentBag<string> listaTesteReverse = new();
+
+            var chunks = SepararListaEmChunks(listaStrings.ToList(), ObterNumeroDeThreadsSafeMode(3));
 
             Parallel.ForEach(chunks, chunk =>
             {
-                ExemploAdicionarLenghtLista(chunk, listaTesteLength);
+                ExemploAdicionarLenght_E_Reverse_EmListas(chunk, listaTesteLength, listaTesteReverse);
             });
 
-            return Ok(listaTesteLength.Sum());
+            stopwatch.Stop();
+            double tempoDecorridoSegundos = stopwatch.Elapsed.TotalSeconds;
 
-            static void ExemploAdicionarLenghtLista(List<string> listaStrings, List<int> listaTesteLength)
+            return Ok(new { Qtd = listaTesteReverse.ToList().Count(), TempoDecorrido = tempoDecorridoSegundos });
+
+            static void ExemploAdicionarLenght_E_Reverse_EmListas(List<string> chunks, ConcurrentBag<int> listaTesteLength, ConcurrentBag<string> listaTesteReverse)
             {
-                foreach (var item in listaStrings)
+                foreach (var chunk in chunks)
                 {
-                    listaTesteLength.Add(item.Length);
+                    listaTesteLength.Add(chunk.Length);
+                    listaTesteReverse.Add(new string(chunk.Reverse().ToArray()));
                 }
             }
         }

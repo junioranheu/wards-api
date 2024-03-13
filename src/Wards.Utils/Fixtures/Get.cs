@@ -340,5 +340,19 @@ namespace Wards.Utils.Fixtures
 
             return extensao;
         }
+
+        /// <summary>
+        /// Obtém de forma segura o Environment.ProcessorCount, caso o parâmetro ultrapasse o limite, defina o resultado como metade da capacidade total;
+        /// </summary>
+        public static int ObterNumeroDeThreadsSafeMode(int numeroThreadAlvo)
+        {
+            if (numeroThreadAlvo >= Environment.ProcessorCount)
+            {
+                int numeroThreadSafe = Environment.ProcessorCount / 2;
+                return numeroThreadSafe < 1 ? 1 : numeroThreadSafe;
+            }
+
+            return numeroThreadAlvo;
+        }
     }
 }
