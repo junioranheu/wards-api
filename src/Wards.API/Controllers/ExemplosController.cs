@@ -13,10 +13,8 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Channels;
-using Wards.API.Filters;
 using Wards.Application.Services.GenericReadExcel;
 using Wards.Application.Services.GenericReadExcel.Models.Input;
-using Wards.Application.Services.Imports.Shared.Models.Input;
 using Wards.Application.Services.Sistemas.ResetarBancoDados;
 using Wards.Application.UseCases.Logs.ListarLog;
 using Wards.Application.UseCases.Logs.Shared.Output;
@@ -100,8 +98,8 @@ namespace Wards.API.Controllers
 
         ~ExemplosController()
         {
-            _rabbitMQChannel.Close();
-            _rabbitMQConnection.Close();
+            _rabbitMQChannel?.Close();
+            _rabbitMQConnection?.Close();
         }
         #endregion
 
@@ -165,7 +163,7 @@ namespace Wards.API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(StatusCodes))]
         public ActionResult<List<NewsletterCadastroOutput>> ExemploLerExcelNewsletterCadastroOutput([FromForm] FileInput input)
         {
-            if (input.FormFile is null || !input.FormFile!.FileName.EndsWith(".xlsx"))
+            if (input.FormFile is null || (!input.FormFile!.FileName.EndsWith(".xlsx") && !input.FormFile!.FileName.EndsWith(".xls")))
             {
                 throw new Exception(ObterDescricaoEnum(CodigoErroEnum.ArquivoImportFormatoInvalido));
             }

@@ -2,10 +2,13 @@
 using DocumentFormat.OpenXml.Spreadsheet;
 using Microsoft.AspNetCore.Http;
 using NPOI.HSSF.UserModel;
+using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using System.Globalization;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using Wards.Domain.Enums;
+using static Wards.Utils.Fixtures.Get;
 
 namespace Wards.Application.Services.GenericReadExcel
 {
@@ -16,6 +19,11 @@ namespace Wards.Application.Services.GenericReadExcel
     {
         public static List<T> ReadExcel<T>(IFormFile? file, int sheetIndex = 0, int skipRow = 1, bool cleanEmptyItems = true) where T : new()
         {
+            if (file is null || (!file!.FileName.EndsWith(".xlsx") && !file!.FileName.EndsWith(".xls")))
+            {
+                throw new Exception(ObterDescricaoEnum(CodigoErroEnum.ArquivoImportFormatoInvalido));
+            }
+
             var result = new List<T>();
 
             if (file is null || file?.Length == 0)
@@ -95,6 +103,7 @@ namespace Wards.Application.Services.GenericReadExcel
 
             return result;
         }
+
         private static bool IsXlsFile(string arquivo)
         {
             return arquivo.EndsWith(".xls", StringComparison.OrdinalIgnoreCase);
@@ -104,7 +113,7 @@ namespace Wards.Application.Services.GenericReadExcel
         {
             try
             {
-                // Read the XLS file into an HSSFWorkbook;
+                // Ler o XLS e convertê-lo para HSSFWorkbook;
                 HSSFWorkbook hssfWorkbook;
 
                 using (var xlsReader = new MemoryStream(xlsStream.ToArray()))
@@ -112,16 +121,15 @@ namespace Wards.Application.Services.GenericReadExcel
                     hssfWorkbook = new HSSFWorkbook(xlsReader);
                 }
 
-                // Create a new XSSFWorkbook;
                 var xssfWorkbook = new XSSFWorkbook();
 
-                // Iterate through sheets and copy data;
+                // Iterar arquivo para copiar dados;
                 for (var i = 0; i < hssfWorkbook.NumberOfSheets; i++)
                 {
                     var hssfSheet = hssfWorkbook.GetSheetAt(i);
                     var xssfSheet = xssfWorkbook.CreateSheet(hssfSheet.SheetName);
 
-                    // Copy data;
+                    // Copiar dados;
                     for (var rowIndex = 0; rowIndex <= hssfSheet.LastRowNum; rowIndex++)
                     {
                         var hssfRow = hssfSheet.GetRow(rowIndex);
@@ -139,14 +147,24 @@ namespace Wards.Application.Services.GenericReadExcel
                                     switch (hssfCell.CellType)
                                     {
                                         case NPOI.SS.UserModel.CellType.Numeric:
+                                            // Em certos casos, uma data como 25/03/1997 é transformada para um número int;
+                                            // É necessário realizar essa verificação para tratar caso o número na real seja uma data;
+                                            if (DateUtil.IsCellDateFormatted(hssfCell))
+                                            {
+                                                xssfCell.SetCellValue(hssfCell.DateCellValue);
+                                                break;
+                                            }
+
+                                            // Caso normal númerico;
                                             xssfCell.SetCellValue(hssfCell.NumericCellValue);
                                             break;
                                         case NPOI.SS.UserModel.CellType.String:
                                             string str = hssfCell.StringCellValue;
 
+                                            // Caso a string esteja no formato "2025-Mar-03", normalize-a antes de setá-la;
                                             if (IsMonthFormat(str))
                                             {
-                                                str = NormalizeMonthFormat(str);
+                                                str = NormalizeMonthFormat_yyyy_MM_dd(str);
                                             }
 
                                             xssfCell.SetCellValue(str);
@@ -161,7 +179,7 @@ namespace Wards.Application.Services.GenericReadExcel
                     }
                 }
 
-                // Save the XSSFWorkbook to a MemoryStream;
+                // Salvar o XSSFWorkbook como MemoryStream;
                 var xlsxMemoryStream = new MemoryStream();
                 xssfWorkbook.Write(xlsxMemoryStream, leaveOpen: true);
 
@@ -180,9 +198,8 @@ namespace Wards.Application.Services.GenericReadExcel
             return Regex.IsMatch(input, pattern);
         }
 
-        private static string NormalizeMonthFormat(string input)
+        private static string NormalizeMonthFormat_yyyy_MM_dd(string input)
         {
-            // Dicionário para mapear nomes dos meses de inglês para português;
             var monthMappings = new Dictionary<string, string>
             {
                 {"Jan", "Jan"},
@@ -206,25 +223,25 @@ namespace Wards.Application.Services.GenericReadExcel
                 reverseMonthMappings[entry.Value] = entry.Key;
             }
 
-            // Extrai as partes do formato de data;
+            // Extrair as partes do formato de data;
             Match match = RegexData().Match(input);
 
             if (match.Success)
             {
-                // Obtém as partes da data;
+                // Obter as partes da data;
                 string year = match.Groups[1].Value;
                 string month = match.Groups[2].Value;
                 string day = match.Groups[3].Value;
 
-                // Traduz o nome do mês (reverso)
+                // Traduzir o nome do mês (reverso);
                 if (reverseMonthMappings.TryGetValue(month, out string? translatedMonth))
                 {
-                    // Retorna a data normalizada no formato desejado;
+                    // Retornar a data normalizada no formato desejado;
                     return $"{year}-{translatedMonth}-{day}";
                 }
             }
 
-            // Retorna a string original se não for possível normalizar;
+            // Retornar a string original se não for possível normalizar;
             return input;
         }
 
@@ -258,7 +275,7 @@ namespace Wards.Application.Services.GenericReadExcel
 
             if (property != null)
             {
-                // Handle nullable;
+                // Lidar com objetos nullables;
                 if (property.PropertyType.IsGenericType && property.PropertyType.GetGenericTypeDefinition() == typeof(Nullable<>) && value != null)
                 {
                     var underlyingType = Nullable.GetUnderlyingType(property.PropertyType);
@@ -269,7 +286,7 @@ namespace Wards.Application.Services.GenericReadExcel
                         property.SetValue(item, convertedValue);
                     }
                 }
-                // Handle non-nullable;
+                // Lidar com objetos não nullables;
                 else
                 {
                     if (value != null)
@@ -295,13 +312,33 @@ namespace Wards.Application.Services.GenericReadExcel
                     }
                     else if (targetType == typeof(DateTime) || targetType == typeof(DateTime?))
                     {
+                        // A conversão de data pode ser bem complicada;
+                        // Portanto, foi implementada algumas validações previamente previstas para mitigar possíveis problemas;
+                        // #1 - Data no formato "padrão";
                         if (DateTime.TryParse(value?.ToString(), out DateTime result))
                         {
                             return result;
                         }
+                        // #2 - Data no formato "2025-Mar-03";
+                        else if (DateTime.TryParse(NormalizeMonthFormat_yyyy_MM_dd(value?.ToString()!), out DateTime result_yyyy_MM_dd))
+                        {
+                            return result_yyyy_MM_dd;
+                        }
                         else
                         {
-                            return null;
+                            // #3 - Data no formato OA;
+                            try
+                            {
+                                double OA = Convert.ToDouble(value);
+                                DateTime oaDateTime = DateTime.FromOADate(OA);
+
+                                return oaDateTime;
+                            }
+                            catch (Exception ex)
+                            {
+                                Console.WriteLine(ex.Message);
+                                return null;
+                            }
                         }
                     }
                     else
@@ -309,8 +346,9 @@ namespace Wards.Application.Services.GenericReadExcel
                         return Convert.ChangeType(value, targetType);
                     }
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
+                    Console.WriteLine(ex.Message);
                     return null;
                 }
             }
