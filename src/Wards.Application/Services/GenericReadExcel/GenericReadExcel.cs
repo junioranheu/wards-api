@@ -1,6 +1,8 @@
 ﻿using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
 using Microsoft.AspNetCore.Http;
+using NPOI.HSSF.UserModel;
+using NPOI.XSSF.UserModel;
 using System.Globalization;
 using System.Reflection;
 using System.Text.RegularExpressions;
@@ -8,7 +10,7 @@ using System.Text.RegularExpressions;
 namespace Wards.Application.Services.GenericReadExcel
 {
     /// <summary>
-    /// GenericReadExcel funciona - no momento - apenas para arquivos .XLSX;
+    /// GenericReadExcel aceita arquivos .XLSX e .XLS;
     /// </summary>
     public sealed partial class GenericReadExcel
     {
@@ -27,14 +29,21 @@ namespace Wards.Application.Services.GenericReadExcel
 
             if (IsXlsFile(file.FileName))
             {
-                //// Converter XLS para XLSX;
-                //stream.Seek(0, SeekOrigin.Begin);
-                //var xlsxStream = ConverterXlsParaXlsx(stream);
-                //stream.Dispose();
-                //stream.SetLength(0);
-                //xlsxStream.CopyTo(stream);
-                //xlsxStream.Dispose();
-                //stream.Seek(0, SeekOrigin.Begin);
+                stream.Seek(0, SeekOrigin.Begin);
+
+                using MemoryStream xlsxStreamConvert = ConvertXlsToXlsx(stream);
+
+                if (xlsxStreamConvert.Length > 0)
+                {
+                    stream.SetLength(0);
+                    xlsxStreamConvert.WriteTo(stream);
+                    stream.Seek(0, SeekOrigin.Begin);
+                }
+            }
+
+            if (stream.Length <= 0)
+            {
+                throw new InvalidOperationException("O arquivo está vazio.");
             }
 
             using (var spreadsheetDocument = SpreadsheetDocument.Open(stream, false))
@@ -89,6 +98,134 @@ namespace Wards.Application.Services.GenericReadExcel
         private static bool IsXlsFile(string arquivo)
         {
             return arquivo.EndsWith(".xls", StringComparison.OrdinalIgnoreCase);
+        }
+
+        private static MemoryStream ConvertXlsToXlsx(MemoryStream xlsStream)
+        {
+            try
+            {
+                // Read the XLS file into an HSSFWorkbook;
+                HSSFWorkbook hssfWorkbook;
+
+                using (var xlsReader = new MemoryStream(xlsStream.ToArray()))
+                {
+                    hssfWorkbook = new HSSFWorkbook(xlsReader);
+                }
+
+                // Create a new XSSFWorkbook;
+                var xssfWorkbook = new XSSFWorkbook();
+
+                // Iterate through sheets and copy data;
+                for (var i = 0; i < hssfWorkbook.NumberOfSheets; i++)
+                {
+                    var hssfSheet = hssfWorkbook.GetSheetAt(i);
+                    var xssfSheet = xssfWorkbook.CreateSheet(hssfSheet.SheetName);
+
+                    // Copy data;
+                    for (var rowIndex = 0; rowIndex <= hssfSheet.LastRowNum; rowIndex++)
+                    {
+                        var hssfRow = hssfSheet.GetRow(rowIndex);
+                        var xssfRow = xssfSheet.CreateRow(rowIndex);
+
+                        if (hssfRow != null)
+                        {
+                            for (var cellIndex = 0; cellIndex < hssfRow.LastCellNum; cellIndex++)
+                            {
+                                var hssfCell = hssfRow.GetCell(cellIndex);
+                                var xssfCell = xssfRow.CreateCell(cellIndex);
+
+                                if (hssfCell != null)
+                                {
+                                    switch (hssfCell.CellType)
+                                    {
+                                        case NPOI.SS.UserModel.CellType.Numeric:
+                                            xssfCell.SetCellValue(hssfCell.NumericCellValue);
+                                            break;
+                                        case NPOI.SS.UserModel.CellType.String:
+                                            string str = hssfCell.StringCellValue;
+
+                                            if (IsMonthFormat(str))
+                                            {
+                                                str = NormalizeMonthFormat(str);
+                                            }
+
+                                            xssfCell.SetCellValue(str);
+                                            break;
+                                        default:
+                                            xssfCell.SetCellValue(hssfCell.StringCellValue);
+                                            break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // Save the XSSFWorkbook to a MemoryStream;
+                var xlsxMemoryStream = new MemoryStream();
+                xssfWorkbook.Write(xlsxMemoryStream, leaveOpen: true);
+
+                return xlsxMemoryStream;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erro ao converter arquvo XLS para XLSX: {ex.Message}");
+                throw;
+            }
+        }
+
+        private static bool IsMonthFormat(string input)
+        {
+            string pattern = @"^\d{4}-[A-Za-z]{3}-\d{2}$";
+            return Regex.IsMatch(input, pattern);
+        }
+
+        private static string NormalizeMonthFormat(string input)
+        {
+            // Dicionário para mapear nomes dos meses de inglês para português;
+            var monthMappings = new Dictionary<string, string>
+            {
+                {"Jan", "Jan"},
+                {"Feb", "Fev"},
+                {"Mar", "Mar"},
+                {"Apr", "Abr"},
+                {"May", "Mai"},
+                {"Jun", "Jun"},
+                {"Jul", "Jul"},
+                {"Aug", "Ago"},
+                {"Sep", "Set"},
+                {"Oct", "Out"},
+                {"Nov", "Nov"},
+                {"Dec", "Dez"}
+            };
+
+            // Dicionário para mapear nomes dos meses de português para inglês (reverso);
+            var reverseMonthMappings = new Dictionary<string, string>();
+            foreach (var entry in monthMappings)
+            {
+                reverseMonthMappings[entry.Value] = entry.Key;
+            }
+
+            // Extrai as partes do formato de data;
+            Match match = RegexData().Match(input);
+
+            if (match.Success)
+            {
+                // Obtém as partes da data;
+                string year = match.Groups[1].Value;
+                string month = match.Groups[2].Value;
+                string day = match.Groups[3].Value;
+
+                // Traduz o nome do mês (reverso)
+                if (reverseMonthMappings.TryGetValue(month, out string? translatedMonth))
+                {
+                    // Retorna a data normalizada no formato desejado;
+                    return $"{year}-{translatedMonth}-{day}";
+                }
+            }
+
+            // Retorna a string original se não for possível normalizar;
+            return input;
         }
 
         private static string GetCellValue(WorkbookPart workbookPart, Cell cell)
@@ -232,5 +369,8 @@ namespace Wards.Application.Services.GenericReadExcel
 
         [GeneratedRegex("[^a-zA-Z0-9]")]
         private static partial Regex RegexPropertyName();
+
+        [GeneratedRegex("^(\\d{4})-([A-Za-z]{3})-(\\d{2})$")]
+        private static partial Regex RegexData();
     }
 }
