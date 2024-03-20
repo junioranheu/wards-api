@@ -7,8 +7,6 @@ using NPOI.XSSF.UserModel;
 using System.Globalization;
 using System.Reflection;
 using System.Text.RegularExpressions;
-using Wards.Domain.Enums;
-using static Wards.Utils.Fixtures.Get;
 
 namespace Wards.Application.Services.GenericReadExcel
 {
@@ -17,11 +15,11 @@ namespace Wards.Application.Services.GenericReadExcel
     /// </summary>
     public sealed partial class GenericReadExcel
     {
-        public static List<T> ReadExcel<T>(IFormFile? file, int sheetIndex = 0, int skipRow = 1, bool cleanEmptyItems = true) where T : new()
+        public static List<T> ReadExcel<T>(IFormFile? file, int sheetIndex = 0, int skipRow = 1, bool cleanEmptyItems = true, bool includeEmptyOrNullCells = false) where T : new()
         {
             if (file is null || (!file!.FileName.EndsWith(".xlsx") && !file!.FileName.EndsWith(".xls")))
             {
-                throw new Exception(ObterDescricaoEnum(CodigoErroEnum.ArquivoImportFormatoInvalido));
+                throw new Exception("Arquivo a ser importado está em um formato inválido");
             }
 
             var result = new List<T>();
@@ -35,6 +33,7 @@ namespace Wards.Application.Services.GenericReadExcel
             file!.CopyTo(stream);
             var properties = typeof(T).GetProperties();
 
+            // Caso o arquivo seja XLS em vez de XLSX, deve haver todo um tratamento especial para normalizá-lo para o resto do código;
             if (IsXlsFile(file.FileName))
             {
                 stream.Seek(0, SeekOrigin.Begin);
@@ -60,12 +59,14 @@ namespace Wards.Application.Services.GenericReadExcel
                 var sheet = workbookPart?.Workbook.Descendants<Sheet>().ElementAt(sheetIndex);
                 var worksheetPart = (WorksheetPart)workbookPart?.GetPartById(sheet?.Id!)!;
 
-                var rows = worksheetPart?.Worksheet.Descendants<Row>();
+                var rows = worksheetPart?.Worksheet.Descendants<DocumentFormat.OpenXml.Spreadsheet.Row>();
 
                 foreach (var row in rows!.Skip(skipRow)) // Skip cabeçalho;
                 {
                     var item = new T();
-                    var cells = row.Elements<Cell>().ToArray();
+
+                    // Caso o parâmetro includeEmptyOrNullCells seja true, é necessário todo uma nova tratativa para obter todas as celulas do arquivo, incluindo as vazias/nulas;
+                    Cell[] cells = includeEmptyOrNullCells ? GetAllCellsIncludingEmptyOrNull(row) : row.Elements<Cell>().ToArray();
 
                     for (int i = 0; i < cells.Length; i++)
                     {
@@ -102,6 +103,91 @@ namespace Wards.Application.Services.GenericReadExcel
             }
 
             return result;
+        }
+
+        // Obter todas as celulas incluindo as vazias;
+        private static Cell[] GetAllCellsIncludingEmptyOrNull(DocumentFormat.OpenXml.Spreadsheet.Row row)
+        {
+            List<Cell> allCells = new();
+
+            // Obter todas as celulas (NÃO incluindo as vazias);
+            var existingCells = row.Elements<Cell>();
+            allCells.AddRange(existingCells);
+
+            // Determinar o máximo da iteração com base nas células existentes;
+            int maxColumnIndex = 0;
+
+            foreach (var cell in existingCells)
+            {
+                int columnIndex = GetColumnIndexFromName(GetColumnName(cell.CellReference!));
+                maxColumnIndex = Math.Max(maxColumnIndex, columnIndex);
+            }
+
+            // Iterar para corrigir as possíveis faltas das celulas;
+            for (int columnIndex = 1; columnIndex <= maxColumnIndex; columnIndex++)
+            {
+                string columnName = GetColumnNameFromIndex(columnIndex);
+                string cellReference = $"{columnName}{row.RowIndex}";
+
+                // Caso necessário, crie essa celula faltante;
+                if (!existingCells.Any(cell => cell.CellReference == cellReference))
+                {
+                    Cell newCell = new() { CellReference = cellReference, DataType = CellValues.String };
+                    string defaultValue = string.Empty;
+                    newCell.CellValue = new DocumentFormat.OpenXml.Spreadsheet.CellValue(defaultValue);
+                    allCells.Add(newCell);
+                }
+            }
+
+            Cell[] cells = allCells.OrderBy(cell => GetNumericCellReference(cell.CellReference!)).ToList().ToArray();
+
+            return cells;
+        }
+
+        // Obter referência númerica com base na referência da celula;
+        private static int GetNumericCellReference(string referenciaCelula)
+        {
+            string nomeColuna = GetColumnName(referenciaCelula);
+            int rowIndex = int.Parse(referenciaCelula.Substring(nomeColuna.Length));
+            int columnIndex = GetColumnIndexFromName(nomeColuna);
+
+            return (rowIndex * 1000) + columnIndex;
+        }
+
+        // Obter o index da coluna pelo nome (A -> 1, B -> 2, etc);
+        private static int GetColumnIndexFromName(string nomeColuna)
+        {
+            int index = 0;
+            int mul = 1;
+
+            for (int i = nomeColuna.Length - 1; i >= 0; i--)
+            {
+                index += (nomeColuna[i] - 'A' + 1) * mul;
+                mul *= 26;
+            }
+
+            return index;
+        }
+
+        // Obter o nome da coluna pelo index (1 -> A, 2 -> B, etc);
+        private static string GetColumnNameFromIndex(int indexColuna)
+        {
+            string nomeColuna = "";
+
+            while (indexColuna > 0)
+            {
+                int remainder = (indexColuna - 1) % 26;
+                nomeColuna = Convert.ToChar('A' + remainder) + nomeColuna;
+                indexColuna = (indexColuna - remainder) / 26;
+            }
+
+            return nomeColuna;
+        }
+
+        // Extrair o nome da coluna com base na referência da celula ("A1" -> "A", "B10" -> "B", etc);
+        private static string GetColumnName(string referenciaCelula)
+        {
+            return new string(referenciaCelula.TakeWhile(char.IsLetter).ToArray());
         }
 
         private static bool IsXlsFile(string arquivo)
@@ -170,7 +256,16 @@ namespace Wards.Application.Services.GenericReadExcel
                                             xssfCell.SetCellValue(str);
                                             break;
                                         default:
-                                            xssfCell.SetCellValue(hssfCell.StringCellValue);
+                                            try
+                                            {
+                                                xssfCell.SetCellValue(hssfCell.StringCellValue);
+                                            }
+                                            catch (Exception ex)
+                                            {
+                                                Console.WriteLine($"Erro SetCellValue: {ex.Message}");
+                                                xssfCell.SetBlank();
+                                            }
+
                                             break;
                                     }
                                 }
@@ -224,7 +319,7 @@ namespace Wards.Application.Services.GenericReadExcel
             }
 
             // Extrair as partes do formato de data;
-            Match match = RegexData().Match(input);
+            System.Text.RegularExpressions.Match match = Regex.Match(input, @"^(\d{4})-([A-Za-z]{3})-(\d{2})$");
 
             if (match.Success)
             {
@@ -263,7 +358,7 @@ namespace Wards.Application.Services.GenericReadExcel
 
         private static string GetPropertyName(PropertyInfo property)
         {
-            var invalidCharsRegex = RegexPropertyName();
+            var invalidCharsRegex = new Regex("[^a-zA-Z0-9]");
             var cleanedName = invalidCharsRegex.Replace(property.Name, "_");
 
             return cleanedName.ToLower();
@@ -404,11 +499,5 @@ namespace Wards.Application.Services.GenericReadExcel
                 return type.IsPrimitive && type != typeof(char) && type != typeof(bool) && type != typeof(nint) && type != typeof(nuint);
             }
         }
-
-        [GeneratedRegex("[^a-zA-Z0-9]")]
-        private static partial Regex RegexPropertyName();
-
-        [GeneratedRegex("^(\\d{4})-([A-Za-z]{3})-(\\d{2})$")]
-        private static partial Regex RegexData();
     }
 }
