@@ -23,7 +23,7 @@ namespace Wards.API.Filters
 
         public override async Task OnActionExecutionAsync(ActionExecutingContext filterContextExecuting, ActionExecutionDelegate next)
         {
-            if (filterContextExecuting.HttpContext.Request.Path.StartsWithSegments("/api/Sistemas/seed"))
+            if (filterContextExecuting.HttpContext.Request.Path.ToString().Contains("/Sistemas/seed"))
             {
                 await next();
                 return;
