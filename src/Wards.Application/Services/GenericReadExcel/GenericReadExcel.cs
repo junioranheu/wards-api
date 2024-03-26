@@ -237,7 +237,7 @@ namespace Wards.Application.Services.GenericReadExcel
                                             // É necessário realizar essa verificação para tratar caso o número na real seja uma data;
                                             if (DateUtil.IsCellDateFormatted(hssfCell))
                                             {
-                                                xssfCell.SetCellValue(hssfCell.DateCellValue);
+                                                xssfCell.SetCellValue((DateTime)hssfCell.DateCellValue!);
                                                 break;
                                             }
 
@@ -319,7 +319,7 @@ namespace Wards.Application.Services.GenericReadExcel
             }
 
             // Extrair as partes do formato de data;
-            System.Text.RegularExpressions.Match match = Regex.Match(input, @"^(\d{4})-([A-Za-z]{3})-(\d{2})$");
+            Match match = RegexFormatoData().Match(input);
 
             if (match.Success)
             {
@@ -358,7 +358,7 @@ namespace Wards.Application.Services.GenericReadExcel
 
         private static string GetPropertyName(PropertyInfo property)
         {
-            var invalidCharsRegex = new Regex("[^a-zA-Z0-9]");
+            var invalidCharsRegex = RegexPropNome();
             var cleanedName = invalidCharsRegex.Replace(property.Name, "_");
 
             return cleanedName.ToLower();
@@ -499,5 +499,11 @@ namespace Wards.Application.Services.GenericReadExcel
                 return type.IsPrimitive && type != typeof(char) && type != typeof(bool) && type != typeof(nint) && type != typeof(nuint);
             }
         }
+
+        [GeneratedRegex("^(\\d{4})-([A-Za-z]{3})-(\\d{2})$")]
+        private static partial Regex RegexFormatoData();
+
+        [GeneratedRegex("[^a-zA-Z0-9]")]
+        private static partial Regex RegexPropNome();
     }
 }
