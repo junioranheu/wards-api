@@ -1,5 +1,6 @@
 ﻿using QuestPDF.Fluent;
 using QuestPDF.Helpers;
+using static Wards.Utils.Fixtures.Get;
 
 namespace Wards.Application.Services.Exports.PDF
 {
@@ -10,9 +11,31 @@ namespace Wards.Application.Services.Exports.PDF
     /// </summary>
     public static class QuestPDFService
     {
-        public static void Texto(this TableDescriptor tabela, string? conteudo, int borda = 1, bool isBold = false, string fontColor = Colors.Black, string backgroundColor = Colors.Transparent)
+        public static float DefinirConfiguracoesIniciais(this PageDescriptor pagina, PageSize tipoPagina, bool isPortrait = true, int margem = 50, string backgroundColor = Colors.White, int fontSize = 16)
         {
-            var celula = tabela.Cell().Border(borda).BorderColor(Colors.Grey.Darken1).AlignCenter().AlignMiddle().Text(conteudo);
+            if (isPortrait)
+            {
+                pagina.Size(tipoPagina.Portrait());
+            }
+            else
+            {
+                pagina.Size(tipoPagina.Landscape());
+            }
+
+            pagina.Margin(margem);
+            pagina.PageColor(backgroundColor);
+            pagina.DefaultTextStyle(x => x.FontSize(fontSize));
+
+            float pageWidth = isPortrait ? tipoPagina.Width : tipoPagina.Height;
+            float pageWidthFinal = pageWidth - margem;
+            return pageWidthFinal;
+        }
+
+        public static void TextoTabela(this TableDescriptor tabela, string? conteudo, bool isBold = false, string fontColor = Colors.Black, string backgroundColor = Colors.Transparent, bool hasBorder = true, bool isCenter = true, int fontSize = 12)
+        {
+            var celula = isCenter ? // Workaround;
+                tabela.Cell().Border((hasBorder ? 1 : 0)).BorderColor((hasBorder ? Colors.Grey.Lighten1 : Colors.Transparent)).AlignCenter().AlignMiddle().Text(conteudo).FontSize(fontSize) :
+                tabela.Cell().Border((hasBorder ? 1 : 0)).BorderColor((hasBorder ? Colors.Grey.Lighten1 : Colors.Transparent)).Text(conteudo).FontSize(fontSize);
 
             if (isBold)
             {
@@ -30,17 +53,17 @@ namespace Wards.Application.Services.Exports.PDF
             }
         }
 
-        public static void TextoAlternativo(this ColumnDescriptor coluna, string? conteudo, bool isBold = false, string fontColor = Colors.Black, string backgroundColor = Colors.Transparent, bool isSmall = false, bool paddingTop = false, bool paddingBottom = false, int paddingTopCustom = 0, int paddingBottomCustom = 0)
+        public static void TextoAlternativo(this ColumnDescriptor coluna, string? conteudo, bool isBold = false, string fontColor = Colors.Black, string backgroundColor = Colors.Transparent, bool isSmall = false, bool paddingTop = false, bool paddingBottom = false, int paddingTopCustom = 0, int paddingBottomCustom = 0, bool isAlignRight = false)
         {
-            TextoAlternativoConstructor(coluna.Item(), conteudo, isBold, fontColor, backgroundColor, isSmall, paddingTop, paddingBottom, paddingTopCustom, paddingBottomCustom);
+            TextoAlternativoConstructor(coluna.Item(), conteudo, isBold, fontColor, backgroundColor, isSmall, paddingTop, paddingBottom, paddingTopCustom, paddingBottomCustom, isAlignRight);
         }
 
-        public static void TextoAlternativo(this RowDescriptor item, string? conteudo, bool isBold = false, string fontColor = Colors.Black, string backgroundColor = Colors.Transparent, bool isSmall = false, bool paddingTop = false, bool paddingBottom = false, int paddingTopCustom = 0, int paddingBottomCustom = 0)
+        public static void TextoAlternativo(this RowDescriptor item, string? conteudo, bool isBold = false, string fontColor = Colors.Black, string backgroundColor = Colors.Transparent, bool isSmall = false, bool paddingTop = false, bool paddingBottom = false, int paddingTopCustom = 0, int paddingBottomCustom = 0, bool isAlignRight = false)
         {
-            TextoAlternativoConstructor(item.RelativeItem(), conteudo, isBold, fontColor, backgroundColor, isSmall, paddingTop, paddingBottom, paddingTopCustom, paddingBottomCustom);
+            TextoAlternativoConstructor(item.RelativeItem(), conteudo, isBold, fontColor, backgroundColor, isSmall, paddingTop, paddingBottom, paddingTopCustom, paddingBottomCustom, isAlignRight);
         }
 
-        private static void TextoAlternativoConstructor(QuestPDF.Infrastructure.IContainer item, string? conteudo, bool isBold = false, string fontColor = Colors.Black, string backgroundColor = Colors.Transparent, bool isSmall = false, bool paddingTop = false, bool paddingBottom = false, int paddingTopCustom = 0, int paddingBottomCustom = 0)
+        private static void TextoAlternativoConstructor(QuestPDF.Infrastructure.IContainer item, string? conteudo, bool isBold = false, string fontColor = Colors.Black, string backgroundColor = Colors.Transparent, bool isSmall = false, bool paddingTop = false, bool paddingBottom = false, int paddingTopCustom = 0, int paddingBottomCustom = 0, bool isAlignRight = false)
         {
             var containerItemNormalizado = item.PaddingTop((paddingTop ? 16 : 0)).PaddingBottom((paddingBottom ? 16 : 0));
 
@@ -52,6 +75,11 @@ namespace Wards.Application.Services.Exports.PDF
             if (paddingBottomCustom > 0)
             {
                 containerItemNormalizado.PaddingTop(paddingBottomCustom);
+            }
+
+            if (isAlignRight)
+            {
+                containerItemNormalizado.AlignRight();
             }
 
             var itemNormalizado = containerItemNormalizado.Text(conteudo);
@@ -77,29 +105,63 @@ namespace Wards.Application.Services.Exports.PDF
             }
         }
 
-        public static void DefinirColunas(this TableDescriptor tabela, List<string> cabecalhos, int tamanhoColuna = 0, float pageWidth = 0)
+        public static void DefinirColunas(this TableDescriptor tabela, List<string> cabecalhos, float tamanhoColunasFixo = 0, List<float>? listaTamanhosColunas = default, float pageWidth = 0, bool hasBorder = true, bool isCenter = true, int fontSize = 12)
         {
-            float width = tamanhoColuna;
-
-            if (width == 0)
+            // Caso a função tenha um valor no parâmetro "tamanhoColunasFixo", todas as colunas terão o mesmo width;
+            if (tamanhoColunasFixo > 0)
             {
-                int offset = 3;
-                width = (pageWidth / cabecalhos.Count) - offset;
-            }
-
-            tabela.ColumnsDefinition(coluna =>
-            {
-                foreach (var item in cabecalhos)
+                tabela.ColumnsDefinition(coluna =>
                 {
-                    coluna.ConstantColumn(width);
-                }
-            });
+                    foreach (var item in cabecalhos)
+                    {
+                        coluna.ConstantColumn(tamanhoColunasFixo);
+                    }
+                });
+            }
+            // Caso a lista do parâmetro "listaTamanhosColunas" NÃO tenha valores, defina automaticamente o width das colunas;
+            else if (listaTamanhosColunas?.Count == 0 || listaTamanhosColunas == null)
+            {
+                int offset = 5;
+                float width = (pageWidth / cabecalhos.Count) - offset;
+
+                tabela.ColumnsDefinition(coluna =>
+                {
+                    foreach (var item in cabecalhos)
+                    {
+                        coluna.ConstantColumn(width);
+                    }
+                });
+            }
+            // Caso a lista do parâmetro "listaTamanhosColunas" TENHA valores (else), defina o width das colunas com base nessa lista;
+            else
+            {
+                tabela.ColumnsDefinition(coluna =>
+                {
+                    if (listaTamanhosColunas?.Count != cabecalhos.Count)
+                    {
+                        throw new Exception($"Problema interno. A quantidade de itens das listas não se coincidem. [QuestPDFService/{ObterNomeDoMetodo()}]");
+                    }
+
+                    foreach (var item in listaTamanhosColunas!)
+                    {
+                        coluna.ConstantColumn(item);
+                    }
+                });
+            }
 
             tabela.Header(coluna =>
             {
                 foreach (var item in cabecalhos)
                 {
-                    coluna.Cell().Border(1).AlignCenter().AlignMiddle().Text(item).Bold();
+                    // Workaround;
+                    if (isCenter)
+                    {
+                        coluna.Cell().Border((hasBorder ? 1 : 0)).BorderColor((hasBorder ? Colors.Grey.Lighten1 : Colors.Transparent)).AlignCenter().AlignMiddle().Text(item).FontSize(fontSize).Bold();
+                    }
+                    else
+                    {
+                        coluna.Cell().Border((hasBorder ? 1 : 0)).BorderColor((hasBorder ? Colors.Grey.Lighten1 : Colors.Transparent)).Text(item).FontSize(fontSize).Bold();
+                    }
                 }
             });
         }
@@ -122,26 +184,6 @@ namespace Wards.Application.Services.Exports.PDF
             pagina.Header().AlignLeft().Text(conteudo).SemiBold().FontSize(16).FontColor(fontColor);
         }
 
-        public static float DefinirConfiguracoesIniciais(this PageDescriptor pagina, PageSize tipoPagina, bool isPortrait = true, int margem = 50, string backgroundColor = Colors.White, int fontSize = 11)
-        {
-            if (isPortrait)
-            {
-                pagina.Size(tipoPagina.Portrait());
-            }
-            else
-            {
-                pagina.Size(tipoPagina.Landscape());
-            }
-
-            pagina.Margin(margem);
-            pagina.PageColor(backgroundColor);
-            pagina.DefaultTextStyle(x => x.FontSize(fontSize));
-
-            float pageWidth = isPortrait ? tipoPagina.Width : tipoPagina.Height;
-            float pageWidthFinal = pageWidth - margem;
-            return pageWidthFinal;
-        }
-
         public static string FormatarDouble(double? valor)
         {
             if (!valor.HasValue)
@@ -155,6 +197,21 @@ namespace Wards.Application.Services.Exports.PDF
         public static string ObterDataExtensa()
         {
             return DateTime.Now.ToString("dddd, dd 'de' MMMM 'de' yyyy", new System.Globalization.CultureInfo("pt-BR"));
+        }
+
+        public static void QuebrarPagina(this ColumnDescriptor coluna)
+        {
+            coluna.Item().PageBreak();
+        }
+
+        public static void AdicionarFooterComInfosDasPags(this PageDescriptor pagina)
+        {
+            pagina.Footer().AlignCenter().Text(text =>
+            {
+                text.CurrentPageNumber();
+                text.Span(" / ");
+                text.TotalPages();
+            });
         }
     }
 }
