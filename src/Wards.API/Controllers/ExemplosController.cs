@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
 using MySqlConnector;
 using Newtonsoft.Json;
+using QuestPDF.Fluent;
+using QuestPDF.Helpers;
 using RabbitMQ.Client;
 using System.Collections.Concurrent;
 using System.Data.SqlClient;
@@ -15,6 +17,7 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Channels;
+using Wards.Application.Services.Exports.PDF;
 using Wards.Application.Services.GenericReadExcel;
 using Wards.Application.Services.GenericReadExcel.Models.Input;
 using Wards.Application.Services.Sistemas.ResetarBancoDados;
@@ -102,6 +105,498 @@ namespace Wards.API.Controllers
         {
             _rabbitMQChannel?.Close();
             _rabbitMQConnection?.Close();
+        }
+        #endregion
+
+        #region Export_PDF
+        [HttpGet("ExemploPDF")]
+        [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IFormFile))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(StatusCodes))]
+        public async Task<ActionResult<IFormFile>> ExemploPDF(int tipo)
+        {
+            byte[] pdf = Array.Empty<byte>();
+            List<Log>? linq = await _context.Logs.AsNoTracking().ToListAsync();
+
+            if (tipo == 1)
+            {
+                pdf = Gerar_Exemplo_PDF_1(linq);
+            }
+            else if (tipo == 2)
+            {
+                pdf = Gerar_Exemplo_PDF_2(linq);
+            }
+
+            if (pdf.Length <= 0)
+            {
+                throw new Exception("O arquivo PDF não pôde ser exportado");
+            }
+
+            Response.ContentType = "application/octet-stream";
+            string fileName = $"ExemploPDF_tipo{tipo}.pdf";
+            Response.Headers.Add("Content-Disposition", "attachment; filename=" + fileName);
+
+            return File(pdf, Response.ContentType, fileName);
+        }
+
+        private static byte[] Gerar_Exemplo_PDF_1(List<Log> linq)
+        {
+            try
+            {
+                using var stream = new MemoryStream();
+
+                Document.Create(container =>
+                {
+                    container.Page(page =>
+                    {
+                        float pageWidth = page.DefinirConfiguracoesIniciais(tipoPagina: PageSizes.A2, isPortrait: false);
+                        page.TextoFixadoTopoTodasPags(SistemaConst.NomeSistema);
+
+                        page.Content().Column(column =>
+                        {
+                            #region parte1
+                            column.TituloSessao("ORDEM DE XXX NAS XXX DO XXX Nº PL-XXX", isLarge: true);
+                            column.TextoAlternativo(QuestPDFService.ObterDataExtensa(), fontColor: Colors.LightBlue.Medium, isSmall: true);
+                            #endregion
+
+                            #region parte2
+                            column.TituloSessao("CONFIGURAÇÃO INICIAL DO XXX", paddingTop: true, paddingBottom: true);
+
+                            column.Item().Table(table =>
+                            {
+                                List<string> cabecalhos = new()
+                                {
+                                    "Config.", "Vão",
+                                    "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18",
+                                    "Venda XXX"
+                                };
+
+                                table.DefinirColunas(cabecalhos, pageWidth: pageWidth);
+
+                                foreach (var item in linq)
+                                {
+                                    table.TextoTabela(conteudo: "Nº X", isBold: true);
+                                    table.TextoTabela(conteudo: "Abertura (mm)", isBold: true);
+                                    table.TextoTabela(conteudo: item.LogId.ToString());
+                                    table.TextoTabela(conteudo: item.StatusResposta.ToString());
+                                    table.TextoTabela(conteudo: item.Endpoint);
+                                    table.TextoTabela(conteudo: item.Descricao);
+                                    table.TextoTabela(conteudo: item.TipoRequisicao);
+                                    table.TextoTabela(conteudo: item.Parametros);
+                                    table.TextoTabela(conteudo: QuestPDFService.FormatarDouble(22.222));
+                                    table.TextoTabela(conteudo: QuestPDFService.FormatarDouble(22.222));
+                                    table.TextoTabela(conteudo: QuestPDFService.FormatarDouble(22.222));
+                                    table.TextoTabela(conteudo: QuestPDFService.FormatarDouble(22.222));
+                                    table.TextoTabela(conteudo: QuestPDFService.FormatarDouble(22.222));
+                                    table.TextoTabela(conteudo: QuestPDFService.FormatarDouble(22.222));
+                                    table.TextoTabela(conteudo: QuestPDFService.FormatarDouble(22.222));
+                                    table.TextoTabela(conteudo: QuestPDFService.FormatarDouble(22.222));
+                                    table.TextoTabela(conteudo: QuestPDFService.FormatarDouble(22.222));
+                                    table.TextoTabela(conteudo: QuestPDFService.FormatarDouble(22.222));
+                                    table.TextoTabela(conteudo: QuestPDFService.FormatarDouble(22.222));
+                                    table.TextoTabela(conteudo: QuestPDFService.FormatarDouble(22.222));
+                                    table.TextoTabela(conteudo: $"TESTE {DateTime.Now.Millisecond}", isBold: true);
+                                }
+                            });
+                            #endregion
+
+                            #region parte3
+                            column.TituloSessao("SEQUÊNCIA DE XXX", paddingTop: true, paddingBottom: true);
+
+                            column.Item().Table(table =>
+                            {
+                                List<string> cabecalhos = new()
+                                {
+                                    "Hora", "XXX Prevista (m)", "XXX Prevista (m)", "Etapa",
+                                    "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18",
+                                    "Venda Inicial"
+                                };
+
+                                table.DefinirColunas(cabecalhos, pageWidth: pageWidth);
+
+                                foreach (var item in linq)
+                                {
+                                    table.TextoTabela(conteudo: $"{DateTime.Now.Hour}:{DateTime.Now.Minute}");
+                                    table.TextoTabela(conteudo: "XD_1");
+                                    table.TextoTabela(conteudo: "XD_2");
+                                    table.TextoTabela(conteudo: "XD_3", isBold: true);
+                                    table.TextoTabela(conteudo: QuestPDFService.FormatarDouble(22.222));
+                                    table.TextoTabela(conteudo: QuestPDFService.FormatarDouble(22.222));
+                                    table.TextoTabela(conteudo: QuestPDFService.FormatarDouble(22.222));
+                                    table.TextoTabela(conteudo: QuestPDFService.FormatarDouble(22.222));
+                                    table.TextoTabela(conteudo: QuestPDFService.FormatarDouble(22.222));
+                                    table.TextoTabela(conteudo: QuestPDFService.FormatarDouble(22.222));
+                                    table.TextoTabela(conteudo: QuestPDFService.FormatarDouble(22.222));
+                                    table.TextoTabela(conteudo: QuestPDFService.FormatarDouble(22.222));
+                                    table.TextoTabela(conteudo: QuestPDFService.FormatarDouble(22.222));
+                                    table.TextoTabela(conteudo: QuestPDFService.FormatarDouble(22.222));
+                                    table.TextoTabela(conteudo: QuestPDFService.FormatarDouble(22.222));
+                                    table.TextoTabela(conteudo: QuestPDFService.FormatarDouble(22.222));
+                                    table.TextoTabela(conteudo: item.Endpoint, isBold: true, backgroundColor: Colors.Grey.Medium);
+                                    table.TextoTabela(conteudo: QuestPDFService.FormatarDouble(22.222));
+                                    table.TextoTabela(conteudo: QuestPDFService.FormatarDouble(22.222));
+                                    table.TextoTabela(conteudo: QuestPDFService.FormatarDouble(22.222));
+                                    table.TextoTabela(conteudo: QuestPDFService.FormatarDouble(22.222));
+                                    table.TextoTabela(conteudo: QuestPDFService.FormatarDouble(22.222));
+                                    table.TextoTabela(conteudo: $"TESTE {DateTime.Now.Millisecond}");
+                                }
+                            });
+                            #endregion
+
+                            #region parte4
+                            column.TituloSessao("CONFIGURAÇÃO FINAL DO VERTEDOURO", paddingTop: true, paddingBottom: true);
+
+                            column.Item().PaddingBottom(16).Table(table =>
+                            {
+                                List<string> cabecalhos = new()
+                                {
+                                    "Config.", "Vão",
+                                    "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18",
+                                    "Venda Final"
+                                };
+
+                                table.DefinirColunas(cabecalhos, pageWidth: pageWidth);
+
+                                foreach (var item in linq)
+                                {
+                                    table.TextoTabela(conteudo: "Nº Y", isBold: true);
+                                    table.TextoTabela(conteudo: "Abertura (mm)", isBold: true);
+                                    table.TextoTabela(conteudo: QuestPDFService.FormatarDouble(22.222));
+                                    table.TextoTabela(conteudo: item.Endpoint);
+                                    table.TextoTabela(conteudo: QuestPDFService.FormatarDouble(22.222));
+                                    table.TextoTabela(conteudo: QuestPDFService.FormatarDouble(22.222));
+                                    table.TextoTabela(conteudo: QuestPDFService.FormatarDouble(22.222));
+                                    table.TextoTabela(conteudo: QuestPDFService.FormatarDouble(22.222));
+                                    table.TextoTabela(conteudo: QuestPDFService.FormatarDouble(22.222));
+                                    table.TextoTabela(conteudo: QuestPDFService.FormatarDouble(22.222));
+                                    table.TextoTabela(conteudo: QuestPDFService.FormatarDouble(22.222));
+                                    table.TextoTabela(conteudo: QuestPDFService.FormatarDouble(22.222));
+                                    table.TextoTabela(conteudo: QuestPDFService.FormatarDouble(22.222));
+                                    table.TextoTabela(conteudo: QuestPDFService.FormatarDouble(22.222));
+                                    table.TextoTabela(conteudo: QuestPDFService.FormatarDouble(22.222));
+                                    table.TextoTabela(conteudo: QuestPDFService.FormatarDouble(22.222));
+                                    table.TextoTabela(conteudo: QuestPDFService.FormatarDouble(22.222));
+                                    table.TextoTabela(conteudo: QuestPDFService.FormatarDouble(22.222));
+                                    table.TextoTabela(conteudo: QuestPDFService.FormatarDouble(22.222));
+                                    table.TextoTabela(conteudo: QuestPDFService.FormatarDouble(22.222));
+                                    table.TextoTabela(conteudo: $"TESTE {DateTime.Now.Millisecond}", isBold: true);
+                                }
+                            });
+                            #endregion
+
+                            #region parte5
+                            column.Item().
+                            BorderBottom(1).BorderTop(1).BorderColor(Colors.LightBlue.Medium).AlignCenter().AlignMiddle().
+                            Row(row =>
+                            {
+                                row.TextoAlternativo("Esta XXX deverá ser executada conforme data e horários propostos, em modalidade Remoto com supervisão Local.", paddingTopCustom: 64);
+
+                                row.RelativeItem().PaddingTop(16).PaddingBottom(16).AlignRight().Table(table =>
+                                {
+                                    List<string> cabecalhos = new() { "PRIORIDADE" };
+                                    table.DefinirColunas(cabecalhos, tamanhoColunasFixo: 100);
+
+                                    table.TextoTabela("P: Programando", isBold: true, backgroundColor: Colors.Grey.Lighten1);
+                                    table.TextoTabela("A: Pouco Urgente", isBold: true, backgroundColor: Colors.LightGreen.Darken1);
+                                    table.TextoTabela("B: Urgente", isBold: true, backgroundColor: Colors.Yellow.Darken1);
+                                    table.TextoTabela("C: Urgente", isBold: true, backgroundColor: Colors.Orange.Darken1);
+                                    table.TextoTabela("D: Muito Urgente", isBold: true, backgroundColor: Colors.Red.Lighten3);
+                                    table.TextoTabela("E: Muito Urgente", isBold: true, backgroundColor: Colors.Red.Darken2);
+                                    table.TextoTabela("F: Emergência", isBold: true, backgroundColor: Colors.Red.Accent4);
+                                });
+                            });
+                            #endregion
+
+                            #region parte6
+                            column.TituloSessao("ELABORAÇÃO E EXECUÇÃO", paddingTop: true, paddingBottom: true);
+
+                            column.Item().Row(row =>
+                            {
+                                row.TextoAlternativo("SUPERINTENDÊNCIA DE OPERAÇÃO");
+                                row.TextoAlternativo("Elaborado por Gerência de XXX e Controle da XXX");
+                            });
+
+                            column.Item().Row(row =>
+                            {
+                                row.TextoAlternativo("Gerência de XXX e Controle da XXX");
+                                row.TextoAlternativo("Executado por _______________________________________________________");
+                            });
+
+                            column.TextoAlternativo("Baseada nos documentos:", isSmall: true, paddingTop: true);
+                            column.TextoAlternativo("# POC - PLANO DE OPERAÇÃO DE XXX v.XXX", isSmall: true);
+                            #endregion
+
+                            page.AdicionarFooterComInfosDasPags();
+                        });
+                    });
+                }).GeneratePdf(stream);
+
+                return stream.ToArray();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        private static byte[] Gerar_Exemplo_PDF_2(List<Log> linq)
+        {
+            try
+            {
+                using var stream = new MemoryStream();
+
+                Document.Create(container =>
+                {
+                    container.Page(page =>
+                    {
+                        float pageWidth = page.DefinirConfiguracoesIniciais(tipoPagina: PageSizes.A2, isPortrait: false);
+                        page.TextoFixadoTopoTodasPags(SistemaConst.NomeSistema);
+
+                        page.Content().Column(column =>
+                        {
+                            #region parte1
+                            column.TituloSessao("PROGRAMA XXX DE PRODUÇÃO - COMPLEXO DE XXX XXX Nº XXX", paddingBottom: true, isLarge: true);
+                            column.TextoAlternativo("Superintendência de Operação", fontColor: Colors.LightBlue.Medium);
+                            column.TextoAlternativo(QuestPDFService.ObterDataExtensa(), fontColor: Colors.LightBlue.Medium);
+                            column.TextoAlternativo("Gerência de Planejamento e Controle da Operação", fontColor: Colors.LightBlue.Medium);
+                            #endregion
+
+                            #region parte2
+                            column.TituloSessao("UHE XXX", paddingTop: true, paddingBottom: true);
+
+                            column.Item().Table(table =>
+                            {
+                                List<string> cabecalhos = new()
+                             {
+                                 "Hora", "Geração XXX (MW)",
+                                 "Máxima geração possível pelas XXX XXX (MW)",
+                                 "Unidades XXX", "Vazão XXX (m³/s)",
+                                 "Vazão XXX (m³/s)", "Vazão XXX (m³/s)",
+                                 "Outras XXX (m³/s)", "Vazão XXX (m³/s)",
+                                 "Nível d'água esperado a XXX XXX (m)",
+                                 "Nível d'água esperado a XXX de XXX (m)"
+                             };
+
+                                var listaDinamica_ParaGerarMedias = QuestPDFService.DefinirListaDinamicaParaGerarMedias(cabecalhos);
+                                table.DefinirColunas(cabecalhos, pageWidth: pageWidth);
+
+                                foreach (var item in linq)
+                                {
+                                    table.TextoTabela(conteudo: $"{DateTime.Now.Hour}");
+                                    table.TextoTabela(conteudo: QuestPDFService.FormatarDouble(item.LogId), fontColor: Colors.Green.Darken4);
+                                    table.TextoTabela(conteudo: QuestPDFService.FormatarDouble(item.UsuarioId));
+                                    table.TextoTabela(conteudo: QuestPDFService.FormatarDouble(item.LogId));
+                                    table.TextoTabela(conteudo: QuestPDFService.FormatarDouble(item.UsuarioId));
+                                    table.TextoTabela(conteudo: QuestPDFService.FormatarDouble(item.LogId));
+                                    table.TextoTabela(conteudo: QuestPDFService.FormatarDouble(item.UsuarioId));
+                                    table.TextoTabela(conteudo: QuestPDFService.FormatarDouble(item.LogId));
+                                    table.TextoTabela(conteudo: QuestPDFService.FormatarDouble(item.UsuarioId));
+                                    table.TextoTabela(conteudo: QuestPDFService.FormatarDouble(item.LogId));
+                                    table.TextoTabela(conteudo: QuestPDFService.FormatarDouble(item.UsuarioId));
+
+                                    // Ward: utilizar sempre os mesmos valores acima;
+                                    listaDinamica_ParaGerarMedias[0].Add(null);
+                                    listaDinamica_ParaGerarMedias[1].Add(item.LogId);
+                                    listaDinamica_ParaGerarMedias[2].Add(item.UsuarioId);
+                                    listaDinamica_ParaGerarMedias[3].Add(item.LogId);
+                                    listaDinamica_ParaGerarMedias[4].Add(item.UsuarioId);
+                                    listaDinamica_ParaGerarMedias[5].Add(item.LogId);
+                                    listaDinamica_ParaGerarMedias[6].Add(item.UsuarioId);
+                                    listaDinamica_ParaGerarMedias[7].Add(item.LogId);
+                                    listaDinamica_ParaGerarMedias[8].Add(item.UsuarioId);
+                                    listaDinamica_ParaGerarMedias[9].Add(item.LogId);
+                                    listaDinamica_ParaGerarMedias[10].Add(item.UsuarioId);
+                                }
+
+                                table.Gerar_E_Exibir_Medias(listaDinamica_ParaGerarMedias);
+                            });
+                            #endregion
+
+                            column.QuebrarPagina();
+
+                            #region parte3
+                            column.TituloSessao("UHE XXX XXX", paddingTop: true, paddingBottom: true);
+
+                            column.Item().Table(table =>
+                            {
+                                List<string> cabecalhos = new()
+                                {
+                                    "Hora", "Geração Potencia Ativa na XXX XXX (MW)",
+                                    "Consumo estimado para Função XXX Sincrono (MW)",
+                                    "Unidades XXX", "Vazão Turbinada (m³/s)",
+                                    "Outras XXX (Testes e etc)", "NA esperado XXX XXX XXX (m)",
+                                    "Nível d'água esperado a XXX de XXX XXX (m)",
+                                    "Queda Esperada XXX XXX (m)"
+                                };
+
+                                var listaDinamica_ParaGerarMedias = QuestPDFService.DefinirListaDinamicaParaGerarMedias(cabecalhos);
+                                table.DefinirColunas(cabecalhos, pageWidth: pageWidth, offSetCustomWidthAutomatico: 6);
+
+                                foreach (var item in linq)
+                                {
+                                    table.TextoTabela(conteudo: $"{DateTime.Now.Hour}");
+                                    table.TextoTabela(conteudo: QuestPDFService.FormatarDouble(item.UsuarioId), fontColor: Colors.Green.Darken4);
+                                    table.TextoTabela(conteudo: QuestPDFService.FormatarDouble(item.LogId), fontColor: Colors.Green.Darken4);
+                                    table.TextoTabela(conteudo: QuestPDFService.FormatarDouble(item.UsuarioId), fontColor: Colors.Green.Darken4);
+                                    table.TextoTabela(conteudo: QuestPDFService.FormatarDouble(item.LogId));
+                                    table.TextoTabela(conteudo: QuestPDFService.FormatarDouble(item.UsuarioId));
+                                    table.TextoTabela(conteudo: QuestPDFService.FormatarDouble(item.LogId));
+                                    table.TextoTabela(conteudo: QuestPDFService.FormatarDouble(item.UsuarioId));
+                                    table.TextoTabela(conteudo: QuestPDFService.FormatarDouble(item.LogId));
+
+                                    // Ward: utilizar sempre os mesmos valores acima;
+                                    listaDinamica_ParaGerarMedias[0].Add(null);
+                                    listaDinamica_ParaGerarMedias[1].Add(item.UsuarioId);
+                                    listaDinamica_ParaGerarMedias[2].Add(item.LogId);
+                                    listaDinamica_ParaGerarMedias[3].Add(item.UsuarioId);
+                                    listaDinamica_ParaGerarMedias[4].Add(item.LogId);
+                                    listaDinamica_ParaGerarMedias[5].Add(item.UsuarioId);
+                                    listaDinamica_ParaGerarMedias[6].Add(item.LogId);
+                                    listaDinamica_ParaGerarMedias[7].Add(item.UsuarioId);
+                                    listaDinamica_ParaGerarMedias[8].Add(item.LogId);
+                                }
+
+                                table.Gerar_E_Exibir_Medias(listaDinamica_ParaGerarMedias);
+                            });
+                            #endregion
+
+                            column.QuebrarPagina();
+
+                            #region parte4
+                            column.Item().Table(table =>
+                            {
+                                List<string> cabecalhos = new()
+                                {
+                                    "CRITÉRIO PARA OPERAÇÃO DO XXX EM CONDIÇÃO NORMAL", string.Empty, string.Empty
+                                };
+
+                                // TO DO: Col2 deve vir de algum LINQ do banco;
+
+                                List<dynamic> listaDinamica = new()
+                                {
+                                    new { Col1 = "4% da vazão XXX", Col2 = 79.505, Col3 = "m³/s", IsHighlight = false},
+                                    new { Col1 = "Variação na estação fluviométrica UHE XXX XXX XXX*", Col2 = 0.00, Col3 = "m³/s", IsHighlight = false },
+                                    new { Col1 = "Variação PERMITIDA para hoje (maior das duas anteriores)", Col2 = 22.00, Col3 = "m³/s", IsHighlight = true }
+                                };
+
+                                table.DefinirColunas(cabecalhos, listaTamanhosColunas: new() { 600, 120, 120 }, hasBorder: false, isCenter: false);
+
+                                foreach (var item in listaDinamica)
+                                {
+                                    string col1 = item.Col1;
+                                    double col2 = item.Col2;
+                                    string col3 = item.Col3;
+                                    bool isHighlight = item.IsHighlight;
+
+                                    table.TextoTabela(conteudo: col1, backgroundColor: (isHighlight ? Colors.LightBlue.Medium : Colors.Transparent), isBold: isHighlight, hasBorder: false, isCenter: false);
+                                    table.TextoTabela(conteudo: QuestPDFService.FormatarDouble(col2), hasBorder: false, isCenter: false);
+                                    table.TextoTabela(conteudo: col3, hasBorder: false, isCenter: false);
+                                }
+                            });
+                            #endregion
+
+                            #region parte5
+                            column.Item().PaddingTop(32).Table(table =>
+                            {
+                                List<string> cabecalhos = new()
+                                {
+                                    "DEFLUÊNCIAS EM XXX (m³/s)", "Vertida", "Turbinada", "STP", "Defluência Total"
+                                };
+
+                                // TO DO: Os valores das colunas deve, vir de algum LINQ do banco;
+
+                                List<dynamic> listaDinamica = new()
+                                {
+                                    new { Col1 = "Vazão média prevista do dia anterior", Col2 = 0.00, Col3 = 1951, Col4 = 14, Col5 = 1964, IsHighlight = true },
+                                    new { Col1 = "Defluencia inicial (00h)", Col2 = 0.00, Col3 = 2006, Col4 = 5, Col5 = 2011, IsHighlight = false },
+                                    new { Col1 = "Defluencia final (24h)", Col2 = 0.00, Col3 = 2131, Col4 = 7, Col5 = 2137, IsHighlight = false },
+                                    new { Col1 = "Variação absoluta para o dia de hoje (terça-feira)", Col2 = 0.00, Col3 = 1245, Col4 = 2, Col5 = 126, IsHighlight = false },
+                                    new { Col1 = "Defluencia média para o dia de hoje (terça-feira)", Col2 = 0.00, Col3 = 2059, Col4 = 6, Col5 = 2065, IsHighlight = true },
+                                    new { Col1 = "Variação média para o dia (comparada com a media do dia anterior) em m³/s", Col2 = 0.00, Col3 = 000, Col4 = 000, Col5 = 101, IsHighlight = false },
+                                    new { Col1 = "Variação média para o dia (comparada com a media do dia anterior) em %", Col2 = 0.00, Col3 = 000, Col4 = 000, Col5 = 5.1, IsHighlight = true }
+                                };
+
+                                table.DefinirColunas(cabecalhos, listaTamanhosColunas: new() { 600, 120, 120, 120, 150 }, hasBorder: false, isCenter: false);
+
+                                foreach (var item in listaDinamica)
+                                {
+                                    string col1 = item.Col1;
+                                    double col2 = item.Col2;
+                                    double col3 = item.Col3;
+                                    double col4 = item.Col4;
+                                    double col5 = item.Col5;
+                                    bool isHighlight = item.IsHighlight;
+
+                                    table.TextoTabela(conteudo: col1, backgroundColor: (isHighlight ? Colors.LightBlue.Medium : Colors.Transparent), isBold: isHighlight, hasBorder: false, isCenter: false);
+                                    table.TextoTabela(conteudo: QuestPDFService.FormatarDouble(col2), hasBorder: false, isCenter: false);
+                                    table.TextoTabela(conteudo: QuestPDFService.FormatarDouble(col3), hasBorder: false, isCenter: false);
+                                    table.TextoTabela(conteudo: QuestPDFService.FormatarDouble(col4), hasBorder: false, isCenter: false);
+                                    table.TextoTabela(conteudo: QuestPDFService.FormatarDouble(col5), hasBorder: false, isCenter: false);
+                                }
+                            });
+                            #endregion
+
+                            #region parte6
+                            column.TextoAlternativo("DIRETRIZES PARA A OPERAÇÃO", isBold: true, paddingTopCustom: 32);
+
+                            // TO DO;
+                            List<string> listaDiretrizesParaOperacao = new() {
+                                "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. A dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos do. B dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos do. C dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos do!",
+                                "At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga."
+                            };
+
+                            for (int i = 0; i < listaDiretrizesParaOperacao.Count; i++)
+                            {
+                                column.TextoAlternativo($"{i + 1}. {listaDiretrizesParaOperacao[i]}");
+                            }
+                            #endregion
+
+                            #region parte7
+                            column.TextoAlternativo("OBSERVAÇÕES", isBold: true, paddingTopCustom: 32);
+
+                            // TO DO;
+                            List<string> listaObservacoes = new() {                   
+                                "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. A dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos do. B dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos do. C dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos do!",
+                                "At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga."
+                            };
+
+                            for (int i = 0; i < listaObservacoes.Count; i++)
+                            {
+                                column.TextoAlternativo($"{i + 1}. {listaObservacoes[i]}");
+                            }
+                            #endregion
+
+                            #region parte8
+                            // TO DO;
+                            string responsavelPelaProgramacao = "Jailson Mendes";
+                            string revisadoPor = "Junior Souza";
+                            string dataHoraFimPosDessem = QuestPDFService.FormatarData_ddMyyHHmm(DateTime.Now.AddHours(-3));
+                            string dataHoraDivulgacaoPDP = QuestPDFService.FormatarData_ddMyyHHmm(DateTime.Now.AddMinutes(-22));
+
+                            column.TextoAlternativo("Responsável pela programação:", isBold: true, fontColor: Colors.LightBlue.Medium, paddingTopCustom: 32);
+                            column.TextoAlternativo(responsavelPelaProgramacao, isBold: true);
+
+                            column.TextoAlternativo("Revisado por:", isBold: true, fontColor: Colors.LightBlue.Medium, paddingTop: true);
+                            column.TextoAlternativo(revisadoPor, isBold: true);
+
+                            column.TextoAlternativo("Hora de fim do Pós XXX", isBold: true, fontColor: Colors.LightBlue.Medium, paddingTop: true);
+                            column.TextoAlternativo(dataHoraFimPosDessem, isBold: true);
+
+                            column.TextoAlternativo("Hora de divulgação do XXX", isBold: true, fontColor: Colors.LightBlue.Medium, paddingTop: true);
+                            column.TextoAlternativo(dataHoraDivulgacaoPDP, isBold: true);
+                            #endregion
+
+                            page.AdicionarFooterComInfosDasPags();
+                        });
+                    });
+                }).GeneratePdf(stream);
+
+                return stream.ToArray();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
         #endregion
 
