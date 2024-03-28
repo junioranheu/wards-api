@@ -105,7 +105,7 @@ namespace Wards.Application.Services.Exports.PDF
             }
         }
 
-        public static void DefinirColunas(this TableDescriptor tabela, List<string> cabecalhos, float tamanhoColunasFixo = 0, List<float>? listaTamanhosColunas = default, float pageWidth = 0, bool hasBorder = true, bool isCenter = true, int fontSize = 12)
+        public static void DefinirColunas(this TableDescriptor tabela, List<string> cabecalhos, float tamanhoColunasFixo = 0, List<float>? listaTamanhosColunas = default, float pageWidth = 0, bool hasBorder = true, bool isCenter = true, int fontSize = 12, int offSetCustomWidthAutomatico = 5)
         {
             // Caso a função tenha um valor no parâmetro "tamanhoColunasFixo", todas as colunas terão o mesmo width;
             if (tamanhoColunasFixo > 0)
@@ -121,8 +121,7 @@ namespace Wards.Application.Services.Exports.PDF
             // Caso a lista do parâmetro "listaTamanhosColunas" NÃO tenha valores, defina automaticamente o width das colunas;
             else if (listaTamanhosColunas?.Count == 0 || listaTamanhosColunas == null)
             {
-                int offset = 5;
-                float width = (pageWidth / cabecalhos.Count) - offset;
+                float width = (pageWidth / cabecalhos.Count) - offSetCustomWidthAutomatico;
 
                 tabela.ColumnsDefinition(coluna =>
                 {
@@ -149,6 +148,7 @@ namespace Wards.Application.Services.Exports.PDF
                 });
             }
 
+            // Estilização das colunas;
             tabela.Header(coluna =>
             {
                 foreach (var item in cabecalhos)
@@ -181,7 +181,7 @@ namespace Wards.Application.Services.Exports.PDF
 
         public static void TextoFixadoTopoTodasPags(this PageDescriptor pagina, string conteudo, string fontColor = Colors.Grey.Darken4)
         {
-            pagina.Header().AlignLeft().Text(conteudo).SemiBold().FontSize(16).FontColor(fontColor);
+            pagina.Header().AlignLeft().PaddingBottom(16).Text(conteudo).SemiBold().FontSize(16).FontColor(fontColor);
         }
 
         public static string FormatarDouble(double? valor)
@@ -199,6 +199,11 @@ namespace Wards.Application.Services.Exports.PDF
             return DateTime.Now.ToString("dddd, dd 'de' MMMM 'de' yyyy", new System.Globalization.CultureInfo("pt-BR"));
         }
 
+        public static string FormatarData_ddMyyHHmm(DateTime data)
+        {
+            return data.ToString("dd/M/yy HH:mm");
+        }
+
         public static void QuebrarPagina(this ColumnDescriptor coluna)
         {
             coluna.Item().PageBreak();
@@ -212,6 +217,27 @@ namespace Wards.Application.Services.Exports.PDF
                 text.Span(" / ");
                 text.TotalPages();
             });
+        }
+
+        public static List<List<double?>> DefinirListaDinamicaParaGerarMedias(List<string> cabecalhos)
+        {
+            List<List<double?>> listaDinamica_ParaGerarMedias = new();
+
+            for (int i = 0; i < cabecalhos.Count; i++)
+            {
+                listaDinamica_ParaGerarMedias.Add(new List<double?>());
+            }
+
+            return listaDinamica_ParaGerarMedias;
+        }
+
+        public static void Gerar_E_Exibir_Medias(this TableDescriptor tabela, List<List<double?>> listaDinamica_ParaGerarMedias)
+        {
+            foreach (var item in listaDinamica_ParaGerarMedias)
+            {
+                double? average = item.Count > 0 ? item.Average() : 0.0;
+                tabela.TextoTabela(conteudo: FormatarDouble(average), isBold: true, fontColor: Colors.LightBlue.Medium);
+            }
         }
     }
 }
