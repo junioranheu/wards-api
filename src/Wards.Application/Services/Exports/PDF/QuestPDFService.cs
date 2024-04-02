@@ -1,5 +1,6 @@
 ﻿using QuestPDF.Fluent;
 using QuestPDF.Helpers;
+using System.Reflection;
 using static Wards.Utils.Fixtures.Get;
 
 namespace Wards.Application.Services.Exports.PDF
@@ -182,6 +183,40 @@ namespace Wards.Application.Services.Exports.PDF
         public static void TextoFixadoTopoTodasPags(this PageDescriptor pagina, string conteudo, string fontColor = Colors.Grey.Darken4)
         {
             pagina.Header().AlignLeft().PaddingBottom(16).Text(conteudo).SemiBold().FontSize(16).FontColor(fontColor);
+        }
+
+        [Obsolete]
+        public static void LogoFixadoTopoTodasPags(this PageDescriptor pagina, string conteudoFallback, string imgUrl = "Assets\\Images\\logo.png", string fontColor = Colors.Grey.Darken4)
+        {
+            try
+            {
+                string? outPutDirectory = Path.GetDirectoryName(path: Assembly.GetExecutingAssembly().Location);
+                int binIndex = outPutDirectory!.IndexOf("bin", StringComparison.OrdinalIgnoreCase);
+
+                if (binIndex < 0)
+                {
+                    throw new Exception();
+                }
+
+                string outputFinal = outPutDirectory[..binIndex];
+                string img = Path.Combine(outputFinal, imgUrl);
+                string relLogo = new Uri(img).LocalPath;
+
+                if (!File.Exists(relLogo))
+                {
+                    throw new Exception();
+                }
+
+                pagina.Header().Container().Width(250).PaddingBottom(16).Stack(stack =>
+                {
+                    stack.Item().Image(relLogo);
+                });
+            }
+            catch (Exception ex)
+            {
+                Console.Write(ex);
+                pagina.TextoFixadoTopoTodasPags(conteudoFallback, fontColor);
+            }
         }
 
         public static string FormatarDouble(double? valor)
