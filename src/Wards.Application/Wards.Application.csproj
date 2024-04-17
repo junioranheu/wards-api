@@ -14,8 +14,8 @@
 
 	<ItemGroup>
 		<PackageReference Include="AutoMapper" Version="13.0.1" />
-		<PackageReference Include="Betalgo.OpenAI" Version="7.4.6" />
-		<PackageReference Include="Bulk.Sql" Version="1.0.10" />
+		<PackageReference Include="Betalgo.OpenAI" Version="8.1.0" />
+		<PackageReference Include="Bulk.Sql" Version="1.0.11" />
 		<PackageReference Include="ClosedXML" Version="0.102.2" />
 		<PackageReference Include="FluentValidation" Version="11.9.0" />
 		<PackageReference Include="NPOI" Version="2.7.0" />
