@@ -682,11 +682,20 @@ namespace Wards.API.Controllers
         {
             List<NewsletterCadastro>? excel = new()
             {
-                 new() { Data = DateTime.Now, Email = "Teste1" },
-                 new() { Data = DateTime.Now.AddDays(-1), Email = "Teste2" }
+               new() {  Data = DateTime.Now, Email = "Teste1" },
+               new() {  Data = DateTime.Now.AddDays(-1), Email = "Teste2" }
             };
-
-            await Bulk.Helpers.BulkInsert(excel, _context, "NewsletterCadastro");
+            
+            //// System.Data.SqlClient.SqlConnection;
+            //MySqlConnection con_mysql = _connectionFactory.ObterMySqlConnection();
+            //await Bulk.Helpers.BulkInsert(excel, con_mysql, "NewslettersCadastros");
+            
+            //// System.Data.SqlClient.SqlConnection;
+            //SqlConnection con_sql = _connectionFactory.ObterSqlServerConnection();
+            //await Bulk.Helpers.BulkInsert(excel, con_sql, "NewslettersCadastros");
+            
+            // Context;
+            await Bulk.Helpers.BulkInsert(excel, _context, "NewslettersCadastros");
 
             return Ok(excel);
         }
