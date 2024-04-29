@@ -669,7 +669,7 @@ namespace Wards.API.Controllers
 
             // Depois de ler o excel, é possível fazer um Bulk Insert;
             // var result = _mapper.Map<List<NewsletterCadastro>>(response);
-            // await BulkCopy.BulkInsert(result, _context, nomeTabelaAlvo);
+            // await Bulk.Helpers.BulkInsert(result, _context, nomeTabelaAlvo);
 
             return Ok(excel);
         }

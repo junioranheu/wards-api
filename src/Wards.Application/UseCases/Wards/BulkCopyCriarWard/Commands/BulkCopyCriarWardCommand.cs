@@ -1,6 +1,5 @@
 ﻿using Wards.Domain.Entities;
 using Wards.Infrastructure.Data;
-using static Bulk.BulkCopy;
 
 namespace Wards.Application.UseCases.Wards.BulkCopyCriarWard.Commands
 {
@@ -15,7 +14,7 @@ namespace Wards.Application.UseCases.Wards.BulkCopyCriarWard.Commands
 
         public async Task Execute(List<Ward> input)
         {
-            await BulkInsert(input, _context, "Wards", isExceptionInPortuguese: true);
+            await Bulk.Helpers.BulkInsert(input, _context, "Wards", isExceptionInPortuguese: true);
         }
     }
 }
