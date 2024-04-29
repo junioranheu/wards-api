@@ -673,6 +673,23 @@ namespace Wards.API.Controllers
 
             return Ok(excel);
         }
+
+        [HttpGet("lerExcelNewsletterCadastroAltOutput")]
+        [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(bool))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(StatusCodes))]
+        public async Task<ActionResult<bool>> ExemploLerExcelNewsletterCadastroOutputAsync()
+        {
+            List<NewsletterCadastro>? excel = new()
+            {
+                 new() { Data = DateTime.Now, Email = "Teste1" },
+                 new() { Data = DateTime.Now.AddDays(-1), Email = "Teste2" }
+            };
+
+            await Bulk.Helpers.BulkInsert(excel, _context, "NewsletterCadastro");
+
+            return Ok(excel);
+        }
         #endregion
 
         #region channels
