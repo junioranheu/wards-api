@@ -158,7 +158,7 @@ namespace Wards.Utils.Fixtures
 
         /// <summary>
         /// Clona um objeto de forma que não há problemas em suas referências;
-        /// Para mais informações busque Deep Clone;
+        /// Para mais informações, busque: Deep Clone;
         /// </summary>
         public static T GerarDeepClone<T>(T objeto)
         {
@@ -171,6 +171,26 @@ namespace Wards.Utils.Fixtures
             var clone = JsonConvert.DeserializeObject<T>(JsonConvert.SerializeObject(objeto), deserialize)!;
 
             return clone;
+        }
+
+        /// <summary>
+        /// Clona uma lista de objetos de forma que não há problemas em suas referências;
+        /// </summary>
+        public static List<T> GerarDeepCloneLista<T>(List<T> lista)
+        {
+            if (lista == null)
+            {
+                throw new ArgumentNullException(nameof(lista), "A lista não pode ser nula");
+            }
+
+            List<T> clonedList = new();
+
+            foreach (T item in lista)
+            {
+                clonedList.Add(GerarDeepClone(item));
+            }
+
+            return clonedList;
         }
 
         /// <summary>
