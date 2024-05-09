@@ -178,7 +178,7 @@ namespace Wards.Utils.Fixtures
         /// </summary>
         public static List<T> GerarDeepCloneLista<T>(List<T> lista)
         {
-            if (lista == null)
+            if (lista is null)
             {
                 throw new ArgumentNullException(nameof(lista), "A lista não pode ser nula");
             }
