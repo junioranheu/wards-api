@@ -1,14 +1,13 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using System.Data;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using MySqlConnector;
-using System.Data;
-using System.Text;
 using Wards.Domain.Consts;
 using Wards.Infrastructure.Auth.Models;
 using Wards.Infrastructure.Auth.Token;
@@ -66,19 +65,28 @@ namespace Wards.Infrastructure
                  });
         }
 
-        //private static void AddAuthAzure(IServiceCollection services, WebApplicationBuilder builder)
-        //{
-        //    services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-        //            .AddJwtBearer(x =>
-        //            {
-        //                x.Audience = builder.Configuration["AzureSettings:CliendId"] ?? string.Empty;
-        //                x.Authority = builder.Configuration["AzureSettings:Authority"] ?? string.Empty;
-        //                x.TokenValidationParameters = new TokenValidationParameters
-        //                {
-        //                    ValidateIssuer = false
-        //                };
-        //            });
-        //}
+        private static void AddAuthAzure(IServiceCollection services, WebApplicationBuilder builder)
+        {
+            string clientId = builder.Configuration["AzureSettings:CliendId"] ?? string.Empty; // secrets.json
+            string authority = builder.Configuration["AzureSettings:Authority"] ?? string.Empty; // secrets.json
+
+            if (string.IsNullOrEmpty(clientId) || string.IsNullOrEmpty(authority))
+            {
+                throw new Exception("O parâmetro clientId ou authority estão vazios");
+            }
+
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).
+                     AddJwtBearer(x =>
+                     {
+                        x.Audience = clientId;
+                        x.Authority = authority;
+                        x.TokenValidationParameters = new TokenValidationParameters
+                        {
+                            ValidateIssuer = false
+                        };
+                     });
+        }
 
         private static void AddFactory(IServiceCollection services)
         {
