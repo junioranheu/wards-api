@@ -79,7 +79,7 @@ namespace Wards.Infrastructure
                      AddJwtBearer(x =>
                      {
                         x.Audience = clientId;
-                        x.Authority = authority;
+                        x.Authority = $"https://login.microsoftonline.com/{authority}";
                         x.TokenValidationParameters = new TokenValidationParameters
                         {
                             ValidateIssuer = false
