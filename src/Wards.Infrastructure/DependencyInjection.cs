@@ -75,7 +75,6 @@ namespace Wards.Infrastructure
                 throw new Exception("O parâmetro clientId ou authority estão vazios");
             }
 
-
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).
                      AddJwtBearer(x =>
                      {
