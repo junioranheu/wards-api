@@ -11,6 +11,7 @@ namespace Wards.Domain.Entities
         [Key]
         public int UsuarioId { get; set; }
 
+        [MaxLength(255)]
         public string NomeCompleto { get; set; } = string.Empty;
 
         public string NomeUsuarioSistema { get; set; } = string.Empty;
