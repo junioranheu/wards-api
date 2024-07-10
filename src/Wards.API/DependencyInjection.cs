@@ -61,6 +61,7 @@ namespace Wards.API
         private static void AddMisc(IServiceCollection services)
         {
             services.AddMemoryCache();
+            services.AddResponseCaching();
         }
 
         private static void AddValidators(IServiceCollection services)
