@@ -27,6 +27,7 @@ namespace Wards.API
             AddCors(app, builder);
             AddCompression(app);
             AddAuth(app);
+            AddMisc(app);
             AddMapHubSignalR(app);
             AddHealthCheck(app);
             AddStaticFiles(app);
@@ -129,6 +130,11 @@ namespace Wards.API
             app.UseAuthentication();
             app.UseAuthorization();
             app.MapControllers();
+        }
+
+        private static void AddMisc(WebApplication app)
+        {
+            app.UseResponseCaching();
         }
 
         private static void AddMapHubSignalR(WebApplication app)
