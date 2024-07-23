@@ -125,8 +125,56 @@ namespace Wards.Application.Services.Imports.CSV
                 return null;
             }
 
+            if (type == typeof(string))
+            {
+                string? decodedString = CorrigirLetrasOutroEncoding(data.ToString());
+                return Convert.ChangeType(decodedString, type);
+            }
+
             // Convertendo o objeto para o tipo especificado;
             return Convert.ChangeType(dado, tipo);
+        }
+
+        private static string? CorrigirLetrasOutroEncoding(string? text)
+        {
+            var replacements = new Dictionary<string, string>
+            {
+                { "Ã¡", "á" },
+                { "Ã©", "é" },
+                { "Ã­", "í" },
+                { "Ã³", "ó" },
+                { "Ãº", "ú" },
+                { "Ã", "Á" },
+                { "Ã‰", "É" },
+                { "Ã", "Í" },
+                { "Ã“", "Ó" },
+                { "Ãš", "Ú" },
+                { "Ã£", "ã" },
+                { "Ãµ", "õ" },
+                { "Ã±", "ñ" },
+                { "Ã", "Ç" },
+                { "Ã§", "ç" },
+                { "Ã¼", "ü" },
+                { "Ã¶", "ö" },
+                { "Ã¤", "ä" },
+                { "Ã€", "À" },
+                { "Ãˆ", "È" },
+                { "ÃŒ", "Ì" },
+                { "Ã’", "Ò" },
+                { "Ã™", "Ù" },
+                { "Ã¢", "â" },
+                { "Ãª", "ê" },
+                { "Ã®", "î" },
+                { "Ã´", "ô" },
+                { "Ã»", "û" }
+            };
+        
+            foreach (var replacement in replacements)
+            {
+                text = text?.Replace(replacement.Key, replacement.Value);
+            }
+        
+            return text;
         }
     }
 }
