@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NewsletterCadastros.Application.UseCases.NewslettersCadastros;
 using Wards.Application.AutoMapper;
+using Wards.Application.Services.Cache;
 using Wards.Application.Services.Exports;
 using Wards.Application.Services.Imports;
 using Wards.Application.Services.Sistemas;
@@ -82,6 +83,7 @@ namespace Wards.Application
             services.AddImportsService();
             services.AddUsuariosService();
             services.AddResetarBancoDadosService();
+            services.AddCacheService();
         }
     }
 }

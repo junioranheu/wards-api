@@ -17,6 +17,7 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Channels;
+using Wards.Application.Services.Cache.GenericCache;
 using Wards.Application.Services.Exports.PDF;
 using Wards.Application.Services.Imports.XLSX;
 using Wards.Application.Services.Imports.XLSX.Models.Input;
@@ -64,6 +65,7 @@ namespace Wards.API.Controllers
         private readonly IConnection _rabbitMQConnection;
         private readonly IModel _rabbitMQChannel;
         private readonly IImportXlsxService _importXlsxService;
+        private readonly IGenericCacheService _cache;
 
         /// <summary>
         /// Controller para testes e exemplos aleatórios e possivelmente úteis;
@@ -78,7 +80,8 @@ namespace Wards.API.Controllers
             IMigrateDatabaseService migrateDatabaseService,
             IBulkCopyCriarWardUseCase bulkCopyCriarWardUseCase,
             IGenericRepository<Usuario> genericUsuarioRepository,
-            IImportXlsxService importXlsxService)
+            IImportXlsxService importXlsxService,
+            IGenericCacheService cache)
         {
             _context = context;
             _webHostEnvironment = webHostEnvironment;
@@ -89,6 +92,7 @@ namespace Wards.API.Controllers
             _bulkCopyCriarWardUseCase = bulkCopyCriarWardUseCase;
             _genericUsuarioRepository = genericUsuarioRepository;
             _importXlsxService = importXlsxService;
+            _cache = cache;
 
             try
             {
@@ -108,6 +112,39 @@ namespace Wards.API.Controllers
         {
             _rabbitMQChannel?.Close();
             _rabbitMQConnection?.Close();
+        }
+        #endregion
+
+        #region Cache
+        /// <summary>
+        /// Exemplo básico de envio utilizando RabbitMQ;
+        /// </summary>
+        [HttpGet("getOrAddCache")]
+        [AllowAnonymous]
+        public async Task<ActionResult<List<Log>?>> ExemploGetOrAddCache(string key)
+        {
+            List<Log>? logs = await _cache.GetOrAdd(key, () => ExemploGetOrAddCache_Logs(), TimeSpan.FromHours(24));
+
+            return logs;
+
+            async Task<List<Log>?> ExemploGetOrAddCache_Logs()
+            {
+                return await _context.Logs.AsNoTracking().ToListAsync();
+            }
+        }
+
+        [HttpPost("limparCache")]
+        [AllowAnonymous]
+        public ActionResult<bool> ExemploLimparCache(string key)
+        {
+            List<string> keys = new()
+            {
+                key
+            };
+
+            _cache.Clear(keys.ToArray());
+
+            return Ok(true);
         }
         #endregion
 

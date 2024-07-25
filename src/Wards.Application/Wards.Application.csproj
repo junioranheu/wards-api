@@ -10,9 +10,9 @@
 		<Compile Remove="Services\Queues\**" />
 		<EmbeddedResource Remove="Services\Queues\**" />
 		<None Remove="Services\Queues\**" />
-		<None Remove="Services\Imports\Excel\Models\" />
-		<None Remove="Services\Imports\Excel\Models\Input\" />
 		<None Remove="Services\Imports\XLSX\" />
+		<None Remove="Services\Cache\" />
+		<None Remove="Services\Cache\GenericCache\" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -32,9 +32,9 @@
 
 	<ItemGroup>
 		<Folder Include="Hubs\RequestFilterHub\Models\" />
-		<Folder Include="Services\Imports\Excel\Models\" />
-		<Folder Include="Services\Imports\Excel\Models\Input\" />
 		<Folder Include="Services\Imports\XLSX\" />
+		<Folder Include="Services\Cache\" />
+		<Folder Include="Services\Cache\GenericCache\" />
 	</ItemGroup>
 
 </Project>
