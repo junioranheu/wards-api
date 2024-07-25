@@ -18,8 +18,8 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Channels;
 using Wards.Application.Services.Exports.PDF;
-using Wards.Application.Services.GenericReadExcel;
-using Wards.Application.Services.GenericReadExcel.Models.Input;
+using Wards.Application.Services.Imports.XLSX;
+using Wards.Application.Services.Imports.XLSX.Models.Input;
 using Wards.Application.Services.Sistemas.ResetarBancoDados;
 using Wards.Application.UseCases.Logs.ListarLog;
 using Wards.Application.UseCases.Logs.Shared.Output;
@@ -63,6 +63,7 @@ namespace Wards.API.Controllers
         private readonly IConnectionFactory _rabbitMQConectionFactory;
         private readonly IConnection _rabbitMQConnection;
         private readonly IModel _rabbitMQChannel;
+        private readonly IImportXlsxService _importXlsxService;
 
         /// <summary>
         /// Controller para testes e exemplos aleatórios e possivelmente úteis;
@@ -76,7 +77,8 @@ namespace Wards.API.Controllers
             IListarUsuarioUseCase listarUsuarioUseCase,
             IMigrateDatabaseService migrateDatabaseService,
             IBulkCopyCriarWardUseCase bulkCopyCriarWardUseCase,
-            IGenericRepository<Usuario> genericUsuarioRepository)
+            IGenericRepository<Usuario> genericUsuarioRepository,
+            IImportXlsxService importXlsxService)
         {
             _context = context;
             _webHostEnvironment = webHostEnvironment;
@@ -86,6 +88,7 @@ namespace Wards.API.Controllers
             _migrateDatabaseService = migrateDatabaseService;
             _bulkCopyCriarWardUseCase = bulkCopyCriarWardUseCase;
             _genericUsuarioRepository = genericUsuarioRepository;
+            _importXlsxService = importXlsxService;
 
             try
             {
@@ -665,7 +668,7 @@ namespace Wards.API.Controllers
                 throw new Exception(ObterDescricaoEnum(CodigoErroEnum.ArquivoImportFormatoInvalido));
             }
 
-            List<NewsletterCadastroOutput>? excel = GenericReadExcel.ReadExcel<NewsletterCadastroOutput>(file: input.FormFile, skipRow: 1);
+            List<NewsletterCadastroOutput>? excel = _importXlsxService.ReadExcel<NewsletterCadastroOutput>(file: input.FormFile, skipRow: 1);
 
             // Depois de ler o excel, é possível fazer um Bulk Insert;
             // var result = _mapper.Map<List<NewsletterCadastro>>(response);
