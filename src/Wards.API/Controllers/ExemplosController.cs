@@ -123,7 +123,7 @@ namespace Wards.API.Controllers
         [AllowAnonymous]
         public async Task<ActionResult<List<Log>?>> ExemploGetOrAddCache(string key)
         {
-            List<Log>? logs = await _cache.GetOrAdd(key, () => ExemploGetOrAddCache_Logs(), TimeSpan.FromHours(24));
+            List<Log>? logs = await _cache.GetOrAddWithQueue(() => ExemploGetOrAddCache_Logs(), key, TimeSpan.FromHours(24));
 
             return logs;
 

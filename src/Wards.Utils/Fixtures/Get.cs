@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json;
+﻿using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -9,6 +7,9 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.ServiceProcess;
 using System.Text;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using TimeZoneConverter;
 using Wards.Utils.Entities.Output;
 using static Wards.Utils.Fixtures.Encrypt;
@@ -390,6 +391,19 @@ namespace Wards.Utils.Fixtures
             }
 
             throw new ArgumentException("Propriedade não encontrada", nameof(prop));
+        }
+
+        /// <summary>
+        /// Checa se uma lista (List ou IEnumerable) é vazia;
+        /// </summary>
+        public static bool IsEmptyList<T>(T value)
+        {
+            if (value is IEnumerable enumerable)
+            {
+                return !enumerable.Cast<object>().Any();
+            }
+
+            return false;
         }
     }
 }
