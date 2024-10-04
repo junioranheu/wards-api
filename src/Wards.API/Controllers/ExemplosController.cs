@@ -115,9 +115,94 @@ namespace Wards.API.Controllers
         }
         #endregion
 
-        #region Cache
+        #region dictionary_e_hashset
         /// <summary>
-        /// Exemplo básico de envio utilizando RabbitMQ;
+        /// Exemplo de dicionário (SUPER PERFORMÁTICO);
+        /// </summary>
+        [HttpGet("dictionary")]
+        [AllowAnonymous]
+        public async Task<ActionResult> ExemploDictionary()
+        {
+            // #1 - Lista gerada por um LINQ pelo EF;
+            List<Log>? linq = await _context.Logs.AsNoTracking().ToListAsync();
+
+            // #2 - Variáveis mockadas que simulam uma lista real de dados que devem ser iterados;
+            List<Log> listaMockada = new()
+            {
+                new Log() { TipoRequisicao = "GET", Data = new DateTime(2024, 7, 19, 15, 00, 00), StatusResposta = 200 },
+                new Log() { TipoRequisicao = "GET", Data = new DateTime(2024, 7, 19, 15, 00, 00), StatusResposta = 500 }
+            };
+     
+            // #3 - Dicionário - lista de dados;
+            Dictionary<LogKey_TipoRequisicao_Data, List<Log>> dicionario_listaDeDados = linq.
+            GroupBy(x => new LogKey_TipoRequisicao_Data(x.TipoRequisicao, x.Data)).
+            ToDictionary(x => x.Key, x => x.ToList());
+
+            List<Log> listaTeste_DicionarioListaDeDados = new();
+
+            foreach (var item in listaMockada)
+            {
+                var key = new LogKey_TipoRequisicao_Data(item.TipoRequisicao, item.Data);
+                dicionario_listaDeDados.TryGetValue(key, out List<Log>? relevantItems);
+
+                if (relevantItems is null || !relevantItems.Any())
+                {
+                    continue;
+                }
+
+                List<Log> exemploDeComoPodeFazerMaisFiltrosQueTaTudoOk = relevantItems.Where(x => x.UsuarioId is null).ToList();
+
+                if (exemploDeComoPodeFazerMaisFiltrosQueTaTudoOk is null || !exemploDeComoPodeFazerMaisFiltrosQueTaTudoOk.Any())
+                {
+                    continue;
+                }
+
+                listaTeste_DicionarioListaDeDados.AddRange(exemploDeComoPodeFazerMaisFiltrosQueTaTudoOk);
+            }
+
+            // #4 - Dicionário - item único (FirstOrDefault);
+            List<Log> listaTeste_DicionarioItemUnico = new();
+
+            Dictionary<LogKey_TipoRequisicao_StatusResposta, Log> dicionario_itemUnico = linq.
+            GroupBy(x => new LogKey_TipoRequisicao_StatusResposta(x.TipoRequisicao, x.StatusResposta)).
+            Select(x => x.First()).
+            ToDictionary(x => new LogKey_TipoRequisicao_StatusResposta(x.TipoRequisicao, x.StatusResposta), x => x);
+
+            foreach (var item in listaMockada)
+            {
+                var key = new LogKey_TipoRequisicao_StatusResposta(item.TipoRequisicao, item.StatusResposta);
+                dicionario_itemUnico.TryGetValue(key, out Log? relevantItem);
+
+                if (relevantItem is null)
+                {
+                    continue;
+                }
+
+                listaTeste_DicionarioItemUnico.Add(relevantItem);
+            }
+
+            // #5 - Log dos resultados;
+            Console.Write(listaTeste_DicionarioListaDeDados);
+            Console.Write(listaTeste_DicionarioItemUnico);
+
+            // #6 - Remover dados de uma lista usando HashSet;
+            var hashSetDeItensParaRemover1 = new HashSet<Log>(listaTeste_DicionarioListaDeDados);
+            linq.RemoveAll(x => hashSetDeItensParaRemover1.Contains(x));
+
+            Console.Write(linq);
+
+            var hashSetDeItensParaRemover2 = new HashSet<Log>(listaTeste_DicionarioItemUnico);
+            linq.RemoveAll(x => hashSetDeItensParaRemover2.Contains(x));
+
+            Console.Write(linq);
+
+            return Ok();
+        }
+        #endregion
+
+        #region cache
+        /// <summary>
+        /// Exemplo de utilização de cache;
         /// </summary>
         [HttpGet("getOrAddCache")]
         [AllowAnonymous]
@@ -148,7 +233,7 @@ namespace Wards.API.Controllers
         }
         #endregion
 
-        #region Export_PDF
+        #region export_PDF
         [HttpGet("ExemploPDF")]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IFormFile))]
