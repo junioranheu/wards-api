@@ -37,7 +37,7 @@ public static class HttpService
     ///     public string Body { get; set; }
     /// }
     /// </summary>
-    public static async Task<T?> SendRequestAsync<T>(string url, HttpMethod method, object? content = null) where T : class
+    public static async Task<T?> SendRequestAsync<T>(string url, HttpMethod method, object? content = null, int? timeOutInMinutes = 10) where T : class
     {
         using var request = new HttpRequestMessage(method, url);
 
@@ -46,6 +46,8 @@ public static class HttpService
             var jsonContent = JsonSerializer.Serialize(content);
             request.Content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
         }
+
+        _httpClient.Timeout = TimeSpan.FromMinutes(timeOutInMinutes.GetValueOrDefault());
 
         using var response = await _httpClient.SendAsync(request);
         response.EnsureSuccessStatusCode();
