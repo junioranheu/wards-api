@@ -2,6 +2,7 @@
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.ResponseCompression;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using System.IO.Compression;
 using System.Text.Json.Serialization;
 using Wards.API.Filters;
@@ -15,6 +16,7 @@ namespace Wards.API
     {
         public static IServiceCollection AddDependencyInjectionAPI(this IServiceCollection services)
         {
+            AddKestrel(services);
             AddCompression(services);
             AddControllers(services);
             AddMisc(services);
@@ -22,6 +24,14 @@ namespace Wards.API
             AddHealthCheck(services);
 
             return services;
+        }
+
+        private static void AddKestrel(IServiceCollection services)
+        {
+            services.Configure<KestrelServerOptions>(options =>
+            {
+                options.Limits.RequestHeadersTimeout = TimeSpan.FromMinutes(30); 
+            });
         }
 
         private static void AddCompression(IServiceCollection services)
