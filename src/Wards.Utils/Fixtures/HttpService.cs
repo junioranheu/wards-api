@@ -5,8 +5,6 @@ namespace Wards.Utils.Fixtures;
 
 public static class HttpService
 {
-    private static readonly HttpClient _httpClient = new();
-
     /// <summary>
     /// const string baseUrl = "https: //jsonplaceholder.typicode.com";
     /// 
@@ -39,6 +37,11 @@ public static class HttpService
     /// </summary>
     public static async Task<T?> SendRequestAsync<T>(string url, HttpMethod method, object? content = null, int? timeOutInMinutes = 10) where T : class
     {
+         using var _httpClient = new HttpClient
+         {
+             Timeout = TimeSpan.FromMinutes(timeOutInMinutes.GetValueOrDefault())
+         };
+        
         using var request = new HttpRequestMessage(method, url);
 
         if (content is not null)
@@ -46,8 +49,6 @@ public static class HttpService
             var jsonContent = JsonSerializer.Serialize(content);
             request.Content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
         }
-
-        _httpClient.Timeout = TimeSpan.FromMinutes(timeOutInMinutes.GetValueOrDefault());
 
         using var response = await _httpClient.SendAsync(request);
         response.EnsureSuccessStatusCode();
