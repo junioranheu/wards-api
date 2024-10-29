@@ -65,6 +65,7 @@ namespace Wards.API
                 {
                     x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
                     x.JsonSerializerOptions.WriteIndented = true;
+                    x.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
                 });
         }
 
