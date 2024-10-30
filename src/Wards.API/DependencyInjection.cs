@@ -67,6 +67,8 @@ namespace Wards.API
 
 #if DEBUG
                     x.JsonSerializerOptions.WriteIndented = true;
+#else
+                    x.JsonSerializerOptions.WriteIndented = false;
 #endif
 
                     x.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
