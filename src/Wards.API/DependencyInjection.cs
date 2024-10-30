@@ -64,14 +64,13 @@ namespace Wards.API
                 AddJsonOptions(x =>
                 {
                     x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
-
+                    x.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                    
 #if DEBUG
                     x.JsonSerializerOptions.WriteIndented = true;
 #else
                     x.JsonSerializerOptions.WriteIndented = false;
-#endif
-
-                    x.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+#endif           
                 });
         }
 
