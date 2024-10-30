@@ -30,7 +30,7 @@ namespace Wards.API
         {
             services.Configure<KestrelServerOptions>(options =>
             {
-                options.Limits.RequestHeadersTimeout = TimeSpan.FromMinutes(30); 
+                options.Limits.RequestHeadersTimeout = TimeSpan.FromMinutes(30);
             });
         }
 
@@ -64,7 +64,11 @@ namespace Wards.API
                 AddJsonOptions(x =>
                 {
                     x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+
+#if DEBUG
                     x.JsonSerializerOptions.WriteIndented = true;
+#endif
+
                     x.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
                 });
         }
