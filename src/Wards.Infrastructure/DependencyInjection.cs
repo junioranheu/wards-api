@@ -1,7 +1,9 @@
 ﻿using System.Data;
 using System.Text;
+using System.Text.Json;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -14,6 +16,7 @@ using Wards.Infrastructure.Auth.Token;
 using Wards.Infrastructure.Data;
 using Wards.Infrastructure.Factory.ConnectionFactory;
 using Wards.Infrastructure.UnitOfWork;
+using static Wards.Utils.Fixtures.Get;
 
 namespace Wards.Infrastructure
 {
@@ -39,6 +42,8 @@ namespace Wards.Infrastructure
             services.AddUnityOfWorkService();
         }
 
+        private static readonly string[] onChallengeError = new string[] { "Acesso negado. Você não tem autorização para acessar este recurso." };
+
         private static void AddAuth(IServiceCollection services, WebApplicationBuilder builder)
         {
             services.AddAuthentication(x =>
@@ -61,7 +66,29 @@ namespace Wards.Infrastructure
                          ValidAudience = builder.Configuration["JwtSettings:Audience"],
                          ValidateLifetime = true,
                          ClockSkew = TimeSpan.Zero
-                     }; 
+                     };
+
+                     x.Events = new JwtBearerEvents
+                     {
+                         OnChallenge = context =>
+                         {
+                             context.HandleResponse();
+
+                             context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                             context.Response.ContentType = "application/json";
+
+                             var result = JsonSerializer.Serialize(new
+                             {
+                                 Code = StatusCodes.Status401Unauthorized,
+                                 Date = ObterDetalhesDataHora(),
+                                 context.HttpContext.Request.Path,
+                                 Messages = onChallengeError,
+                                 IsError = true
+                             });
+
+                             return context.Response.WriteAsync(result);
+                         }
+                     };
                  });
         }
 
