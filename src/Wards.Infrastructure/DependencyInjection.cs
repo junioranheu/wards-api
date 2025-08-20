@@ -1,7 +1,4 @@
-﻿using System.Data;
-using System.Text;
-using System.Text.Json;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
@@ -10,11 +7,15 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using MySqlConnector;
+using System.Data;
+using System.Text;
+using System.Text.Json;
 using Wards.Domain.Consts;
 using Wards.Infrastructure.Auth.Models;
 using Wards.Infrastructure.Auth.Token;
 using Wards.Infrastructure.Data;
 using Wards.Infrastructure.Factory.ConnectionFactory;
+using Wards.Infrastructure.Interceptors;
 using Wards.Infrastructure.UnitOfWork;
 using static Wards.Utils.Fixtures.Get;
 
@@ -105,12 +106,12 @@ namespace Wards.Infrastructure
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).
                      AddJwtBearer(x =>
                      {
-                        x.Audience = clientId;
-                        x.Authority = $"https://login.microsoftonline.com/{authority}";
-                        x.TokenValidationParameters = new TokenValidationParameters
-                        {
-                            ValidateIssuer = false
-                        };
+                         x.Audience = clientId;
+                         x.Authority = $"https://login.microsoftonline.com/{authority}";
+                         x.TokenValidationParameters = new TokenValidationParameters
+                         {
+                             ValidateIssuer = false
+                         };
                      });
         }
 
@@ -121,13 +122,14 @@ namespace Wards.Infrastructure
 
         private static void AddContext(IServiceCollection services, WebApplicationBuilder builder)
         {
-             string con = new ConnectionFactory(builder.Configuration).ObterStringConnection();
+            string con = new ConnectionFactory(builder.Configuration).ObterStringConnection();
 
             // Entity Framework;
             services.AddDbContextPool<WardsContext>(x =>
             {
                 // x.UseSqlServer(con);
-                x.UseMySql(con, ServerVersion.AutoDetect(con));
+                x.UseMySql(con, ServerVersion.AutoDetect(con)).
+                  AddInterceptors(new SlowQueryDebugInterceptor());
 
 #if DEBUG
                 x.EnableSensitiveDataLogging();
