@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using System.IO.Compression;
 using System.Text.Json.Serialization;
+using Wards.API.Extensions;
 using Wards.API.Filters;
 using Wards.Application.UseCases.Wards.Shared.Input;
 using Wards.Infrastructure.Data;
@@ -78,6 +79,8 @@ namespace Wards.API
         {
             services.AddMemoryCache();
             services.AddResponseCaching();
+
+            services.AddUserRateLimiting();
         }
 
         private static void AddValidators(IServiceCollection services)

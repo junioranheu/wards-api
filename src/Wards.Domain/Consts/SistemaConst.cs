@@ -4,5 +4,6 @@
     {
         public const string NomeSistema = "Wards";
         public const int QtdLimiteMBsImport = 2 * 1_048_576;
+        public const string PolicyRateLimiting = "_policyRateLimiting";
     }
 }

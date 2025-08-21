@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
 using MySqlConnector;
@@ -112,6 +113,16 @@ namespace Wards.API.Controllers
         {
             _rabbitMQChannel?.Close();
             _rabbitMQConnection?.Close();
+        }
+        #endregion
+
+        #region rateLimiting
+        [AllowAnonymous]
+        [EnableRateLimiting(SistemaConst.PolicyRateLimiting)]
+        [HttpGet("GetOlaMundoComRateLimiting")]
+        public ActionResult GetOlaMundoComRateLimiting()
+        {
+            return Ok("Olá, mundo");
         }
         #endregion
 

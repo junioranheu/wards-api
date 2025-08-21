@@ -135,6 +135,7 @@ namespace Wards.API
         private static void AddMisc(WebApplication app)
         {
             app.UseResponseCaching();
+            app.UseRateLimiter();
         }
 
         private static void AddMapHubSignalR(WebApplication app)
