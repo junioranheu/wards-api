@@ -1,12 +1,15 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using MySqlConnector;
+using System;
 using System.Data;
 using System.Text;
 using System.Text.Json;
@@ -124,16 +127,19 @@ namespace Wards.Infrastructure
         {
             string con = new ConnectionFactory(builder.Configuration).ObterStringConnection();
 
-            // Entity Framework;
-            services.AddDbContextPool<WardsContext>(x =>
+            // Context;
+            services.AddDbContextPool<WardsContext>((serviceProvider, options) =>
             {
-                // x.UseSqlServer(con);
-                x.UseMySql(con, ServerVersion.AutoDetect(con)).
-                  AddInterceptors(new SlowQueryDebugInterceptor());
+                ILogger<SlowQueryDebugInterceptor> logger = serviceProvider.GetRequiredService<ILogger<SlowQueryDebugInterceptor>>();
+                IWebHostEnvironment env = serviceProvider.GetRequiredService<IWebHostEnvironment>();
+                SlowQueryDebugInterceptor interceptor = new(logger, env);
 
-#if DEBUG
-                x.EnableSensitiveDataLogging();
-#endif
+                options.UseMySql(con, ServerVersion.AutoDetect(con)).AddInterceptors(interceptor);
+
+                if (env.IsDevelopment())
+                {
+                    options.EnableSensitiveDataLogging();
+                }
             });
 
             // Dapper;

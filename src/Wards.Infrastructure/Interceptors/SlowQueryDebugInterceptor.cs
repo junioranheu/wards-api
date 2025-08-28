@@ -1,10 +1,23 @@
-﻿using Microsoft.EntityFrameworkCore.Diagnostics;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore.Diagnostics;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using System.Data.Common;
+using static Wards.Utils.Fixtures.Get;
 
 namespace Wards.Infrastructure.Interceptors
 {
     public class SlowQueryDebugInterceptor : DbCommandInterceptor
     {
+        private readonly ILogger<SlowQueryDebugInterceptor> _logger;
+        private readonly bool _isDevelopment;
+
+        public SlowQueryDebugInterceptor(ILogger<SlowQueryDebugInterceptor> logger, IWebHostEnvironment env)
+        {
+            _logger = logger;
+            _isDevelopment = env.IsDevelopment();
+        }
+
         public override async ValueTask<DbDataReader> ReaderExecutedAsync(DbCommand command, CommandExecutedEventData eventData, DbDataReader result, CancellationToken cancellationToken = default)
         {
             LogIfSlow(command, eventData);
@@ -18,23 +31,21 @@ namespace Wards.Infrastructure.Interceptors
         }
 
         #region extras
-        private static void LogIfSlow(DbCommand command, CommandExecutedEventData eventData)
+        private void LogIfSlow(DbCommand command, CommandExecutedEventData eventData)
         {
-#if !DEBUG
-        return;
-#endif
+            if (!_isDevelopment)
+            {
+                return;
+            }
 
             int threshold = GetThreshold(command);
 
             if (eventData.Duration.TotalMilliseconds > threshold)
             {
-                Console.ForegroundColor = ConsoleColor.DarkGreen;
-                Console.Write("DB");
-                Console.ResetColor();
-                Console.Write($": [{DateTime.Now:HH:mm:ss}]");
-                Console.ForegroundColor = ConsoleColor.DarkYellow;
-                Console.WriteLine($" Query longa detectada, {eventData.Duration.Milliseconds}ms gastos: {command?.CommandText ?? "-"}");
-                Console.ResetColor();
+                _logger.LogInformation("[Slow query] [date, {Date}], [duration, {Duration}ms]: {CommandText}",
+                    GerarHorarioBrasilia().ToString("HH:mm:ss"),
+                    eventData.Duration.Milliseconds,
+                    command?.CommandText ?? "-");
             }
         }
 

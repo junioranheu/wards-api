@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Wards.Application.UseCases.Logs.CriarLog.Commands;
 using Wards.Application.UseCases.Logs.ListarLog.Queries;
@@ -31,7 +32,8 @@ namespace Wards.UnitTests.Tests.Logs
         public async Task Criar_ChecarResultadoEsperado(string tipoRequisicao, string endpoint, string parametros, string descricao, int statusResposta, int usuarioId, bool esperado)
         {
             // Arrange;
-            var command = new CriarLogCommand(_context);
+            var mockLogger = new Mock<ILogger<CriarLogCommand>>();
+            var command = new CriarLogCommand(_context, mockLogger.Object);
             LogInput input = LogMock.CriarInput(tipoRequisicao, endpoint, parametros, descricao, statusResposta, usuarioId);
 
             // Act;
