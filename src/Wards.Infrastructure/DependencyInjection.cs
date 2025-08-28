@@ -7,13 +7,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
 using MySqlConnector;
-using System;
 using System.Data;
 using System.Text;
 using System.Text.Json;
-using Wards.Domain.Consts;
 using Wards.Infrastructure.Auth.Models;
 using Wards.Infrastructure.Auth.Token;
 using Wards.Infrastructure.Data;
@@ -32,8 +29,6 @@ namespace Wards.Infrastructure
             AddAuth(services, builder);
             AddFactory(services);
             AddContext(services, builder);
-            AddSwagger(services);
-            AddCors(services, builder);
 
             return services;
         }
@@ -144,50 +139,6 @@ namespace Wards.Infrastructure
 
             // Dapper;
             services.AddScoped<IDbConnection>((sp) => new MySqlConnection(con));
-        }
-
-        private static void AddSwagger(IServiceCollection services)
-        {
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new() { Title = $"{SistemaConst.NomeSistema}.API", Version = "v1" });
-
-                OpenApiSecurityScheme jwtSecurityScheme = new()
-                {
-                    Scheme = "bearer",
-                    BearerFormat = "JWT",
-                    Name = "JWT Authentication",
-                    In = ParameterLocation.Header,
-                    Type = SecuritySchemeType.Http,
-                    Description = "Coloque **_apenas_** o token (JWT Bearer) abaixo!",
-
-                    Reference = new OpenApiReference
-                    {
-                        Id = JwtBearerDefaults.AuthenticationScheme,
-                        Type = ReferenceType.SecurityScheme
-                    }
-                };
-
-                c.AddSecurityDefinition(jwtSecurityScheme.Reference.Id, jwtSecurityScheme);
-
-                c.AddSecurityRequirement(new OpenApiSecurityRequirement
-                {
-                    { jwtSecurityScheme, Array.Empty<string>() }
-                });
-            });
-        }
-
-        private static void AddCors(IServiceCollection services, WebApplicationBuilder builder)
-        {
-            services.AddCors(x =>
-                x.AddPolicy(name: builder.Configuration["CORSSettings:Cors"] ?? string.Empty, builder =>
-                {
-                    builder.AllowAnyHeader().
-                            AllowAnyMethod().
-                            SetIsOriginAllowed((host) => true).
-                            AllowCredentials();
-                })
-            );
         }
     }
 }

@@ -1,8 +1,10 @@
 ﻿using FluentValidation;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
+using Microsoft.OpenApi.Models;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using System.IO.Compression;
@@ -22,6 +24,8 @@ namespace Wards.API
         {
             IWebHostEnvironment env = builder.Environment;
 
+            AddSwagger(services);
+            AddCors(services, builder);
             AddKestrel(services);
             AddCompression(services);
             AddControllers(services, env);
@@ -31,6 +35,50 @@ namespace Wards.API
             AddHealthCheck(services);
 
             return services;
+        }
+
+        private static void AddSwagger(IServiceCollection services)
+        {
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new() { Title = $"{SistemaConst.NomeSistema}.API", Version = "v1" });
+
+                OpenApiSecurityScheme jwtSecurityScheme = new()
+                {
+                    Scheme = "bearer",
+                    BearerFormat = "JWT",
+                    Name = "JWT Authentication",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.Http,
+                    Description = "Coloque **_apenas_** o token (JWT Bearer) abaixo!",
+
+                    Reference = new OpenApiReference
+                    {
+                        Id = JwtBearerDefaults.AuthenticationScheme,
+                        Type = ReferenceType.SecurityScheme
+                    }
+                };
+
+                c.AddSecurityDefinition(jwtSecurityScheme.Reference.Id, jwtSecurityScheme);
+
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    { jwtSecurityScheme, Array.Empty<string>() }
+                });
+            });
+        }
+
+        private static void AddCors(IServiceCollection services, WebApplicationBuilder builder)
+        {
+            services.AddCors(x =>
+                x.AddPolicy(name: builder.Configuration["CORSSettings:Cors"] ?? string.Empty, builder =>
+                {
+                    builder.AllowAnyHeader().
+                            AllowAnyMethod().
+                            SetIsOriginAllowed((host) => true).
+                            AllowCredentials();
+                })
+            );
         }
 
         private static void AddKestrel(IServiceCollection services)

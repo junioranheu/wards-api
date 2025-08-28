@@ -15,6 +15,6 @@ WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 WebApplication app = builder.Build();
 {
-    await app.UseAppConfigurationAsync(builder);
+    await app.UseAppConfiguration(builder);
     app.Run();
 }

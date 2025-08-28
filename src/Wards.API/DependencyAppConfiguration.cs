@@ -17,7 +17,7 @@ namespace Wards.API
 {
     public static class DependencyAppConfiguration
     {
-        public static async Task<WebApplication> UseAppConfigurationAsync(this WebApplication app, WebApplicationBuilder builder)
+        public static async Task<WebApplication> UseAppConfiguration(this WebApplication app, WebApplicationBuilder builder)
         {
             using IServiceScope scope = app.Services.CreateScope();
             IServiceProvider services = scope.ServiceProvider;
