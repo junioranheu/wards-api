@@ -4,6 +4,7 @@ using Microsoft.Extensions.FileProviders;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Swashbuckle.AspNetCore.SwaggerUI;
+using System.Diagnostics;
 using Wards.Application.Hubs.ChatHub;
 using Wards.Application.Hubs.RequestFilterHub;
 using Wards.Domain.Consts;
@@ -27,6 +28,7 @@ namespace Wards.API
             AddCors(app, builder);
             AddCompression(app);
             AddAuth(app);
+            AddObservability(app);
             AddMisc(app);
             AddMapHubSignalR(app);
             AddHealthCheck(app);
@@ -130,6 +132,40 @@ namespace Wards.API
             app.UseAuthentication();
             app.UseAuthorization();
             app.MapControllers();
+        }
+
+        private static void AddObservability(WebApplication app)
+        {
+            ActivitySource activitySource = new(SistemaConst.NomeSistema);
+
+            ILogger<Program> logger = app.Services.GetRequiredService<ILogger<Program>>();
+
+            ActivityListener listener = new()
+            {
+                ShouldListenTo = source => source.Name == "Microsoft.AspNetCore" || source.Name == SistemaConst.NomeSistema,
+                Sample = (ref ActivityCreationOptions<ActivityContext> options) => ActivitySamplingResult.AllDataAndRecorded,
+                ActivityStopped = activity =>
+                {
+                    // Filtra métodos irrelevantes;
+                    string? method = activity.Tags.FirstOrDefault(t => t.Key == "http.request.method").Value?.ToString();
+                    string? path = activity.Tags.FirstOrDefault(t => t.Key == "http.route").Value?.ToString();
+
+                    if (method == "OPTIONS" || string.IsNullOrEmpty(path) || path.Contains("favicon") || path.Contains("health"))
+                    {
+                        return;
+                    }
+
+                    string? statusCodeStr = activity.GetTagItem("http.response.status_code")?.ToString();
+
+                    logger.LogInformation("[Observability] {Tags}, [duration, {Duration}ms], [status, {Status}]",
+                        string.Join(", ", activity.Tags.Where(x => x.Key.StartsWith("http") || x.Key == "server.address")),
+                        activity.Duration.TotalMilliseconds,
+                        statusCodeStr
+                    );
+                }
+            };
+
+            ActivitySource.AddActivityListener(listener);
         }
 
         private static void AddMisc(WebApplication app)

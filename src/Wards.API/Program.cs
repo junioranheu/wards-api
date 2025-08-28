@@ -7,7 +7,7 @@ Console.Title = SistemaConst.NomeSistema;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 {
-    builder.Services.AddDependencyInjectionAPI();
+    builder.Services.AddDependencyInjectionAPI(builder);
     builder.Services.AddDependencyInjectionApplication(builder);
     builder.Services.AddDependencyInjectionInfrastructure(builder);
     // builder.Services.AddDependencyInjectionWorkersServices(builder); // ***
