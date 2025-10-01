@@ -3,9 +3,11 @@ using Microsoft.AspNetCore.Mvc;
 using Wards.Application.UseCases.Auxiliares.ListarEstado;
 using Wards.Application.UseCases.Auxiliares.ListarEstado.Shared.Output;
 using Wards.Application.UseCases.Shared.Models.Input;
+using Wards.Application.UseCases.Shared.Models.Output;
 using Wards.Domain.Consts;
 using Wards.Domain.Enums;
 using Wards.Infrastructure.Factory.ConnectionFactory;
+using Wards.Infrastructure.Registry;
 using static Wards.Utils.Fixtures.Get;
 
 namespace Wards.API.Controllers
@@ -44,7 +46,7 @@ namespace Wards.API.Controllers
             catch (Exception ex)
             {
                 isOk = false;
-                return Ok(new { isOk, ex.Message});
+                return Ok(new { isOk, ex.Message });
             }
         }
 
@@ -63,6 +65,34 @@ namespace Wards.API.Controllers
             }
 
             return Ok(lista);
+        }
+
+        [AllowAnonymous]
+        [HttpGet("GetEnum")]
+        public ActionResult GetEnum(string name)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                return BadRequest("Nome do enum inválido.");
+            }
+
+            if (!EnumRegistry.TryGetEnum(name, out Type? enumType))
+            {
+                string validEnums = string.Join(", ", EnumRegistry.GetEnumNames());
+                return BadRequest($"O enum '{name}' não foi encontrado. Enums disponíveis: {validEnums}.");
+            }
+
+            var values = Enum.GetValues(enumType!).
+                Cast<Enum>().
+                Select(x => new DropdownOptionOutput<int>
+                {
+                    Value = Convert.ToInt32(x),
+                    Label = ObterDescricaoEnum(x)
+                }).
+                OrderBy(x => x.Label).
+                ToList();
+
+            return Ok(values);
         }
     }
 }
